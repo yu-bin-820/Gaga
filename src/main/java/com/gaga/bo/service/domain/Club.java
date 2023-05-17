@@ -16,9 +16,10 @@ public class Club {
     private int filterMinAge;
     private int filterMaxAge;
     private String filterTag;
+    private int mainCategoryNo;
 
     public Club(int clubNo, String clubName, String clubIntro, int clubLeaderNo, int clubMaxMemberNo, LocalDateTime clubRegDate,
-                int clubState, String clubImg, String clubRegion, int filterGender, int filterMinAge, int filterMaxAge, String filterTag) {
+                int clubState, String clubImg, String clubRegion, int filterGender, int filterMinAge, int filterMaxAge, String filterTag, int mainCategoryNo ) {
         this.clubNo = clubNo;
         this.clubName = clubName;
         this.clubIntro = clubIntro;
@@ -32,6 +33,7 @@ public class Club {
         this.filterMinAge = filterMinAge;
         this.filterMaxAge = filterMaxAge;
         this.filterTag = filterTag;
+        this.mainCategoryNo = mainCategoryNo;
     }
 
     public int getClubNo() {
@@ -136,6 +138,14 @@ public class Club {
 
     public void setFilterTag(String filterTag) {
         this.filterTag = filterTag;
+    }
+    
+    public int getMainCategoryNo() {
+        return mainCategoryNo;
+    }
+
+    public void setMainCategoryNo(int mainCategoryNo) {
+        this.mainCategoryNo = mainCategoryNo;
     }
 
 	@Override

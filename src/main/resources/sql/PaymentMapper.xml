@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <mapper namespace="com.gaga.bo.service.domain.Payment">
-    <resultMap id="paymentResultMap" type="com.example.Payment">
-        <id property="payNo" column="pay_no" jdbcType="VARCHAR" />
+
+    <resultMap id="paymentResultMap" type="payment">
+        <result property="payNo" column="pay_no" jdbcType="VARCHAR" />
         <result property="userNo" column="user_no" jdbcType="INTEGER" />
         <result property="meetingNo" column="meeting_no" jdbcType="INTEGER" />
         <result property="meetingName" column="meeting_name" jdbcType="VARCHAR" />

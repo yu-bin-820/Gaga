@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mapper namespace="com.gaga.bo.service.domain.Club">
+    <resultMap id="clubResultMap" type="club">
+        <result property="clubNo" column="club_no" jdbcType="INTEGER" />
+        <result property="clubName" column="club_name" jdbcType="VARCHAR" />
+        <result property="clubIntro" column="club_intro" jdbcType="VARCHAR" />
+        <result property="clubLeaderNo" column="club_leader_no" jdbcType="INTEGER" />
+        <result property="clubMaxMemberNo" column="club_max_member_no" jdbcType="INTEGER" />
+        <result property="clubRegDate" column="club_reg_date" jdbcType="DATETIME" />
+        <result property="clubState" column="club_state" jdbcType="INTEGER" />
+        <result property="clubImg" column="club_img" jdbcType="VARCHAR" />
+        <result property="clubRegion" column="club_region" jdbcType="VARCHAR" />
+        <result property="filterGender" column="filter_gender" jdbcType="INTEGER" />
+        <result property="filterMinAge" column="filter_min_age" jdbcType="INTEGER" />
+        <result property="filterMaxAge" column="filter_max_age" jdbcType="INTEGER" />
+        <result property="filterTag" column="filter_tag" jdbcType="VARCHAR" />
+    </resultMap>
+</mapper>
