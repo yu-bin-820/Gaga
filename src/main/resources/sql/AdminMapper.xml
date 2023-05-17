@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gaga.bo.service.noticePost.AdminDao">
+
+	 <resultMap id="noticePostResult" type="com.example.domain.Admin">
+        <id property="noticePostNo" column="notice_post_no" jdbcType="INTEGER" />
+        <result property="noticePostCategoryNo" column="notice_post_category_no" jdbcType="INTEGER" />
+        <result property="noticePostTitle" column="notice_post_title" jdbcType="VARCHAR" />
+        <result property="noticePostText" column="notice_post_text" jdbcType="VARCHAR" />
+        <result property="noticePostImg" column="notice_post_img" jdbcType="VARCHAR" />
+        <result property="noticePostRegDate" column="notice_post_reg_date" jdbcType="TIMESTAMP" />
+        <result property="userNo" column="user_no" jdbcType="INTEGER" />
+    </resultMap>
+
+	<select id="listNoticePosts" resultMap="noticePostResult">
+		SELECT * FROM NoticePost
+	</select>
+	
+	<select id="searchNoticePosts" resultMap="noticePostResult">
+		SELECT * FROM NoticePost
+		WHERE notice_post_title LIKE #{keyword}
+		OR notice_post_text LIKE #{keyword}
+	</select>
+	
+	<select id="getNoticePost" resultMap="noticePostResult">
+		SELECT * FROM NoticePost
+		WHERE notice_post_no = #{noticePostNo}
+	</select>
+
+	<insert id="addNoticePost"
+		parameterType="com.gaga.bo.service.domain.Admin">
+		INSERT INTO NoticePost (notice_post_category_no,
+		notice_post_title,
+		notice_post_text,
+		notice_post_img,
+		notice_post_reg_date, user_no)
+		VALUES (#{noticePostCategoryNo},
+		#{noticePostTitle}, #{noticePostText},
+		#{noticePostImg},
+		#{noticePostRegDate}, #{userNo})
+	</insert>
+
+	<update id="updateNoticePost"
+		parameterType="com.gaga.bo.service.domain.Admin">
+		UPDATE NoticePost
+		SET notice_post_category_no =
+		#{noticePostCategoryNo},
+		notice_post_title = #{noticePostTitle},
+		notice_post_text = #{noticePostText},
+		notice_post_img =
+		#{noticePostImg}
+		WHERE notice_post_no = #{noticePostNo}
+	</update>
+
+	<delete id="deleteNoticePost">
+		DELETE FROM NoticePost WHERE notice_post_no =
+		#{noticePostNo}
+	</delete>
+	
+	
+</mapper>
