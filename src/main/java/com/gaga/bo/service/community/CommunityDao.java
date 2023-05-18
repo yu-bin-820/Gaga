@@ -6,8 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.gaga.bo.service.domain.Report;
-import com.gaga.bo.service.domain.ReportCategory;
-import com.gaga.bo.service.domain.Title;
+import com.gaga.bo.service.domain.User;
 import com.gaga.bo.service.domain.UserReview;
 
 @Mapper
@@ -15,10 +14,10 @@ public interface CommunityDao {
 
 //   public List<Title> getTitleList(int userNo);
 //
-//   //TODO User도메인 객체 필요.
-//   //public List<Report> getReportList(User user);
+
+
 //
-//   public Report getReport(int reportNo);
+//   
 //   
 //	 public Report getReportByUserNo(Map<String,Integer> reportingNoReportedNo);
 //
@@ -37,7 +36,25 @@ public interface CommunityDao {
 //   public ReportCategory getReportCategory();
 //   
 //   List<ReportCategory> getReportCategoryList();
-   
-   public void addReport(Report report);
+	
+	///Report Method
+	public void addReport(Report report) throws Exception;
+	
+	public Report getReport(int reportNo) throws Exception;
+	
+	public List<Report> getReportList(User user) throws Exception;
+	
+	public void updateReport(Report report) throws Exception;
+	
+	public void deleteReport(int reportNo) throws Exception;
+	
+	///Review Method
+	public void addUserReview(UserReview userReview) throws Exception;
+	
+	public UserReview getUserReview(UserReview userReview) throws Exception;
+	
+	public void updateUserReview(UserReview userReview) throws Exception;
+	
+	public void deleteUserReview(UserReview userReview) throws Exception;
 
 }

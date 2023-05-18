@@ -5,28 +5,39 @@ import java.util.Map;
 
 import com.gaga.bo.service.domain.Report;
 import com.gaga.bo.service.domain.ReportCategory;
+import com.gaga.bo.service.domain.User;
 import com.gaga.bo.service.domain.UserReview;
 
 public interface CommunityService {
-	 public Report getReport(int reportNo);
-	 
-	 public void addReport(Report report);
+
+	//ReportMethod
+	public void addReport(Report report) throws Exception;
+	
+	public Report getReport(int reportNo) throws Exception;
+	
+	//public Report getReportByUserNo(Map<String,Integer> reportingNoReportedNo);
+	
+	public List<Report> getReportList(User user) throws Exception;
+	
+	public void updateReport(Report report) throws Exception;
+
+	public void deleteReport(int reportNo) throws Exception;
+//	public ReportCategory getReportCategory();
+//	   
+//	List<ReportCategory> getReportCategoryList();
+//
+	
+	//ReviewMethod
+	public void addUserReview(UserReview userReview) throws Exception;
+	
+	public UserReview getUserReview(UserReview userReview) throws Exception;
+
+	public void updateUserReview(UserReview userReview) throws Exception;
+	
+	public void deleteUserReview(UserReview userReview) throws Exception;
+
+	
 	   
-	   public Report getReportByUserNo(Map<String,Integer> reportingNoReportedNo);
+	
 
-	   public void deleteReport(int reportNo);
-
-	   public void updateReport(Report report);
-
-	   public void addUserReview(UserReview userReview);
-
-	   public UserReview getUserReview(int userReviewNo);
-
-	   public void deleteUserReview(int userReviewNo);
-
-	   public void updateUserReview(UserReview userReview);
-	   
-	   public ReportCategory getReportCategory();
-	   
-	   List<ReportCategory> getReportCategoryList();
 }

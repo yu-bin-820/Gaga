@@ -6,8 +6,8 @@
 
 <mapper namespace="com.gaga.bo.service.community.CommunityDao">
 
-<!-- ResultMaps 검증 안됨
- <resultMap id="ReportResultMap" type="report">
+
+ <resultMap id="reportResultMap" type="report">
     <id column="report_no" property="reportNo" jdbcType="INTEGER"/>
     <result column="reporting_no" property="reportingNo" jdbcType="INTEGER"/>
     <result column="reported_no" property="reportedNo" jdbcType="INTEGER"/>
@@ -19,21 +19,120 @@
     <result column="report_img3" property="reportImg3" jdbcType="VARCHAR"/>
   </resultMap>
   
-  <resultMap id="UserReviewResultMap" type="userReview">
+  <resultMap id="userReviewResultMap" type="userReview">
     <id column="user_review_no" property="userReviewNo" jdbcType="INTEGER"/>
     <result column="reviewer_no" property="reviewerNo" jdbcType="INTEGER"/>
     <result column="reviewed_no" property="reviewedNo" jdbcType="INTEGER"/>
     <result column="user_score" property="userScore" jdbcType="INTEGER"/>
   </resultMap>
-  -->
-  
 
-  <!-- InsertQueries 검증 안됨-->
   
-   <insert id="addReport" parameterType="com.gaga.bo.service.domain.Report">
-    INSERT INTO reports (reporting_no, reported_no, report_category_no, report_content, report_date, report_img, report_img2, report_img3)
-    VALUES (#{reportingNo:INTEGER}, #{reportedNo:INTEGER}, #{reportCategoryNo:INTEGER},
-            #{reportContent:VARCHAR}, #{reportDate:TIMESTAMP}, #{reportImg:VARCHAR},
-            #{reportImg2:VARCHAR}, #{reportImg3:VARCHAR})
-  </insert>
+  <!-- ReportQueries -->
+	
+	  <!-- InsertQueries -->
+	  <insert id="addReport" parameterType="com.gaga.bo.service.domain.Report">
+	    INSERT INTO reports (reporting_no, reported_no, report_category_no, report_content, report_date, report_img, report_img2, report_img3)
+	    VALUES (#{reportingNo:INTEGER}, #{reportedNo:INTEGER}, #{reportCategoryNo:INTEGER},
+	            #{reportContent:VARCHAR}, #{reportDate:TIMESTAMP}, #{reportImg:VARCHAR},
+	            #{reportImg2:VARCHAR}, #{reportImg3:VARCHAR})
+	  </insert>
+	  
+  	<!-- SelectOneQuery -->
+  	<select id="getReport" parameterType="int" resultMap="reportResultMap">
+  	  	SELECT 
+            report_no,
+            reporting_no,
+            reported_no,
+            report_category_no,
+            report_content,
+            report_date,
+            report_img,
+            report_img2,
+            report_img3
+        FROM reports
+        WHERE report_no = #{reportNo}
+  	</select>
+	  <!-- SelectListQuery -->
+		<select id="getReportList" parameterType="user" resultMap="reportResultMap">
+		  SELECT 
+	        report_no,
+	        reporting_no,
+	        reported_no,
+	        report_category_no,
+	        report_date        
+	    FROM reports
+	    <where>
+	     <if test="role == 0">
+					reporting_no = #{userNo}
+	     </if>
+	    </where>
+		</select>
+		
+		<!-- UpdateQuery -->
+		<update id="updateReport" parameterType="report">
+        UPDATE reports
+        SET 
+            reporting_no = #{reportingNo},
+            reported_no = #{reportedNo},
+            report_category_no = #{reportCategoryNo},
+            report_content = #{reportContent},
+            report_date = #{reportDate},
+            report_img = #{reportImg},
+            report_img2 = #{reportImg2},
+            report_img3 = #{reportImg3}
+        WHERE report_no = #{reportNo}
+    </update>
+		
+		<!-- DeleteQuery -->
+		<delete id="deleteReport" parameterType="int">
+			DELETE FROM reports
+			WHERE report_no = #{reportNo}
+		</delete>    
+		
+  <!-- ReviewQueries -->
+  
+  	<!-- InsertQuery -->
+	  <insert id="addUserReview" parameterType="userReview">
+    	INSERT INTO user_reviews (
+      	reviewer_no,
+				reviewed_no,
+				user_score
+			) VALUES (
+				#{reviewerNo},
+				#{reviewedNo},
+				#{userScore}
+			)
+    </insert>
+    
+    <!-- SelectOneQuery -->
+    <select id="getUserReview" parameterType="userReview" resultMap="userReviewResultMap">
+    	SELECT user_review_no, reviewer_no, reviewed_no, user_score
+    	FROM user_reviews
+    	<where>
+    		reviewer_no=#{reviewerNo}
+    		AND reviewed_no=#{reviewedNo}
+    	</where>
+    </select>
+    
+    <!-- UpdateQuery -->
+    <update id="updateUserReview" parameterType="userReview">
+        UPDATE user_reviews
+        <set> 
+          user_score = #{userScore}
+        </set>
+        <where>
+    			reviewer_no=#{reviewerNo}
+    			AND reviewed_no=#{reviewedNo}
+     		</where>
+    </update>
+    
+    <!-- DeleteQuery -->
+    <delete id="deleteUserReview" parameterType="userReview">
+    	DELETE FROM user_reviews
+      <where>
+    		reviewer_no=#{reviewerNo}
+    		AND reviewed_no=#{reviewedNo}
+     	</where>
+    </delete>
+
 </mapper>
