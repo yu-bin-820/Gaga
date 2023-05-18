@@ -26,13 +26,36 @@
 	</insert>
 	
 	<!-- SQL : SELECT -->
-	<select 	id="getPayment"  parameterType="string" resultMap="paymentResultMap" >
+	<select 	id="getPayment"  parameterType="java.lang.String" resultMap="paymentResultMap" >
 	 	SELECT pay_no, user_no, meeting_no, meeting_name, pay_time, refund_time, pay_state, entry_fee
 		FROM payments
 		WHERE pay_no = #{payNo}
 	</select>
 	
+	<!-- SQL : SELECT -->
+	<select 	id="getPaymentByUserMeeting"  parameterType="int" resultType="java.lang.String" >
+	 	SELECT pay_no
+		FROM payments
+		WHERE user_no = #{userNo} AND meeting_no = #{meetingNo}
+	</select>
 	
+	<!-- SQL: SELECT -->
+	<select id="getPaymentList" parameterType="int" resultMap="paymentResultMap">
+	    SELECT pay_no, user_no, meeting_no, meeting_name, pay_time, refund_time, pay_state, entry_fee
+	    FROM payments
+	    WHERE user_no = #{userNo}
+	</select>
+	
+	<!-- SQL : UPDATE -->
+	<update id="updatePayment" parameterType="java.lang.String">
+	  UPDATE payments
+	  	<set>
+	  		pay_state = 2
+	    </set>
+	  WHERE pay_no = #{payNo}
+	  
+	</update>
+
    
     
 </mapper>

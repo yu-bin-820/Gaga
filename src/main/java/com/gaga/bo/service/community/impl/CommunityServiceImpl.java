@@ -11,6 +11,7 @@ import com.gaga.bo.service.community.CommunityDao;
 import com.gaga.bo.service.community.CommunityService;
 import com.gaga.bo.service.domain.Report;
 import com.gaga.bo.service.domain.ReportCategory;
+import com.gaga.bo.service.domain.User;
 import com.gaga.bo.service.domain.UserReview;
 
 @Service
@@ -27,55 +28,68 @@ public class CommunityServiceImpl implements CommunityService {
 	}
 
 	@Override
-	public Report getReport(int reportNo) {
-		return null;
-	}
-
-	@Override
-	public Report getReportByUserNo(Map<String, Integer> reportingNoReportedNo) {
-		return null;
-	}
-
-	@Override
-	public void deleteReport(int reportNo) {
-	}
-
-	@Override
-	public void updateReport(Report report) {
-	}
-
-	@Override
-	public void addUserReview(UserReview userReview) {
-	}
-
-	@Override
-	public UserReview getUserReview(int userReviewNo) {
-		return null;
-	}
-
-	@Override
-	public void deleteUserReview(int userReviewNo) {
-	}
-
-	@Override
-	public void updateUserReview(UserReview userReview) {
-	}
-
-	@Override
-	public ReportCategory getReportCategory() {
-		return null;
-	}
-
-	@Override
-	public List<ReportCategory> getReportCategoryList() {
-		return null;
-	}
-
-	@Override
-	public void addReport(Report report) {
+	public void addReport(Report report)  throws Exception{
 		communityDao.addReport(report);
-		System.out.println("addReport");
-		System.out.println(report);
+//		System.out.println("addReport");
+//		System.out.println(report);
+	}
+
+	//Report method
+	@Override
+	public Report getReport(int reportNo)  throws Exception{
+		return communityDao.getReport(reportNo);
+	}
+
+//	@Override
+//	public Report getReportByUserNo(Map<String, Integer> reportingNoReportedNo) {
+//		return null;
+//	}
+
+	@Override
+	public List<Report> getReportList(User user) throws Exception {
+		return communityDao.getReportList(user);
+	}
+
+	@Override
+	public void updateReport(Report report) throws Exception {
+		communityDao.updateReport(report);
+	}
+
+
+	@Override
+	public void deleteReport(int reportNo) throws Exception {
+		communityDao.deleteReport(reportNo);
+	}
+
+//	@Override
+//	public ReportCategory getReportCategory() {
+//		return null;
+//	}
+//
+//	@Override
+//	public List<ReportCategory> getReportCategoryList() {
+//		return null;
+//	}
+
+	//ReviewMethod
+	@Override
+	public void addUserReview(UserReview userReview) throws Exception {
+		communityDao.addUserReview(userReview);
+	}
+
+	@Override
+	public UserReview getUserReview(UserReview userReview) throws Exception {
+		return communityDao.getUserReview(userReview);
+	}
+
+	@Override
+	public void updateUserReview(UserReview userReview) throws Exception {
+		communityDao.updateUserReview(userReview);
+	}
+	
+	@Override
+	public void deleteUserReview(UserReview userReview) throws Exception {
+		communityDao.deleteUserReview(userReview);
 	}
 
 }
