@@ -14,7 +14,7 @@ public class AdminPostServiceImpl implements AdminService {
 
     private final AdminDao noticePostDao;
 
-    @Autowired
+    //@Autowired
     public AdminPostServiceImpl(AdminDao noticePostDao) {
         this.noticePostDao = noticePostDao;
     }

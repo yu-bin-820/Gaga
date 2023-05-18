@@ -6,7 +6,7 @@
 
 <mapper namespace="com.gaga.bo.service.community.CommunityDao">
 
-<!-- ResultMaps 검증 안됨-->
+<!-- ResultMaps 검증 안됨
  <resultMap id="ReportResultMap" type="report">
     <id column="report_no" property="reportNo" jdbcType="INTEGER"/>
     <result column="reporting_no" property="reportingNo" jdbcType="INTEGER"/>
@@ -25,9 +25,9 @@
     <result column="reviewed_no" property="reviewedNo" jdbcType="INTEGER"/>
     <result column="user_score" property="userScore" jdbcType="INTEGER"/>
   </resultMap>
+  -->
   
-  
-  <!-- SelectQueries 검증 안됨-->
+  <!-- SelectQueries 검증 안됨 -->
   <select id="getReport" parameterType="int" resultMap="ReportResultMap">
     SELECT * FROM reports WHERE report_no = #{reportNo}
   </select>
@@ -37,10 +37,11 @@
   </select>
   
   <!-- InsertQueries 검증 안됨-->
-   <insert id="addReport" parameterType="report">
+  
+   <insert id="addReport" parameterType="com.gaga.bo.service.domain.Report">
     INSERT INTO reports (reporting_no, reported_no, report_category_no, report_content, report_date, report_img, report_img2, report_img3)
     VALUES (#{reportingNo:INTEGER}, #{reportedNo:INTEGER}, #{reportCategoryNo:INTEGER},
-            #{reportContent:VARCHAR}, #{reportDate:DATETIME}, #{reportImg:VARCHAR},
+            #{reportContent:VARCHAR}, #{reportDate:TIMESTAMP}, #{reportImg:VARCHAR},
             #{reportImg2:VARCHAR}, #{reportImg3:VARCHAR})
   </insert>
 </mapper>

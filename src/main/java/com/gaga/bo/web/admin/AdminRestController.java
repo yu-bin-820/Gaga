@@ -24,19 +24,19 @@ public class AdminRestController {
         this.reportService = reportService;
     }
 
-    // »ç¿ëÀÚ Á¤º¸ Á¶È¸
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
     @GetMapping("/user/{userId}")
     public User getUser(@PathVariable("userId") int userId) {
         return userService.getUser(userId);
     }
 
-    // »ç¿ëÀÚ ºí·¢¸®½ºÆ® Ãß°¡
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ß°ï¿½
     @PutMapping("/user/{userId}/blacklist")
     public void addBlacklist(@PathVariable("userId") int userId) {
         userService.addBlacklist(userId);
     }
 
-    // ½Å°í ´çÇÑ À¯Àú Á¶È¸
+    // ï¿½Å°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
     @GetMapping("/user/reported")
     public List<User> getReportUser() {
         return reportService.getReportUser();
