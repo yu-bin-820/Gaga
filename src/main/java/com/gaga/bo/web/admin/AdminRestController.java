@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gaga.bo.service.domain.User;
-
+/*
 @RestController
-@RequestMapping("/rest/admin")
+@RequestMapping("/rest/admin/*")
 public class AdminRestController {
 
-    private final UserService userService;
-    private final ReportService reportService;
+    //private final UserService userService;
+    //private final ReportService reportService;
 
     @Autowired
     public AdminRestController(UserService userService, ReportService reportService) {
@@ -42,3 +42,4 @@ public class AdminRestController {
         return reportService.getReportUser();
     }
 }
+*/

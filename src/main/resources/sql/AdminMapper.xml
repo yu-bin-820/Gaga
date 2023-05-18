@@ -4,7 +4,7 @@
 
 <mapper namespace="com.gaga.bo.service.noticePost.AdminDao">
 
-	 <resultMap id="noticePostResult" type="com.example.domain.Admin">
+	 <resultMap id="noticePostResult" type="noticePost">
         <id property="noticePostNo" column="notice_post_no" jdbcType="INTEGER" />
         <result property="noticePostCategoryNo" column="notice_post_category_no" jdbcType="INTEGER" />
         <result property="noticePostTitle" column="notice_post_title" jdbcType="VARCHAR" />
@@ -13,12 +13,29 @@
         <result property="noticePostRegDate" column="notice_post_reg_date" jdbcType="TIMESTAMP" />
         <result property="userNo" column="user_no" jdbcType="INTEGER" />
     </resultMap>
-
-	<select id="listNoticePosts" resultMap="noticePostResult">
+	
+	<insert id="addNoticePost"
+		parameterType="com.gaga.bo.service.domain.NoticePost">
+		INSERT INTO NoticePost (
+		notice_post_category_no,
+		notice_post_title,
+		notice_post_text,
+		notice_post_img,
+		notice_post_reg_date, 
+		user_no
+		)
+		VALUES (#{noticePostCategoryNo},
+		#{noticePostTitle}, #{noticePostText},
+		#{noticePostImg},
+		#{noticePostRegDate}, #{userNo})
+	</insert>
+	
+	<!-- 
+	<select id="listNoticePost" resultMap="noticePostResult">
 		SELECT * FROM NoticePost
 	</select>
 	
-	<select id="searchNoticePosts" resultMap="noticePostResult">
+	<select id="searchNoticePost" resultMap="noticePostResult">
 		SELECT * FROM NoticePost
 		WHERE notice_post_title LIKE #{keyword}
 		OR notice_post_text LIKE #{keyword}
@@ -29,21 +46,10 @@
 		WHERE notice_post_no = #{noticePostNo}
 	</select>
 
-	<insert id="addNoticePost"
-		parameterType="com.gaga.bo.service.domain.Admin">
-		INSERT INTO NoticePost (notice_post_category_no,
-		notice_post_title,
-		notice_post_text,
-		notice_post_img,
-		notice_post_reg_date, user_no)
-		VALUES (#{noticePostCategoryNo},
-		#{noticePostTitle}, #{noticePostText},
-		#{noticePostImg},
-		#{noticePostRegDate}, #{userNo})
-	</insert>
+	
 
 	<update id="updateNoticePost"
-		parameterType="com.gaga.bo.service.domain.Admin">
+		parameterType="com.gaga.bo.service.domain.NoticePost">
 		UPDATE NoticePost
 		SET notice_post_category_no =
 		#{noticePostCategoryNo},
@@ -59,5 +65,5 @@
 		#{noticePostNo}
 	</delete>
 	
-	
+	 -->
 </mapper>

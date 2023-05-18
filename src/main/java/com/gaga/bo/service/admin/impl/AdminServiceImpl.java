@@ -7,35 +7,37 @@ import org.springframework.stereotype.Service;
 
 import com.gaga.bo.service.admin.AdminDao;
 import com.gaga.bo.service.admin.AdminService;
-import com.gaga.bo.service.domain.Admin;
+import com.gaga.bo.service.domain.NoticePost;
 
 @Service
-public class AdminPostServiceImpl implements AdminService {
+public class AdminServiceImpl implements AdminService {
 
     private final AdminDao noticePostDao;
 
     @Autowired
-    public AdminPostServiceImpl(AdminDao noticePostDao) {
+    public AdminServiceImpl(AdminDao noticePostDao) {
         this.noticePostDao = noticePostDao;
     }
-
+    
     @Override
-    public List<Admin> listNoticePosts() {
-        return noticePostDao.listNoticePosts();
-    }
-
-    @Override
-    public Admin getNoticePost(int noticePostNo) {
-        return noticePostDao.getNoticePost(noticePostNo);
-    }
-
-    @Override
-    public void addNoticePost(Admin noticePost) {
+    public void addNoticePost(NoticePost noticePost) {
         noticePostDao.addNoticePost(noticePost);
     }
+    
+
+    
+    /*
+    @Override
+    public List<NoticePost> listNoticePosts() {
+        return noticePostDao.listNoticePost();
+    }
 
     @Override
-    public void updateNoticePost(Admin noticePost) {
+    public NoticePost getNoticePost(int noticePostNo) {
+        return noticePostDao.getNoticePost(noticePostNo);
+    }
+    @Override
+    public void updateNoticePost(NoticePost noticePost) {
         noticePostDao.updateNoticePost(noticePost);
     }
 
@@ -45,7 +47,8 @@ public class AdminPostServiceImpl implements AdminService {
     }
     
     @Override
-    public List<Admin> searchNoticePost(String keyword) {
+    public List<NoticePost> searchNoticePost(String keyword) {
         return noticePostDao.searchNoticePost(keyword);
     }
+    */
 }
