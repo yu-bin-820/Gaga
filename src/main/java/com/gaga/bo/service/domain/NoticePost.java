@@ -14,7 +14,9 @@ public class NoticePost {
     private int userNo;
 
     //constructor
-    public NoticePost() {}
+    public NoticePost() {
+    	
+    }
 
     // 모든 필드를 포함하는 생성자
     public NoticePost(int noticePostNo, int noticePostCategoryNo, String noticePostTitle, String noticePostText, 
