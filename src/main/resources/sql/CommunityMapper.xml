@@ -27,15 +27,7 @@
   </resultMap>
   -->
   
-  <!-- SelectQueries 검증 안됨 -->
-  <select id="getReport" parameterType="int" resultMap="ReportResultMap">
-    SELECT * FROM reports WHERE report_no = #{reportNo}
-  </select>
-  
-  <select id="getUserReview" parameterType="int" resultMap="UserReviewResultMap">
-    SELECT * FROM user_reviews WHERE user_review_no = #{userReviewNo}
-  </select>
-  
+
   <!-- InsertQueries 검증 안됨-->
   
    <insert id="addReport" parameterType="com.gaga.bo.service.domain.Report">

@@ -44,11 +44,11 @@
 
 		<mapper resource="sql/CommunityMapper.xml"/>
 
-		<mapper resource="sql/ClubMapper.xml"/>
+		<!-- <mapper resource="sql/ClubMapper.xml"/>  -->
 
 		<mapper resource="sql/PaymentMapper.xml"/>
 
-		<mapper resource="sql/AdminMapper.xml"/>
+		<!-- <mapper resource="sql/AdminMapper.xml"/>  -->
 
 	</mappers>
 

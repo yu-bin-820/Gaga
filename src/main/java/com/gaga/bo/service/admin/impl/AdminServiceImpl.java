@@ -9,7 +9,7 @@ import com.gaga.bo.service.admin.AdminDao;
 import com.gaga.bo.service.admin.AdminService;
 import com.gaga.bo.service.domain.NoticePost;
 
-@Service
+//@Service
 public class AdminServiceImpl implements AdminService {
 
     private final AdminDao noticePostDao;

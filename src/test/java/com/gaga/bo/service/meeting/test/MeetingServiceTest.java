@@ -19,7 +19,7 @@ public class MeetingServiceTest {
 	@Qualifier("meetingServiceImpl")
 	MeetingService meetingService;
 	
-	//@Test
+	@Test
 	public void testGetMeeting() throws Exception{
 		
 		Meeting meeting = new Meeting();
@@ -41,7 +41,7 @@ public class MeetingServiceTest {
 
 	}
 	
-	@Test
+	//@Test
 	public void testAddMeeting() throws Exception{
 		
 		Meeting meeting = new Meeting();
