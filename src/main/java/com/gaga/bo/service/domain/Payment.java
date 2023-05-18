@@ -3,6 +3,8 @@ package com.gaga.bo.service.domain;
 import java.time.LocalDateTime;
 
 public class Payment {
+	
+	//Field
     private String payNo;
     private int userNo;
     private int meetingNo;
@@ -12,17 +14,12 @@ public class Payment {
     private int payState;
     private int entryFee;
 
-    public Payment(String payNo, int userNo, int meetingNo, String meetingName, LocalDateTime payTime, LocalDateTime refundTime, int payState, int entryFee) {
-        this.payNo = payNo;
-        this.userNo = userNo;
-        this.meetingNo = meetingNo;
-        this.meetingName = meetingName;
-        this.payTime = payTime;
-        this.refundTime = refundTime;
-        this.payState = payState;
-        this.entryFee = entryFee;
-    }
-
+    //Constructor
+    public Payment() {
+		
+	}
+    
+    //getter/setter Method
     public String getPayNo() {
         return payNo;
     }
