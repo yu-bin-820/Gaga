@@ -5,10 +5,13 @@ import com.gaga.bo.service.domain.Payment;
 
 public interface PaymentService {
 	
-	//°áÁ¦ ³»¿ª Ãß°¡
+	//ê²°ì œ ë‚´ì—­ ì¶”ê°€
 	public void addPayment(Payment payment) throws Exception;
 	
-	//°áÁ¦ ³»¿ª Á¶È¸
+	//ê²°ì œ ë‚´ì—­ ì¡°íšŒ
 	public Payment getPayment(String payNo) throws Exception;
+	
+	//ê²°ì œ ë‚´ì—­ ìˆ˜ì •(í™˜ë¶ˆ)
+	public void updatePayment(Payment payment) throws Exception;
 
 }

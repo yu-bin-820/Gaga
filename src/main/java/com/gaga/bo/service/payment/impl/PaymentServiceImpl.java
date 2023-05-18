@@ -20,20 +20,36 @@ public class PaymentServiceImpl implements PaymentService {
 	
 	//Constructor
 	public PaymentServiceImpl() {
+		System.out.println(this.getClass());
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void addPayment(Payment payment) throws Exception {
 		
+		System.out.println("결제 내역 추가");
+		
 		paymentDao.addPayment(payment);
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public Payment getPayment(String payNo) throws Exception {
+		
+		System.out.println("결제 내역 1건만 조회");
 
 		return paymentDao.getPayment(payNo);
 	}
+
+	@Override
+	public void updatePayment(Payment payment) throws Exception {
+		
+		System.out.println("환불시 결제 상태 변화");
+		// TODO Auto-generated method stub
+		paymentDao.updatePayment(payment);
+		
+		
+	}
+
+
 }

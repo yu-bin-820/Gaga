@@ -13,6 +13,8 @@ public interface PaymentDao {
 	//SELECT ONE
 	public Payment getPayment(String payNo) throws Exception;
 	
+	//UPDATE
+	public void updatePayment(Payment payment) throws Exception;
 	
 
 }

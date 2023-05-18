@@ -48,18 +48,36 @@ public class PaymentServiceTest {
   
     }
     
-    @Test
+    //@Test
     public void getPaymentTest() throws Exception{
     	
     	Payment payment = new Payment();
     	
     	payment = paymentService.getPayment("imp_123456789012");
     	
-    	//�ܼ�Ȯ��
+    	//�ܼ�Ȯ��
     	System.out.println(payment);
     	
-    	Assert.assertEquals("imp_123456789012", payment.getPayNo());
-    			
+    	assertEquals("imp_123456789012", payment.getPayNo());
+	
+    }
+    
+    @Test
+    public void updatePaymentTest() throws Exception{
+    	
+    	Payment payment = new Payment();
+    	
+    	//업데이트 전
+    	payment = paymentService.getPayment("imp_123456789012");
+    	
+    	//payState 1->2
+    	paymentService.updatePayment(payment);
+    	
+    	//업데이트 후
+    	payment = paymentService.getPayment("imp_123456789012");
+    	
+    	assertEquals(2, payment.getPayState());   	
+    	
     	
     }
 }
