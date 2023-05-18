@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mapper namespace="com.gaga.bo.service.domain.Payment">
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gaga.bo.service.payment.PaymentDao">
 
     <resultMap id="paymentResultMap" type="payment">
         <result property="payNo" column="pay_no" jdbcType="VARCHAR" />
@@ -20,6 +24,15 @@
         VALUES (#{payNo:VARCHAR}, #{userNo:INTEGER}, #{meetingNo:INTEGER}, #{meetingName:VARCHAR}, 
         #{payTime:TIMESTAMP}, #{refundTime:TIMESTAMP}, #{payState:INTEGER}, #{entryFee:INTEGER})
 	</insert>
+	
+	<!-- SQL : SELECT -->
+	<select 	id="getPayment"  parameterType="string" resultMap="paymentResultMap" >
+	 	SELECT pay_no, user_no, meeting_no, meeting_name, pay_time, refund_time, pay_state, entry_fee
+		FROM payments
+		WHERE pay_no = #{payNo}
+	</select>
+	
+	
    
     
 </mapper>

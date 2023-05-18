@@ -13,7 +13,7 @@ import com.gaga.bo.service.domain.Report;
 import com.gaga.bo.service.domain.ReportCategory;
 import com.gaga.bo.service.domain.UserReview;
 
-@Service
+//@Service
 public class CommunityServiceImpl implements CommunityService {
 	
 	///field

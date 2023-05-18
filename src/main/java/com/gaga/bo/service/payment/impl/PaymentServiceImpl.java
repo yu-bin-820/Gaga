@@ -36,6 +36,4 @@ public class PaymentServiceImpl implements PaymentService {
 
 		return paymentDao.getPayment(payNo);
 	}
-
-
 }

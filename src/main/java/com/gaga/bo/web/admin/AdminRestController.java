@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gaga.bo.service.domain.User;
 
-@RestController
-@RequestMapping("/rest/admin")
+//@RestController
+//@RequestMapping("/rest/admin")
 public class AdminRestController {
 
     private final UserService userService;

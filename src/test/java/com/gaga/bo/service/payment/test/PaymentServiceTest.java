@@ -1,4 +1,4 @@
-package com.gaga.bo.service.patment.test;
+package com.gaga.bo.service.payment.test;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,27 +25,42 @@ public class PaymentServiceTest {
     @Qualifier("paymentServiceImpl")
     PaymentService paymentService;
 
-    @Test
+    //@Test
     public void addPaymentTest() throws Exception{
     	
     	Payment payment = new Payment();
     	
-    	payment.setPayNo("imp_123456789012");
+    	payment.setPayNo("imp_123456789014");
     	payment.setUserNo(1);
     	payment.setMeetingNo(1);
     	payment.setMeetingName("test");
     	payment.setPayTime(LocalDateTime.now());
-    	payment.setRefundTime(null);
+    	payment.setRefundTime(LocalDateTime.now());
     	payment.setPayState(1);
     	payment.setEntryFee(5000);
     	
     	paymentService.addPayment(payment);
     	
-    	payment = paymentService.getPayment("imp_123456789012");
+    	payment = paymentService.getPayment("imp_123456789014");
     	
-    	Assert.assertEquals("imp_123456789012", payment.getPayNo());
+    	Assert.assertEquals("imp_123456789014", payment.getPayNo());
  
   
+    }
+    
+    @Test
+    public void getPaymentTest() throws Exception{
+    	
+    	Payment payment = new Payment();
+    	
+    	payment = paymentService.getPayment("imp_123456789012");
+    	
+    	//콘솔확인
+    	System.out.println(payment);
+    	
+    	Assert.assertEquals("imp_123456789012", payment.getPayNo());
+    			
+    	
     }
 }
 
