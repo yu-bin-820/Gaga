@@ -2,18 +2,21 @@ package com.gaga.bo.service.admin;
 
 import java.util.List;
 
-import com.gaga.bo.service.domain.Admin;
+import com.gaga.bo.service.domain.NoticePost;
 
 public interface AdminService {
-	List<Admin> listNoticePosts();
+	public void addNoticePost(NoticePost noticePost);
+/*
+	List<NoticePost> listNoticePosts();
+	
+	NoticePost getNoticePost(int noticePostNo);
 
-	Admin getNoticePost(int noticePostNo);
+	
 
-	void addNoticePost(Admin noticePost);
-
-	void updateNoticePost(Admin noticePost);
+	void updateNoticePost(NoticePost noticePost);
 
 	void deleteNoticePost(int noticePostNo);
 	
-	List<Admin> searchNoticePost(String keyword);
+	List<NoticePost> searchNoticePost(String keyword);
+	*/
 }

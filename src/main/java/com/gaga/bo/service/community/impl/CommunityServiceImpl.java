@@ -73,6 +73,9 @@ public class CommunityServiceImpl implements CommunityService {
 
 	@Override
 	public void addReport(Report report) {
+		communityDao.addReport(report);
+		System.out.println("addReport");
+		System.out.println(report);
 	}
 
 }

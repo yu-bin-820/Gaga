@@ -1,23 +1,24 @@
 package com.gaga.bo.service.domain;
 
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
-public class Admin {
+public class NoticePost {
+	//field
     private int noticePostNo;
     private int noticePostCategoryNo;
     private String noticePostTitle;
     private String noticePostText;
     private String noticePostImg;
-    private Date noticePostRegDate;
+    private LocalDateTime noticePostRegDate;
     private int userNo;
 
-    // 기본 생성자
-    public Admin() {}
+    //constructor
+    public NoticePost() {}
 
     // 모든 필드를 포함하는 생성자
-    public Admin(int noticePostNo, int noticePostCategoryNo, String noticePostTitle, String noticePostText, 
-                      String noticePostImg, Date noticePostRegDate, int userNo) {
+    public NoticePost(int noticePostNo, int noticePostCategoryNo, String noticePostTitle, String noticePostText, 
+                      String noticePostImg, LocalDateTime noticePostRegDate, int userNo) {
         this.noticePostNo = noticePostNo;
         this.noticePostCategoryNo = noticePostCategoryNo;
         this.noticePostTitle = noticePostTitle;
@@ -67,11 +68,11 @@ public class Admin {
 		this.noticePostImg = noticePostImg;
 	}
 
-	public Date getNoticePostRegDate() {
+	public LocalDateTime getNoticePostRegDate() {
 		return noticePostRegDate;
 	}
 
-	public void setNoticePostRegDate(Date noticePostRegDate) {
+	public void setNoticePostRegDate(LocalDateTime noticePostRegDate) {
 		this.noticePostRegDate = noticePostRegDate;
 	}
 
@@ -83,8 +84,11 @@ public class Admin {
 		this.userNo = userNo;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "NoticePost [noticePostNo=" + noticePostNo + ", noticePostCategoryNo=" + noticePostCategoryNo
+				+ ", noticePostTitle=" + noticePostTitle + ", noticePostText=" + noticePostText + ", noticePostImg="
+				+ noticePostImg + ", noticePostRegDate=" + noticePostRegDate + ", userNo=" + userNo + "]";
+	}
 
-    // getter와 setter 메서드들
-    // 생략 가능하다면 Lombok 라이브러리의 @Data 어노테이션을 사용하면 좋습니다.
 }

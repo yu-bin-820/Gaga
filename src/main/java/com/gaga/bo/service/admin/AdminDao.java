@@ -2,18 +2,22 @@ package com.gaga.bo.service.admin;
 
 import java.util.List;
 
-import com.gaga.bo.service.domain.Admin;
+import org.apache.ibatis.annotations.Mapper;
 
+import com.gaga.bo.service.domain.NoticePost;
+
+@Mapper
 public interface AdminDao {
-	List<Admin> listNoticePosts();
+	public void addNoticePost(NoticePost noticePost);
+	/*
+	 * List<NoticePost> listNoticePost();
+	NoticePost getNoticePost(int noticePostNo);
 
-	Admin getNoticePost(int noticePostNo);
+	
 
-	void addNoticePost(Admin noticePost);
-
-	void updateNoticePost(Admin noticePost);
+	void updateNoticePost(NoticePost noticePost);
 
 	void deleteNoticePost(int noticePostNo);
 
-	List<Admin> searchNoticePost(String keyword);
+	List<NoticePost> searchNoticePost(String keyword);*/
 }

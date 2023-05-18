@@ -3,6 +3,8 @@ package com.gaga.bo.service.domain;
 import java.time.LocalDateTime;
 
 public class Club {
+	
+	//Field
     private int clubNo;
     private String clubName;
     private String clubIntro;
@@ -18,25 +20,13 @@ public class Club {
     private String filterTag;
     private int mainCategoryNo;
 
-    public Club(int clubNo, String clubName, String clubIntro, int clubLeaderNo, int clubMaxMemberNo, LocalDateTime clubRegDate,
-                int clubState, String clubImg, String clubRegion, int filterGender, int filterMinAge, int filterMaxAge, String filterTag, int mainCategoryNo ) {
-        this.clubNo = clubNo;
-        this.clubName = clubName;
-        this.clubIntro = clubIntro;
-        this.clubLeaderNo = clubLeaderNo;
-        this.clubMaxMemberNo = clubMaxMemberNo;
-        this.clubRegDate = clubRegDate;
-        this.clubState = clubState;
-        this.clubImg = clubImg;
-        this.clubRegion = clubRegion;
-        this.filterGender = filterGender;
-        this.filterMinAge = filterMinAge;
-        this.filterMaxAge = filterMaxAge;
-        this.filterTag = filterTag;
-        this.mainCategoryNo = mainCategoryNo;
-    }
+ 
+    //Constructor
+    public Club() {
+	}
 
-    public int getClubNo() {
+    //getter/setter Method
+	public int getClubNo() {
         return clubNo;
     }
 
