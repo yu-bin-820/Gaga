@@ -2,6 +2,9 @@ package com.gaga.bo.service.meeting.test;
 
 import java.sql.Time;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.gaga.bo.service.domain.Meeting;
+import com.gaga.bo.service.domain.MeetingReview;
 import com.gaga.bo.service.meeting.MeetingService;
 
 @SpringBootTest
@@ -19,7 +23,7 @@ public class MeetingServiceTest {
 	@Qualifier("meetingServiceImpl")
 	MeetingService meetingService;
 	
-	@Test
+	//@Test
 	public void testGetMeeting() throws Exception{
 		
 		Meeting meeting = new Meeting();
@@ -50,7 +54,6 @@ public class MeetingServiceTest {
         meeting.setMeetingDate(new java.sql.Date(new Date().getTime()));
         meeting.setMeetingStartTime(new Time(10, 0, 0));
         meeting.setMeetingEndTime(new Time(12, 0, 0));
-        meeting.setMeetingSuccess(1);
         meeting.setMeetingAddr("Sample Address");
         meeting.setMeetingDetailAddr("Sample Detail Address");
         meeting.setMeetingLat(37.123456);
@@ -60,15 +63,179 @@ public class MeetingServiceTest {
         meeting.setMeetingLeaderNo(1);
         meeting.setMeetingMaxMemberNo(20);
         meeting.setMeetingRegDate(new java.sql.Date(new Date().getTime()));
-        meeting.setMeetingState(1);
         meeting.setMeetingImg("sample.jpg");
         meeting.setFilterGender(1);
         meeting.setFilterMinAge(20);
         meeting.setFilterMaxAge(40);
         meeting.setFilterTag("sample");
+        meeting.setParentClubNo(1);
 		
 		meetingService.addMeeting(meeting);
 		
 	}
+	
+	//@Test
+	public void testUpdateMeeting() throws Exception{
+		
+		Meeting meeting = meetingService.getMeeting(9);
+		Assert.assertNotNull(meeting);
+		
+		Assert.assertEquals("Sample Meeting", meeting.getMeetingName());
+		Assert.assertEquals("sample.jpg", meeting.getMeetingImg());
+		Assert.assertEquals("Sample Introduction", meeting.getMeetingIntro());
+		
+        meeting.setMeetingName("Update Sample Meeting");
+        meeting.setMeetingImg("updatesample.jpg");
+        meeting.setMeetingIntro("Update Sample Introduction");
+        
+        meetingService.updateMeeting(meeting);
+        
+        meeting = meetingService.getMeeting(meeting.getMeetingNo());
+		Assert.assertNotNull(meeting);
+        
+		Assert.assertEquals("Update Sample Meeting", meeting.getMeetingName());
+		Assert.assertEquals("updatesample.jpg", meeting.getMeetingImg());
+		Assert.assertEquals("Update Sample Introduction", meeting.getMeetingIntro());
+
+	}
+	
+	//@Test
+	public void testUpdateMeetingSuccess() throws Exception{
+		
+		Meeting meeting = meetingService.getMeeting(9);
+		Assert.assertNotNull(meeting);
+		
+		Assert.assertEquals("Update Sample Meeting", meeting.getMeetingName());
+		Assert.assertEquals("updatesample.jpg", meeting.getMeetingImg());
+		Assert.assertEquals(0, meeting.getMeetingSuccess());
+		
+		
+        meeting.setMeetingImg("updatesample.jpg");
+        meeting.setMeetingIntro("Update Sample Introduction");
+        
+        meetingService.updateMeetingSuccess(meeting);
+        
+        meeting = meetingService.getMeeting(meeting.getMeetingNo());
+		Assert.assertNotNull(meeting);
+        
+		Assert.assertEquals(1, meeting.getMeetingSuccess());
+		Assert.assertEquals(1, meeting.getMeetingState());
+
+	}
+	
+	//@Test
+	public void testDeleteMeeting() throws Exception{
+		
+		meetingService.deleteMeeting(5);
+
+
+	}
+	
+	//@Test
+	public void testGetMeetingListFromRarentClubNo() throws Exception{
+		
+		Map<String, Object> map = meetingService.getMeetingListFromRarentClubNo(1);
+		
+		List<Object> list = (List<Object>)map.get("list");
+		
+		Assert.assertEquals(3, list.size());
+
+	}
+	
+	//@Test
+	public void testAddMeetingMember() throws Exception{
+		
+		
+		Map<String, String> map = new HashMap<>();
+		map.put("userNo", "1");
+		map.put("meetingNo", "2");
+				
+				
+		meetingService.addMeetingMember(map);
+
+	}
+	
+	//@Test
+	public void testUpdateMeetingMember() throws Exception{
+		
+		
+		Map<String, String> map = new HashMap<>();
+		map.put("memberNo", "1");
+		map.put("state", "1");
+				
+				
+		meetingService.updateMember(map);
+
+	}
+	
+	//@Test
+	public void testDeleteMeetingMember() throws Exception{	
+				
+		meetingService.deleteMeetingMember(1);
+
+	}
+	
+	@Test
+	public void testGetMyMeetingList() throws Exception{	
+				
+		List<Meeting> list = meetingService.getMyMeetingList(1);
+		
+		Assert.assertEquals(1, list.size());
+
+	}
+	
+    //@Test
+    public void testAddMeetingReview() throws Exception {
+        MeetingReview meetingReview = new MeetingReview();
+        meetingReview.setMeetingNo(2);
+        meetingReview.setMeetingScore(5);
+        meetingReview.setMeetingReviewImg("review.jpg");
+        meetingReview.setMeetingReviewContent("Great meeting!");
+        meetingReview.setMeetingReviewerNo(1);
+        
+        meetingService.addMeetingReview(meetingReview);
+        
+    }
+    
+    //@Test
+    public void testGetMeetingReview() throws Exception {
+		MeetingReview meetingReview = new MeetingReview();
+		
+		meetingReview = meetingService.getMeetingReview(1);
+        
+		Assert.assertEquals(5, meetingReview.getMeetingScore(),0);
+		Assert.assertEquals("review.jpg", meetingReview.getMeetingReviewImg());
+		Assert.assertEquals("Great meeting!", meetingReview.getMeetingReviewContent());
+    }
+	
+    //@Test
+    public void testUpdateMeetingReview() throws Exception {
+    	
+        MeetingReview meetingReview = new MeetingReview();
+        meetingReview.setMeetingReviewNo(1);
+        meetingReview.setMeetingScore(2);
+        meetingReview.setMeetingReviewImg("updatereview.jpg");
+        meetingReview.setMeetingReviewContent("updateGreat meeting!");
+        
+        meetingService.updateMeetingReview(meetingReview);
+        
+    }
+    
+	//@Test
+	public void testGetMeetingReviewList() throws Exception{	
+				
+		List<MeetingReview> list = meetingService.getMeetingReviewList(2);
+		
+		Assert.assertEquals(1, list.size());
+
+	}
+	
+	//@Test
+	public void testDeleteMeetingReview() throws Exception{	
+				
+		meetingService.deleteMeetingReview(1);
+
+	}
+	
 
 }

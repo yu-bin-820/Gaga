@@ -10,7 +10,7 @@ public class Meeting {
     private Date meetingDate;
     private Time meetingStartTime;
     private Time meetingEndTime;
-    private Integer parentClubNo;
+    private int parentClubNo;
     private int meetingSuccess;
     private String meetingAddr;
     private String meetingDetailAddr;
@@ -31,6 +31,7 @@ public class Meeting {
     private int adjustmentState;
     private String accountNo;
     private String bankName;
+    private int state;
     
     public Meeting() {
     	
@@ -204,6 +205,18 @@ public class Meeting {
 				+ ", filterMinAge=" + filterMinAge + ", filterMaxAge=" + filterMaxAge + ", filterTag=" + filterTag
 				+ ", adjustmentTime=" + adjustmentTime + ", adjustmentState=" + adjustmentState + ", accountNo="
 				+ accountNo + ", bankName=" + bankName + "]";
+	}
+
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
+	public void setAdjustmentState(int adjustmentState) {
+		this.adjustmentState = adjustmentState;
 	}
     
 }
