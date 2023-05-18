@@ -15,16 +15,26 @@
 	<!-- FQCN(Full Qualified Class Name) Alias(별칭관리) -->
 	<typeAliases>
 		<!-- <typeAlias alias="user" type="com.gaga.bo.service.domain.User" /> -->
+
+		<typeAlias alias="club" type="com.gaga.bo.service.domain.Club" />
+		<typeAlias alias="payment" type="com.gaga.bo.service.domain.Payment" />
+
 		<typeAlias alias="report" type="com.gaga.bo.service.domain.Report" />
 		<typeAlias alias="reportCategory" type="com.gaga.bo.service.domain.ReportCategory" />
 		<typeAlias alias="title" type="com.gaga.bo.service.domain.Title" />
 		<typeAlias alias="userReview" type="com.gaga.bo.service.domain.UserReview" />
+
 	</typeAliases>
 	
 	 <!-- SQL Definition :: file include -->
 	<mappers>
 		<!-- <mapper resource="sql/UserMapper.xml"/> -->
+
 		<mapper resource="sql/CommunityMapper.xml"/>
+
+		<mapper resource="sql/ClubMapper.xml"/>
+		<mapper resource="sql/PaymentMapper.xml"/>
+
 	</mappers>
 
 </configuration>
