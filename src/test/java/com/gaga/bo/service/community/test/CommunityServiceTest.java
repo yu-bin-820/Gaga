@@ -33,6 +33,8 @@ class CommunityServiceTest {
 	    report.setReportImg3("report_img3.jpg");
 		
 	    communityService.addReport(report);
+	    
+	    
 	}
 
 }

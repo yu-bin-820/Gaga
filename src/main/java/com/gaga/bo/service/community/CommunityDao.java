@@ -10,7 +10,7 @@ import com.gaga.bo.service.domain.ReportCategory;
 import com.gaga.bo.service.domain.Title;
 import com.gaga.bo.service.domain.UserReview;
 
-@Mapper
+//@Mapper
 public interface CommunityDao {
 
    public List<Title> getTitleList(int userNo);

@@ -9,12 +9,12 @@ import com.gaga.bo.service.admin.AdminDao;
 import com.gaga.bo.service.admin.AdminService;
 import com.gaga.bo.service.domain.Admin;
 
-@Service
+//@Service
 public class AdminPostServiceImpl implements AdminService {
 
     private final AdminDao noticePostDao;
 
-    @Autowired
+    //@Autowired
     public AdminPostServiceImpl(AdminDao noticePostDao) {
         this.noticePostDao = noticePostDao;
     }

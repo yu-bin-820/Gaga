@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gaga.bo.service.meeting.MeetingDao">
+ 	
+
+  <resultMap id="MeetingResultMap" type="Meeting">
+    <id property="meetingNo" 				column="meeting_no" 			jdbcType="INTEGER" />
+    <result property="entryFee" 			column="entry_fee" 				jdbcType="INTEGER" />
+    <result property="meetingDate" 			column="meeting_date" 			jdbcType="DATE" />
+    <result property="meetingStartTime" 	column="meeting_start_time" 	jdbcType="TIME" />
+    <result property="meetingEndTime" 		column="meeting_end_time" 		jdbcType="TIME" />
+    <result property="parentClubNo" 		column="parent_club_no" 		jdbcType="INTEGER" />
+    <result property="meetingSuccess" 		column="meeting_success" 		jdbcType="INTEGER" />
+    <result property="meetingAddr" 			column="meeting_addr" 			jdbcType="LONGVARCHAR" />
+    <result property="meetingDetailAddr" 	column="meeting_detail_addr" 	jdbcType="LONGVARCHAR" />
+    <result property="meetingLat" 			column="meeting_lat" 			jdbcType="DOUBLE" />
+    <result property="meetingLng" 			column="meeting_lng" 			jdbcType="DOUBLE" />
+    <result property="meetingName" 			column="meeting_name" 			jdbcType="VARCHAR" />
+    <result property="meetingIntro" 		column="meeting_intro" 			jdbcType="LONGVARCHAR" />
+    <result property="meetingLeaderNo" 		column="meeting_leader_no" 		jdbcType="INTEGER" />
+    <result property="meetingMaxMemberNo" 	column="meeting_max_member_no" 	jdbcType="INTEGER" />
+    <result property="meetingRegDate" 		column="meeting_reg_date" 		jdbcType="TIMESTAMP" />
+    <result property="meetingState" 		column="meeting_state" 			jdbcType="INTEGER" />
+    <result property="meetingImg" 			column="meeting_img" 			jdbcType="LONGVARCHAR" />
+    <result property="filterGender" 		column="filter_gender" 			jdbcType="INTEGER" />
+    <result property="filterMinAge" 		column="filter_min_age" 		jdbcType="INTEGER" />
+    <result property="filterMaxAge" 		column="filter_max_age" 		jdbcType="INTEGER" />
+    <result property="filterTag" 			column="filter_tag" 			jdbcType="LONGVARCHAR" />
+    <result property="adjustmentTime" 		column="adjustment_time" 		jdbcType="TIMESTAMP" />
+    <result property="adjustmentState" 		column="adjustment_state" 		jdbcType="INTEGER" />
+    <result property="accountNo" 			column="account_no"				jdbcType="VARCHAR" />
+    <result property="bankName" 			column="bank_name" 				jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="MeetingReviewResultMap" type="MeetingReview">
+    <id property="meetingReviewNo" 				column="meeting_review_no" 			jdbcType="INTEGER" />
+    <result property="meetingNo" 				column="meeting_no" 				jdbcType="INTEGER" />
+    <result property="meetingScore" 			column="meeting_score" 				jdbcType="FLOAT" />
+    <result property="meetingReviewImg" 		column="meeting_review_img" 		jdbcType="LONGVARCHAR" />
+    <result property="meetingReviewContent" 	column="meeting_review_content" 	jdbcType="LONGVARCHAR" />
+    <result property="meetingReviewerNo" 		column="meeting_reviewer_no" 		jdbcType="INTEGER" />
+    <result property="meetingReviewDate" 		column="meeting_review_date" 		jdbcType="TIMESTAMP" />
+  </resultMap>
+	
+<!-- 미팅 파트 -->	
+<!--  미팅 하나 조회 -->
+  <select id="getMeeting" parameterType="int" resultMap="MeetingResultMap">
+    SELECT meeting_no, entry_fee, meeting_date, meeting_start_time, meeting_end_time, parent_club_no, meeting_success, meeting_addr, meeting_detail_addr, meeting_lat, meeting_lng, meeting_name,
+    meeting_intro, meeting_leader_no, meeting_max_member_no, meeting_reg_date, meeting_state, meeting_img, filter_gender, filter_min_age, filter_max_age, filter_tag
+    FROM meetings
+    WHERE meeting_no = #{meetingNo}
+  </select>
+  
+  
+  <!-- 채팅방이 있는 미팅 리스트 조회 (getMeetingListInChat)-->
+  
+   <!-- 
+  <!-- 부모 클럽에 속하는 미팅 리스트 조회-->
+  <select id="getMeetingListFromRarentClubNo" parameterType="int" resultMap="meetingSelectMap">
+    SELECT meeting_no, entry_fee, meeting_date, meeting_start_time, meeting_end_time, parent_club_no, meeting_success, meeting_addr, meeting_detail_addr, meeting_lat, meeting_lng, meeting_name,
+    meeting_intro, meeting_leader_no, meeting_max_member_no, meeting_reg_date, meeting_state, meeting_img, filter_gender, filter_min_age, filter_max_age, filter_tag
+    FROM meetings
+    WHERE parent_club_no = #{clubNo}
+  </select>  
+  
+  
+  <!-- 미팅 리스트 조회 구현 (getMeetingList)-->
+  
+  
+  <!-- 미팅 생성 -->
+  <insert id="addMeeting" parameterType="Meeting">
+    INSERT INTO meetings (entry_fee, meeting_date, meeting_start_time, meeting_end_time, parent_club_no, meeting_success, meeting_addr, meeting_detail_addr, meeting_lat, meeting_lng, meeting_name, meeting
+     intro, meeting_leader_no, meeting_max_member_no, meeting_reg_date, meeting_state, meeting_img, filter_gender, filter_min_age, filter_max_age, filter_tag)
+    VALUES (#{entryFee}, #{meetingDate}, #{meetingStartTime}, #{meetingEndTime}, #{parentClubNo}, #{meetingSuccess}, #{meetingAddr}, #{meetingDetailAddr}, #{meetingLat}, #{meetingLng}, #{meetingName}, #{meetingIntro}, #{meetingLeaderNo}, #{meetingMaxMemberNo}, #{meetingRegDate}, #{meetingState}, #{meetingImg}, #{filterGender}, #{filterMinAge}, #{filterMaxAge}, #{filterTag})
+  </insert>
+  
+  
+<!-- 미팅 모집중 정보 수정 -->
+  <update id="updateMeeting" parameterType="Meeting">
+    UPDATE meetings
+    SET entry_fee = #{entryFee}, meeting_date = #{meetingDate}, meeting_start_time = #{meetingStartTime}, meeting_end_time = #{meetingEndTime}, parent_club_no = #{parentClubNo}, meeting_addr = #{meetingAddr}, meeting_detail_addr = #{meetingDetailAddr}, meeting_lat = #{meetingLat}, meeting_lng = #{meetingLng}, meeting_name = #{meetingName}, meeting_intro = #{meetingIntro}, meeting_leader_no = #{meetingLeaderNo}, meeting_max_member_no = #{meetingMaxMemberNo}, meeting_reg_date = #{meetingRegDate}, meeting_state = #{meetingState}, meeting_img = #{meetingImg}, filter_gender = #{filterGender}, filter_min_age = #{filterMinAge}, filter_max_age = #{filterMaxAge}, filter_tag = #{filterTag}, adjustment_time = #{adjustmentTime}, adjustment_state = #{adjustmentState}, account_no = #{accountNo}, bank_name = #{bankName}
+    WHERE meeting_no = #{meetingNo}
+  </update>
+  
+  <!-- 미팅 성사 및 결제정보 수정 -->
+  <update id="updateMeetingSuccess" parameterType="Meeting">
+    UPDATE meetings
+    SET meeting_success = #{meetingSuccess}, meeting_state = #{meetingState}, adjustment_time = #{adjustmentTime}, adjustment_state = #{adjustmentState}, account_no = #{accountNo}, bank_name = #{bankName}
+    WHERE meeting_no = #{meetingNo}
+  </update>
+  
+  <!-- 미팅 삭제 -->
+  <delete id="deleteMeeting" parameterType="int">
+    DELETE FROM meetings
+    WHERE meeting_no = #{meetingNo}
+  </delete>
+  
+  
+  
+  <!-- 미팅 신청 파트 -->
+  <!-- 미팅 신청시 회원 추가 -->
+  <insert id="addMeetingMember" parameterType="Map">
+    INSERT INTO members (user_no, meeting_no, state)
+    VALUES (#{userNo}, #{meetingNo}, #{state})
+  </insert>
+  
+ <!-- 신청 멤버를 확정 멤버로 변경(updateMeetingMemberState) -->
+  <update id="updateMember" parameterType="Map">
+    UPDATE members
+    SET state = #{state}
+    WHERE member_no = #{memberNo}
+  </update>
+  
+  <!-- 미팅 멤버 삭제 -->
+  <delete id="deleteMeetingMember" parameterType="int">
+    DELETE FROM members
+    WHERE member_no = #{memberNo}
+  </delete>
+  
+  
+  <!-- 회원의 나의 미팅 리스트 조회 -->
+  <select id="getMyMeetingList" parameterType="int" resultMap="MemberResultMap">
+    SELECT *
+    FROM members
+    WHERE user_no = #{userNo}
+  </select>
+  
+  <!-- 모임에 참여신청을 한 멤버 리스트 조회 -->
+  
+  <!-- 모임에 참여 확정 멤버 리스트 조회 -->
+  
+
+  
+  
+  
+  <!-- 미팅 리뷰 파트 -->
+  <!-- 미팅 리뷰 하나 조회 -->
+  <select id="getMeetingReview" parameterType="int" resultMap="MeetingReviewResultMap">
+    SELECT *
+    FROM meeting_reviews
+    WHERE meeting_review_no = #{meetingReviewNo}
+  </select>
+  
+  <!-- 미팅 리뷰 리스트 조회 -->
+  <select id="getMeetingReviewList" parameterType="int" resultMap="meetingReviewSelectMap">
+    SELECT meeting_review_no, meeting_no, meeting_score, meeting_review_img, meeting_reviewer_no
+    FROM meeting_reviews
+    WHERE meeting_no = #{meetingNo}
+  </select>
+
+  <!-- 미팅 리뷰 추가 -->
+  <insert id="addMeetingReview" parameterType="MeetingReview">
+    INSERT INTO meeting_reviews (meeting_no, meeting_score, meeting_review_img, meeting_review_content, meeting_reviewer_no, meeting_review_date)
+    VALUES (#{meetingNo}, #{meetingScore}, #{meetingReviewImg}, #{meetingReviewContent}, #{meetingReviewerNo}, #{meetingReviewDate})
+  </insert>
+
+  <!-- 미팅 정보 수정 -->
+  <update id="updateMeetingReview" parameterType="MeetingReview">
+    UPDATE meeting_reviews
+    SET meeting_score = #{meetingScore}, meeting_review_img = #{meetingReviewImg}, meeting_review_content = #{meetingReviewContent}
+    WHERE meeting_review_no = #{meetingReviewNo}
+  </update>
+
+ <!-- 미팅 삭제 -->
+  <delete id="deleteMeetingReview" parameterType="int">
+    DELETE FROM meeting_reviews
+    WHERE meeting_review_no = #{meetingReviewNo}
+  </delete>
+	 
+</mapper>
