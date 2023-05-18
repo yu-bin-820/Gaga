@@ -15,20 +15,20 @@ class AdminTest {
 
 	///field
 	@Autowired
-	@Qualifier("AdminServiceImpl")
+	@Qualifier("adminServiceImpl")
 	AdminService adminService;
 	
 	@Test
 	public void testAddNoticePost() {
 		NoticePost noticePost = new NoticePost();
 		
-	    noticePost.setNoticePostNo(9990);
-	    noticePost.setNoticePostCategoryNo(1001);
-	    noticePost.setNoticePostTitle("junit´ÜÅ×");
-	    noticePost.setNoticePostText("´ÜÅ×³»¿ë¹°");
-	    noticePost.setNoticePostImg("´ÜÅ×.jpg");
+	    noticePost.setNoticePostNo(999);
+	    noticePost.setNoticePostCategoryNo(1);
+	    noticePost.setNoticePostTitle("junití…ŒìŠ¤íŠ¸");
+	    noticePost.setNoticePostText("junití…ŒìŠ¤íŠ¸");
+	    noticePost.setNoticePostImg("asdasdsad.jpg");
 	    noticePost.setNoticePostRegDate(LocalDateTime.now());
-	    noticePost.setUserNo(1212);
+	    noticePost.setUserNo(5);
 	    		
 	    adminService.addNoticePost(noticePost);
 	}

@@ -48,7 +48,7 @@
 
 		<mapper resource="sql/PaymentMapper.xml"/>
 
-		<!-- <mapper resource="sql/AdminMapper.xml"/>  -->
+		<mapper resource="sql/AdminMapper.xml"/>
 
 	</mappers>
 
