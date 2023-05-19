@@ -45,11 +45,11 @@ public class ClubServiceImpl implements ClubService {
 	  
 	  
 	  @Override 
-	  public List<Club> getClubList(int clubLeaderNo) throws Exception {
+	  public List<Club> getCreateClubList(int clubLeaderNo) throws Exception {
 	  
 		  System.out.println("회원의 클럽 목록 조회"); 
 		  // TODO Auto-generated method stub return
-		  return clubDao.getClubList(clubLeaderNo);
+		  return clubDao.getCreateClubList(clubLeaderNo);
 	  
 	  }
 	  

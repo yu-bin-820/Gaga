@@ -39,7 +39,6 @@ public class ClubServiceTest {
 		club.setFilterMaxAge(60);
 		club.setFilterTag("탁구");
 		club.setMainCategoryNo(1); 
-		club.setState(1);
 		 
 		clubService.addClub(club);
 
@@ -57,9 +56,9 @@ public class ClubServiceTest {
 	}
 	
 	//@Test
-	public void getClubListTest() throws Exception{
+	public void getCreateClubListTest() throws Exception{
 		
-		List<Club> clubList = clubService.getClubList(3);
+		List<Club> clubList = clubService.getCreateClubList(3);
 		
 		assertNotNull(clubList);
 		

@@ -21,7 +21,6 @@
 	  <result property="filterMaxAge" column="filter_max_age" jdbcType="INTEGER"/>
 	  <result property="filterTag" column="filter_tag" jdbcType="VARCHAR"/>
 	  <result property="mainCategoryNo" column="main_category_no" jdbcType="INTEGER"/>
-	  <result property="state" column="state" jdbcType="INTEGER"/>
 	</resultMap>
 
 	
@@ -35,14 +34,14 @@
 	   (#{clubName:VARCHAR}, #{clubIntro:VARCHAR}, #{clubLeaderNo:INTEGER}, #{clubMaxMemberNo:INTEGER},
 	    #{clubRegDate:TIMESTAMP}, #{clubState:INTEGER}, #{clubImg:VARCHAR}, #{clubRegion:VARCHAR},
 	    #{filterGender:INTEGER}, #{filterMinAge:INTEGER}, #{filterMaxAge:INTEGER}, #{filterTag:VARCHAR},
-	    #{mainCategoryNo:INTEGER}, #{state:INTEGER})
+	    #{mainCategoryNo:INTEGER})
 	</insert>
 	
 	<!-- SELECT ONE -->
 	<select id="getClub" resultMap="ClubResultMap" parameterType="int">
 	  SELECT club_no, club_name, club_intro, club_leader_no, club_max_member_no,
 	         club_reg_date, club_state, club_img, club_region, filter_gender,
-	         filter_min_age, filter_max_age, filter_tag, main_category_no, state
+	         filter_min_age, filter_max_age, filter_tag, main_category_no
 	  FROM clubs
 	  WHERE club_no = #{clubNo:INTEGER}
 	</select>
@@ -51,7 +50,7 @@
 	<select id="getClubList" resultMap="ClubResultMap" parameterType="int">
 	  SELECT club_no, club_name, club_intro, club_leader_no, club_max_member_no,
 	         club_reg_date, club_state, club_img, club_region, filter_gender,
-	         filter_min_age, filter_max_age, filter_tag, main_category_no, state
+	         filter_min_age, filter_max_age, filter_tag, main_category_no
 	  FROM clubs
 	  WHERE club_leader_no = #{clubLeaderNo:INTEGER}
 	</select>
