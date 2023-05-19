@@ -3,17 +3,23 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.gaga.bo.service.admin.AdminDao">
-<!-- 
-	 <resultMap id="noticePostResult" type="noticePost">
-        <id property="noticePostNo" column="notice_post_no" jdbcType="INTEGER" />
-        <result property="noticePostCategoryNo" column="notice_post_category_no" jdbcType="INTEGER" />
-        <result property="noticePostTitle" column="notice_post_title" jdbcType="VARCHAR" />
-        <result property="noticePostText" column="notice_post_text" jdbcType="VARCHAR" />
-        <result property="noticePostImg" column="notice_post_img" jdbcType="VARCHAR" />
-        <result property="noticePostRegDate" column="notice_post_reg_date" jdbcType="TIMESTAMP" />
-        <result property="userNo" column="user_no" jdbcType="INTEGER" />
-    </resultMap>
- -->	
+
+	<resultMap id="noticePostResult" type="noticePost">
+		<id property="noticePostNo" column="notice_post_no"
+			jdbcType="INTEGER" />
+		<result property="noticePostCategoryNo"
+			column="notice_post_category_no" jdbcType="INTEGER" />
+		<result property="noticePostTitle" column="notice_post_title"
+			jdbcType="VARCHAR" />
+		<result property="noticePostText" column="notice_post_text"
+			jdbcType="VARCHAR" />
+		<result property="noticePostImg" column="notice_post_img"
+			jdbcType="VARCHAR" />
+		<result property="noticePostRegDate"
+			column="notice_post_reg_date" jdbcType="TIMESTAMP" />
+		<result property="userNo" column="user_no" jdbcType="INTEGER" />
+	</resultMap>
+
 	<insert id="addNoticePost"
 		parameterType="com.gaga.bo.service.domain.NoticePost">
 		INSERT INTO notice_posts (
@@ -21,36 +27,36 @@
 		notice_post_title,
 		notice_post_text,
 		notice_post_img,
-		notice_post_reg_date, 
+		notice_post_reg_date,
 		user_no
 		)
 		VALUES (#{noticePostCategoryNo},
-		#{noticePostTitle}, #{noticePostText},
+		#{noticePostTitle},
+		#{noticePostText},
 		#{noticePostImg},
 		#{noticePostRegDate}, #{userNo})
 	</insert>
-	
-	<!-- 
+
+
 	<select id="listNoticePost" resultMap="noticePostResult">
-		SELECT * FROM NoticePost
+		SELECT * FROM notice_posts
 	</select>
-	
+
 	<select id="searchNoticePost" resultMap="noticePostResult">
-		SELECT * FROM NoticePost
-		WHERE notice_post_title LIKE #{keyword}
-		OR notice_post_text LIKE #{keyword}
+		SELECT * FROM
+		notice_posts
+		WHERE notice_post_title LIKE CONCAT('%', #{keyword}, '%')
+		OR notice_post_text LIKE CONCAT('%', #{keyword}, '%')
 	</select>
-	
+
 	<select id="getNoticePost" resultMap="noticePostResult">
-		SELECT * FROM NoticePost
+		SELECT * FROM notice_posts
 		WHERE notice_post_no = #{noticePostNo}
 	</select>
 
-	
-
 	<update id="updateNoticePost"
 		parameterType="com.gaga.bo.service.domain.NoticePost">
-		UPDATE NoticePost
+		UPDATE notice_posts
 		SET notice_post_category_no =
 		#{noticePostCategoryNo},
 		notice_post_title = #{noticePostTitle},
@@ -61,9 +67,8 @@
 	</update>
 
 	<delete id="deleteNoticePost">
-		DELETE FROM NoticePost WHERE notice_post_no =
+		DELETE FROM notice_posts WHERE notice_post_no =
 		#{noticePostNo}
 	</delete>
-	
-	 -->
+
 </mapper>
