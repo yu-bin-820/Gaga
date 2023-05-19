@@ -52,7 +52,7 @@
 	        #{nickName:VARCHAR}, #{phoneNo:INTEGER}, #{role:INTEGER},
 	        #{outDay:TIMESTAMP}, #{outReason:LONGVARCHAR}, 
 	        #{profileImg:LONGVARCHAR}, 
-	        #{activityImg1:LONGVARCHAR}, #{activityImg2:LONGVARCHAR}, #{activityImg3:LONGVARCHAR}, 
+	        #{activityImg:LONGVARCHAR}, #{activityImg2:LONGVARCHAR}, #{activityImg3:LONGVARCHAR}, 
 	        #{userIntro:LONGVARCHAR}, 
 	        <if test="mainTitleNo!=0">#{mainTitleNo:INTEGER}</if> <if test="mainTitleNo==0">null</if>, 
 	        #{bankCode:VARCHAR}, #{bankName:VARCHAR},
