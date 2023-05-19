@@ -26,6 +26,7 @@ public class Meeting {
     private int filterGender;
     private int filterMinAge;
     private int filterMaxAge;
+    private int mainCategoryNo;
     private String filterTag;
     private Date adjustmentTime;
     private int adjustmentState;
@@ -193,19 +194,6 @@ public class Meeting {
 	public void setBankName(String bankName) {
 		this.bankName = bankName;
 	}
-	@Override
-	public String toString() {
-		return "Meeting [meetingNo=" + meetingNo + ", entryFee=" + entryFee + ", meetingDate=" + meetingDate
-				+ ", meetingStartTime=" + meetingStartTime + ", meetingEndTime=" + meetingEndTime + ", parentClubNo="
-				+ parentClubNo + ", meetingSuccess=" + meetingSuccess + ", meetingAddr=" + meetingAddr
-				+ ", meetingDetailAddr=" + meetingDetailAddr + ", meetingLat=" + meetingLat + ", meetingLng="
-				+ meetingLng + ", meetingName=" + meetingName + ", meetingIntro=" + meetingIntro + ", meetingLeaderNo="
-				+ meetingLeaderNo + ", meetingMaxMemberNo=" + meetingMaxMemberNo + ", meetingRegDate=" + meetingRegDate
-				+ ", meetingState=" + meetingState + ", meetingImg=" + meetingImg + ", filterGender=" + filterGender
-				+ ", filterMinAge=" + filterMinAge + ", filterMaxAge=" + filterMaxAge + ", filterTag=" + filterTag
-				+ ", adjustmentTime=" + adjustmentTime + ", adjustmentState=" + adjustmentState + ", accountNo="
-				+ accountNo + ", bankName=" + bankName + "]";
-	}
 
 	public int getState() {
 		return state;
@@ -217,6 +205,29 @@ public class Meeting {
 
 	public void setAdjustmentState(int adjustmentState) {
 		this.adjustmentState = adjustmentState;
+	}
+
+	public int getMainCategoryNo() {
+		return mainCategoryNo;
+	}
+
+	public void setMainCategoryNo(int mainCategoryNo) {
+		this.mainCategoryNo = mainCategoryNo;
+	}
+
+	@Override
+	public String toString() {
+		return "Meeting [meetingNo=" + meetingNo + ", entryFee=" + entryFee + ", meetingDate=" + meetingDate
+				+ ", meetingStartTime=" + meetingStartTime + ", meetingEndTime=" + meetingEndTime + ", parentClubNo="
+				+ parentClubNo + ", meetingSuccess=" + meetingSuccess + ", meetingAddr=" + meetingAddr
+				+ ", meetingDetailAddr=" + meetingDetailAddr + ", meetingLat=" + meetingLat + ", meetingLng="
+				+ meetingLng + ", meetingName=" + meetingName + ", meetingIntro=" + meetingIntro + ", meetingLeaderNo="
+				+ meetingLeaderNo + ", meetingMaxMemberNo=" + meetingMaxMemberNo + ", meetingRegDate=" + meetingRegDate
+				+ ", meetingState=" + meetingState + ", meetingImg=" + meetingImg + ", filterGender=" + filterGender
+				+ ", filterMinAge=" + filterMinAge + ", filterMaxAge=" + filterMaxAge + ", mainCategoryNo="
+				+ mainCategoryNo + ", filterTag=" + filterTag + ", adjustmentTime=" + adjustmentTime
+				+ ", adjustmentState=" + adjustmentState + ", accountNo=" + accountNo + ", bankName=" + bankName
+				+ ", state=" + state + "]";
 	}
     
 }
