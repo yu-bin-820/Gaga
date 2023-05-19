@@ -4,9 +4,9 @@
 		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 		
-<mapper namespace="com.gaga.bo.service.domain.User">
+<mapper namespace="com.gaga.bo.service.user.UserDao">
 
-	<resultMap id="UserResultMap" type="com.gaga.bo.service.domain.User">
+	<resultMap id="userResultMap" type="user">
 	    <result property="userNo" column="user_no" jdbcType="INTEGER"/>
 	    <result property="userId" column="user_id" jdbcType="VARCHAR"/>
 	    <result property="password" column="password" jdbcType="VARCHAR"/>
@@ -21,7 +21,7 @@
 	    <result property="outDay" column="out_day" jdbcType="TIMESTAMP"/>
 	    <result property="outReason" column="out_reason" jdbcType="LONGVARCHAR"/>
 	    <result property="profileImg" column="profile_img" jdbcType="LONGVARCHAR"/>
-	    <result property="activityImg1" column="activity_img1" jdbcType="LONGVARCHAR"/>
+	    <result property="activityImg" column="activity_img" jdbcType="LONGVARCHAR"/>
 	    <result property="activityImg2" column="activity_img2" jdbcType="LONGVARCHAR"/>
 	    <result property="activityImg3" column="activity_img3" jdbcType="LONGVARCHAR"/>
 	    <result property="userIntro" column="user_intro" jdbcType="LONGVARCHAR"/>
@@ -38,71 +38,74 @@
 	    <result property="filterTag3" column="filter_tag3" jdbcType="LONGVARCHAR"/>
 	</resultMap>
 	
-	<insert id="addUser" parameterType="com.gaga.bo.service.domain.User">
-	    INSERT INTO user (
+	<insert id="addUser" parameterType="user">
+	    INSERT INTO users (
 	        user_no, user_id, password, user_name, birthday, gender, nick_name, phone_no, 
-	        role, join_day, temperature, out_day, out_reason, profile_img, activity_img1, 
+	        role, out_day, out_reason, profile_img, activity_img, 
 	        activity_img2, activity_img3, user_intro, main_title_no, bank_code, bank_name, 
 	        account_no, blacklist, filter_gender, filter_max_age, filter_min_age, filter_tag, 
 	        filter_tag2, filter_tag3
 	    )
 	    VALUES (
-	        #{userNo, jdbcType=INTEGER}, #{userId, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR},
-	        #{userName, jdbcType=VARCHAR}, #{birthday, jdbcType=DATE}, #{gender, jdbcType=INTEGER},
-	        #{nickName, jdbcType=VARCHAR}, #{phoneNo, jdbcType=INTEGER}, #{role, jdbcType=VARCHAR},
-	        #{joinDay, jdbcType=TIMESTAMP}, #{temperature, jdbcType=REAL}, #{outDay, jdbcType=TIMESTAMP},
-	        #{outReason, jdbcType=LONGVARCHAR}, #{profileImg, jdbcType=LONGVARCHAR}, 
-	        #{activityImg1, jdbcType=LONGVARCHAR}, #{activityImg2, jdbcType=LONGVARCHAR}, 
-	        #{activityImg3, jdbcType=LONGVARCHAR}, #{userIntro, jdbcType=LONGVARCHAR}, 
-	        #{mainTitleNo, jdbcType=INTEGER}, #{bankCode, jdbcType=VARCHAR}, #{bankName, jdbcType=VARCHAR},
-	        #{accountNo, jdbcType=VARCHAR}, #{blacklist, jdbcType=INTEGER}, #{filterGender, jdbcType=INTEGER},
-	        #{filterMaxAge, jdbcType=INTEGER}, #{filterMinAge, jdbcType=INTEGER}, #{filterTag, jdbcType=LONGVARCHAR},
-	        #{filterTag2, jdbcType=LONGVARCHAR}, #{filterTag3, jdbcType=LONGVARCHAR}
+	        #{userNo:INTEGER}, #{userId:VARCHAR}, #{password:VARCHAR},
+	        #{userName:VARCHAR}, #{birthday:DATE}, #{gender:INTEGER},
+	        #{nickName:VARCHAR}, #{phoneNo:INTEGER}, #{role:INTEGER},
+	        #{outDay:TIMESTAMP}, #{outReason:LONGVARCHAR}, 
+	        #{profileImg:LONGVARCHAR}, 
+	        #{activityImg1:LONGVARCHAR}, #{activityImg2:LONGVARCHAR}, #{activityImg3:LONGVARCHAR}, 
+	        #{userIntro:LONGVARCHAR}, 
+	        <if test="mainTitleNo!=0">#{mainTitleNo:INTEGER}</if> <if test="mainTitleNo==0">null</if>, 
+	        #{bankCode:VARCHAR}, #{bankName:VARCHAR},
+	        #{accountNo:VARCHAR}, 
+	        #{blacklist:INTEGER}, 
+	        #{filterGender:INTEGER},
+	        #{filterMaxAge:INTEGER}, #{filterMinAge:INTEGER}, 
+	        #{filterTag:LONGVARCHAR}, #{filterTag2:LONGVARCHAR}, #{filterTag3:LONGVARCHAR}
 	    )
-	</insert>
+	 </insert>  
 	 
-	<select id="getUser" parameterType="int" resultMap="UserResultMap">
-	    SELECT *
-	    FROM user
-	    WHERE user_no = #{userNo, jdbcType=INTEGER}
-	</select>   
-	    
-	<update id="updateUser" parameterType="com.gaga.bo.service.domain.User">
-	    UPDATE user SET
-	        user_id = #{userId, jdbcType=VARCHAR},
-	        password = #{password, jdbcType=VARCHAR},
-	        user_name = #{userName, jdbcType=VARCHAR},
-	        birthday = #{birthday, jdbcType=DATE},
-	        gender = #{gender, jdbcType=INTEGER},
-	        nick_name = #{nickName, jdbcType=VARCHAR},
-	        phone_no = #{phoneNo, jdbcType=INTEGER},
-	        role = #{role, jdbcType=VARCHAR},
-	        join_day = #{joinDay, jdbcType=TIMESTAMP},
-	        temperature = #{temperature, jdbcType=REAL},
-	        out_day = #{outDay, jdbcType=TIMESTAMP},
-	        out_reason = #{outReason, jdbcType=LONGVARCHAR},
-	        profile_img = #{profileImg, jdbcType=LONGVARCHAR},
-	        activity_img1 = #{activityImg1, jdbcType=LONGVARCHAR},
-	        activity_img2 = #{activityImg2, jdbcType=LONGVARCHAR},
-	        activity_img3 = #{activityImg3, jdbcType=LONGVARCHAR},
-	        user_intro = #{userIntro, jdbcType=LONGVARCHAR},
-	        main_title_no = #{mainTitleNo, jdbcType=INTEGER},
-	        bank_code = #{bankCode, jdbcType=VARCHAR},
-	        bank_name = #{bankName, jdbcType=VARCHAR},
-	        account_no = #{accountNo, jdbcType=VARCHAR},
-	        blacklist = #{blacklist, jdbcType=INTEGER},
-	        filter_gender = #{filterGender, jdbcType=INTEGER},
-	        filter_max_age = #{filterMaxAge, jdbcType=INTEGER},
-	        filter_min_age = #{filterMinAge, jdbcType=INTEGER},
-	        filter_tag = #{filterTag, jdbcType=LONGVARCHAR},
-	        filter_tag2 = #{filterTag2, jdbcType=LONGVARCHAR},
-	        filter_tag3 = #{filterTag3, jdbcType=LONGVARCHAR}
-	    WHERE user_no = #{userNo, jdbcType=INTEGER}
+	<update id="updateUser" parameterType="User">
+	    UPDATE users SET
+	        user_id = #{userId},
+	        password = #{password},
+	        user_name = #{userName},
+	        birthday = #{birthday},
+	        gender = #{gender},
+	        nick_name = #{nickName},
+	        phone_no = #{phoneNo},
+	        role = #{role},
+	        out_day = #{outDay},
+	        out_reason = #{outReason},
+	        profile_img = #{profileImg},
+	        activity_img = #{activityImg},
+	        activity_img2 = #{activityImg2},
+	        activity_img3 = #{activityImg3},
+	        user_intro = #{userIntro},
+	        main_title_no = <choose><when test="mainTitleNo != 0">#{mainTitleNo}</when><otherwise>null</otherwise></choose>,
+	        bank_code = #{bankCode},
+	        bank_name = #{bankName},
+	        account_no = #{accountNo},
+	        blacklist = #{blacklist},
+	        filter_gender = #{filterGender},
+	        filter_max_age = #{filterMaxAge},
+	        filter_min_age = #{filterMinAge},
+	        filter_tag = #{filterTag},
+	        filter_tag2 = #{filterTag2},
+	        filter_tag3 = #{filterTag3}
+	    WHERE user_no = #{userNo}
 	</update>
 	
-	
-	
-	
-	
-	
+	<select id="getUser" parameterType="int" resultMap="userResultMap">
+	    SELECT
+	        user_no, user_id, password, user_name, birthday, gender, nick_name, phone_no,
+	        role, join_day, out_day, out_reason, profile_img, activity_img,
+	        activity_img2, activity_img3, user_intro, main_title_no, bank_code, bank_name,
+	        account_no, blacklist, filter_gender, filter_min_age, filter_max_age, filter_tag,
+	        filter_tag2, filter_tag3
+	    FROM users
+	    WHERE user_no = #{userNo}
+	</select>
+
+	 
+	 
 </mapper>
