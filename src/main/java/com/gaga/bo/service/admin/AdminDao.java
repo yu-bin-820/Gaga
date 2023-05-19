@@ -10,8 +10,9 @@ import com.gaga.bo.service.domain.NoticePost;
 public interface AdminDao {
 
 	public void addNoticePost(NoticePost noticePost);
-	/*
-	 * List<NoticePost> listNoticePost();
+	
+	List<NoticePost> listNoticePost();
+	
 	NoticePost getNoticePost(int noticePostNo);
 	
 
@@ -19,5 +20,5 @@ public interface AdminDao {
 
 	void deleteNoticePost(int noticePostNo);
 
-	List<NoticePost> searchNoticePost(String keyword);*/
+	/*List<NoticePost> searchNoticePost(String keyword);*/
 }

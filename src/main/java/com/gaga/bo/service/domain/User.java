@@ -22,7 +22,7 @@ public class User {
     private LocalDateTime outDay;
     private String outReason;
     private String profileImg;
-    private String activityImg1;
+    private String activityImg;
     private String activityImg2;
     private String activityImg3;
     private String userIntro;
@@ -122,11 +122,11 @@ public class User {
 	public void setProfileImg(String profileImg) {
 		this.profileImg = profileImg;
 	}
-	public String getActivityImg1() {
-		return activityImg1;
+	public String getActivityImg() {
+		return activityImg;
 	}
-	public void setActivityImg1(String activityImg1) {
-		this.activityImg1 = activityImg1;
+	public void setActivityImg(String activityImg) {
+		this.activityImg = activityImg;
 	}
 	public String getActivityImg2() {
 		return activityImg2;
@@ -217,7 +217,7 @@ public class User {
 		return "User [userNo=" + userNo + ", userId=" + userId + ", password=" + password + ", userName=" + userName
 				+ ", birthday=" + birthday + ", gender=" + gender + ", nickName=" + nickName + ", phoneNo=" + phoneNo
 				+ ", role=" + role + ", joinDay=" + joinDay + ", temperature=" + temperature + ", outDay=" + outDay
-				+ ", outReason=" + outReason + ", profileImg=" + profileImg + ", activityImg1=" + activityImg1
+				+ ", outReason=" + outReason + ", profileImg=" + profileImg + ", activityImg=" + activityImg
 				+ ", activityImg2=" + activityImg2 + ", activityImg3=" + activityImg3 + ", userIntro=" + userIntro
 				+ ", mainTitleNo=" + mainTitleNo + ", bankCode=" + bankCode + ", bankName=" + bankName + ", accountNo="
 				+ accountNo + ", blacklist=" + blacklist + ", filterGender=" + filterGender + ", filterMaxAge="
