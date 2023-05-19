@@ -19,27 +19,27 @@ class UserServiceTest {
     @Qualifier("userServiceImpl")
     UserService userService;
 
-    //@Test
-//    public void addUserTest() throws Exception{
-//        User user = new User();
-//        
-//        user.setUserId("이현석");
-//        user.setPassword("1234");
-//        user.setUserName("lee");
-//        user.setBirthday(LocalDate.of(2000, 1, 1));
-//        user.setGender(1);
-//        user.setNickName("lee");
-//        user.setPhoneNo(01011111111);
-//        user.setFilterMinAge(14);
-//        user.setFilterMaxAge(100);
-//        // 필요한 필드들을 추가로 설정하세요.
-//
-//        userService.addUser(user);
-//
-//        // 데이터베이스에 실제로 추가되었는지 확인하는 방법은 데이터베이스에서 조회하는 방법 등이 있습니다.
-//        // 예를 들면, userService.getUser(user.getUserNo()); 와 같이 조회한 후 assertEquals 등을 사용하여 확인할 수 있습니다.
-//        // 이 부분은 당신의 환경과 요구 사항에 따라 다를 수 있습니다.
-//    }
+    @Test
+    public void addUserTest() throws Exception{
+        User user = new User();
+        
+        user.setUserId("송용범");
+        user.setPassword("1234");
+        user.setUserName("song");
+        user.setBirthday(LocalDate.of(2000, 1, 1));
+        user.setGender(1);
+        user.setNickName("song");
+        user.setPhoneNo(01011111111);
+        user.setFilterMinAge(14);
+        user.setFilterMaxAge(100);
+        // 필요한 필드들을 추가로 설정하세요.
+
+        userService.addUser(user);
+
+        // 데이터베이스에 실제로 추가되었는지 확인하는 방법은 데이터베이스에서 조회하는 방법 등이 있습니다.
+        // 예를 들면, userService.getUser(user.getUserNo()); 와 같이 조회한 후 assertEquals 등을 사용하여 확인할 수 있습니다.
+        // 이 부분은 당신의 환경과 요구 사항에 따라 다를 수 있습니다.
+    }
     
     //@Test
 //    public void updateUserTest() throws Exception{
@@ -64,7 +64,7 @@ class UserServiceTest {
 //        // 이 부분은 당신의 환경과 요구 사항에 따라 다를 수 있습니다.
 //    }
     
-    @Test
+    //@Test
     public void getUserTest() throws Exception{
     	int userNo=8;
     	
