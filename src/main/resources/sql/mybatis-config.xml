@@ -44,7 +44,7 @@
 
 		<mapper resource="sql/CommunityMapper.xml"/>
 
-		<!-- <mapper resource="sql/ClubMapper.xml"/>  -->
+		<mapper resource="sql/ClubMapper.xml"/>
 
 		<mapper resource="sql/PaymentMapper.xml"/>
 
