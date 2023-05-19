@@ -14,7 +14,7 @@ public class User {
     private LocalDate birthday;
     private int gender;
     private String nickName;
-    private int phoneNo;
+    private String phoneNo;
     private int role;
     // 가입일은 날짜+시분초 필요해서 LocalDateTime 타입 사용
     private LocalDateTime joinDay;
@@ -80,10 +80,10 @@ public class User {
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
 	}
-	public int getPhoneNo() {
+	public String getPhoneNo() {
 		return phoneNo;
 	}
-	public void setPhoneNo(int phoneNo) {
+	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
 	}
 	public int getRole() {

@@ -7,35 +7,35 @@
 <mapper namespace="com.gaga.bo.service.user.UserDao">
 
 	<resultMap id="userResultMap" type="user">
-	    <result property="userNo" column="user_no" jdbcType="INTEGER"/>
-	    <result property="userId" column="user_id" jdbcType="VARCHAR"/>
-	    <result property="password" column="password" jdbcType="VARCHAR"/>
-	    <result property="userName" column="user_name" jdbcType="VARCHAR"/>
-	    <result property="birthday" column="birthday" jdbcType="DATE"/>
-	    <result property="gender" column="gender" jdbcType="INTEGER"/>
-	    <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
-	    <result property="phoneNo" column="phone_no" jdbcType="INTEGER"/>
-	    <result property="role" column="role" jdbcType="INTEGER"/>
-	    <result property="joinDay" column="join_day" jdbcType="TIMESTAMP"/>
-	    <result property="temperature" column="temperature" jdbcType="REAL"/>
-	    <result property="outDay" column="out_day" jdbcType="TIMESTAMP"/>
-	    <result property="outReason" column="out_reason" jdbcType="LONGVARCHAR"/>
-	    <result property="profileImg" column="profile_img" jdbcType="LONGVARCHAR"/>
-	    <result property="activityImg" column="activity_img" jdbcType="LONGVARCHAR"/>
-	    <result property="activityImg2" column="activity_img2" jdbcType="LONGVARCHAR"/>
-	    <result property="activityImg3" column="activity_img3" jdbcType="LONGVARCHAR"/>
-	    <result property="userIntro" column="user_intro" jdbcType="LONGVARCHAR"/>
-	    <result property="mainTitleNo" column="main_title_no" jdbcType="INTEGER"/>
-	    <result property="bankCode" column="bank_code" jdbcType="VARCHAR"/>
-	    <result property="bankName" column="bank_name" jdbcType="VARCHAR"/>
-	    <result property="accountNo" column="account_no" jdbcType="VARCHAR"/>
-	    <result property="blacklist" column="blacklist" jdbcType="INTEGER"/>
-	    <result property="filterGender" column="filter_gender" jdbcType="INTEGER"/>
+	    <result property="userNo" 		column="user_no" 		jdbcType="INTEGER"/>
+	    <result property="userId" 		column="user_id" 		jdbcType="VARCHAR"/>
+	    <result property="password" 	column="password" 		jdbcType="VARCHAR"/>
+	    <result property="userName" 	column="user_name" 		jdbcType="VARCHAR"/>
+	    <result property="birthday" 	column="birthday" 		jdbcType="DATE"/>
+	    <result property="gender" 		column="gender" 		jdbcType="INTEGER"/>
+	    <result property="nickName" 	column="nick_name" 		jdbcType="VARCHAR"/>
+	    <result property="phoneNo" 		column="phone_no" 		jdbcType="VARCHAR"/>
+	    <result property="role" 		column="role" 			jdbcType="INTEGER"/>
+	    <result property="joinDay" 		column="join_day" 		jdbcType="TIMESTAMP"/>
+	    <result property="temperature" 	column="temperature" 	jdbcType="REAL"/>
+	    <result property="outDay" 		column="out_day" 		jdbcType="TIMESTAMP"/>
+	    <result property="outReason" 	column="out_reason" 	jdbcType="LONGVARCHAR"/>
+	    <result property="profileImg" 	column="profile_img" 	jdbcType="LONGVARCHAR"/>
+	    <result property="activityImg" 	column="activity_img" 	jdbcType="LONGVARCHAR"/>
+	    <result property="activityImg2" column="activity_img2" 	jdbcType="LONGVARCHAR"/>
+	    <result property="activityImg3" column="activity_img3" 	jdbcType="LONGVARCHAR"/>
+	    <result property="userIntro" 	column="user_intro" 	jdbcType="LONGVARCHAR"/>
+	    <result property="mainTitleNo" 	column="main_title_no" 	jdbcType="INTEGER"/>
+	    <result property="bankCode" 	column="bank_code" 		jdbcType="VARCHAR"/>
+	    <result property="bankName" 	column="bank_name" 		jdbcType="VARCHAR"/>
+	    <result property="accountNo" 	column="account_no" 	jdbcType="VARCHAR"/>
+	    <result property="blacklist" 	column="blacklist" 		jdbcType="INTEGER"/>
+	    <result property="filterGender" column="filter_gender" 	jdbcType="INTEGER"/>
 	    <result property="filterMaxAge" column="filter_max_age" jdbcType="INTEGER"/>
 	    <result property="filterMinAge" column="filter_min_age" jdbcType="INTEGER"/>
-	    <result property="filterTag" column="filter_tag" jdbcType="LONGVARCHAR"/>
-	    <result property="filterTag2" column="filter_tag2" jdbcType="LONGVARCHAR"/>
-	    <result property="filterTag3" column="filter_tag3" jdbcType="LONGVARCHAR"/>
+	    <result property="filterTag" 	column="filter_tag" 	jdbcType="LONGVARCHAR"/>
+	    <result property="filterTag2" 	column="filter_tag2" 	jdbcType="LONGVARCHAR"/>
+	    <result property="filterTag3" 	column="filter_tag3" 	jdbcType="LONGVARCHAR"/>
 	</resultMap>
 	
 	<insert id="addUser" parameterType="user">
@@ -49,7 +49,7 @@
 	    VALUES (
 	        #{userNo:INTEGER}, #{userId:VARCHAR}, #{password:VARCHAR},
 	        #{userName:VARCHAR}, #{birthday:DATE}, #{gender:INTEGER},
-	        #{nickName:VARCHAR}, #{phoneNo:INTEGER}, #{role:INTEGER},
+	        #{nickName:VARCHAR}, #{phoneNo:VARCHAR}, #{role:INTEGER},
 	        #{outDay:TIMESTAMP}, #{outReason:LONGVARCHAR}, 
 	        #{profileImg:LONGVARCHAR}, 
 	        #{activityImg:LONGVARCHAR}, #{activityImg2:LONGVARCHAR}, #{activityImg3:LONGVARCHAR}, 
@@ -64,7 +64,29 @@
 	    )
 	 </insert>  
 	 
-	<update id="updateUser" parameterType="User">
+	 <select id="getUser" parameterType="int" resultMap="userResultMap">
+	    SELECT
+	        user_no, user_id, password, user_name, birthday, gender, nick_name, phone_no,
+	        role, join_day, out_day, out_reason, profile_img, activity_img,
+	        activity_img2, activity_img3, user_intro, main_title_no, bank_code, bank_name,
+	        account_no, blacklist, filter_gender, filter_min_age, filter_max_age, filter_tag,
+	        filter_tag2, filter_tag3
+	    FROM users
+	    WHERE user_no = #{userNo}
+	</select>
+	
+	<select id="getUserId" parameterType="string" resultMap="userResultMap">
+	    SELECT
+	        user_no, user_id, password, user_name, birthday, gender, nick_name, phone_no,
+	        role, join_day, out_day, out_reason, profile_img, activity_img,
+	        activity_img2, activity_img3, user_intro, main_title_no, bank_code, bank_name,
+	        account_no, blacklist, filter_gender, filter_min_age, filter_max_age, filter_tag,
+	        filter_tag2, filter_tag3
+	    FROM users
+	    WHERE user_id = #{userId}
+	</select>
+	 
+	<update id="updateUser" parameterType="user">
 	    UPDATE users SET
 	        user_id = #{userId},
 	        password = #{password},
@@ -95,17 +117,7 @@
 	    WHERE user_no = #{userNo}
 	</update>
 	
-	<select id="getUser" parameterType="int" resultMap="userResultMap">
-	    SELECT
-	        user_no, user_id, password, user_name, birthday, gender, nick_name, phone_no,
-	        role, join_day, out_day, out_reason, profile_img, activity_img,
-	        activity_img2, activity_img3, user_intro, main_title_no, bank_code, bank_name,
-	        account_no, blacklist, filter_gender, filter_min_age, filter_max_age, filter_tag,
-	        filter_tag2, filter_tag3
-	    FROM users
-	    WHERE user_no = #{userNo}
-	</select>
 
-	 
+
 	 
 </mapper>

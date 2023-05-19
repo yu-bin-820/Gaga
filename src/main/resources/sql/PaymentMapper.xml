@@ -7,7 +7,7 @@
 <mapper namespace="com.gaga.bo.service.payment.PaymentDao">
 
     <resultMap id="paymentResultMap" type="payment">
-        <result property="payNo" column="pay_no" jdbcType="VARCHAR" />
+        <id property="payNo" column="pay_no" jdbcType="VARCHAR" />
         <result property="userNo" column="user_no" jdbcType="INTEGER" />
         <result property="meetingNo" column="meeting_no" jdbcType="INTEGER" />
         <result property="meetingName" column="meeting_name" jdbcType="VARCHAR" />
@@ -16,6 +16,21 @@
         <result property="payState" column="pay_state" jdbcType="INTEGER" />
         <result property="entryFee" column="entry_fee" jdbcType="INTEGER" />
     </resultMap>
+    
+    <resultMap id="meetingResultMap" type="meeting">
+	    <id property="meetingNo" 				column="meeting_no" 			jdbcType="INTEGER" />
+	    <result property="adjustmentTime" 		column="adjustment_time" 		jdbcType="TIMESTAMP" />
+	    <result property="adjustmentState" 		column="adjustment_state" 		jdbcType="INTEGER" />
+	    <result property="accountNo" 			column="account_no"				jdbcType="VARCHAR" />
+	    <result property="bankName" 			column="bank_name" 				jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="userResultMap" type="user">
+	    <id property="userNo" column="user_no" jdbcType="INTEGER"/>
+	    <result property="bankCode" column="bank_code" jdbcType="VARCHAR"/>
+	    <result property="bankName" column="bank_name" jdbcType="VARCHAR"/>
+	    <result property="accountNo" column="account_no" jdbcType="VARCHAR"/>
+	</resultMap>
     
     <!-- SQL : INSERT -->
 	<insert 	id="addPayment"		parameterType="payment" >
@@ -48,14 +63,44 @@
 	
 	<!-- SQL : UPDATE -->
 	<update id="updatePayment" parameterType="java.lang.String">
-	  UPDATE payments
+		UPDATE payments
 	  	<set>
 	  		pay_state = 2
 	    </set>
-	  WHERE pay_no = #{payNo}
-	  
+		WHERE pay_no = #{payNo}	  
 	</update>
-
-   
+	
+	<!-- SQL : UPDATE -->
+	<update id="updateAdjustment" parameterType="meeting">
+    	UPDATE meetings
+	    <set>
+	        adjustment_time = #{adjustmentTime},
+	        adjustment_state = #{adjustmentState},
+	        bank_name = #{bankName},
+	        account_no = #{accountNo}
+	    </set> 
+    		WHERE meeting_no = #{meetingNo}
+	</update>
+	
+	<!-- SQL : UPDATE -->
+	<update id="updateAdjustmentState" parameterType="meeting">
+    	UPDATE meetings
+    <set>
+        adjustment_state = 0
+    </set> 
+    	WHERE meeting_no = #{meetingNo}
+	</update>
+	
+	<!-- SQL : UPDATE -->
+	<update id="updateAccount" parameterType="user">
+    	UPDATE users
+	    <set>
+	    	bank_code = #{bankCode},
+	        bank_name = #{bankName},
+		    account_no = #{accountNo}
+	    </set> 
+    	WHERE user_no = #{userNo}
+	</update>
+		 
     
 </mapper>

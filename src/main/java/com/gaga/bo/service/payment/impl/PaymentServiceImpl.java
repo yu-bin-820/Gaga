@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gaga.bo.service.domain.Meeting;
 import com.gaga.bo.service.domain.Payment;
+import com.gaga.bo.service.domain.User;
 import com.gaga.bo.service.payment.PaymentDao;
 import com.gaga.bo.service.payment.PaymentService;
 
@@ -69,6 +71,35 @@ public class PaymentServiceImpl implements PaymentService {
 		System.out.println("결제 내역 목록 조회");
 		
 		return paymentDao.getPaymentList(userNo);
+	}
+
+	@Override
+	public void updateAdjustment(Meeting meeting) throws Exception {
+		
+		System.out.println("정산 내역 추가");
+		
+		paymentDao.updateAdjustment(meeting);
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updatePaymentState(Meeting meeting) throws Exception {
+		
+		System.out.println("정산 상태 변경");
+		
+		paymentDao.updateAdjustmentState(meeting);
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateAccount(User user) throws Exception {
+		
+		System.out.println("계좌 정보 등록");
+		
+		paymentDao.updateAccount(user);
+		
 	}
 
 
