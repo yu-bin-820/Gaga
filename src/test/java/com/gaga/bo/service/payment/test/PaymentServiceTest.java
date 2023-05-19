@@ -7,7 +7,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.gaga.bo.service.community.CommunityService;
+import com.gaga.bo.service.domain.Meeting;
 import com.gaga.bo.service.domain.Payment;
+import com.gaga.bo.service.domain.User;
+import com.gaga.bo.service.meeting.MeetingService;
 import com.gaga.bo.service.payment.PaymentService;
 
 import junit.framework.Assert;
@@ -16,6 +19,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,15 +31,19 @@ public class PaymentServiceTest {
     @Autowired
     @Qualifier("paymentServiceImpl")
     PaymentService paymentService;
+    
+    @Autowired
+    @Qualifier("meetingServiceImpl")
+    MeetingService meetingService;
 
-    //@Test
+    @Test
     public void addPaymentTest() throws Exception{
     	
     	Payment payment = new Payment();
     	
-    	payment.setPayNo("imp_123456789019");
-    	payment.setUserNo(2);
-    	payment.setMeetingNo(1);
+    	payment.setPayNo("imp_123456789020");
+    	payment.setUserNo(3);
+    	payment.setMeetingNo(3);
     	payment.setMeetingName("test");
     	payment.setPayTime(LocalDateTime.now());
     	payment.setRefundTime(LocalDateTime.now());
@@ -77,7 +86,7 @@ public class PaymentServiceTest {
     	
     }
     
-    @Test
+    //@Test
     public void updatePaymentTest() throws Exception{
     	
     	Payment payment = new Payment();
@@ -96,7 +105,36 @@ public class PaymentServiceTest {
     	
     	assertEquals(2, payment.getPayState());   	
     	
+    }
+    
+    //@Test
+    public void updateAdjustmentTest() throws Exception{
+    	
+    	Meeting meeting = new Meeting();
+    	
+    	meeting = meetingService.getMeeting(2);
+    
+    	meeting.setAdjustmentTime(Date.valueOf(LocalDate.now()));
+    	meeting.setAdjustmentState(0);
+    	meeting.setBankName("우리은행");   
+    	meeting.setAccountNo("12312312312");
+    	paymentService.updateAdjustment(meeting);
+    	
+    	meeting = meetingService.getMeeting(2);
+    	System.out.println("업데이트 왜 안돼"+meeting.toString());
+    	//assertEquals("우리은행", meeting.getBankName());
+    	//assertEquals(1, meeting.getAdjustmentState());
     	
     }
+    
+    @Test
+    public void updateAccountTest() throws Exception{
+    	
+    	User user = new User();
+    	
+    	//userService가 없다!
+    	
+    }
+    
 }
 

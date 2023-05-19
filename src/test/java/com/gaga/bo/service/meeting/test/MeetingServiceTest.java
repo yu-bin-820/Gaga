@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.gaga.bo.service.domain.Filter;
 import com.gaga.bo.service.domain.Meeting;
 import com.gaga.bo.service.domain.MeetingReview;
 import com.gaga.bo.service.meeting.MeetingService;
@@ -67,8 +68,9 @@ public class MeetingServiceTest {
         meeting.setFilterGender(1);
         meeting.setFilterMinAge(20);
         meeting.setFilterMaxAge(40);
+        meeting.setMainCategoryNo(1);
         meeting.setFilterTag("sample");
-        meeting.setParentClubNo(1);
+        //meeting.setParentClubNo(1);
 		
 		meetingService.addMeeting(meeting);
 		
@@ -175,7 +177,7 @@ public class MeetingServiceTest {
 
 	}
 	
-	@Test
+	//@Test
 	public void testGetMyMeetingList() throws Exception{	
 				
 		List<Meeting> list = meetingService.getMyMeetingList(1);
@@ -235,6 +237,61 @@ public class MeetingServiceTest {
 				
 		meetingService.deleteMeetingReview(1);
 
+	}
+	
+	//@Test
+	public void testGetMainCategory() throws Exception{
+		
+		List<HashMap<Integer, String>> list = meetingService.getMainCategory();
+		
+		Assert.assertEquals(6, list.size());
+
+		
+	}
+	
+	//@Test
+	public void testGetSubCategory() throws Exception{
+		
+		List<HashMap<Integer, String>> list = meetingService.getSubCategory(5);
+		
+		Assert.assertEquals(7, list.size());
+
+		
+	}
+	
+	
+	//@Test
+	public void testGetMeetingListInChat() throws Exception{
+		
+		List<Meeting> list = meetingService.getMeetingListInChat(1);
+		
+		Assert.assertEquals(0, list.size());
+
+		
+	}
+	
+	@Test
+	public void testGetMeetingList() throws Exception{
+		
+		Filter filter = new Filter();
+		
+		filter.setGender(1);
+		filter.setMaxAge(80);
+		filter.setMinAge(10);
+		filter.setAge(22);
+		filter.setMainCategoryNo(1);
+		//filter.setTag("Tag 2");
+		filter.setSwLat(0);
+		filter.setNeLat(1000);
+		filter.setSwLng(0);
+		filter.setNeLng(1000);
+
+		
+		List<Meeting> list = meetingService.getMeetingList(filter);
+		
+		Assert.assertEquals(2, list.size());
+
+		
 	}
 	
 

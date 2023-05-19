@@ -1,10 +1,12 @@
 package com.gaga.bo.service.meeting;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.gaga.bo.service.domain.Filter;
 import com.gaga.bo.service.domain.Meeting;
 import com.gaga.bo.service.domain.MeetingReview;
 
@@ -16,6 +18,10 @@ public interface MeetingDao {
 	public List<Meeting> getMeetingListFromRarentClubNo(int clubNo) throws Exception;
 	
 	public List<Meeting> getMyMeetingList(int userNo) throws Exception;
+	
+	public List<Meeting> getMeetingListInChat(int userNo) throws Exception;
+	
+	public List<Meeting> getMeetingList(Filter filter) throws Exception;
 	
 	public void addMeeting(Meeting meeting) throws Exception;
 	
@@ -44,6 +50,13 @@ public interface MeetingDao {
 	public List<MeetingReview> getMeetingReviewList(int meetinNo) throws Exception;
 	
 	public void deleteMeetingReview(int meetingReviewNo) throws Exception;
+	
+	
+	//카테고리 관련
+	public List<HashMap<Integer, String>> getMainCategory() throws Exception;
+	
+	public List<HashMap<Integer, String>> getSubCategory(int mainCategoryNo) throws Exception;
+
 
 		
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.gaga.bo.service.domain.Filter;
 import com.gaga.bo.service.domain.Meeting;
 import com.gaga.bo.service.domain.MeetingReview;
 import com.gaga.bo.service.meeting.MeetingDao;
@@ -106,6 +107,19 @@ public class MeetingServiceImpl implements MeetingService {
 		List<Meeting> list = meetingDao.getMyMeetingList(userNo);
 		return list;
 	}
+	
+	@Override
+	public List<Meeting> getMeetingListInChat(int userNo) throws Exception {
+		// TODO Auto-generated method stub
+		return meetingDao.getMeetingListInChat(userNo);
+	}
+	
+	@Override
+	public List<Meeting> getMeetingList(Filter filter) throws Exception {
+		// TODO Auto-generated method stub
+		return  meetingDao.getMeetingList(filter);
+	}
+
 
 
 	@Override
@@ -146,5 +160,21 @@ public class MeetingServiceImpl implements MeetingService {
 		meetingDao.deleteMeetingReview(meetingReviewNo);
 
 	}
+
+
+	@Override
+	public List<HashMap<Integer, String>> getMainCategory() throws Exception {
+		// TODO Auto-generated method stub
+		return meetingDao.getMainCategory();
+	}
+
+
+	@Override
+	public List<HashMap<Integer, String>> getSubCategory(int mainCategoryNo) throws Exception {
+		// TODO Auto-generated method stub
+		return meetingDao.getSubCategory(mainCategoryNo);
+	}
+
+
 
 }
