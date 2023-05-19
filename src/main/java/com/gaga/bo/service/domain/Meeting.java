@@ -10,7 +10,7 @@ public class Meeting {
     private Date meetingDate;
     private Time meetingStartTime;
     private Time meetingEndTime;
-    private Integer parentClubNo;
+    private int parentClubNo;
     private int meetingSuccess;
     private String meetingAddr;
     private String meetingDetailAddr;
@@ -26,11 +26,13 @@ public class Meeting {
     private int filterGender;
     private int filterMinAge;
     private int filterMaxAge;
+    private int mainCategoryNo;
     private String filterTag;
     private Date adjustmentTime;
     private int adjustmentState;
     private String accountNo;
     private String bankName;
+    private int state;
     
     public Meeting() {
     	
@@ -192,6 +194,27 @@ public class Meeting {
 	public void setBankName(String bankName) {
 		this.bankName = bankName;
 	}
+
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
+	public void setAdjustmentState(int adjustmentState) {
+		this.adjustmentState = adjustmentState;
+	}
+
+	public int getMainCategoryNo() {
+		return mainCategoryNo;
+	}
+
+	public void setMainCategoryNo(int mainCategoryNo) {
+		this.mainCategoryNo = mainCategoryNo;
+	}
+
 	@Override
 	public String toString() {
 		return "Meeting [meetingNo=" + meetingNo + ", entryFee=" + entryFee + ", meetingDate=" + meetingDate
@@ -201,9 +224,10 @@ public class Meeting {
 				+ meetingLng + ", meetingName=" + meetingName + ", meetingIntro=" + meetingIntro + ", meetingLeaderNo="
 				+ meetingLeaderNo + ", meetingMaxMemberNo=" + meetingMaxMemberNo + ", meetingRegDate=" + meetingRegDate
 				+ ", meetingState=" + meetingState + ", meetingImg=" + meetingImg + ", filterGender=" + filterGender
-				+ ", filterMinAge=" + filterMinAge + ", filterMaxAge=" + filterMaxAge + ", filterTag=" + filterTag
-				+ ", adjustmentTime=" + adjustmentTime + ", adjustmentState=" + adjustmentState + ", accountNo="
-				+ accountNo + ", bankName=" + bankName + "]";
+				+ ", filterMinAge=" + filterMinAge + ", filterMaxAge=" + filterMaxAge + ", mainCategoryNo="
+				+ mainCategoryNo + ", filterTag=" + filterTag + ", adjustmentTime=" + adjustmentTime
+				+ ", adjustmentState=" + adjustmentState + ", accountNo=" + accountNo + ", bankName=" + bankName
+				+ ", state=" + state + "]";
 	}
     
 }

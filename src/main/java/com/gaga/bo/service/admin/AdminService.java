@@ -7,17 +7,15 @@ import com.gaga.bo.service.domain.NoticePost;
 public interface AdminService {
 	
 	public void addNoticePost(NoticePost noticePost);
-	/*
-	List<NoticePost> listNoticePosts();
+	
+	List<NoticePost> listNoticePost();
 	
 	NoticePost getNoticePost(int noticePostNo);
-
-	
 
 	void updateNoticePost(NoticePost noticePost);
 
 	void deleteNoticePost(int noticePostNo);
 	
-	List<NoticePost> searchNoticePost(String keyword);
-	*/
+	//List<NoticePost> searchNoticePost(String keyword);
+	
 }
