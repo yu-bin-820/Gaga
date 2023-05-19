@@ -78,5 +78,4 @@ class AdminTest {
 		NoticePost deletedNoticePost = adminService.getNoticePost(3);
 		assertNull(deletedNoticePost);
 	}
-	/**/
 }
