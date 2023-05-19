@@ -1,6 +1,6 @@
 package com.gaga.bo.web.user;
 
 public class UserRestController {
-	int userNo;
+	
 
 }

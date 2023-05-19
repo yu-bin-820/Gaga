@@ -22,16 +22,38 @@ public class UserServiceImpl implements UserService {
 	public void addUser(User user) throws Exception{
 		userDao.addUser(user);
 	}
+	
+	@Override
+	public User getUser(int userNo) throws Exception {
+		
+		return userDao.getUser(userNo);
+	}
+	
+	@Override
+	public User getUserId(String userId) throws Exception {
+	    return userDao.getUserId(userId);
+	}
 
 	@Override
 	public void updateUser(User user) throws Exception {
 		userDao.updateUser(user);
 	}
 
+
 	@Override
-	public User getUser(int userNo) throws Exception {
+	public void deleteUser(int userNo) throws Exception {
+		userDao.deleteUser(userNo);
 		
-		return userDao.getUser(userNo);
 	}
+
+	public boolean checkDuplication(String userId) throws Exception {
+		boolean result=true;
+		User user=userDao.getUserId(userId);
+		if(user != null) {
+			result=false;
+		}
+		return result;
+	}
+
 
 }
