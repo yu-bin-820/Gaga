@@ -18,7 +18,7 @@ public class NoticePost {
     	
     }
 
-    // ¸ðµç ÇÊµå¸¦ Æ÷ÇÔÇÏ´Â »ý¼ºÀÚ
+    // ï¿½ï¿½ï¿½ ï¿½Êµå¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public NoticePost(int noticePostNo, int noticePostCategoryNo, String noticePostTitle, String noticePostText, 
                       String noticePostImg, LocalDateTime noticePostRegDate, int userNo) {
         this.noticePostNo = noticePostNo;
@@ -92,5 +92,6 @@ public class NoticePost {
 				+ ", noticePostTitle=" + noticePostTitle + ", noticePostText=" + noticePostText + ", noticePostImg="
 				+ noticePostImg + ", noticePostRegDate=" + noticePostRegDate + ", userNo=" + userNo + "]";
 	}
+
 
 }

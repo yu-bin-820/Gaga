@@ -27,19 +27,19 @@ public class AdminRestController {
 	private AdminService adminService;
 	
 	@PostMapping("addNoticePost")
-	public ResponseEntity<NoticePost> addNoticePost(@RequestBody NoticePost noticePost) {
+	public ResponseEntity<NoticePost> addNoticePost(@RequestBody NoticePost noticePost) throws Exception {
 		adminService.addNoticePost(noticePost);
 		return new ResponseEntity<>(noticePost, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("listNoticePost")
-	public ResponseEntity<List<NoticePost>> listNoticePost() {
+	public ResponseEntity<List<NoticePost>> listNoticePost() throws Exception {
 		List<NoticePost> noticePosts = adminService.listNoticePost();
 		return new ResponseEntity<>(noticePosts, HttpStatus.OK);
 	}
 	
 	@GetMapping("getNoticePost/{noticePostNo}")
-	public ResponseEntity<NoticePost> getNoticePost(@PathVariable int noticePostNo) {
+	public ResponseEntity<NoticePost> getNoticePost(@PathVariable int noticePostNo) throws Exception {
 		NoticePost noticePost = adminService.getNoticePost(noticePostNo);
 		if (noticePost == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -48,7 +48,7 @@ public class AdminRestController {
 	}
 	
 	@PutMapping("updateNoticePost/{noticePostNo}")
-	public ResponseEntity<NoticePost> updateNoticePost(@PathVariable int noticePostNo, @RequestBody NoticePost updatedNoticePost) {
+	public ResponseEntity<NoticePost> updateNoticePost(@PathVariable int noticePostNo, @RequestBody NoticePost updatedNoticePost) throws Exception {
 		NoticePost noticePost = adminService.getNoticePost(noticePostNo);
 		if (noticePost == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -61,7 +61,7 @@ public class AdminRestController {
 	}
 	
 	@DeleteMapping("deleteNoticePost/{noticePostNo}")
-	public ResponseEntity<Void> deleteNoticePost(@PathVariable int noticePostNo) {
+	public ResponseEntity<Void> deleteNoticePost(@PathVariable int noticePostNo) throws Exception {
 		NoticePost noticePost = adminService.getNoticePost(noticePostNo);
 		if (noticePost == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

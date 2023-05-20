@@ -10,16 +10,72 @@
 		<result property="noticePostCategoryNo"
 			column="notice_post_category_no" jdbcType="INTEGER" />
 		<result property="noticePostTitle" column="notice_post_title"
-			jdbcType="VARCHAR" />
+			jdbcType="LONGVARCHAR" />
 		<result property="noticePostText" column="notice_post_text"
-			jdbcType="VARCHAR" />
+			jdbcType="LONGVARCHAR" />
 		<result property="noticePostImg" column="notice_post_img"
-			jdbcType="VARCHAR" />
+			jdbcType="LONGVARCHAR" />
 		<result property="noticePostRegDate"
 			column="notice_post_reg_date" jdbcType="TIMESTAMP" />
 		<result property="userNo" column="user_no" jdbcType="INTEGER" />
 	</resultMap>
 
+	<!-- 블랙리스트용 -->
+	<resultMap id="userResultMap" type="user">
+		<result property="userNo" column="user_no" jdbcType="INTEGER" />
+		<result property="userId" column="user_id" jdbcType="VARCHAR" />
+		<result property="password" column="password"
+			jdbcType="VARCHAR" />
+		<result property="userName" column="user_name"
+			jdbcType="VARCHAR" />
+		<result property="birthday" column="birthday" jdbcType="DATE" />
+		<result property="gender" column="gender" jdbcType="INTEGER" />
+		<result property="nickName" column="nick_name"
+			jdbcType="VARCHAR" />
+		<result property="phoneNo" column="phone_no" jdbcType="INTEGER" />
+		<result property="role" column="role" jdbcType="INTEGER" />
+		<result property="joinDay" column="join_day"
+			jdbcType="TIMESTAMP" />
+		<result property="temperature" column="temperature"
+			jdbcType="REAL" />
+		<result property="outDay" column="out_day" jdbcType="TIMESTAMP" />
+		<result property="outReason" column="out_reason"
+			jdbcType="LONGVARCHAR" />
+		<result property="profileImg" column="profile_img"
+			jdbcType="LONGVARCHAR" />
+		<result property="activityImg" column="activity_img"
+			jdbcType="LONGVARCHAR" />
+		<result property="activityImg2" column="activity_img2"
+			jdbcType="LONGVARCHAR" />
+		<result property="activityImg3" column="activity_img3"
+			jdbcType="LONGVARCHAR" />
+		<result property="userIntro" column="user_intro"
+			jdbcType="LONGVARCHAR" />
+		<result property="mainTitleNo" column="main_title_no"
+			jdbcType="INTEGER" />
+		<result property="bankCode" column="bank_code"
+			jdbcType="VARCHAR" />
+		<result property="bankName" column="bank_name"
+			jdbcType="VARCHAR" />
+		<result property="accountNo" column="account_no"
+			jdbcType="VARCHAR" />
+		<result property="blacklist" column="blacklist"
+			jdbcType="INTEGER" />
+		<result property="filterGender" column="filter_gender"
+			jdbcType="INTEGER" />
+		<result property="filterMaxAge" column="filter_max_age"
+			jdbcType="INTEGER" />
+		<result property="filterMinAge" column="filter_min_age"
+			jdbcType="INTEGER" />
+		<result property="filterTag" column="filter_tag"
+			jdbcType="LONGVARCHAR" />
+		<result property="filterTag2" column="filter_tag2"
+			jdbcType="LONGVARCHAR" />
+		<result property="filterTag3" column="filter_tag3"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<!-- 관리자게시판 -->
 	<insert id="addNoticePost"
 		parameterType="com.gaga.bo.service.domain.NoticePost">
 		INSERT INTO notice_posts (
@@ -30,11 +86,11 @@
 		notice_post_reg_date,
 		user_no
 		)
-		VALUES (#{noticePostCategoryNo},
-		#{noticePostTitle},
-		#{noticePostText},
-		#{noticePostImg},
-		#{noticePostRegDate}, #{userNo})
+		VALUES (#{noticePostCategoryNo:INTEGER},
+		#{noticePostTitle:LONGVARCHAR},
+		#{noticePostText:LONGVARCHAR},
+		#{noticePostImg:LONGVARCHAR},
+		#{noticePostRegDate:LONGVARCHAR}, #{userNo:INTEGER})
 	</insert>
 
 
@@ -70,5 +126,33 @@
 		DELETE FROM notice_posts WHERE notice_post_no =
 		#{noticePostNo}
 	</delete>
+
+	<!-- 블랙리스트 CRUD -->
+	
+	<insert id="addBlackList"
+		parameterType="com.gaga.bo.service.domain.User">
+		UPDATE users
+		SET blacklist = 1
+		WHERE user_no = #{userNo}
+	</insert>
+	
+	<select id="getBlackList" resultMap="userResultMap">
+		SELECT * 
+		FROM users 
+		WHERE blacklist = 1 AND user_no = #{userNo}
+	</select>
+	
+	<select id="listBlackList" resultMap="userResultMap">
+		SELECT * 
+		FROM users 
+		WHERE blacklist = 1
+	</select>
+	
+	<insert id="deleteBlackList"
+		parameterType="com.gaga.bo.service.domain.User">
+		UPDATE users
+		SET blacklist = 0
+		WHERE user_no = #{userNo}
+	</insert>
 
 </mapper>
