@@ -25,10 +25,35 @@ const GetMeeting = () => {
             });
         },[]);
 
+        const onClickDelete = useCallback(
+            async (event) => {
+                event.preventDefault();
+
+                try {
+                const data = {
+                    meetingNo: meeting?.meetingNo
+                };
+
+                console.log(data);
+
+                const response = await axios.delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting`, {
+                    data: data,
+                });
+
+                navigate(`/`);
+                
+              } catch (error) {
+                console.error(error);
+              }
+            },
+            [meeting, navigate]
+          );
+
     return (
     <Box sx={{marginTop:'64px'}}>
      <h5>{meeting?.meetingName}</h5>
      <Button onClick={onClickUpdate}>수정하기</Button>
+     <Button onClick={onClickDelete}>삭제하기</Button>
     </Box>
     );
 };
