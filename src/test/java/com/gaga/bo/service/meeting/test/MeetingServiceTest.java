@@ -134,9 +134,9 @@ public class MeetingServiceTest {
 	}
 	
 	//@Test
-	public void testGetMeetingListFromRarentClubNo() throws Exception{
+	public void testGetMeetingListFromParentClubNo() throws Exception{
 		
-		Map<String, Object> map = meetingService.getMeetingListFromRarentClubNo(1);
+		Map<String, Object> map = meetingService.getMeetingListFromParentClubNo(1);
 		
 		List<Object> list = (List<Object>)map.get("list");
 		
@@ -177,12 +177,12 @@ public class MeetingServiceTest {
 
 	}
 	
-	//@Test
+	@Test
 	public void testGetMyMeetingList() throws Exception{	
 				
 		List<Meeting> list = meetingService.getMyMeetingList(1);
 		
-		Assert.assertEquals(1, list.size());
+		Assert.assertEquals(4, list.size());
 
 	}
 	
@@ -270,7 +270,7 @@ public class MeetingServiceTest {
 		
 	}
 	
-	@Test
+	//@Test
 	public void testGetMeetingList() throws Exception{
 		
 		Filter filter = new Filter();

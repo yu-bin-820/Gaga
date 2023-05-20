@@ -1,5 +1,7 @@
 package com.gaga.bo.web.meeting;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +19,7 @@ import com.gaga.bo.service.meeting.MeetingService;
 import com.gaga.bo.service.user.UserService;
 
 @RestController
-@RequestMapping("/rest/meeting/*")
+@RequestMapping("/rest/meeting")
 public class MeetingRestController {
 	
 	///Field
@@ -41,21 +43,30 @@ public class MeetingRestController {
 		return meetingService.getMeeting(meetingNo);
 	}
 	
-	@PatchMapping("/")
+	@PatchMapping("")
 	public void updateMeeting(@RequestBody Meeting meeting) throws Exception{
-		
+		meetingService.updateMeeting(meeting);
 	}
 	
-	@PostMapping("/")
+	@PostMapping("")
 	public void addMeeting(@RequestBody Meeting meeting) throws Exception{
-		
+		System.out.println("Controller에넘어온meeting정보:"+meeting);
+		meetingService.addMeeting(meeting);
+
 	}
 	
-	@DeleteMapping("/")
+	@DeleteMapping("")
 	public void deleteMeeting(@RequestBody Meeting meeting)throws Exception{
-		
+		meetingService.deleteMeeting(meeting.getMeetingNo());
 	}
 	
+	@GetMapping("list/mymeeting/{userNo}")
+	public List listMymeeting(@PathVariable int userNo ) throws Exception{
+		
+		return meetingService.getMyMeetingList(userNo);
+	}
+	
+
 	
 	//미팅리뷰관련
 	//@PostMapping("/review")

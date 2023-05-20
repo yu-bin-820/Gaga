@@ -67,9 +67,9 @@ public class MeetingServiceImpl implements MeetingService {
 
 
 	@Override
-	public Map<String, Object> getMeetingListFromRarentClubNo(int clubNo) throws Exception {
+	public Map<String, Object> getMeetingListFromParentClubNo(int clubNo) throws Exception {
 		// TODO Auto-generated method stub
-		List<Meeting> list = meetingDao.getMeetingListFromRarentClubNo(clubNo);
+		List<Meeting> list = meetingDao.getMeetingListFromParentClubNo(clubNo);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list);
 		return map;

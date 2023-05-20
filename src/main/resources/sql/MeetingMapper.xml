@@ -92,7 +92,7 @@
 
   
  <!-- 부모 클럽에 속하는 미팅 리스트 조회-->
-<select id="getMeetingListFromRarentClubNo" parameterType="int" resultMap="meetingResultMap">
+<select id="getMeetingListFromParentClubNo" parameterType="int" resultMap="meetingResultMap">
   SELECT
     meeting_no,
     entry_fee,
@@ -156,8 +156,11 @@
     m.bank_name,
     mb.state
   FROM meetings m
-  INNER JOIN members mb ON m.meeting_no = mb.meeting_no
-  WHERE mb.user_no = #{userNo}
+  LEFT JOIN members mb ON m.meeting_no = mb.meeting_no
+  WHERE 
+  	mb.user_no = #{userNo}
+  OR 
+  	m.meeting_leader_no = #{userNo}
 </select>
 
   
@@ -293,7 +296,7 @@
     #{meetingIntro:LONGVARCHAR},
     #{meetingLeaderNo:INTEGER},
     #{meetingMaxMemberNo:INTEGER},
-    #{meetingRegDate:TIMESTAMP},
+    now(),
     0,
     #{meetingImg:LONGVARCHAR},
     #{filterGender:INTEGER},
@@ -315,7 +318,6 @@
     meeting_end_time = #{meetingEndTime},
     meeting_name = #{meetingName},
     meeting_intro = #{meetingIntro},
-    meeting_leader_no = #{meetingLeaderNo},
     meeting_max_member_no = #{meetingMaxMemberNo},
     meeting_state = #{meetingState},
     meeting_img = #{meetingImg},
