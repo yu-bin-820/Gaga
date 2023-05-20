@@ -21,13 +21,13 @@ public class UserRestController {
 		System.out.println(this.getClass());
 	}
 	
-	@GetMapping("/userno/{userNo}")
-	public User getUser( @PathVariable int userNo ) throws Exception{
+	@GetMapping("/userno/{userId}")
+	public User getUser( @PathVariable String userId ) throws Exception{
 		
 		System.out.println("/user/json/getUser : GET");
 		
 		//Business Logic
-		return userService.getUser(userNo);
+		return userService.getUserById(userId);
 	}
 
 	@PostMapping("/login")
@@ -37,7 +37,7 @@ public class UserRestController {
 		System.out.println("/rest/user/login : POST");
 		//Business Logic
 		System.out.println("::"+user);
-		User dbUser=userService.getUser(user.getUserNo());
+		User dbUser=userService.getUserById(user.getUserId());
 
 		if( dbUser==null ) {
 		dbUser = new User();

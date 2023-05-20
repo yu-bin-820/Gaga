@@ -65,7 +65,7 @@ class UserServiceTest {
     public void getUserIdTest() throws Exception{
     	String userId="updateTest@gaga.com";
     	
-    	User user = userService.getUserId(userId);
+    	User user = userService.getUserById(userId);
     	
     	System.out.println("회원id user1의 유저정보 겟 테스트"+user);
     }	//회원 아이디로 유저정보 가져오기 완료

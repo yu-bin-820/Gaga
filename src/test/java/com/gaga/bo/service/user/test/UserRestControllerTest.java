@@ -28,14 +28,14 @@ public class UserRestControllerTest {
     @Test
     public void loginTest() throws Exception {
         User user = new User();
-        user.setUserNo(1);
+        user.setUserId("user1");
         user.setPassword("password1");
 
-        mockMvc.perform(post("/user/login")
+        mockMvc.perform(post("/rest/user/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(user)))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.userNo", is(user.getUserNo())));
+            .andExpect(jsonPath("$.userId", is(user.getUserId())));
     }
 }
 

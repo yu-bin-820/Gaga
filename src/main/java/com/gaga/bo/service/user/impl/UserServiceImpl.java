@@ -48,8 +48,8 @@ public class UserServiceImpl implements UserService {
 		return userDao.getUser(userNo);
 	}
 	
-	@Override
-	public User getUserId(String userId) throws Exception {
+
+	public User getUserById(String userId) throws Exception {
 	    return userDao.getUserId(userId);
 	}
 	
