@@ -29,7 +29,12 @@ public class UserRestController {
 		//Business Logic
 		return userService.getUserById(userId);
 	}
-
+	
+	@GetMapping("/login")
+	public User getLoginUser(HttpSession session) throws Exception {
+		return (User)session.getAttribute("user");
+	}
+	
 	@PostMapping("/login")
 	public User login(	@RequestBody User user,
 									HttpSession session ) throws Exception{

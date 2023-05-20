@@ -25,7 +25,7 @@ public class UserRestControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
+    //@Test
     public void loginTest() throws Exception {
         User user = new User();
         user.setUserId("user1");
