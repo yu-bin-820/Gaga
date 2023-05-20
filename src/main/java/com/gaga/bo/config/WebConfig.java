@@ -1,7 +1,9 @@
 package com.gaga.bo.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -28,4 +30,9 @@ public class WebConfig implements WebMvcConfigurer {
 				//withCredentials: true 옵션 사용시, Response에 JSESSIONID정보를 담은 쿠키를 내려보낸다.
 	
 	}
+	//챗봇 
+	@Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 }
