@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import { Box } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
@@ -52,9 +53,11 @@ const AddMeetingMember = () => {
             },
             [meeting, navigate]
         );
+
+        console.log(myData)
     return (
         <Box sx={{marginTop:'64px'}}>
-            
+                <Button onClick={onClickAddMember}>신청하기</Button>
         </Box>
     );
 };
