@@ -26,7 +26,7 @@ module.exports = class Club extends Model {
       },
       {
         modelName: 'Club',
-        tableName: 'club',
+        tableName: 'clubs',
         charset: 'utf8',
         collate: 'utf8_general_ci', // 한글 저장
         sequelize,
@@ -40,7 +40,7 @@ module.exports = class Club extends Model {
     });
     db.Club.hasMany(db.RoomMessage, { as: 'ClubMessages' });
     db.Club.belongsToMany(db.User, {
-      through: 'member',
+      through: db.Member,
       as: 'ClubMembers',
     });
   }

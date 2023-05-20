@@ -26,7 +26,7 @@ module.exports = class Meeting extends Model {
       },
       {
         modelName: 'Meeting',
-        tableName: 'meeting',
+        tableName: 'meetings',
         charset: 'utf8',
         collate: 'utf8_general_ci', // 한글 저장
         sequelize,
@@ -40,7 +40,7 @@ module.exports = class Meeting extends Model {
     });
     db.Meeting.hasMany(db.RoomMessage, { as: 'MeetingMessages' });
     db.Meeting.belongsToMany(db.User, {
-      through: 'member',
+      through: db.Member,
       as: 'MeetingMembers',
     });
   }
