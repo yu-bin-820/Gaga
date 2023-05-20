@@ -11,6 +11,8 @@ import UpdateMeeting from '@pages/meeting/UpdateMeeting.jsx';
 import ListMeeting from '@pages/meeting/ListMeeting.jsx';
 import AddMeeting from '@pages/meeting/AddMeeting.jsx';
 import Profil from '@pages/communication/Profil.jsx';
+import AddMeetingMember from '@pages/meeting/AddMeetingMember.jsx';
+import Login from '@pages/user/Login.jsx';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,13 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Main />,
+      },
+      {
+        path: 'user',
+        children: [
+          {path: 'login',
+        element: <Login/>}
+        ]
       },
       {
         path: 'meeting',
@@ -40,6 +49,15 @@ const router = createBrowserRouter([
           {
             path: 'updatemeetig/:meetingno',
             element: <UpdateMeeting />
+          },
+          {
+            path: 'member',
+            children: [
+              {
+                path: 'addmember/:meetingno',
+                element: <AddMeetingMember />
+              }
+            ]
           },
         ]
       },

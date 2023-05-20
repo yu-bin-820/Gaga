@@ -25,35 +25,40 @@ const GetMeeting = () => {
             });
         },[]);
 
-        const onClickDelete = useCallback(
-            async (event) => {
-                event.preventDefault();
+    const onClickDelete = useCallback(
+        async (event) => {
+            event.preventDefault();
 
-                try {
-                const data = {
-                    meetingNo: meeting?.meetingNo
-                };
+            try {
+            const data = {
+                meetingNo: meeting?.meetingNo
+            };
 
-                console.log(data);
+            console.log(data);
 
-                const response = await axios.delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting`, {
-                    data: data,
-                });
+            const response = await axios.delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting`, {
+                data: data,
+            });
 
-                navigate(`/`);
+            navigate(`/`);
                 
-              } catch (error) {
+            } catch (error) {
                 console.error(error);
-              }
-            },
-            [meeting, navigate]
-          );
+            }
+        },
+        [meeting, navigate]
+    );
+
+    const onClickAddMember=useCallback((event)=>{
+        navigate(`/meeting/member/addmember/${meetingno}`);
+    },[]);
 
     return (
     <Box sx={{marginTop:'64px'}}>
-     <h5>{meeting?.meetingName}</h5>
-     <Button onClick={onClickUpdate}>수정하기</Button>
-     <Button onClick={onClickDelete}>삭제하기</Button>
+    <h5>{meeting?.meetingName}</h5>
+    <Button onClick={onClickUpdate}>수정하기</Button>
+    <Button onClick={onClickDelete}>삭제하기</Button>
+    <Button onClick={onClickAddMember}>신청하기</Button>
     </Box>
     );
 };

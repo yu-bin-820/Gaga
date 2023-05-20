@@ -4,7 +4,7 @@ import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
-const MyMeeting = () => {
+const ListMyMeeting = () => {
     
     const [meetingList, setMeetingList] = useState();
     const navigate = useNavigate();
@@ -32,7 +32,9 @@ const MyMeeting = () => {
                     <Box key={i}>
                     <h5>{meeting.meetingName}</h5>
                     <h5>{meeting.state}</h5>
-                    <Button id={meeting.meetingNo}>미팅정보</Button>
+                    <Button 
+                    id={meeting.meetingNo}
+                    onClick={onClickMeeting}>미팅정보</Button>
                     </Box>
 
                 ))}
@@ -41,4 +43,4 @@ const MyMeeting = () => {
     );
 };
 
-export default MyMeeting;
+export default ListMyMeeting;
