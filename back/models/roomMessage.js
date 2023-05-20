@@ -28,7 +28,7 @@ module.exports = class RoomMessage extends Model {
       },
       {
         modelName: 'RoomMessage',
-        tableName: 'room_message',
+        tableName: 'room_messages',
         charset: 'utf8mb4',
         collate: 'utf8mb4_general_ci', // 이모티콘 저장
         sequelize,

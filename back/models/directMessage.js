@@ -20,21 +20,15 @@ module.exports = class DirectMessage extends Model {
           allowNull: false,
           defaultValue: DataTypes.NOW,
         },
-        updated_at: {
-          type: DataTypes.DATE,
-          allowNull: false,
-          defaultValue: DataTypes.NOW,
-        },
       },
       {
         modelName: 'DirectMessage',
-        tableName: 'direct_message',
+        tableName: 'direct_messages',
         charset: 'utf8mb4',
         collate: 'utf8mb4_general_ci', // 이모티콘 저장
         sequelize,
         timestamps: true, // timestamps 필드 사용
         createdAt: 'created_at', // 테이블의 createdAt 칼럼과 매핑
-        updatedAt: 'updated_at',
       }
     );
   }
