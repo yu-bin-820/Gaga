@@ -70,7 +70,7 @@ class UserServiceTest {
     	System.out.println("회원id user1의 유저정보 겟 테스트"+user);
     }	//회원 아이디로 유저정보 가져오기 완료
     
-    @Test     // 테스트 완료
+    //@Test     // 테스트 완료
     public void testCheckDuplication() throws Exception {
         String userId = "xxxx";
 
@@ -78,6 +78,15 @@ class UserServiceTest {
 
         assertTrue(result);
     } //xxxx 인 회원 아이디 체크 듀플리케이션 확인 존재하는 회원 확인하려면 user1로 변경
+    
+    //@Test  
+    public void getUserPhoneNo()  throws Exception{
+    	String userPhoneNo = "555555555";
+    	
+    	User user = userService.getUserPhoneNo(userPhoneNo);
+    	
+    	System.out.println("핸드폰 번호 가져오기 테스트"+user);
+    } // 핸드폰 번호로 아이디 비밀번호 조회 테스트 완료 가져오는 정보는 회원번호, 회원아이디, 회원비밀번호, 회원 핸드폰번호
     
     
 }

@@ -13,8 +13,12 @@ public interface UserDao {
 	
 	public User getUserId(String userId) throws Exception;
 	
+	public User getUserPhoneNo(String phoneNo) throws Exception;
+	
 	public void updateUser(User user) throws Exception;
 		
 	public void deleteUser(int userNo) throws Exception;
+	
+	public boolean chechDuplication(String userId) throws Exception;
 	
 }

@@ -16,7 +16,7 @@ public interface PaymentDao {
 	public void addPayment(Payment payment) throws Exception;
 	
 	//SELECT ONE 사실상 필요는 없음
-	//public Payment getPayment(String payNo) throws Exception;
+	public Payment getPayment(String payNo) throws Exception;
 	
 	//SELECT ONE
 	public String getPaymentByUserMeeting(int userNo, int meetingNo) throws Exception;
