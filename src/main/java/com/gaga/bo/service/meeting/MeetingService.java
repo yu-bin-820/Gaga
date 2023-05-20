@@ -12,7 +12,7 @@ public interface MeetingService {
 	
 	public Meeting getMeeting(int meetingNo) throws Exception;
 	
-	public Map<String, Object> getMeetingListFromRarentClubNo(int clubNo) throws Exception;
+	public Map<String, Object> getMeetingListFromParentClubNo(int clubNo) throws Exception;
 	
 	public List<Meeting> getMyMeetingList(int userNo) throws Exception;
 	
