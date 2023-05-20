@@ -26,9 +26,8 @@ module.exports = class DirectMessage extends Model {
         tableName: 'direct_messages',
         charset: 'utf8mb4',
         collate: 'utf8mb4_general_ci', // 이모티콘 저장
+        timestamps: false, // timestamps 필드 사용X
         sequelize,
-        timestamps: true, // timestamps 필드 사용
-        createdAt: 'created_at', // 테이블의 createdAt 칼럼과 매핑
       }
     );
   }

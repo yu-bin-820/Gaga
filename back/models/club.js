@@ -29,6 +29,7 @@ module.exports = class Club extends Model {
         tableName: 'clubs',
         charset: 'utf8',
         collate: 'utf8_general_ci', // 한글 저장
+        timestamps: false, // timestamps 필드 사용X
         sequelize,
       }
     );
@@ -38,10 +39,16 @@ module.exports = class Club extends Model {
       foreignKey: 'club_leader_no',
       as: 'ClubLeader',
     });
-    db.Club.hasMany(db.RoomMessage, { as: 'ClubMessages' });
+    db.Club.hasMany(db.RoomMessage, {
+      as: 'ClubMessages',
+      foreignKey: 'club_no',
+    });
     db.Club.belongsToMany(db.User, {
-      through: db.Member,
+      through: 'members',
       as: 'ClubMembers',
+      foreignKey: 'club_no',
+      otherKey: 'user_no',
+      timestamps: false,
     });
   }
 };

@@ -29,6 +29,7 @@ module.exports = class Meeting extends Model {
         tableName: 'meetings',
         charset: 'utf8',
         collate: 'utf8_general_ci', // 한글 저장
+        timestamps: false, // timestamps 필드 사용X
         sequelize,
       }
     );
@@ -38,10 +39,16 @@ module.exports = class Meeting extends Model {
       foreignKey: 'meeting_leader_no',
       as: 'MeetingLeader',
     });
-    db.Meeting.hasMany(db.RoomMessage, { as: 'MeetingMessages' });
+    db.Meeting.hasMany(db.RoomMessage, {
+      as: 'MeetingMessages',
+      foreignKey: 'meeting_no',
+    });
     db.Meeting.belongsToMany(db.User, {
-      through: db.Member,
+      through: 'members',
       as: 'MeetingMembers',
+      foreignKey: 'meeting_no',
+      otherKey: 'user_no',
+      timestamps: false,
     });
   }
 };
