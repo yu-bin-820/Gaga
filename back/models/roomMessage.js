@@ -54,5 +54,12 @@ module.exports = class RoomMessage extends Model {
       as: 'Club',
       sourceKey: 'club_no',
     });
+    db.RoomMessage.belongsToMany(db.User, {
+      through: 'readers',
+      as: 'Readers',
+      foreignKey: 'message_no',
+      otherKey: 'user_no',
+      timestamps: false,
+    });
   }
 };

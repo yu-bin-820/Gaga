@@ -58,6 +58,13 @@ module.exports = class User extends Model {
       otherKey: 'club_no',
       timestamps: false,
     });
+    db.User.belongsToMany(db.RoomMessage, {
+      through: 'readers',
+      as: 'ReadedMessages',
+      foreignKey: 'user_no',
+      otherKey: 'message_no',
+      timestamps: false,
+    });
     db.User.hasMany(db.RoomMessage, {
       foreignKey: 'sender_no',
       as: 'SentMessages',

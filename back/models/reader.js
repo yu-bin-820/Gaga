@@ -1,29 +1,26 @@
 const DataTypes = require('sequelize');
 const { Model } = DataTypes;
 
-module.exports = class Member extends Model {
+module.exports = class Reader extends Model {
   static init(sequelize) {
     return super.init(
       {
-        member_no: {
+        reader_no: {
           type: DataTypes.INTEGER,
           primaryKey: true,
           autoIncrement: true,
           allowNull: false,
         },
-        club_no: {
+        message_no: {
           type: DataTypes.INTEGER,
         },
-        meeting_no: {
-          type: DataTypes.INTEGER,
-        },
-        state: {
+        user_no: {
           type: DataTypes.INTEGER,
         },
       },
       {
-        modelName: 'Member',
-        tableName: 'members',
+        modelName: 'Reader',
+        tableName: 'readers',
         charset: 'utf8',
         collate: 'utf8_general_ci', // 한글 저장
         timestamps: false, // timestamps 필드 사용X

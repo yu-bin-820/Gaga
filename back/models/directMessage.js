@@ -11,9 +11,25 @@ module.exports = class DirectMessage extends Model {
           autoIncrement: true,
           allowNull: false,
         },
+        sender_no: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
+        },
+        receiver_no: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
+        },
         content: {
           type: DataTypes.TEXT, // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
+          allowNull: true, // 필수
+        },
+        content_type_no: {
+          type: DataTypes.INTEGER, // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
           allowNull: false, // 필수
+        },
+        path: {
+          type: DataTypes.TEXT, // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
+          allowNull: true, // 필수
         },
         created_at: {
           type: DataTypes.DATE,
