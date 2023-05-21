@@ -15,7 +15,7 @@ public interface MeetingDao {
 
 	public Meeting getMeeting(int meetingNo) throws Exception;
 	
-	public List<Meeting> getMeetingListFromRarentClubNo(int clubNo) throws Exception;
+	public List<Meeting> getMeetingListFromParentClubNo(int clubNo) throws Exception;
 	
 	public List<Meeting> getMyMeetingList(int userNo) throws Exception;
 	
