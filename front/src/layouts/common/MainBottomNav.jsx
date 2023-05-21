@@ -38,7 +38,7 @@ export default function MainBottomNav() {
 
   const onClickProfile = React.useCallback((MouseEvent)=>{
     navigate(`/community/profile/${myData.userNo}`);
-  },[]);
+  },[myData]);
 
   console.log(myData)
 
