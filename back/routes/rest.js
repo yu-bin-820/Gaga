@@ -1,4 +1,4 @@
-const { Op } = require('sequelize');
+const { Op, literal } = require('sequelize');
 const express = require('express');
 const multer = require('multer');
 const fs = require('fs');
@@ -61,11 +61,18 @@ router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
     const joinedMeetings = await user.getMeetings({
       through: { where: { state: 2 } },
     });
+    const groups = [
+      ...ownedClubs,
+      ...joinedClubs,
+      ...ownedMeetings,
+      ...joinedMeetings,
+    ];
+
+    const sortedGroups = groups.sort(
+      (a, b) => b.last_message_time - a.last_message_time
+    );
     return res.json({
-      ownedClubs,
-      joinedClubs,
-      ownedMeetings,
-      joinedMeetings,
+      sortedGroups,
     });
   } catch (error) {
     next(error);
@@ -236,11 +243,11 @@ router.get(
 module.exports = router;
 
 //-----------------------------Room Message POST-----------------------
-router.post('/chat/club', async (req, res, next) => {
+router.post('/chat/club/message', async (req, res, next) => {
   try {
-    // const club = await Club.findOne({
-    //   where: { club_no: req.body.clubNo },
-    // });
+    const club = await Club.findOne({
+      where: { club_no: req.body.clubNo },
+    });
     const roomMessage = await RoomMessage.create({
       sender_no: req.body.senderNo,
       club_no: req.body.clubNo,
@@ -263,21 +270,38 @@ router.post('/chat/club', async (req, res, next) => {
         },
       ],
     });
+
     const io = req.app.get('io');
     io.of(`/ct-club`)
       .to(`/ct-club-${req.body.clubNo}`)
       .emit('message', roomMessageWithUser);
+
+    let lastMessage = req.body.content;
+    if (lastMessage.length > 15) {
+      lastMessage = lastMessage.slice(0, 15) + '...'; // 15글자까지 자르기
+    }
+
+    if (req.body.contentTypeNo === 2) {
+      lastMessage = '(사진)';
+    } else if (req.body.contentTypeNo === 3) {
+      lastMessage = '(위치 공유)';
+    }
+    await club.update({
+      last_message_time: literal('NOW()'),
+      last_message: lastMessage,
+    });
+
     res.send('club ok');
   } catch (error) {
     next(error);
   }
 });
 
-router.post('/chat/meeting', async (req, res, next) => {
+router.post('/chat/meeting/message', async (req, res, next) => {
   try {
-    // const meeting = await Meeting.findOne({
-    //   where: { meeting_no: req.body.meetingNo },
-    // });
+    const meeting = await Meeting.findOne({
+      where: { meeting_no: req.body.meetingNo },
+    });
     const roomMessage = await RoomMessage.create({
       sender_no: req.body.senderNo,
       meeting_no: req.body.meetingNo,
@@ -304,6 +328,23 @@ router.post('/chat/meeting', async (req, res, next) => {
     io.of(`/ct-meeting`)
       .to(`/ct-meeting-${req.body.meetingNo}`)
       .emit('message', roomMessageWithUser);
+
+    let lastMessage = req.body.content;
+    if (lastMessage.length > 15) {
+      lastMessage = lastMessage.slice(0, 15) + '...'; // 15글자까지 자르기
+    }
+
+    if (req.body.contentTypeNo === 2) {
+      lastMessage = '(사진)';
+    } else if (req.body.contentTypeNo === 3) {
+      lastMessage = '(위치 공유)';
+    }
+
+    await meeting.update({
+      last_message_time: literal('NOW()'),
+      last_message: lastMessage,
+    });
+
     res.send('meeting ok');
   } catch (error) {
     next(error);
@@ -316,6 +357,14 @@ router.get(
   '/chat/direct/senderno/:senderNo/receiverno/:receiverNo',
   async (req, res, next) => {
     try {
+      await DirectMessage.update(
+        { read_state: 0 },
+        {
+          where: {
+            receiver_no: req.params.senderNo,
+          },
+        }
+      );
       return res.json(
         await DirectMessage.findAll({
           where: {
@@ -352,6 +401,14 @@ router.get(
 //-------------------------Alarm Get----------------------------------------------
 router.get('/chat/alarm/receiverno/:receiverNo', async (req, res, next) => {
   try {
+    await DirectMessage.update(
+      { read_state: 0 },
+      {
+        where: {
+          receiver_no: req.params.senderNo,
+        },
+      }
+    );
     return res.json(
       await DirectMessage.findAll({
         where: {

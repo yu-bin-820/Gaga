@@ -23,6 +23,13 @@ module.exports = class Club extends Model {
           type: DataTypes.STRING(255),
           allowNull: true,
         },
+        last_message_time: {
+          type: DataTypes.DATE,
+        },
+        last_message: {
+          type: DataTypes.TEXT, // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
+          allowNull: true,
+        },
       },
       {
         modelName: 'Club',

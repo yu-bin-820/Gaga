@@ -29,12 +29,16 @@ module.exports = class DirectMessage extends Model {
         },
         path: {
           type: DataTypes.TEXT, // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
-          allowNull: true, // 필수
+          allowNull: true,
         },
         created_at: {
           type: DataTypes.DATE,
           allowNull: false,
           defaultValue: DataTypes.NOW,
+        },
+        read_state: {
+          type: DataTypes.INTEGER,
+          defaultValue: 1,
         },
       },
       {
