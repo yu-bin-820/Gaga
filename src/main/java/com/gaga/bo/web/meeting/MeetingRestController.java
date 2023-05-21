@@ -1,6 +1,7 @@
 package com.gaga.bo.web.meeting;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gaga.bo.service.domain.Meeting;
+import com.gaga.bo.service.domain.MeetingReview;
 import com.gaga.bo.service.meeting.MeetingService;
 import com.gaga.bo.service.user.UserService;
 
@@ -48,6 +51,12 @@ public class MeetingRestController {
 		meetingService.updateMeeting(meeting);
 	}
 	
+	//test 미완료
+	@PatchMapping("meetingsuccess")
+	public void updateMeetingSuccess(@RequestBody Meeting meeting) throws Exception{
+		meetingService.updateMeetingSuccess(meeting);
+	}
+	
 	@PostMapping("")
 	public void addMeeting(@RequestBody Meeting meeting) throws Exception{
 		System.out.println("Controller에넘어온meeting정보:"+meeting);
@@ -66,13 +75,36 @@ public class MeetingRestController {
 		return meetingService.getMyMeetingList(userNo);
 	}
 	
-
+	@PostMapping("member")
+	public void addMember(@RequestBody Map<String, String> requestParams) throws Exception{
+		
+		meetingService.addMeetingMember(requestParams);
+	}
+	
+	@PatchMapping("member")
+	public void updateMember(@RequestBody Map<String, String> requestParams) throws Exception{
+		
+		meetingService.updateMember(requestParams);
+	}
+	
+	@DeleteMapping("member")
+	public void DeleteMember(@RequestBody Map<String, String> requestParams) throws Exception{
+		
+		meetingService.deleteMeetingMember(requestParams);
+	}
 	
 	//미팅리뷰관련
-	//@PostMapping("/review")
-	//public void addMeeting(@RequestBody Meeting meeting) throws Exception{
+	@PostMapping("review")
+	public void addMeetingReview(@RequestBody MeetingReview meetingReview) throws Exception{
+        meetingService.addMeetingReview(meetingReview);
+
+	}
 	
-	//@
+	@GetMapping("review/{meetingNo}")
+	public List<MeetingReview> getMeetingReviewList(@PathVariable int meetinNo) throws Exception {
+		
+		return meetingService.getMeetingReviewList(meetinNo);
+	}
 	
 
 }
