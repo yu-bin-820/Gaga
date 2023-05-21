@@ -8,11 +8,13 @@ import ErrorPage from '@pages/common/ErrorPage.jsx';
 import Main from '@pages/common/Main.jsx';
 import GetMeeting from '@pages/meeting/GetMeeting.jsx';
 import UpdateMeeting from '@pages/meeting/UpdateMeeting.jsx';
-import ListMeeting from '@pages/meeting/ListMeeting.jsx';
 import AddMeeting from '@pages/meeting/AddMeeting.jsx';
-import Profil from '@pages/communication/Profil.jsx';
 import AddMeetingMember from '@pages/meeting/AddMeetingMember.jsx';
 import Login from '@pages/user/Login.jsx';
+import Profile from '@pages/communication/Profile.jsx';
+import ListMeetingMember from '@pages/meeting/ListMeetingMember.jsx';
+import UpdateMeetingSuccess from '@pages/meeting/UpdateMeetingSuccess.jsx';
+import AddMeetingReveiw from '@pages/meeting/AddMeetingReveiw.jsx';
 
 const router = createBrowserRouter([
   {
@@ -35,10 +37,6 @@ const router = createBrowserRouter([
         path: 'meeting',
         children: [
           {
-            path: 'list',
-            element: <ListMeeting/>
-          },
-          {
             path: 'addmeeting',
             element: <AddMeeting />
           },
@@ -51,11 +49,31 @@ const router = createBrowserRouter([
             element: <UpdateMeeting />
           },
           {
+            pathg: 'updatemeetingsuccess/meetingon/:meetingno',
+            element:<UpdateMeetingSuccess />
+          },
+          {
             path: 'member',
             children: [
               {
                 path: 'addmember/:meetingno',
                 element: <AddMeetingMember />
+              },
+              {
+                path: 'listmember/meetingno/:meetingno',
+                element: <ListMeetingMember/>
+              }
+            ]
+          },
+          {
+            path: 'review',
+            children: [
+              {
+                path: 'addreview/meetingno/:meetingno',
+                element: <AddMeetingReveiw />
+              },
+              {
+
               }
             ]
           },
@@ -65,8 +83,8 @@ const router = createBrowserRouter([
         path: 'community',
         children: [
           {
-            path: 'profil',
-            element: <Profil/>
+            path: 'profile/:userno',
+            element: <Profile/>
           }
         ]
       }

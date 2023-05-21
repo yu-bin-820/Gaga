@@ -25,6 +25,22 @@ const ListMyMeeting = () => {
         const { id } = event.target;
         navigate(`/meeting/meetingno/${id}`);
     },[]);
+
+    const onClickListMeetingMember=useCallback((event)=>{
+        const { id } = event.target;
+        navigate(`/meeting/member/listmember/meetingno/${id}`);
+    },[]);
+
+    const onClickMeetingSuccess = React.useCallback((MouseEvent)=>{
+        const { id } = event.target;
+        navigate(`/meeting/updatemeetingsuccess/meetingno/${id}`);
+        },[]);
+
+        const onClickAddMeetingReview=useCallback((event)=>{
+            const { id } = event.target;
+            navigate(`/meeting/review/addreview/meetingno/${id}`);
+        },[]);
+
     return (
         <Box>
             <Box>
@@ -35,8 +51,17 @@ const ListMyMeeting = () => {
                     <Button 
                     id={meeting.meetingNo}
                     onClick={onClickMeeting}>미팅정보</Button>
+                    <Button 
+                    id={meeting.meetingNo}
+                    onClick={onClickListMeetingMember}>멤버리스트</Button>
+                    <Button 
+                    id={meeting.meetingNo}
+                    onClick={onClickMeetingSuccess}>성사하기</Button>
+                    <Button 
+                    id={meeting.meetingNo}
+                    onClick={onClickAddMeetingReview}>후기작성</Button>
                     </Box>
-
+                    
                 ))}
             </Box>
         </Box>

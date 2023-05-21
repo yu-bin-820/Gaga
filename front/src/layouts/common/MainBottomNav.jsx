@@ -9,12 +9,38 @@ import HomeIcon from '@mui/icons-material/Home';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import PersonIcon from '@mui/icons-material/Person';
+import { useNavigate } from 'react-router';
+import fetcher from '@utils/fetcher';
+import useSWR from 'swr';
+
 export default function MainBottomNav() {
+
+  const navigate = useNavigate();
+
   const [value, setValue] = React.useState('home');
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const { data: myData, mutate: mutateMe } = useSWR(
+    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+    );
+
+  const onClickHome = React.useCallback((MouseEvent)=>{
+    navigate(`/`);
+  },[]);
+
+  const onClickAddGrop = React.useCallback((MouseEvent)=>{
+    navigate(`/meeting/addmeeting`);
+  },[]);
+
+  const onClickProfile = React.useCallback((MouseEvent)=>{
+    navigate(`/community/profile/${myData.userNo}`);
+  },[]);
+
+  console.log(myData)
 
   return (
     <BottomNavigation
@@ -22,11 +48,17 @@ export default function MainBottomNav() {
       value={value}
       onChange={handleChange}
     >
-      <BottomNavigationAction label="Home" value="home" icon={<HomeIcon />} />
+      <BottomNavigationAction 
+        label="Home" 
+        value="home" 
+        icon={<HomeIcon />} 
+        onClick={onClickHome}/>
+        
       <BottomNavigationAction
         label="Create"
         value="create"
         icon={<AddCircleOutlineIcon />}
+        onClick={onClickAddGrop}
       />
       <BottomNavigationAction
         label="Chat"
@@ -37,6 +69,7 @@ export default function MainBottomNav() {
         label="Profile"
         value="profile"
         icon={<PersonIcon />}
+        onClick={onClickProfile}
       />
     </BottomNavigation>
   );

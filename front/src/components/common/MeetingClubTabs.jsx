@@ -4,6 +4,7 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import ListMeeting from '@components/meeting/ListMeeting';
 
 export default function MeetingClubTabs() {
   const [value, setValue] = React.useState('meeting');
@@ -34,7 +35,7 @@ export default function MeetingClubTabs() {
             maxHeight: 'calc(100vh - 200px)',
           }}
         >
-          <TabPanel value="meeting">ListMeeting Component</TabPanel>
+          <TabPanel value="meeting"><ListMeeting/></TabPanel>
           <TabPanel value="club">ListClub Component</TabPanel>
         </Box>
       </TabContext>

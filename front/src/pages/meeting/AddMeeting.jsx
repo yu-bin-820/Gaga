@@ -1,9 +1,11 @@
 import useInput from '@hooks/common/useInput';
 import { Button, TextField } from '@mui/material';
 import { Box } from '@mui/system';
+import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router';
+import useSWR from 'swr';
 
 const AddMeeting = () => {
   const [meeting, onChangeMeeting, setMeeting] = useInput({
@@ -26,6 +28,11 @@ const AddMeeting = () => {
     entryFee: '',
     meetingLeaderNo: '',
   });
+
+  const { data: myData, mutate: mutateMe } = useSWR(
+    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+    );
 
   const navigate = useNavigate();
   const handleSubmit = useCallback(async () => {
@@ -50,12 +57,13 @@ const AddMeeting = () => {
         filterMaxAge: meeting.filterMaxAge,
         meetingMaxMemberNo: meeting.meetingMaxMemberNo,
         entryFee: meeting.entryFee,
-        meetingLeaderNo: meeting.meetingLeaderNo,
+        meetingLeaderNo: myData.userNo,
       };
 
       const response = await axios.post(
         `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting`,
         data
+
       );
 
       console.log(response.data);
@@ -200,14 +208,6 @@ const AddMeeting = () => {
         onChange={onChangeMeeting}
         required
         value={meeting.entryFee}
-      />
-      <TextField
-        fulWidth
-        label="meetingLeaderNo"
-        name="meetingLeaderNo"
-        onChange={onChangeMeeting}
-        required
-        value={meeting.meetingLeaderNo}
       />
 
       <Button onClick={handleSubmit}>생성하기</Button>

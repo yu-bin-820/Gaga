@@ -3,7 +3,7 @@ import MyMeeting from '@components/meeting/ListMyMeeting';
 import { Box } from '@mui/system';
 import React from 'react';
 
-const Profil = () => {
+const Profile = () => {
     return (
         <Box sx={{marginTop:'64px'}}>
             <ListMyMeeting/>
@@ -12,4 +12,4 @@ const Profil = () => {
     );
 };
 
-export default Profil;
+export default Profile;

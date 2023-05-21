@@ -36,14 +36,12 @@ const AddMeetingMember = () => {
                 try {
                 const data = {
                     meetingNo: meeting?.meetingNo,
-                    userNo: myData?.userNo
+                    userNo: myData.userNo
                 };
     
                 console.log(data);
     
-                const response = await axios.post(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`, {
-                    data: data,
-                });
+                const response = await axios.post(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`, data);
     
                 navigate(`/`);
                     

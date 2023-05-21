@@ -1,3 +1,4 @@
+import ListMeetingReview from '@components/meeting/ListMeetingReview';
 import { Box, Button } from '@mui/material';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -59,6 +60,7 @@ const GetMeeting = () => {
     <Button onClick={onClickUpdate}>수정하기</Button>
     <Button onClick={onClickDelete}>삭제하기</Button>
     <Button onClick={onClickAddMember}>신청하기</Button>
+    <ListMeetingReview/>
     </Box>
     );
 };
