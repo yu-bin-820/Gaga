@@ -6,6 +6,7 @@ const roomMessage = require('./roomMessage');
 const directMessage = require('./directMessage');
 const user = require('./user');
 const member = require('./member');
+const reader = require('./reader');
 
 const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config')[env];
@@ -24,6 +25,7 @@ db.RoomMessage = roomMessage;
 db.DirectMessage = directMessage;
 db.User = user;
 db.Member = member;
+db.Reader = reader;
 
 Object.keys(db).forEach((modelName) => {
   db[modelName].init(sequelize);

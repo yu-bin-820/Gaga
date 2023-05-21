@@ -11,14 +11,34 @@ module.exports = class DirectMessage extends Model {
           autoIncrement: true,
           allowNull: false,
         },
+        sender_no: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
+        },
+        receiver_no: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
+        },
         content: {
           type: DataTypes.TEXT, // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
+          allowNull: true, // 필수
+        },
+        content_type_no: {
+          type: DataTypes.INTEGER, // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
           allowNull: false, // 필수
+        },
+        path: {
+          type: DataTypes.TEXT, // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
+          allowNull: true,
         },
         created_at: {
           type: DataTypes.DATE,
           allowNull: false,
           defaultValue: DataTypes.NOW,
+        },
+        read_state: {
+          type: DataTypes.INTEGER,
+          defaultValue: 1,
         },
       },
       {
@@ -26,9 +46,8 @@ module.exports = class DirectMessage extends Model {
         tableName: 'direct_messages',
         charset: 'utf8mb4',
         collate: 'utf8mb4_general_ci', // 이모티콘 저장
+        timestamps: false, // timestamps 필드 사용X
         sequelize,
-        timestamps: true, // timestamps 필드 사용
-        createdAt: 'created_at', // 테이블의 createdAt 칼럼과 매핑
       }
     );
   }

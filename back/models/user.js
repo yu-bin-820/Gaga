@@ -30,6 +30,7 @@ module.exports = class User extends Model {
         paranoid: true,
         charset: 'utf8',
         collate: 'utf8_general_ci', // 한글 저장
+        timestamps: false, // timestamps 필드 사용X
         sequelize,
       }
     );
@@ -44,13 +45,29 @@ module.exports = class User extends Model {
       foreignKey: 'club_leader_no',
     });
     db.User.belongsToMany(db.Meeting, {
-      through: db.Member,
+      through: 'members',
       as: 'Meetings',
+      foreignKey: 'user_no',
+      otherKey: 'meeting_no',
+      timestamps: false,
     });
     db.User.belongsToMany(db.Club, {
-      through: db.Member,
+      through: 'members',
       as: 'Clubs',
+      foreignKey: 'user_no',
+      otherKey: 'club_no',
+      timestamps: false,
     });
-    db.User.hasMany(db.RoomMessage);
+    db.User.belongsToMany(db.RoomMessage, {
+      through: 'readers',
+      as: 'ReadedMessages',
+      foreignKey: 'user_no',
+      otherKey: 'message_no',
+      timestamps: false,
+    });
+    db.User.hasMany(db.RoomMessage, {
+      foreignKey: 'sender_no',
+      as: 'SentMessages',
+    });
   }
 };
