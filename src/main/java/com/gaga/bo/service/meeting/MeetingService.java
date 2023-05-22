@@ -32,7 +32,7 @@ public interface MeetingService {
 
 	public void updateMember(Map<String, String> map) throws Exception;
 	
-	public void deleteMeetingMember(int memberNo) throws Exception;
+	public void deleteMeetingMember(Map<String, String> map) throws Exception;
 
 	
 	public void addMeetingReview(MeetingReview meetingReview) throws Exception;

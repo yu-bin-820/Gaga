@@ -163,6 +163,7 @@ public class MeetingServiceTest {
 		
 		Map<String, String> map = new HashMap<>();
 		map.put("memberNo", "1");
+		map.put("userNo", "2");
 		map.put("state", "1");
 				
 				
@@ -173,7 +174,11 @@ public class MeetingServiceTest {
 	//@Test
 	public void testDeleteMeetingMember() throws Exception{	
 				
-		meetingService.deleteMeetingMember(1);
+		Map<String, String> map = new HashMap<>();
+		map.put("memberNo", "1");
+		map.put("userNo", "2");
+		
+		meetingService.deleteMeetingMember(map);
 
 	}
 	
