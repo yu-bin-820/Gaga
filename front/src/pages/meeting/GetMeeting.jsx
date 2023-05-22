@@ -11,7 +11,7 @@ const GetMeeting = () => {
 
     const navigate = useNavigate();
     const onClickUpdate = useCallback((MouseEvent)=>{
-        navigate(`/meeting/updatemeetig/${ meetingno }`);
+        navigate(`/meeting/updatemeeting/${ meetingno }`);
     },[]);
 
     useEffect(()=>{

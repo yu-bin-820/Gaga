@@ -1,17 +1,24 @@
 import { Button } from '@mui/material';
 import { Box } from '@mui/system';
+import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import useSWR from 'swr';
 
 const ListMyMeeting = () => {
     
     const [meetingList, setMeetingList] = useState();
     const navigate = useNavigate();
 
+    const { data: myData, mutate: mutateMe } = useSWR(
+        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+        fetcher
+        );
+
     useEffect(()=>{
         axios
-            .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/1`)
+            .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${myData.userNo}`)
             .then((response)=>{
                 console.log(response.data);
                 setMeetingList(response.data);
@@ -19,7 +26,7 @@ const ListMyMeeting = () => {
             .catch((error)=>{
                 console.log(error);
             });
-    },[]);
+    },[myData]);
 
     const onClickMeeting=useCallback((event)=>{
         const { id } = event.target;

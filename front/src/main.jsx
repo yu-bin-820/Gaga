@@ -46,11 +46,11 @@ const router = createBrowserRouter([
             element: <GetMeeting />
           },
           {
-            path: 'updatemeetig/:meetingno',
+            path: 'updatemeeting/:meetingno',
             element: <UpdateMeeting />
           },
           {
-            pathg: 'updatemeetingsuccess/meetingno/:meetingno',
+            path: 'updatemeetingsuccess/meetingno/:meetingno',
             element:<UpdateMeetingSuccess />
           },
           {

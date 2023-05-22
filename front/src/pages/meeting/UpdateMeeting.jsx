@@ -25,9 +25,7 @@ const UpdateMeeting = () => {
   useEffect(() => {
     axios
       .get(
-        `http://${
-          import.meta.env.VITE_SPRING_HOST
-        }/rest/meeting/no/${meetingno}`
+        `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${meetingno}`
       )
       .then((response) => {
         console.log(response.data);
