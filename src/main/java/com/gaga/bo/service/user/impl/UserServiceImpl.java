@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -50,7 +51,15 @@ public class UserServiceImpl implements UserService {
 	
 
 	public User getUserById(String userId) throws Exception {
-	    return userDao.getUserId(userId);
+	    return userDao.getUserById(userId);
+	    
+//	    List<User> userList = (List<User>) userDao.getUserById(userId);
+//	    
+//	    if (userList.isEmpty()) {
+//	        return null;  // 중복된 아이디가 아닌 경우
+//	    } else {
+//	        throw new Exception("중복된 아이디입니다.");  // 중복된 아이디인 경우
+//	    }
 	}
 	
 	@Override
@@ -72,7 +81,7 @@ public class UserServiceImpl implements UserService {
 
 	public boolean checkDuplication(String userId) throws Exception {
 		boolean result=true;
-		User user=userDao.getUserId(userId);
+		User user=userDao.getUserById(userId);
 		if(user != null) {
 			result=false;
 		}

@@ -93,9 +93,9 @@ public class MeetingServiceImpl implements MeetingService {
 
 
 	@Override
-	public void deleteMeetingMember(int memberNo) throws Exception {
+	public void deleteMeetingMember(Map<String, String> map) throws Exception {
 		// TODO Auto-generated method stub
-		meetingDao.deleteMeetingMember(memberNo);
+		meetingDao.deleteMeetingMember(map);
 
 		
 	}

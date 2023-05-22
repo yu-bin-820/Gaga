@@ -35,7 +35,7 @@ public interface MeetingDao {
 	
 	public void updateMember(Map<String, String> map) throws Exception;
 	
-	public void deleteMeetingMember(int memberNo) throws Exception;
+	public void deleteMeetingMember(Map<String, String> map) throws Exception;
 
 	
 
