@@ -335,8 +335,6 @@
   SET
     meeting_success = 1,
     meeting_state = 1,
-    adjustment_time = #{adjustmentTime},
-    adjustment_state = #{adjustmentState},
     account_no = #{accountNo},
     bank_name = #{bankName}
   WHERE
@@ -370,9 +368,10 @@
   
   
     <!-- 미팅 멤버 삭제 -->
-    <delete id="deleteMeetingMember" parameterType="int">
+    <delete id="deleteMeetingMember" parameterType="Map">
     DELETE FROM members
-    WHERE member_no = #{memberNo}
+    WHERE meeting_no = #{meetingNo}
+    AND user_no = #{userNo}
   </delete>
   
   
