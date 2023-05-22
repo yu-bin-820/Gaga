@@ -34,7 +34,6 @@ public interface ClubDao {
 	public void deleteClub(int clubNo) throws Exception;
 	
 	//멤버관리
-	
 	//INSERT
 	public void addClubMember(Map<String, String> map) throws Exception;
 	
@@ -48,6 +47,6 @@ public interface ClubDao {
 	//SELECT
 	public List<HashMap<Integer, String>> getMainCategory() throws Exception;
 	
-	public List<HashMap<Integer, String>> getSubCategory() throws Exception;
+	public List<HashMap<Integer, String>> getSubCategory(int mainCategoryNo) throws Exception;
 
 }
