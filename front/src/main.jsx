@@ -15,6 +15,7 @@ import Profile from '@pages/communication/Profile.jsx';
 import ListMeetingMember from '@pages/meeting/ListMeetingMember.jsx';
 import UpdateMeetingSuccess from '@pages/meeting/UpdateMeetingSuccess.jsx';
 import AddMeetingReveiw from '@pages/meeting/AddMeetingReveiw.jsx';
+import UpdateMeetingReview from '@pages/meeting/UpdateMeetingReview.jsx';
 
 const router = createBrowserRouter([
   {
@@ -73,7 +74,8 @@ const router = createBrowserRouter([
                 element: <AddMeetingReveiw />
               },
               {
-
+                path: 'updatereview/reviewno/:reviewno',
+                element: <UpdateMeetingReview />
               }
             ]
           },
