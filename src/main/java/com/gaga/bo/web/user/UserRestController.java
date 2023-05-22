@@ -121,12 +121,12 @@ public class UserRestController {
 	
 	
 
-//    @GetMapping("/kakaoLogin")
-//    public String kakaoLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
-//        String access_Token = userService.getAccessKakaoToken(code);
-//        HashMap<String, Object> user = userService.getKakaoUserInfo(access_Token);
-//        session.setAttribute("user", user);
-//        return "redirect:/main.jsx";
-//    }
+    @GetMapping("/kakaoLogin")
+    public String kakaoLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
+        String access_Token = userService.getAccessKakaoToken(code);
+        HashMap<String, Object> user = userService.getKakaoUserInfo(access_Token);
+        session.setAttribute("user", user);
+        return "redirect:/main.jsx";
+    }
 
 }
