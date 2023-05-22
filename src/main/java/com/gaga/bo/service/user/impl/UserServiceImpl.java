@@ -8,7 +8,9 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.ibatis.session.SqlSession;
 import org.json.simple.JSONObject;
@@ -16,6 +18,7 @@ import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,6 +44,16 @@ public class UserServiceImpl implements UserService {
 	public void addUser(User user) throws Exception{
 		userDao.addUser(user);
 	}
+	//프로필이미지 구현부 미완료
+//	public void addProfileImg(String userId, MultipartFile file) throws IOException {
+//	    String savedFileName = "";
+//	    String originalFileName = file.getOriginalFilename();
+//	    UUID uuid = UUID.randomUUID();
+//	    savedFileName = uuid.toString() + "_" + originalFileName;
+//	    // 파일명만 데이터베이스에 저장하므로 파일 업로드 로직은 필요하지 않습니다.
+//	    // 이곳에 프로필 이미지 파일명을 데이터베이스에 저장하는 로직을 구현하세요.
+//	    // ...
+//	}
 	
 	@Override
 	public User getUser(int userNo) throws Exception {
@@ -50,12 +63,13 @@ public class UserServiceImpl implements UserService {
 	
 
 	public User getUserById(String userId) throws Exception {
-	    return userDao.getUserId(userId);
+	    return userDao.getUserById(userId);
+
 	}
 	
 	@Override
-	public User getUserPhoneNo(String phoneNo) throws Exception {
-		return userDao.getUserPhoneNo(phoneNo);
+	public User getUserByPhoneNo(String phoneNo) throws Exception {
+		return userDao.getUserByPhoneNo(phoneNo);
 	}
 
 	@Override
@@ -71,12 +85,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public boolean checkDuplication(String userId) throws Exception {
-		boolean result=true;
-		User user=userDao.getUserId(userId);
-		if(user != null) {
-			result=false;
-		}
-		return result;
+//		boolean result=true;
+//		User user=userDao.getUserById(userId);
+//		if(user != null) {
+//			result=false;
+//		}
+//		return result;
+	    User user = userDao.getUserById(userId);
+	    return user != null;
 	}
 
 	@Override

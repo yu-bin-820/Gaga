@@ -11,9 +11,9 @@ public interface UserDao {
 	
 	public User getUser(int userNo) throws Exception;
 	
-	public User getUserId(String userId) throws Exception;
+	public User getUserById(String userId) throws Exception;
 	
-	public User getUserPhoneNo(String phoneNo) throws Exception;
+	public User getUserByPhoneNo(String phoneNo) throws Exception;
 	
 	public void updateUser(User user) throws Exception;
 		

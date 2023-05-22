@@ -75,7 +75,7 @@
 	    WHERE user_no = #{userNo}
 	</select>
 	
-	<select id="getUserId" parameterType="string" resultMap="userResultMap">
+	<select id="getUserById" parameterType="string" resultMap="userResultMap">
 	    SELECT
 	        user_no, user_id, password, user_name, birthday, gender, nick_name, phone_no,
 	        role, join_day, out_day, out_reason, profile_img, activity_img,
@@ -86,7 +86,7 @@
 	    WHERE user_id = #{userId}
 	</select>
 	
-	<select id="getUserPhoneNo" parameterType="string" resultMap="userResultMap">
+	<select id="getUserByPhoneNo" parameterType="string" resultMap="userResultMap">
 	    SELECT 
 	    	user_no, user_id, password, user_name, birthday, gender, nick_name, phone_no,
 	        role, join_day, out_day, out_reason, profile_img, activity_img,
