@@ -50,7 +50,7 @@ const router = createBrowserRouter([
             element: <UpdateMeeting />
           },
           {
-            pathg: 'updatemeetingsuccess/meetingon/:meetingno',
+            pathg: 'updatemeetingsuccess/meetingno/:meetingno',
             element:<UpdateMeetingSuccess />
           },
           {
