@@ -67,12 +67,10 @@ public class MeetingServiceImpl implements MeetingService {
 
 
 	@Override
-	public Map<String, Object> getMeetingListFromParentClubNo(int clubNo) throws Exception {
+	public List<Meeting> getMeetingListFromParentClubNo(int clubNo) throws Exception {
 		// TODO Auto-generated method stub
-		List<Meeting> list = meetingDao.getMeetingListFromParentClubNo(clubNo);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("list", list);
-		return map;
+
+		return meetingDao.getMeetingListFromParentClubNo(clubNo);
 	}
 
 
@@ -170,9 +168,9 @@ public class MeetingServiceImpl implements MeetingService {
 
 
 	@Override
-	public List<HashMap<Integer, String>> getSubCategory(int mainCategoryNo) throws Exception {
+	public List<HashMap<Integer, String>> getSubCategory() throws Exception {
 		// TODO Auto-generated method stub
-		return meetingDao.getSubCategory(mainCategoryNo);
+		return meetingDao.getSubCategory();
 	}
 
 

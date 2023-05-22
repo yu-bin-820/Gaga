@@ -136,10 +136,8 @@ public class MeetingServiceTest {
 	//@Test
 	public void testGetMeetingListFromParentClubNo() throws Exception{
 		
-		Map<String, Object> map = meetingService.getMeetingListFromParentClubNo(1);
-		
-		List<Object> list = (List<Object>)map.get("list");
-		
+		List<Meeting> list = meetingService.getMeetingListFromParentClubNo(1);
+				
 		Assert.assertEquals(3, list.size());
 
 	}
@@ -257,7 +255,7 @@ public class MeetingServiceTest {
 	//@Test
 	public void testGetSubCategory() throws Exception{
 		
-		List<HashMap<Integer, String>> list = meetingService.getSubCategory(5);
+		List<HashMap<Integer, String>> list = meetingService.getSubCategory();
 		
 		Assert.assertEquals(7, list.size());
 
