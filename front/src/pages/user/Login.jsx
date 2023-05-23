@@ -36,17 +36,20 @@ const Login = () => {
           )
           .then((response) => {
             console.log(response);
+            mutateMe();
           });
       } catch (error) {
         console.error(error);
       }
     },
-    [user]
+    [user, mutateMe]
   );
+
   if (myData === undefined) {
     return <div>로딩중</div>;
   }
   if (myData.userId !== undefined && myData.userId !== null) {
+    console.log(myData);
     return <Navigate replace to="/" />;
   }
   return (

@@ -61,18 +61,18 @@ router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
     const joinedMeetings = await user.getMeetings({
       through: { where: { state: 2 } },
     });
-    const groups = [
+    const unsortedGroups = [
       ...ownedClubs,
       ...joinedClubs,
       ...ownedMeetings,
       ...joinedMeetings,
     ];
 
-    const sortedGroups = groups.sort(
+    const groups = unsortedGroups.sort(
       (a, b) => b.last_message_time - a.last_message_time
     );
     return res.json({
-      sortedGroups,
+      groups,
     });
   } catch (error) {
     next(error);
@@ -99,7 +99,7 @@ router.get(
             as: 'Club',
           },
         ],
-        order: [['created_at', 'DESC']],
+        order: [['created_at', 'ASC']],
       });
       // );
 
@@ -126,14 +126,17 @@ router.get(
       }
 
       // 클럽 총원 Count
-      const countClubMembers = await club.countClubMembers();
+      const countClubMembers = await club.countClubMembers({
+        through: { where: { state: 2 } },
+      });
       // console.log('countMeeting', countMeetingMembers);
 
       // 읽은 인원 수를 카운트하여 meetingMessages에 연결
       const clubMessagesWithReadCount = await Promise.all(
         clubMessages.map(async (message) => {
           const readCount =
-            countClubMembers -
+            countClubMembers +
+            1 -
             (await Reader.count({
               where: { message_no: message.message_no },
             }));
@@ -181,7 +184,7 @@ router.get(
             as: 'Meeting',
           },
         ],
-        order: [['created_at', 'DESC']],
+        order: [['created_at', 'ASC']],
       });
       // );
 
@@ -208,14 +211,17 @@ router.get(
       }
 
       // 미팅 총원 Count
-      const countMeetingMembers = await meeting.countMeetingMembers();
+      const countMeetingMembers = await meeting.countMeetingMembers({
+        through: { where: { state: 2 } },
+      });
       // console.log('countMeeting', countMeetingMembers);
 
       // 읽은 인원 수를 카운트하여 meetingMessages에 연결
       const meetingMessagesWithReadCount = await Promise.all(
         meetingMessages.map(async (message) => {
           const readCount =
-            countMeetingMembers -
+            countMeetingMembers +
+            1 -
             (await Reader.count({
               where: { message_no: message.message_no },
             }));
@@ -350,7 +356,31 @@ router.post('/chat/meeting/message', async (req, res, next) => {
     next(error);
   }
 });
-
+//------------------DM List Get-----------------------------------------------------
+router.get('/chat/direct/list/senderno/:senderNo', async (req, res, next) => {
+  try {
+    const directMessageList = await DirectMessage.findAll({
+      attributes: ['receiver_no', 'content', 'content_type_no', 'created_at'],
+      where: {
+        sender_no: req.params.senderNo,
+      },
+      include: [
+        {
+          model: User,
+          as: 'Receiver',
+          attributes: ['user_no', 'user_id', 'nick_name', 'profile_img'],
+        },
+      ],
+      group: ['receiver_no', 'content', 'content_type_no', 'created_at'],
+      having: literal(
+        'created_at = (SELECT MAX(created_at) FROM direct_messages WHERE sender_no = 1 AND receiver_no = `DirectMessage`.`receiver_no` LIMIT 1)'
+      ),
+    });
+    res.json(directMessageList);
+  } catch (error) {
+    next(error);
+  }
+});
 //---------------------------Direct Message Get--------------------------------------
 
 router.get(
