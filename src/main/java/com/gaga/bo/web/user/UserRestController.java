@@ -1,7 +1,10 @@
 package com.gaga.bo.web.user;
 
-import java.util.HashMap;
+import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +26,7 @@ public class UserRestController {
 		System.out.println(this.getClass());
 	}
 	
-	@GetMapping("/userno/{userNo}")
+	@GetMapping("/userno/{userNo}")		//회원번호로 유저
 	public User getUser( @PathVariable int userNo ) throws Exception{
 		
 		System.out.println("/rest/user/getUser : GET");
@@ -77,12 +80,25 @@ public class UserRestController {
 	}
 	
 	@DeleteMapping("/logout")
-	public ResponseEntity<String> logout(HttpSession session ) throws Exception{
+	public ResponseEntity<String> logout(HttpSession session, HttpServletResponse response,
+			 HttpServletRequest request) throws Exception{
 		
-		System.out.println("/rest/user/logout : DELETE");
+		System.out.println("/rest/user/logout : DELETE 로그아웃 요청옴");
 		
 //		session.removeAttribute("user");
+		session.removeAttribute("access_token"); // 네이버 로그인 토큰 정보 제거
+		System.out.println("1");
 		session.invalidate();
+		System.out.println("2");
+	    // 쿠키 삭제
+	    Cookie[] cookies = request.getCookies();
+	    if (cookies != null) {
+	        for (Cookie cookie : cookies) {
+	            cookie.setMaxAge(0);
+	            response.addCookie(cookie);
+	        }
+	    }
+	    System.out.println("3");
 		
 		// 성공 메시지를 반환합니다.
 		return new ResponseEntity<>("로그아웃 완료!", HttpStatus.OK);
@@ -145,12 +161,29 @@ public class UserRestController {
         
     }
 
-    @GetMapping("/kakaoLogin")
-    public String kakaoLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
-        String access_Token = userService.getAccessKakaoToken(code);
-        HashMap<String, Object> user = userService.getKakaoUserInfo(access_Token);
-        session.setAttribute("user", user);
-        return "redirect:/main.jsx";
-    }
+	@GetMapping("/naverLogin")
+	public ResponseEntity<User> naverLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
+	    String access_Token = userService.getAccessNaverToken(code);
+	    Map<String, Object> userInfoMap = userService.getNaverUserInfo(access_Token);
+	    System.out.println("usercontroller nlogin= "+userInfoMap);
+
+	    User user = new User();
+
+	    session.setAttribute("user", user);
+	    return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+	
+	@GetMapping("/kakaoLogin")
+	public ResponseEntity<User> kakaoLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
+	    String access_Token = userService.getAccessKakaoToken(code);
+	    Map<String, Object> userInfoMap = userService.getKakaoUserInfo(access_Token);
+	    System.out.println("usercontroller klogin= "+userInfoMap);
+
+	    User user = new User();
+
+	    session.setAttribute("user", user);
+	    return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+
 
 }
