@@ -2,6 +2,7 @@ package com.gaga.bo.service.domain;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
 
 public class Meeting {
 
@@ -28,7 +29,7 @@ public class Meeting {
     private int filterMaxAge;
     private int mainCategoryNo;
     private String filterTag;
-    private Date adjustmentTime;
+    private Timestamp adjustmentTime;
     private int adjustmentState;
     private String accountNo;
     private String bankName;
@@ -170,12 +171,15 @@ public class Meeting {
 	public void setFilterTag(String filterTag) {
 		this.filterTag = filterTag;
 	}
-	public Date getAdjustmentTime() {
+	
+	public Timestamp getAdjustmentTime() {
 		return adjustmentTime;
 	}
-	public void setAdjustmentTime(Date adjustmentTime) {
+
+	public void setAdjustmentTime(Timestamp adjustmentTime) {
 		this.adjustmentTime = adjustmentTime;
 	}
+
 	public Integer getAdjustmentState() {
 		return adjustmentState;
 	}
