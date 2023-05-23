@@ -1,5 +1,6 @@
 package com.gaga.bo.web.meeting;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gaga.bo.service.domain.Filter;
 import com.gaga.bo.service.domain.Meeting;
 import com.gaga.bo.service.domain.MeetingReview;
 import com.gaga.bo.service.meeting.MeetingService;
@@ -46,6 +48,26 @@ public class MeetingRestController {
 		return meetingService.getMeeting(meetingNo);
 	}
 	
+	//test 미완료
+	@GetMapping("list/clubno/{clubNo}")
+	public List getMeetingListFromParentClubNo(@PathVariable int clubNo) throws Exception{
+		
+		return meetingService.getMeetingListFromParentClubNo(clubNo);
+	}
+	
+	@GetMapping("list/inchat/no/{userNo}")
+	public List getMeetingListInChat(@PathVariable int userNo) throws Exception{
+		
+		return meetingService.getMeetingListInChat(userNo);
+	}
+	
+	@PostMapping("list")
+	public List getMeetingList(@RequestBody Filter filter) throws Exception{
+		
+		System.out.println(filter);
+		return meetingService.getMeetingList(filter);
+	}
+	
 	@PatchMapping("")
 	public void updateMeeting(@RequestBody Meeting meeting) throws Exception{
 		meetingService.updateMeeting(meeting);
@@ -59,7 +81,9 @@ public class MeetingRestController {
 	
 	@PostMapping("")
 	public void addMeeting(@RequestBody Meeting meeting) throws Exception{
-		System.out.println("Controller에넘어온meeting정보:"+meeting);
+		
+		System.out.println(meeting);
+
 		meetingService.addMeeting(meeting);
 
 	}
@@ -69,8 +93,10 @@ public class MeetingRestController {
 		meetingService.deleteMeeting(meeting.getMeetingNo());
 	}
 	
+	
+	//멤버관련
 	@GetMapping("list/mymeeting/{userNo}")
-	public List listMymeeting(@PathVariable int userNo ) throws Exception{
+	public List getMyMeetingList(@PathVariable int userNo ) throws Exception{
 		
 		return meetingService.getMyMeetingList(userNo);
 	}
@@ -88,7 +114,7 @@ public class MeetingRestController {
 	}
 	
 	@DeleteMapping("member")
-	public void DeleteMember(@RequestBody Map<String, String> requestParams) throws Exception{
+	public void deleteMember(@RequestBody Map<String, String> requestParams) throws Exception{
 		
 		meetingService.deleteMeetingMember(requestParams);
 	}
@@ -101,9 +127,42 @@ public class MeetingRestController {
 	}
 	
 	@GetMapping("review/{meetingNo}")
-	public List<MeetingReview> getMeetingReviewList(@PathVariable int meetinNo) throws Exception {
+	public List<MeetingReview> getMeetingReviewList(@PathVariable int meetingNo) throws Exception {
 		
-		return meetingService.getMeetingReviewList(meetinNo);
+		return meetingService.getMeetingReviewList(meetingNo);
+	}
+	
+	@GetMapping("review/no/{meetingReviewNo}")
+	public MeetingReview getMeetingReview(@PathVariable int meetingReviewNo) throws Exception{
+		
+		return meetingService.getMeetingReview(meetingReviewNo);
+		
+	}
+	
+	@PatchMapping("review")
+	public void updateMeetingReview(@RequestBody MeetingReview meetingReview) throws Exception {
+		
+		meetingService.updateMeetingReview(meetingReview);
+	}
+	
+	@DeleteMapping("review")
+	public void deleteMeetingReview(@RequestBody MeetingReview meetingReview) throws Exception{
+		
+		meetingService.deleteMeetingReview(meetingReview.getMeetingReviewNo());
+	}
+	
+	
+	//카테고리관련
+	@GetMapping("maincategory")
+	public List getMainCategoryList() throws Exception {
+		
+		return meetingService.getMainCategory();
+	}
+	
+	@GetMapping("subcategory")
+	public List getSubCategoryList() throws Exception {
+		
+		return meetingService.getSubCategory();
 	}
 	
 

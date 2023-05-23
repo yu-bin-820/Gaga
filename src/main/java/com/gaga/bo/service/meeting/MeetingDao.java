@@ -55,7 +55,7 @@ public interface MeetingDao {
 	//카테고리 관련
 	public List<HashMap<Integer, String>> getMainCategory() throws Exception;
 	
-	public List<HashMap<Integer, String>> getSubCategory(int mainCategoryNo) throws Exception;
+	public List<HashMap<Integer, String>> getSubCategory() throws Exception;
 
 
 		

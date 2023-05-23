@@ -12,7 +12,7 @@ public interface MeetingService {
 	
 	public Meeting getMeeting(int meetingNo) throws Exception;
 	
-	public Map<String, Object> getMeetingListFromParentClubNo(int clubNo) throws Exception;
+	public List<Meeting> getMeetingListFromParentClubNo(int clubNo) throws Exception;
 	
 	public List<Meeting> getMyMeetingList(int userNo) throws Exception;
 	
@@ -48,7 +48,7 @@ public interface MeetingService {
 	
 	public List<HashMap<Integer, String>> getMainCategory() throws Exception;
 	
-	public List<HashMap<Integer, String>> getSubCategory(int mainCategoryNo) throws Exception;
+	public List<HashMap<Integer, String>> getSubCategory() throws Exception;
 
 
 
