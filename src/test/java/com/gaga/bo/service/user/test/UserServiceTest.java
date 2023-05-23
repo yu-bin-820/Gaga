@@ -89,5 +89,8 @@ class UserServiceTest {
     	System.out.println("핸드폰 번호 가져오기 테스트"+user);
     } // 핸드폰 번호로 아이디 비밀번호 조회 테스트 완료 가져오는 정보는 회원번호, 회원아이디, 회원비밀번호, 회원 핸드폰번호
     
-    
+//    @Test
+//    public void deleteUser() throws Exception{
+//    	
+//    }
 }

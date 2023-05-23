@@ -76,6 +76,18 @@ public class UserRestController {
 		return dbUser;
 	}
 	
+	@DeleteMapping("/logout")
+	public ResponseEntity<String> logout(HttpSession session ) throws Exception{
+		
+		System.out.println("/rest/user/logout : DELETE");
+		
+//		session.removeAttribute("user");
+		session.invalidate();
+		
+		// 성공 메시지를 반환합니다.
+		return new ResponseEntity<>("로그아웃 완료!", HttpStatus.OK);
+	}
+	
 	@GetMapping("/addUser")
 	public ResponseEntity<String> addUser() throws Exception{
 		System.out.println("/rest/user/addUser : GET");
@@ -104,7 +116,7 @@ public class UserRestController {
 	
 	@PostMapping("/updateUser")
 	public ResponseEntity<User> updateUser(@RequestBody User user) throws Exception {
-		System.out.println("/resr/user/updateUser : POST");
+		System.out.println("/rest/user/updateUser : POST");
 //		String userId = user.getUserId();
 //		
 //		// 아이디 중복 확인
@@ -119,7 +131,19 @@ public class UserRestController {
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
 	
-	
+	@DeleteMapping("/deleteUser/{userNo}")
+    public ResponseEntity<Void> deleteUser(@PathVariable int userNo) {
+        try {
+            userService.deleteUser(userNo);
+            System.out.println("회원번호="+userNo+"유저정보 삭제완료");
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+        	System.out.println("오류가 발생했습니다: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
+        
+    }
 
     @GetMapping("/kakaoLogin")
     public String kakaoLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
