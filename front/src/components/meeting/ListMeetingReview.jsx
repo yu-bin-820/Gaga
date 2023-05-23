@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 const ListMeetingReview = () => {
@@ -20,12 +20,35 @@ const ListMeetingReview = () => {
             .catch((error)=>{
                 console.log(error);
             });
-        },[]);
+        },[meetingReviewList]);
 
-        const onClickMeetingReviewUpdate = React.useCallback((MouseEvent)=>{
+        const onClickUpdateMeetingReview = React.useCallback((MouseEvent)=>{
             const { id } = event.target;
-            navigate(`/meeting/updatemeetingsuccess/meetingno/${id}`);
+            navigate(`/meeting/review/updatereview/reviewno/${id}`);
             },[]);
+
+        const onClickDelete = useCallback(
+            
+            async (event) => {
+                event.preventDefault();
+        
+                try {
+                    const data = {
+                        meetingReviewNo: event.target.id
+                    };
+        
+                    console.log(data);
+        
+                    const response = await axios.delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`, {
+                        data: data,
+                    });
+                    
+                } catch (error) {
+                    console.error(error);
+                }
+            },
+            []
+        );
 
     return (
         <Box>
@@ -36,7 +59,10 @@ const ListMeetingReview = () => {
                     <h5>{meetingReview.meetingReviewImg}</h5>
                     <Button 
                     id={meetingReview.meetingReviewNo}
-                    onClick={onClickMeetingReviewUpdate}>수정하기</Button>
+                    onClick={onClickUpdateMeetingReview}>수정하기</Button>
+                    <Button 
+                    id={meetingReview.meetingReviewNo}
+                    onClick={onClickDelete}>삭제하기</Button>
                     </Box>
                     
                 ))}
