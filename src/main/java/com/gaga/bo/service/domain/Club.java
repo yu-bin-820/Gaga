@@ -11,7 +11,7 @@ public class Club {
     private int clubLeaderNo;
     private int clubMaxMemberNo;
     private LocalDateTime clubRegDate;
-    private int clubState;
+    private int clubState; //0:모집중 1: 모집완료
     private String clubImg;
     private String clubRegion;
     private int filterGender;
@@ -19,8 +19,6 @@ public class Club {
     private int filterMaxAge;
     private String filterTag;
     private int mainCategoryNo;
-    private int state;
-
  
     //Constructor
     public Club() {
@@ -139,21 +137,13 @@ public class Club {
         this.mainCategoryNo = mainCategoryNo;
     }
 
-	public int getState() {
-		return state;
-	}
-
-	public void setState(int state) {
-		this.state = state;
-	}
-
 	@Override
 	public String toString() {
 		return "Club [clubNo=" + clubNo + ", clubName=" + clubName + ", clubIntro=" + clubIntro + ", clubLeaderNo="
 				+ clubLeaderNo + ", clubMaxMemberNo=" + clubMaxMemberNo + ", clubRegDate=" + clubRegDate
 				+ ", clubState=" + clubState + ", clubImg=" + clubImg + ", clubRegion=" + clubRegion + ", filterGender="
 				+ filterGender + ", filterMinAge=" + filterMinAge + ", filterMaxAge=" + filterMaxAge + ", filterTag="
-				+ filterTag + ", mainCategoryNo=" + mainCategoryNo + ", state=" + state + "]";
+				+ filterTag + ", mainCategoryNo=" + mainCategoryNo + "]";
 	}
 
     

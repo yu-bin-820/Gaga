@@ -38,8 +38,9 @@ class UserServiceTest {
     //@Test //테스트 완료
     public void updateUserTest() throws Exception{
         User user = new User();
-        user.setUserId("updateTest@gaga.com");
+        
         user.setUserNo(6);
+        user.setUserId("updateTest@gaga.com");
         user.setPassword("1234");
         user.setUserName("유저네임 수정 테스트");
         user.setBirthday(LocalDate.of(2000, 1, 1));
@@ -62,7 +63,7 @@ class UserServiceTest {
     }
     
     //@Test    //테스트 완료
-    public void getUserIdTest() throws Exception{
+    public void getUserByIdTest() throws Exception{
     	String userId="updateTest@gaga.com";
     	
     	User user = userService.getUserById(userId);
@@ -80,13 +81,16 @@ class UserServiceTest {
     } //xxxx 인 회원 아이디 체크 듀플리케이션 확인 존재하는 회원 확인하려면 user1로 변경
     
     //@Test  
-    public void getUserPhoneNo()  throws Exception{
+    public void getUserByPhoneNo()  throws Exception{
     	String userPhoneNo = "555555555";
     	
-    	User user = userService.getUserPhoneNo(userPhoneNo);
+    	User user = userService.getUserByPhoneNo(userPhoneNo);
     	
     	System.out.println("핸드폰 번호 가져오기 테스트"+user);
     } // 핸드폰 번호로 아이디 비밀번호 조회 테스트 완료 가져오는 정보는 회원번호, 회원아이디, 회원비밀번호, 회원 핸드폰번호
     
-    
+//    @Test
+//    public void deleteUser() throws Exception{
+//    	
+//    }
 }
