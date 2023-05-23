@@ -86,7 +86,7 @@
 	    WHERE user_id = #{userId}
 	</select>
 	
-	<select id="getUserPhoneNo" parameterType="string" resultMap="userResultMap">
+	<select id="getUserByPhoneNo" parameterType="string" resultMap="userResultMap">
 	    SELECT 
 	    	user_no, user_id, password, user_name, birthday, gender, nick_name, phone_no,
 	        role, join_day, out_day, out_reason, profile_img, activity_img,
@@ -128,7 +128,31 @@
 	    WHERE user_no = #{userNo}
 	</update>
 	
+	<update id="deleteUser" parameterType="int">
+	    UPDATE users SET
+	        user_id = CONCAT('out_', user_id),
+	        password = CONCAT('out_', password),
+	        user_name = CONCAT('out_', user_name),
+	        gender = 9,
+	        nick_name = CONCAT('out_', nick_name),
+	        phone_no = CONCAT('out_', phone_no),
+	        out_day = NOW(),
+	        out_reason = #{outReason},
+	        profile_img = CONCAT('out_', profile_img),
+	        activity_img = CONCAT('out_', activity_img),
+	        activity_img2 = CONCAT('out_', activity_img2),
+	        activity_img3 = CONCAT('out_', activity_img3),
+	        user_intro = CONCAT('out_', user_intro),
+	<!--     bank_code = CONCAT('out_', bank_code), -->
+	        bank_name = CONCAT('out_', bank_name),
+	        account_no = CONCAT('out_', account_no),
+	        filter_gender = 9,
+	        filter_max_age = 999,
+	        filter_min_age = 200,
+	        filter_tag = CONCAT('out_', filter_tag),
+	        filter_tag2 = CONCAT('out_', filter_tag2),
+	        filter_tag3 = CONCAT('out_', filter_tag3)
+	    WHERE user_no = #{userNo}
+	</update>
 
-
-	 
 </mapper>

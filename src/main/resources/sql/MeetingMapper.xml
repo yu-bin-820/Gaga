@@ -238,7 +238,7 @@
    filter_max_age &gt;= #{minAge:INTEGER}
   AND
    #{age:INTEGER} BETWEEN filter_min_age and filter_max_age
-  <if test="mainCategoryNo != null">
+    <if test="mainCategoryNo != null and mainCategoryNo != 0">
   	AND main_category_no =  #{mainCategoryNo:INTEGER}
   </if>
   <if test="tag != null">
@@ -247,7 +247,7 @@
   AND
    meeting_lat BETWEEN #{swLat:DOUBLE} AND #{neLat:DOUBLE}
   AND
-   meeting_lng BETWEEN #{swLng:DOUBLE} and #{neLng:DOUBLE};
+   meeting_lng BETWEEN #{swLng:DOUBLE} AND #{neLng:DOUBLE};
    </select>
   
   <!-- 미팅 생성 -->
@@ -451,14 +451,12 @@
     
   
   <!-- 대분류 카테고리 선택 시 하위 카테고리 출력 (getSubCategory)-->
-  <select id="getSubCategory" parameterType="int" resultMap="subCategoryResultMap">
+  <select id="getSubCategory" resultMap="subCategoryResultMap">
     SELECT
     	main_category_no,
     	tag
   	FROM
   		group_sub_category
-  	WHERE
-    	main_category_no = #{mainCategoryNo}
   </select>
   
 
