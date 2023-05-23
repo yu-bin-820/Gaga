@@ -19,6 +19,4 @@ public interface UserDao {
 		
 	public void deleteUser(int userNo) throws Exception;
 	
-	public boolean chechDuplication(String userId) throws Exception;
-	
 }
