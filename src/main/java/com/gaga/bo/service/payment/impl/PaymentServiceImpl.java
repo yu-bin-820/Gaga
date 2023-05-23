@@ -25,7 +25,6 @@ public class PaymentServiceImpl implements PaymentService {
 	//Constructor
 	public PaymentServiceImpl() {
 		System.out.println(this.getClass());
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -46,11 +45,11 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public String getPaymentByUserMeeting(int userNo, int meetingNo) throws Exception {
+	public String getPayNoByUserMeeting(int userNo, int meetingNo) throws Exception {
 		
-		System.out.println("회원, 모임 정보로 결제 정보 가져오기");
+		System.out.println("회원, 모임 정보로 결제 번호 가져오기 => 환불");
 		
-		return paymentDao.getPaymentByUserMeeting(userNo, meetingNo);
+		return paymentDao.getPayNoByUserMeeting(userNo, meetingNo);
 	}
 
 	@Override
@@ -58,8 +57,9 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		String payNo = new String();
 				
-		payNo =	getPaymentByUserMeeting(userNo, meetingNo);
-		System.out.println("환불시 결제 상태 변화");
+		payNo =	getPayNoByUserMeeting(userNo, meetingNo);
+		
+		System.out.println("환불시 결제 상태 변경");
 		
 		paymentDao.updatePayment(payNo);
 			
@@ -74,9 +74,26 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
+	public List<Meeting> getAllAdjustmentList() throws Exception {
+		
+		System.out.println("정산 목록 전체 조회");
+		
+		return paymentDao.getAllAdjustmentList();
+	}
+
+	@Override
+	public List<Meeting> getAdjustmentList(int userNo) throws Exception {
+		
+		System.out.println("회원별 정산 목록 조회");
+		
+		return paymentDao.getAdjustmentList(userNo);
+		
+	}
+
+	@Override
 	public void updateAdjustment(Meeting meeting) throws Exception {
 		
-		System.out.println("정산 내역 추가");
+		System.out.println("정산 정보 추가");
 		
 		paymentDao.updateAdjustment(meeting);
 		// TODO Auto-generated method stub
@@ -84,23 +101,12 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public void updatePaymentState(Meeting meeting) throws Exception {
+	public void updateAdjustmentState(Meeting meeting) throws Exception {
 		
 		System.out.println("정산 상태 변경");
 		
 		paymentDao.updateAdjustmentState(meeting);
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub 	
 	}
-
-	@Override
-	public void updateAccount(User user) throws Exception {
-		
-		System.out.println("계좌 정보 등록");
-		
-		paymentDao.updateAccount(user);
-		
-	}
-
 
 }
