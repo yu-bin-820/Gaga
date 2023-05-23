@@ -25,7 +25,7 @@ public interface PaymentDao {
 	public List<Payment> getPaymentList(int userNo) throws Exception;
 	
 	//UPDATE
-	public void updatePayment(String payNo) throws Exception;
+	public void updatePayment(int userNo, int meetingNo) throws Exception;
 	
 	//정산
 	//SELECT LIST 정산정보 전체 목록 조회(이후 상태별 조회)

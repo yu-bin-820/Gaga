@@ -14,10 +14,7 @@ public interface PaymentService {
 	
 	//결제 내역 1건 상세 조회
 	public Payment getPayment(String payNo) throws Exception;
-	
-	//회원, 모임에 대한 결제 정보 조회
-	public String getPayNoByUserMeeting(int userNo, int meetingNo) throws Exception;
-	
+
 	//회원별 결제 내역 목록 조회
 	public List<Payment> getPaymentList(int userNo) throws Exception;
 	

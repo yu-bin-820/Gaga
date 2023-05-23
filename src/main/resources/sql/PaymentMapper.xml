@@ -52,7 +52,7 @@
 	 	INSERT 
 	 	INTO payments (pay_no, user_no, meeting_no, meeting_name, pay_time, refund_time, pay_state, entry_fee)
         VALUES (#{payNo:VARCHAR}, #{userNo:INTEGER}, #{meetingNo:INTEGER}, #{meetingName:VARCHAR}, 
-        #{payTime:TIMESTAMP}, #{refundTime:TIMESTAMP}, #{payState:INTEGER}, #{entryFee:INTEGER})
+        #{payTime:TIMESTAMP}, #{refundTime}, #{payState:INTEGER}, #{entryFee:INTEGER})
 	</insert>
 	
 	<!-- SQL : SELECT -->
@@ -76,13 +76,24 @@
 	    WHERE user_no = #{userNo}
 	</select>
 	
-	<!-- SQL : UPDATE -->
+	<!-- SQL : UPDATE 
 	<update id="updatePayment" parameterType="java.lang.String">
 		UPDATE payments
 	  	<set>
-	  		pay_state = 2
+	  		pay_state = 1
 	    </set>
 		WHERE pay_no = #{payNo}	  
+	</update>-->
+	
+	<update id="updatePayment" parameterType="int">
+	  UPDATE payments
+	  <set>
+	    pay_state = 1
+	  </set>
+	  WHERE pay_no IN (
+	    SELECT p.pay_no
+	    FROM (SELECT pay_no FROM payments WHERE user_no = #{userNo} AND meeting_no = #{meetingNo}) AS p
+	  )
 	</update>
 	
 	<!-- SQL : SELECT -->
@@ -127,16 +138,6 @@
 	  WHERE meeting_no = #{meetingNo}
 	</update>
 
-	
-	<!-- SQL : UPDATE -->
-	<update id="updateAdjustmentState" parameterType="meeting">
-    	UPDATE meetings
-    <set>
-        adjustment_state = 0
-    </set> 
-    	WHERE meeting_no = #{meetingNo}
-	</update>
-	
 	<!-- SQL : SELECT -->
 	<select id="getTotalCount" parameterType="int" resultType="int">
 		SELECT COUNT(*)
