@@ -5,15 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.gaga.bo.service.community.CommunityService;
 import com.gaga.bo.service.domain.Report;
+import com.gaga.bo.service.domain.Title;
 import com.gaga.bo.service.domain.User;
 import com.gaga.bo.service.domain.UserReview;
+
+import org.junit.jupiter.api.Test;
 
 @SpringBootTest
 class CommunityServiceTest {
@@ -102,12 +104,31 @@ class CommunityServiceTest {
 		System.out.println(communityService.getUserReview(userReview));
 	}
 	
-	@Test
+	//@Test
 	public void testDeleteUserReview() throws Exception {
 		UserReview userReview = new UserReview();
 		userReview.setReviewerNo(3);
 		userReview.setReviewedNo(4);
 		communityService.deleteUserReview(userReview);
 		System.out.println("after Delete : " + communityService.getUserReview(userReview));
+	}
+	
+	//@Test
+	public void testAddUserEarnedTitle() throws Exception {
+		Map<String,Integer> map = new HashMap<String,Integer>();
+		map.put("userNo", 3);
+		
+		for (int i = 0; i<2; i++) {
+			map.put("leaderState",i);
+			for (int j=0; j<6; j++) {
+				map.put("mainCategoryNo", j);
+				communityService.addUserEarnedTitle(map);
+			}
+		}
+	}
+	@Test
+	public void testGetUserEarnedTitleList() throws Exception {
+		List<Title> list = communityService.getUserEarnedTitleList(3);
+		System.out.println(list);
 	}
 }
