@@ -24,7 +24,10 @@ public interface ClubService {
 	
 	//회원이 참여한 클럽 목록 조회
 	public List<Club> getMyClublist(int userNo) throws Exception;
-	  
+	
+	//비회원, 미인증 회원 메인화면 클럽 목록
+	public List<Club> getMainClubList(int mainCategoryNo) throws Exception;
+	
 	//클럽 정보 수정 
 	public void updateClub(Club club) throws Exception;
 	
@@ -41,11 +44,5 @@ public interface ClubService {
 	//클럽 멤버 삭제
 	public void deleteClubMember(int memberNo) throws Exception;
 	
-	//카테고리관리
-	//카테고리 대분류
-	public List<HashMap<Integer, String>> getMainCategory() throws Exception;
-	
-	//카테고리 소분류
-	public List<HashMap<Integer, String>> getSubCategory(int mainCatedoryNo) throws Exception;		
-	
+	//카테고리관리 => 미팅에서 가져오기
 }
