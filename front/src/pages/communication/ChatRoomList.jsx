@@ -109,14 +109,18 @@ export default function ChatList() {
                 onClick={onClickGroupChatOne}
               >
                 <ChatItem
-                  avatar={'https://facebook.github.io/react/img/logo.svg'}
-                  alt={'Reactjs'}
+                  avatar={`http://${
+                    import.meta.env.VITE_EXPRESS_HOST
+                  }/uploads/${group.meeting_img}`}
+                  alt={`http://${
+                    import.meta.env.VITE_EXPRESS_HOST
+                  }/uploads/group_alt.jpg`}
                   title={
                     group.meeting_name ? group.meeting_name : group.club_name
                   }
                   subtitle={group.last_message}
                   date={new Date(group.last_message_time)}
-                  unread={0}
+                  unread={group.unreadMessages}
                 />
               </Box>
             ))}
@@ -133,12 +137,14 @@ export default function ChatList() {
                 }}
               >
                 <ChatItem
-                  avatar={'https://facebook.github.io/react/img/logo.svg'}
-                  alt={'Reactjs'}
+                  avatar={'http://facebook.github.io/react/img/logo.svg'}
+                  alt={`http://${
+                    import.meta.env.VITE_EXPRESS_HOST
+                  }/uploads/user_alt.jpg`}
                   title={receiver.Receiver.nick_name}
                   subtitle={receiver.content}
                   date={new Date(receiver.created_at)}
-                  unread={0}
+                  unread={receiver.unreadMessages}
                 />
               </Box>
             ))}

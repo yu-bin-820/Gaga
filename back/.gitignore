@@ -1,5 +1,6 @@
 # 환경 설정 파일
-
+node_modules
+node_modules/
 
 # 의존성 패키지
 /node_modules
