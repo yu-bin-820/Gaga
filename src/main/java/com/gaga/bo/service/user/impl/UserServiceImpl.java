@@ -335,5 +335,11 @@ public class UserServiceImpl implements UserService {
 		return userInfo;
 	}
 
+	@Override
+	public List<User> getGroupMemberList(Map<String, Integer> map) throws Exception {
+		System.out.println("참여 멤버 목록 조회");
+		return userDao.getGroupMemberList(map);
+	}
+
 
 }

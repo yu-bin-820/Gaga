@@ -1,5 +1,7 @@
 package com.gaga.bo.web.user;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -184,6 +186,20 @@ public class UserRestController {
 	    session.setAttribute("user", user);
 	    return new ResponseEntity<>(user, HttpStatus.OK);
 	}
+	
+	@GetMapping("/list/grouptype/{groupType}/no/{groupNo}/state/{state}")
+	public List<User> getGroupMemberList(@PathVariable("groupType") int groupType,
+										@PathVariable("groupNo") int groupNo,
+										@PathVariable("state") int state) throws Exception{
+		
+		Map<String, Integer> map = new HashMap<>();
+		map.put("groupType", groupType);
+	    map.put("groupNo", groupNo);
+	    map.put("state", state);
+	    
+	    
+		return userService.getGroupMemberList(map);
+	} 
 
 
 }

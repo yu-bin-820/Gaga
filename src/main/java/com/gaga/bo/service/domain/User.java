@@ -37,6 +37,7 @@ public class User {
     private String filterTag;
     private String filterTag2;
     private String filterTag3;
+    private int state;
     
 	public int getUserNo() {
 		return userNo;
@@ -212,6 +213,13 @@ public class User {
 	public void setFilterTag3(String filterTag3) {
 		this.filterTag3 = filterTag3;
 	}
+	
+	public int getState() {
+		return state;
+	}
+	public void setState(int state) {
+		this.state = state;
+	}
 	@Override
 	public String toString() {
 		return "User [userNo=" + userNo + ", userId=" + userId + ", password=" + password + ", userName=" + userName
@@ -222,8 +230,9 @@ public class User {
 				+ ", mainTitleNo=" + mainTitleNo + ", bankCode=" + bankCode + ", bankName=" + bankName + ", accountNo="
 				+ accountNo + ", blacklist=" + blacklist + ", filterGender=" + filterGender + ", filterMaxAge="
 				+ filterMaxAge + ", filterMinAge=" + filterMinAge + ", filterTag=" + filterTag + ", filterTag2="
-				+ filterTag2 + ", filterTag3=" + filterTag3 + "]";
+				+ filterTag2 + ", filterTag3=" + filterTag3 + ", state=" + state + "]";
 	}
-    
+	
+	   
 	
 }

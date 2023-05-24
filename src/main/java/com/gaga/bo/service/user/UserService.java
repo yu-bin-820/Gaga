@@ -2,6 +2,7 @@ package com.gaga.bo.service.user;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -33,4 +34,6 @@ public interface UserService {
 	public Map<String, Object> getNaverUserInfo(String access_Token) throws Exception;
 	
 	public Map<String, Object> getKakaoUserInfo(String access_Token) throws Exception;
+	
+	public List<User> getGroupMemberList(Map<String, Integer> map) throws Exception;
 }

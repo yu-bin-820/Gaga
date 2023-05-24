@@ -21,6 +21,9 @@ public interface PaymentService {
 	//결제 내역 수정(환불)
 	public void updatePayment(int userNo, int meetingNo) throws Exception;
 	
+	//모임, 유저번호로 결제번호 가져오기
+	public String getPayNoByUserMeeting(int userNo, int meetingNo) throws Exception;
+	
 	//정산 목록 조회(운영자)
 	public List<Meeting> getAllAdjustmentList() throws Exception;
 	

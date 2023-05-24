@@ -181,7 +181,11 @@ public class ClubServiceTest {
 	//@Test
 	public void deleteClubMember() throws Exception{
 		
-		clubService.deleteClubMember(25);
+		Map<String, String> map = new HashMap<>();
+		map.put("clubNo", "7");
+		map.put("userNo", "7");
+		
+		clubService.deleteClubMember(map);
 	}
 
 	
