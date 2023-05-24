@@ -45,23 +45,12 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public String getPayNoByUserMeeting(int userNo, int meetingNo) throws Exception {
-		
-		System.out.println("회원, 모임 정보로 결제 번호 가져오기 => 환불");
-		
-		return paymentDao.getPayNoByUserMeeting(userNo, meetingNo);
-	}
-
-	@Override
 	public void updatePayment(int userNo, int meetingNo) throws Exception {
 		
-		String payNo = new String();
-				
-		payNo =	getPayNoByUserMeeting(userNo, meetingNo);
-		
+
 		System.out.println("환불시 결제 상태 변경");
 		
-		paymentDao.updatePayment(payNo);
+		paymentDao.updatePayment(userNo, meetingNo);
 			
 	}
 

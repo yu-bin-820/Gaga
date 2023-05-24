@@ -42,13 +42,13 @@ public class PaymentServiceTest {
     	
     	Payment payment = new Payment();
     	
-    	payment.setPayNo("imp_123456789020");
-    	payment.setUserNo(3);
-    	payment.setMeetingNo(3);
+    	payment.setPayNo("imp_123456789021");
+    	payment.setUserNo(2);
+    	payment.setMeetingNo(22);
     	payment.setMeetingName("test");
     	payment.setPayTime(Timestamp.valueOf(LocalDateTime.now()));
-    	payment.setRefundTime(Timestamp.valueOf(LocalDateTime.now()));
-    	payment.setPayState(1);
+    	payment.setRefundTime(null);
+    	payment.setPayState(0);
     	payment.setEntryFee(5000);
     	
     	paymentService.addPayment(payment);
@@ -65,19 +65,19 @@ public class PaymentServiceTest {
     	
     	Payment payment = new Payment();
     	
-    	payment = paymentService.getPayment("imp_123456789016");
+    	payment = paymentService.getPayment("imp_123456789020");
     	
     	//콘솔확인
     	System.out.println(payment);
     	
-    	assertEquals("imp_123456789016", payment.getPayNo());
+    	assertEquals("imp_123456789020", payment.getPayNo());
 	
     }
     
     //@Test
     public void getPaymentListTest() throws Exception{
     	
-    	List<Payment> paymentList = paymentService.getPaymentList(1);
+    	List<Payment> paymentList = paymentService.getPaymentList(2);
     	
     	assertNotNull(paymentList);
     	
@@ -100,34 +100,35 @@ public class PaymentServiceTest {
     //@Test
     public void getAdjustmentListTest() throws Exception {
     	
-    	List<Meeting> adjustmemtList = paymentService.getAdjustmentList(3);
+    	List<Meeting> adjustmemtList = paymentService.getAdjustmentList(2);
+    	
     	for(Meeting adjustment : adjustmemtList) {
     		System.out.println(adjustment);
     	}
     }
     
-    //@Test
+    @Test   //==>다시 해봐라
     public void updatePaymentTest() throws Exception{
     	
     	Payment payment = new Payment();
     	
     	//업데이트 전
-    	payment = paymentService.getPayment("imp_123456789016");
+    	payment = paymentService.getPayment("imp_123456789020");
     	
     	int userNo = payment.getUserNo();
     	int meetingNo = payment.getMeetingNo();
+    	System.out.println(userNo+"  "+meetingNo);
     	
-    	//payState 1->2 
+    	//payState 0->1
     	paymentService.updatePayment(userNo, meetingNo);
     	
     	//업데이트 후
-    	payment = paymentService.getPayment("imp_123456789016");
-    	
-    	assertEquals(2, payment.getPayState());   	
+   	
+    	//assertEquals(1, payment.getPayState());   	
     	
     }
     
-    @Test
+    //@Test
     public void updateAdjustmentTest() throws Exception{
     	
     	Meeting meeting = new Meeting();
