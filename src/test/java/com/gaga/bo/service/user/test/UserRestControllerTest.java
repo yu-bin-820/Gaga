@@ -32,7 +32,7 @@ public class UserRestControllerTest {
     
     @MockBean
     private UserServiceImpl userService;
-
+    
     //@Test
     public void loginTest() throws Exception {
         User user = new User();
