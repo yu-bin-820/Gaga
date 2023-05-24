@@ -4,7 +4,10 @@ const useInput = (initialData) => {
   const [value, setValue] = useState(initialData);
 
   const handler = useCallback((e) => {
-    setValue(e.target.value);
+    setValue((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
   }, []);
 
   return [value, handler, setValue];
