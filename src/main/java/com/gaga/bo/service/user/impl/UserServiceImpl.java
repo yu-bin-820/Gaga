@@ -12,19 +12,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+import java.util.Random;
 
-import org.apache.ibatis.session.SqlSession;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaga.bo.service.domain.User;
+import com.gaga.bo.service.user.NaverSens;
 import com.gaga.bo.service.user.UserDao;
 import com.gaga.bo.service.user.UserService;
 
@@ -34,9 +33,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	@Qualifier("userDao")
 	UserDao userDao;
-//	@Autowired
-//	@Qualifier("userService")
-//	UserService userService;
 	
 	public UserServiceImpl() {
 		System.out.println(this.getClass());
@@ -45,16 +41,6 @@ public class UserServiceImpl implements UserService {
 	public void addUser(User user) throws Exception{
 		userDao.addUser(user);
 	}
-	//프로필이미지 구현부 미완료
-//	public void addProfileImg(String userId, MultipartFile file) throws IOException {
-//	    String savedFileName = "";
-//	    String originalFileName = file.getOriginalFilename();
-//	    UUID uuid = UUID.randomUUID();
-//	    savedFileName = uuid.toString() + "_" + originalFileName;
-//	    // 파일명만 데이터베이스에 저장하므로 파일 업로드 로직은 필요하지 않습니다.
-//	    // 이곳에 프로필 이미지 파일명을 데이터베이스에 저장하는 로직을 구현하세요.
-//	    // ...
-//	}
 	
 	@Override
 	public User getUser(int userNo) throws Exception {
@@ -335,10 +321,28 @@ public class UserServiceImpl implements UserService {
 		return userInfo;
 	}
 
+
 	@Override
 	public List<User> getGroupMemberList(Map<String, Integer> map) throws Exception {
-		System.out.println("참여 멤버 목록 조회");
+		
 		return userDao.getGroupMemberList(map);
+	}
+
+	@Override			//네이버 핸드폰 인증을 위한 랜덤 난수 생성+문자 보내기 메소드
+	public String sendRandomSmsMessage(String tel) {
+		NaverSens message = new NaverSens();
+	    Random rand = new Random();
+	    String numStr = "";
+	    for (int i = 0; i < 6; i++) {
+	        String ran = Integer.toString(rand.nextInt(10));
+	        numStr += ran;
+	    }
+	    System.out.println("회원가입 문자 인증 => " + numStr);
+
+	    message.send_msg(tel, numStr);
+
+	    return numStr;
+
 	}
 
 

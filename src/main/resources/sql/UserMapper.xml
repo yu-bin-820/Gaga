@@ -66,26 +66,53 @@
 	 </insert>  
 	 
 	 <select id="getUser" parameterType="int" resultMap="userResultMap">
-	    SELECT
-	        user_no, user_id, password, user_name, birthday, gender, nick_name, phone_no,
-	        role, join_day, out_day, out_reason, profile_img, activity_img,
-	        activity_img2, activity_img3, user_intro, main_title_no, bank_code, bank_name,
-	        account_no, blacklist, filter_gender, filter_min_age, filter_max_age, filter_tag,
-	        filter_tag2, filter_tag3
-	    FROM users
-	    WHERE user_no = #{userNo}
+    SELECT
+        u.user_no, u.user_id, u.password, u.user_name, u.birthday, u.gender, u.nick_name, u.phone_no,
+        u.role, u.join_day, u.out_day, u.out_reason, u.profile_img, u.activity_img,
+        u.activity_img2, u.activity_img3, u.user_intro, u.main_title_no, u.bank_code, u.bank_name,
+        u.account_no, u.blacklist, u.filter_gender, u.filter_min_age, u.filter_max_age, u.filter_tag,
+        u.filter_tag2, u.filter_tag3,
+        (36.5 + COALESCE(
+            SUM(
+                CASE ur.user_score
+                    WHEN 1 THEN -0.2
+                    WHEN 2 THEN -0.1
+                    WHEN 3 THEN 0
+                    WHEN 4 THEN 0.1
+                    WHEN 5 THEN 0.2
+                END
+            ), 0
+        )) AS temperature
+    FROM users u
+    LEFT JOIN user_reviews ur ON u.user_no = ur.reviewed_no
+    WHERE u.user_no = #{userNo}
+    GROUP BY u.user_no
 	</select>
 	
 	<select id="getUserById" parameterType="string" resultMap="userResultMap">
-	    SELECT
-	        user_no, user_id, password, user_name, birthday, gender, nick_name, phone_no,
-	        role, join_day, out_day, out_reason, profile_img, activity_img,
-	        activity_img2, activity_img3, user_intro, main_title_no, bank_code, bank_name,
-	        account_no, blacklist, filter_gender, filter_min_age, filter_max_age, filter_tag,
-	        filter_tag2, filter_tag3
-	    FROM users
-	    WHERE user_id = #{userId}
-	</select>
+    SELECT
+        u.user_no, u.user_id, u.password, u.user_name, u.birthday, u.gender, u.nick_name, u.phone_no,
+        u.role, u.join_day, u.out_day, u.out_reason, u.profile_img, u.activity_img,
+        u.activity_img2, u.activity_img3, u.user_intro, u.main_title_no, u.bank_code, u.bank_name,
+        u.account_no, u.blacklist, u.filter_gender, u.filter_min_age, u.filter_max_age, u.filter_tag,
+        u.filter_tag2, u.filter_tag3,
+        (36.5 + COALESCE(
+            SUM(
+                CASE ur.user_score
+                    WHEN 1 THEN -0.2
+                    WHEN 2 THEN -0.1
+                    WHEN 3 THEN 0
+                    WHEN 4 THEN 0.1
+                    WHEN 5 THEN 0.2
+                END
+            ), 0
+        )) AS temperature
+    FROM users u
+    LEFT JOIN user_reviews ur ON u.user_no = ur.reviewed_no
+    WHERE u.user_id = #{userId}
+    GROUP BY u.user_no
+</select>
+
 	
 	<select id="getUserByPhoneNo" parameterType="string" resultMap="userResultMap">
 	    SELECT 

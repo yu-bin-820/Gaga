@@ -31,8 +31,9 @@ public class UserRestControllerTest {
     private ObjectMapper objectMapper;
     
     @MockBean
+//    @Autowired
     private UserServiceImpl userService;
-
+    
     //@Test
     public void loginTest() throws Exception {
         User user = new User();
@@ -58,6 +59,28 @@ public class UserRestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andDo(print());
+    }
+    
+//    @Test
+    public void phoneAuthTest() throws Exception {
+        String tel = "01051884079";
+        
+        mockMvc.perform(post("/rest/user/phoneAuth")
+            .contentType(MediaType.TEXT_PLAIN)
+            .content(tel))
+            .andExpect(status().isOk())
+            .andDo(print());
+    }
+
+    //@Test
+    public void phoneAuthOkTest() throws Exception {
+        String code = "1234";
+        
+        mockMvc.perform(post("/rest/user/phoneAuthOk")
+            .contentType(MediaType.TEXT_PLAIN)
+            .content(code))
+            .andExpect(status().isOk())
+            .andDo(print());
     }
 }
 

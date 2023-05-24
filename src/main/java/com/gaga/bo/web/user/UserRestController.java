@@ -201,5 +201,38 @@ public class UserRestController {
 		return userService.getGroupMemberList(map);
 	} 
 
+	@PostMapping("/phoneAuth")
+	public Boolean phoneAuth(@RequestBody String tel, HttpSession session) {
+		System.out.println("핸드폰 인증 요청 옴");
+	    try {
+	        // 이미 가입된 전화번호가 있는지 확인
+	        User user = userService.getUserByPhoneNo(tel);
+	        if(user != null && user.getPhoneNo().equals(tel)) {
+	            return true;
+	        }
+	    } catch (Exception e) {
+	        System.out.println("폰인증 에러"+e);
+	        e.printStackTrace();
+	    }
+	
+	    String code = userService.sendRandomSmsMessage(tel);
+	    session.setAttribute("rand", code);
+	    
+	    return false;
+	}
+	
+	@PostMapping("/phoneAuthOk")
+	public Boolean phoneAuthOk(@RequestBody String code, HttpSession session) {
+	    String rand = (String) session.getAttribute("rand");
+
+	    System.out.println(rand + "<-인증번호 : 회원이입력한 인증번호->" + code);
+
+	    if (rand.equals(code)) {
+	        session.removeAttribute("rand");
+	        return true;
+	    } 
+
+	    return false;
+	}
 
 }

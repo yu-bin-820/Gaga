@@ -11,6 +11,7 @@ import com.gaga.bo.service.community.CommunityDao;
 import com.gaga.bo.service.community.CommunityService;
 import com.gaga.bo.service.domain.Report;
 import com.gaga.bo.service.domain.ReportCategory;
+import com.gaga.bo.service.domain.Title;
 import com.gaga.bo.service.domain.User;
 import com.gaga.bo.service.domain.UserReview;
 
@@ -91,5 +92,17 @@ public class CommunityServiceImpl implements CommunityService {
 	public void deleteUserReview(UserReview userReview) throws Exception {
 		communityDao.deleteUserReview(userReview);
 	}
+
+	///TitleMethod
+	@Override
+	public void addUserEarnedTitle(Map<String, Integer> userNoMainCategoryNoLeaderState) throws Exception {
+		communityDao.addUserEarnedTitle(userNoMainCategoryNoLeaderState);
+	}
+
+	@Override
+	public List<Title> getUserEarnedTitleList(int userNo) throws Exception {
+		return communityDao.getUserEarnedTitleList(userNo);
+	}
+	
 
 }

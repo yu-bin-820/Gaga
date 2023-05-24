@@ -36,4 +36,7 @@ public interface UserService {
 	public Map<String, Object> getKakaoUserInfo(String access_Token) throws Exception;
 	
 	public List<User> getGroupMemberList(Map<String, Integer> map) throws Exception;
+
+	public String sendRandomSmsMessage(String tel);
+
 }

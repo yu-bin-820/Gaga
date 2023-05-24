@@ -55,7 +55,7 @@ class UserServiceTest {
     
     //@Test //테스트 완료
     public void getUserTest() throws Exception{
-    	int userNo=6;
+    	int userNo=3;
     	
     	User user = userService.getUser(userNo);
     	
@@ -64,10 +64,11 @@ class UserServiceTest {
     
     //@Test    //테스트 완료
     public void getUserByIdTest() throws Exception{
-    	String userId="updateTest@gaga.com";
+    	String userId="user3";
     	
     	User user = userService.getUserById(userId);
     	
+    	System.out.println("온도 가져오기 테스트 : "+user.getTemperature());
     	System.out.println("회원id user1의 유저정보 겟 테스트"+user);
     }	//회원 아이디로 유저정보 가져오기 완료
     
