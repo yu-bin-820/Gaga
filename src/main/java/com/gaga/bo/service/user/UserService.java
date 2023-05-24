@@ -33,4 +33,6 @@ public interface UserService {
 	public Map<String, Object> getNaverUserInfo(String access_Token) throws Exception;
 	
 	public Map<String, Object> getKakaoUserInfo(String access_Token) throws Exception;
+	
+	public String sendRandomSmsMessage(String tel);
 }

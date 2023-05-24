@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaga.bo.service.domain.User;
+import com.gaga.bo.service.user.NaverSens;
 import com.gaga.bo.service.user.UserDao;
 import com.gaga.bo.service.user.UserService;
 
@@ -316,6 +318,22 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 		return userInfo;
+	}
+
+	@Override			//네이버 핸드폰 인증을 위한 랜덤 난수 생성+문자 보내기 메소드
+	public String sendRandomSmsMessage(String tel) {
+		NaverSens message = new NaverSens();
+	    Random rand = new Random();
+	    String numStr = "";
+	    for (int i = 0; i < 6; i++) {
+	        String ran = Integer.toString(rand.nextInt(10));
+	        numStr += ran;
+	    }
+	    System.out.println("회원가입 문자 인증 => " + numStr);
+
+	    message.send_msg(tel, numStr);
+
+	    return numStr;
 	}
 
 
