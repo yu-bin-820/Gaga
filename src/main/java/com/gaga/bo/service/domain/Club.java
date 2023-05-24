@@ -19,6 +19,8 @@ public class Club {
     private int filterMaxAge;
     private String filterTag;
     private int mainCategoryNo;
+    private int state;
+    private int memberCount;
  
     //Constructor
     public Club() {
@@ -137,14 +139,30 @@ public class Club {
         this.mainCategoryNo = mainCategoryNo;
     }
 
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
+	public int getMemberCount() {
+		return memberCount;
+	}
+
+	public void setMemberCount(int memberCount) {
+		this.memberCount = memberCount;
+	}
+
 	@Override
 	public String toString() {
 		return "Club [clubNo=" + clubNo + ", clubName=" + clubName + ", clubIntro=" + clubIntro + ", clubLeaderNo="
 				+ clubLeaderNo + ", clubMaxMemberNo=" + clubMaxMemberNo + ", clubRegDate=" + clubRegDate
 				+ ", clubState=" + clubState + ", clubImg=" + clubImg + ", clubRegion=" + clubRegion + ", filterGender="
 				+ filterGender + ", filterMinAge=" + filterMinAge + ", filterMaxAge=" + filterMaxAge + ", filterTag="
-				+ filterTag + ", mainCategoryNo=" + mainCategoryNo + "]";
+				+ filterTag + ", mainCategoryNo=" + mainCategoryNo + ", state=" + state + ", memberCount=" + memberCount
+				+ "]";
 	}
-
-    
+		
 }

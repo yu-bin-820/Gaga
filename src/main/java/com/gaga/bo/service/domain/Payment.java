@@ -1,5 +1,6 @@
 package com.gaga.bo.service.domain;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class Payment {
@@ -9,8 +10,8 @@ public class Payment {
     private int userNo;
     private int meetingNo;
     private String meetingName;
-    private LocalDateTime payTime;
-    private LocalDateTime refundTime;
+    private Timestamp payTime;
+    private Timestamp refundTime;
     private int payState;
     private int entryFee;
 
@@ -52,19 +53,19 @@ public class Payment {
         this.meetingName = meetingName;
     }
 
-    public LocalDateTime getPayTime() {
+    public Timestamp getPayTime() {
         return payTime;
     }
 
-    public void setPayTime(LocalDateTime payTime) {
+    public void setPayTime(Timestamp payTime) {
         this.payTime = payTime;
     }
 
-    public LocalDateTime getRefundTime() {
+    public Timestamp getRefundTime() {
         return refundTime;
     }
 
-    public void setRefundTime(LocalDateTime refundTime) {
+    public void setRefundTime(Timestamp refundTime) {
         this.refundTime = refundTime;
     }
 
@@ -76,25 +77,21 @@ public class Payment {
         this.payState = payState;
     }
 
-    public int getEntryFee() {
-        return entryFee;
-    }
+	public int getEntryFee() {
+		return entryFee;
+	}
 
-    public void setEntryFee(int entryFee) {
-        this.entryFee = entryFee;
-    }
+	public void setEntryFee(int entryFee) {
+		this.entryFee = entryFee;
+	}
 
-    @Override
-    public String toString() {
-        return "Payment{" +
-                "payNo='" + payNo + '\'' +
-                ", userNo=" + userNo +
-                ", meetingNo=" + meetingNo +
-                ", meetingName='" + meetingName + '\'' +
-                ", payTime=" + payTime +
-                ", refundTime=" + refundTime +
-                ", payState=" + payState +
-                ", entryFee=" + entryFee +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "Payment [payNo=" + payNo + ", userNo=" + userNo + ", meetingNo=" + meetingNo + ", meetingName="
+				+ meetingName + ", payTime=" + payTime + ", refundTime=" + refundTime + ", payState=" + payState
+				+ ", entryFee=" + entryFee + "]";
+	}
+
+
+
 }
