@@ -13,7 +13,77 @@ const DirectMessage = require('../models/directMessage');
 const Reader = require('../models/reader');
 const Member = require('../models/member');
 const router = express.Router();
+//-----------------Club,Meeting Totalunread GET-----------------------------------------
+router.get(
+  '/chat/group/message/unreads/userno/:userNo',
+  async (req, res, next) => {
+    try {
+      const user = await User.findOne({
+        where: { user_no: req.params.userNo },
+      });
 
+      const ownedClubs = await user.getOwnedClub(); // getOwnedClub 호출
+
+      const joinedClubs = await user.getClubs({
+        through: { where: { state: 2 } },
+      });
+
+      const ownedMeetings = await user.getOwnedMeeting(); // getOwnedClub 호출
+
+      const joinedMeetings = await user.getMeetings({
+        through: { where: { state: 2 } },
+      });
+      //------------------- user가 속한 그룹 전체 메시지수 count-------------------------
+
+      let countMessage = 0;
+
+      for (const club of ownedClubs) {
+        countMessage += await club.countClubMessages();
+      }
+
+      for (const club of joinedClubs) {
+        countMessage += await club.countClubMessages();
+      }
+
+      for (const meeting of ownedMeetings) {
+        countMessage += await meeting.countMeetingMessages();
+      }
+
+      for (const meeting of joinedMeetings) {
+        countMessage += await meeting.countMeetingMessages();
+      }
+
+      const countReadedMessage = await user.countReadedMessages();
+      const countGroupUnreads = countMessage - countReadedMessage;
+
+      //------------------------------directUnreads count--------------------------
+
+      const countDirectUnreads = await DirectMessage.count({
+        where: {
+          [Op.and]: [
+            { receiver_no: req.params.userNo },
+            { read_state: 1 },
+            { sender_no: { [Op.not]: null } },
+          ],
+        },
+      });
+
+      const countAlramUnreads = await DirectMessage.count({
+        where: {
+          [Op.and]: [
+            { receiver_no: req.params.userNo },
+            { read_state: 1 },
+            { sender_no: null },
+          ],
+        },
+      });
+
+      res.json({ countGroupUnreads, countDirectUnreads, countAlramUnreads });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 //-------------------Club, Meeting list GET---------------------------------------------
 router.get('/chat/club/list/userno/:userNo', async (req, res, next) => {
   try {
@@ -53,6 +123,7 @@ router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
     const user = await User.findOne({
       where: { user_no: req.params.userNo },
     });
+
     const ownedClubs = await user.getOwnedClub(); // getOwnedClub 호출
     const joinedClubs = await user.getClubs({
       through: { where: { state: 2 } },
@@ -67,10 +138,37 @@ router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
       ...ownedMeetings,
       ...joinedMeetings,
     ];
+    // get all read messages by the user
+    console.log('userno', user.user_no);
+    const readMessages = await user.getReadedMessages();
+    console.log('readMessages', readMessages.length);
+    for (const group of unsortedGroups) {
+      const countGroupMessage =
+        group instanceof Club
+          ? await group.countClubMessages()
+          : await group.countMeetingMessages();
 
+      // filter the read messages where club_no or meeting_no matches with the group
+      const countReadedMessages = await readMessages.filter(
+        (message) =>
+          message[group instanceof Club ? 'club_no' : 'meeting_no'] ===
+          group[group instanceof Club ? 'club_no' : 'meeting_no']
+      ).length;
+
+      console.log(
+        group instanceof Club ? 'club_no' : 'meeting_no',
+        group[group instanceof Club ? 'club_no' : 'meeting_no'],
+        countReadedMessages
+      );
+      console.log(countGroupMessage);
+      group.dataValues.unreadMessages = countGroupMessage - countReadedMessages;
+
+      console.log(group.dataValues.unreadMessages);
+    }
     const groups = unsortedGroups.sort(
       (a, b) => b.last_message_time - a.last_message_time
     );
+
     return res.json({
       groups,
     });
@@ -376,6 +474,20 @@ router.get('/chat/direct/list/senderno/:senderNo', async (req, res, next) => {
         'created_at = (SELECT MAX(created_at) FROM direct_messages WHERE sender_no = 1 AND receiver_no = `DirectMessage`.`receiver_no` LIMIT 1)'
       ),
     });
+
+    for (const directMessage of directMessageList) {
+      const unreadMessages = await DirectMessage.count({
+        where: {
+          [Op.and]: [
+            { sender_no: directMessage.receiver_no },
+            { receiver_no: req.params.senderNo },
+            { read_state: 1 },
+          ],
+        },
+      });
+      directMessage.dataValues.unreadMessages = unreadMessages;
+    }
+
     res.json(directMessageList);
   } catch (error) {
     next(error);
