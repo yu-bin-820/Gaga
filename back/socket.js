@@ -16,6 +16,7 @@ module.exports = (server, app) => {
 
   const dynamicNsp = io.of(/^\/ct-.+$/).on('connect', (socket) => {
     console.log('on connect');
+    console.log(socket.nsp.name);
     const newNamespace = socket.nsp;
 
     if (!onlineMap[socket.nsp.name]) {
@@ -24,15 +25,20 @@ module.exports = (server, app) => {
 
     socket.emit('hello', socket.nsp.name);
 
-    socket.on('login', ({ id, channel }) => {
+    socket.on('login', ({ userNo, groupsData }) => {
       console.log('on login');
-      onlineMap[socket.nsp.name][socket.id] = id;
+      onlineMap[socket.nsp.name][socket.id] = userNo;
       newNamespace.emit(
         'onlineList',
         Object.values(onlineMap[socket.nsp.name])
       );
-
-      socket.join(`${socket.nsp.name}-${channel}`);
+      groupsData?.groups.forEach((group) => {
+        if (group.meeting_no !== undefined) {
+          socket.join(`${socket.nsp.name}-${group.meeting_no}`);
+        } else if (group.club_no !== undefined) {
+          socket.join(`${socket.nsp.name}-${group.club_no}`);
+        }
+      });
     });
 
     socket.on('disconnect', () => {

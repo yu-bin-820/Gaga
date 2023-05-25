@@ -16,6 +16,10 @@ import ListMeetingMember from '@pages/meeting/ListMeetingMember.jsx';
 import UpdateMeetingSuccess from '@pages/meeting/UpdateMeetingSuccess.jsx';
 import AddMeetingReveiw from '@pages/meeting/AddMeetingReveiw.jsx';
 import UpdateMeetingReview from '@pages/meeting/UpdateMeetingReview.jsx';
+import ChatList from '@pages/communication/ChatRoomList.jsx';
+import ClubChat from '@pages/communication/ClubChat.jsx';
+import DirectChat from '@pages/communication/DirectChat.jsx';
+import MeetingChat from '@pages/communication/MeetingChat.jsx';
 
 const router = createBrowserRouter([
   {
@@ -29,67 +33,85 @@ const router = createBrowserRouter([
       },
       {
         path: 'user',
-        children: [
-          {path: 'login',
-        element: <Login/>}
-        ]
+        children: [{ path: 'login', element: <Login /> }],
       },
       {
         path: 'meeting',
         children: [
           {
             path: 'addmeeting',
-            element: <AddMeeting />
+            element: <AddMeeting />,
           },
           {
             path: 'meetingno/:meetingno',
-            element: <GetMeeting />
+            element: <GetMeeting />,
           },
           {
             path: 'updatemeeting/:meetingno',
-            element: <UpdateMeeting />
+            element: <UpdateMeeting />,
           },
           {
             path: 'updatemeetingsuccess/meetingno/:meetingno',
-            element:<UpdateMeetingSuccess />
+            element: <UpdateMeetingSuccess />,
           },
           {
             path: 'member',
             children: [
               {
                 path: 'addmember/:meetingno',
-                element: <AddMeetingMember />
+                element: <AddMeetingMember />,
               },
               {
                 path: 'listmember/meetingno/:meetingno',
-                element: <ListMeetingMember/>
-              }
-            ]
+                element: <ListMeetingMember />,
+              },
+            ],
           },
           {
             path: 'review',
             children: [
               {
                 path: 'addreview/meetingno/:meetingno',
-                element: <AddMeetingReveiw />
+                element: <AddMeetingReveiw />,
               },
               {
                 path: 'updatereview/reviewno/:reviewno',
-                element: <UpdateMeetingReview />
-              }
-            ]
+                element: <UpdateMeetingReview />,
+              },
+            ],
           },
-        ]
+        ],
       },
       {
         path: 'community',
         children: [
           {
             path: 'profile/:userno',
-            element: <Profile/>
-          }
-        ]
-      }
+            element: <Profile />,
+          },
+        ],
+      },
+      {
+        path: 'chat',
+        children: [
+          {
+            path: 'list',
+            element: <ChatList />,
+          },
+          {
+            path: 'club/message/list',
+            element: <ClubChat />,
+          },
+          {
+            path: 'meeting/message/list',
+            element: <MeetingChat />,
+          },
+          {
+            path: 'direct/message/list',
+            element: <DirectChat />,
+          },
+        ],
+      },
     ],
   },
 ]);

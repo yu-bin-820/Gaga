@@ -23,10 +23,6 @@ const { log } = require('console');
 
 const { PORT, REACT_HOST, REACT_PORT } = process.env;
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 app.use(
   cors({
     origin: `http://${REACT_HOST}:${REACT_PORT}`,
@@ -34,8 +30,12 @@ app.use(
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   })
 );
-
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use('/rest', restRouter);
+
 app.get('*', (req, res, next) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
