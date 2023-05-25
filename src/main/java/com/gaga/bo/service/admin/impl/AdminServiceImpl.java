@@ -65,9 +65,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<User> listBlackList() throws Exception {
-		return adminDao.listBlackList();
-	}
-
+    public List<User> listBlackList() throws Exception {
+        return adminDao.listBlackList();
+    }
 	
 }

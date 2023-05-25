@@ -31,7 +31,7 @@ class AdminTest {
 		
 	    noticePost.setNoticePostNo(999);
 	    noticePost.setNoticePostCategoryNo(1);
-	    noticePost.setNoticePostTitle("junit테스트1");
+	    noticePost.setNoticePostTitle("junit123테스트123");
 	    noticePost.setNoticePostText("junit테스트");
 	    noticePost.setNoticePostImg("asdasdsad.jpg");
 	    noticePost.setNoticePostRegDate(LocalDateTime.now());
@@ -83,7 +83,7 @@ class AdminTest {
 	
 	//@Test
     public void testAddBlackList() throws Exception {
-        int userNo = 6;
+        int userNo = 2;
 
         // Add user to the blacklist
         adminService.addBlackList(userNo);

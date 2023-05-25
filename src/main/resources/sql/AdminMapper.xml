@@ -90,7 +90,8 @@
 		#{noticePostTitle:LONGVARCHAR},
 		#{noticePostText:LONGVARCHAR},
 		#{noticePostImg:LONGVARCHAR},
-		#{noticePostRegDate:LONGVARCHAR}, #{userNo:INTEGER})
+		#{noticePostRegDate:LONGVARCHAR},
+		#{userNo:INTEGER})
 	</insert>
 
 
@@ -128,31 +129,33 @@
 	</delete>
 
 	<!-- 블랙리스트 CRUD -->
-	
+
 	<insert id="addBlackList"
 		parameterType="com.gaga.bo.service.domain.User">
 		UPDATE users
 		SET blacklist = 1
 		WHERE user_no = #{userNo}
 	</insert>
-	
+
 	<select id="getBlackList" resultMap="userResultMap">
-		SELECT * 
-		FROM users 
-		WHERE blacklist = 1 AND user_no = #{userNo}
+		SELECT *
+		FROM users
+		WHERE blacklist != 0 AND user_no = #{userNo}
 	</select>
-	
+
 	<select id="listBlackList" resultMap="userResultMap">
-		SELECT * 
-		FROM users 
-		WHERE blacklist = 1
+		SELECT *
+		FROM users
+		WHERE blacklist != 0
 	</select>
-	
+
 	<insert id="deleteBlackList"
 		parameterType="com.gaga.bo.service.domain.User">
 		UPDATE users
 		SET blacklist = 0
 		WHERE user_no = #{userNo}
 	</insert>
-
+	
+	<!-- 블랙리스트 CRUD -->
+	
 </mapper>

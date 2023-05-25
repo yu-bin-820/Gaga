@@ -18,7 +18,7 @@ public class NoticePost {
     	
     }
 
-    // ��� �ʵ带 �����ϴ� ������
+    // 
     public NoticePost(int noticePostNo, int noticePostCategoryNo, String noticePostTitle, String noticePostText, 
                       String noticePostImg, LocalDateTime noticePostRegDate, int userNo) {
         this.noticePostNo = noticePostNo;
