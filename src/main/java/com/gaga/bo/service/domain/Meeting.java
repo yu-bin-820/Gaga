@@ -2,6 +2,7 @@ package com.gaga.bo.service.domain;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
 
 public class Meeting {
 
@@ -26,8 +27,9 @@ public class Meeting {
     private int filterGender;
     private int filterMinAge;
     private int filterMaxAge;
+    private int mainCategoryNo;
     private String filterTag;
-    private Date adjustmentTime;
+    private Timestamp adjustmentTime;
     private int adjustmentState;
     private String accountNo;
     private String bankName;
@@ -169,12 +171,15 @@ public class Meeting {
 	public void setFilterTag(String filterTag) {
 		this.filterTag = filterTag;
 	}
-	public Date getAdjustmentTime() {
+	
+	public Timestamp getAdjustmentTime() {
 		return adjustmentTime;
 	}
-	public void setAdjustmentTime(Date adjustmentTime) {
+
+	public void setAdjustmentTime(Timestamp adjustmentTime) {
 		this.adjustmentTime = adjustmentTime;
 	}
+
 	public Integer getAdjustmentState() {
 		return adjustmentState;
 	}
@@ -193,19 +198,6 @@ public class Meeting {
 	public void setBankName(String bankName) {
 		this.bankName = bankName;
 	}
-	@Override
-	public String toString() {
-		return "Meeting [meetingNo=" + meetingNo + ", entryFee=" + entryFee + ", meetingDate=" + meetingDate
-				+ ", meetingStartTime=" + meetingStartTime + ", meetingEndTime=" + meetingEndTime + ", parentClubNo="
-				+ parentClubNo + ", meetingSuccess=" + meetingSuccess + ", meetingAddr=" + meetingAddr
-				+ ", meetingDetailAddr=" + meetingDetailAddr + ", meetingLat=" + meetingLat + ", meetingLng="
-				+ meetingLng + ", meetingName=" + meetingName + ", meetingIntro=" + meetingIntro + ", meetingLeaderNo="
-				+ meetingLeaderNo + ", meetingMaxMemberNo=" + meetingMaxMemberNo + ", meetingRegDate=" + meetingRegDate
-				+ ", meetingState=" + meetingState + ", meetingImg=" + meetingImg + ", filterGender=" + filterGender
-				+ ", filterMinAge=" + filterMinAge + ", filterMaxAge=" + filterMaxAge + ", filterTag=" + filterTag
-				+ ", adjustmentTime=" + adjustmentTime + ", adjustmentState=" + adjustmentState + ", accountNo="
-				+ accountNo + ", bankName=" + bankName + "]";
-	}
 
 	public int getState() {
 		return state;
@@ -217,6 +209,29 @@ public class Meeting {
 
 	public void setAdjustmentState(int adjustmentState) {
 		this.adjustmentState = adjustmentState;
+	}
+
+	public int getMainCategoryNo() {
+		return mainCategoryNo;
+	}
+
+	public void setMainCategoryNo(int mainCategoryNo) {
+		this.mainCategoryNo = mainCategoryNo;
+	}
+
+	@Override
+	public String toString() {
+		return "Meeting [meetingNo=" + meetingNo + ", entryFee=" + entryFee + ", meetingDate=" + meetingDate
+				+ ", meetingStartTime=" + meetingStartTime + ", meetingEndTime=" + meetingEndTime + ", parentClubNo="
+				+ parentClubNo + ", meetingSuccess=" + meetingSuccess + ", meetingAddr=" + meetingAddr
+				+ ", meetingDetailAddr=" + meetingDetailAddr + ", meetingLat=" + meetingLat + ", meetingLng="
+				+ meetingLng + ", meetingName=" + meetingName + ", meetingIntro=" + meetingIntro + ", meetingLeaderNo="
+				+ meetingLeaderNo + ", meetingMaxMemberNo=" + meetingMaxMemberNo + ", meetingRegDate=" + meetingRegDate
+				+ ", meetingState=" + meetingState + ", meetingImg=" + meetingImg + ", filterGender=" + filterGender
+				+ ", filterMinAge=" + filterMinAge + ", filterMaxAge=" + filterMaxAge + ", mainCategoryNo="
+				+ mainCategoryNo + ", filterTag=" + filterTag + ", adjustmentTime=" + adjustmentTime
+				+ ", adjustmentState=" + adjustmentState + ", accountNo=" + accountNo + ", bankName=" + bankName
+				+ ", state=" + state + "]";
 	}
     
 }

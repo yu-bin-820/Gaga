@@ -7,7 +7,7 @@
 <mapper namespace="com.gaga.bo.service.payment.PaymentDao">
 
     <resultMap id="paymentResultMap" type="payment">
-        <result property="payNo" column="pay_no" jdbcType="VARCHAR" />
+        <id property="payNo" column="pay_no" jdbcType="VARCHAR" />
         <result property="userNo" column="user_no" jdbcType="INTEGER" />
         <result property="meetingNo" column="meeting_no" jdbcType="INTEGER" />
         <result property="meetingName" column="meeting_name" jdbcType="VARCHAR" />
@@ -17,12 +17,42 @@
         <result property="entryFee" column="entry_fee" jdbcType="INTEGER" />
     </resultMap>
     
+    <resultMap id="meetingResultMap" type="meeting">
+    <id property="meetingNo" 				column="meeting_no" 			jdbcType="INTEGER" />
+    <result property="entryFee" 			column="entry_fee" 				jdbcType="INTEGER" />
+    <result property="meetingDate" 			column="meeting_date" 			jdbcType="DATE" />
+    <result property="meetingStartTime" 	column="meeting_start_time" 	jdbcType="TIME" />
+    <result property="meetingEndTime" 		column="meeting_end_time" 		jdbcType="TIME" />
+    <result property="parentClubNo" 		column="parent_club_no" 		jdbcType="INTEGER" />
+    <result property="meetingSuccess" 		column="meeting_success" 		jdbcType="INTEGER" />
+    <result property="meetingAddr" 			column="meeting_addr" 			jdbcType="LONGVARCHAR" />
+    <result property="meetingDetailAddr" 	column="meeting_detail_addr" 	jdbcType="LONGVARCHAR" />
+    <result property="meetingLat" 			column="meeting_lat" 			jdbcType="DOUBLE" />
+    <result property="meetingLng" 			column="meeting_lng" 			jdbcType="DOUBLE" />
+    <result property="meetingName" 			column="meeting_name" 			jdbcType="VARCHAR" />
+    <result property="meetingIntro" 		column="meeting_intro" 			jdbcType="LONGVARCHAR" />
+    <result property="meetingLeaderNo" 		column="meeting_leader_no" 		jdbcType="INTEGER" />
+    <result property="meetingMaxMemberNo" 	column="meeting_max_member_no" 	jdbcType="INTEGER" />
+    <result property="meetingRegDate" 		column="meeting_reg_date" 		jdbcType="TIMESTAMP" />
+    <result property="meetingState" 		column="meeting_state" 			jdbcType="INTEGER" />
+    <result property="meetingImg" 			column="meeting_img" 			jdbcType="LONGVARCHAR" />
+    <result property="filterGender" 		column="filter_gender" 			jdbcType="INTEGER" />
+    <result property="filterMinAge" 		column="filter_min_age" 		jdbcType="INTEGER" />
+    <result property="filterMaxAge" 		column="filter_max_age" 		jdbcType="INTEGER" />
+    <result property="mainCategoryNo" 		column="main_category_no" 		jdbcType="INTEGER"/>
+    <result property="filterTag" 			column="filter_tag" 			jdbcType="LONGVARCHAR" />
+    <result property="adjustmentTime" 		column="adjustment_time" 		jdbcType="TIMESTAMP" />
+    <result property="adjustmentState" 		column="adjustment_state" 		jdbcType="INTEGER" />
+    <result property="accountNo" 			column="account_no"				jdbcType="VARCHAR" />
+    <result property="bankName" 			column="bank_name" 				jdbcType="VARCHAR" />
+  </resultMap>
+    
     <!-- SQL : INSERT -->
 	<insert 	id="addPayment"		parameterType="payment" >
 	 	INSERT 
 	 	INTO payments (pay_no, user_no, meeting_no, meeting_name, pay_time, refund_time, pay_state, entry_fee)
         VALUES (#{payNo:VARCHAR}, #{userNo:INTEGER}, #{meetingNo:INTEGER}, #{meetingName:VARCHAR}, 
-        #{payTime:TIMESTAMP}, #{refundTime:TIMESTAMP}, #{payState:INTEGER}, #{entryFee:INTEGER})
+        #{payTime:TIMESTAMP}, #{refundTime}, #{payState:INTEGER}, #{entryFee:INTEGER})
 	</insert>
 	
 	<!-- SQL : SELECT -->
@@ -33,7 +63,7 @@
 	</select>
 	
 	<!-- SQL : SELECT -->
-	<select 	id="getPaymentByUserMeeting"  parameterType="int" resultType="java.lang.String" >
+	<select 	id="getPayNoByUserMeeting"  parameterType="int" resultType="java.lang.String" >
 	 	SELECT pay_no
 		FROM payments
 		WHERE user_no = #{userNo} AND meeting_no = #{meetingNo}
@@ -46,16 +76,65 @@
 	    WHERE user_no = #{userNo}
 	</select>
 	
-	<!-- SQL : UPDATE -->
-	<update id="updatePayment" parameterType="java.lang.String">
+	<update id="updatePayment" parameterType="int">
 	  UPDATE payments
-	  	<set>
-	  		pay_state = 2
-	    </set>
-	  WHERE pay_no = #{payNo}
-	  
+	  <set>
+	    pay_state = 1
+	  </set>
+	  WHERE pay_no IN (
+	    SELECT p.pay_no
+	    FROM (SELECT pay_no FROM payments WHERE user_no = #{userNo} AND meeting_no = #{meetingNo}) AS p
+	  )
+	</update>
+	
+	<!-- SQL : SELECT -->
+	<select id="getAllAdjustmentList" resultMap="meetingResultMap">
+		SELECT 
+		    meeting_date, meeting_end_time, adjustment_time, 
+		    adjustment_state, account_no, bank_name, 
+		    meeting_name, meeting_leader_no, entry_fee
+		FROM 
+		    meetings
+		WHERE 
+		    entry_fee != 0
+		ORDER BY 
+		    meeting_date DESC,
+		    meeting_end_time DESC;
+
+	</select>
+	
+	<!-- SQL : SELECT -->
+	<select id="getAdjustmentList" parameterType="int" resultMap="meetingResultMap">
+	  SELECT 
+		    meeting_date, meeting_start_time, adjustment_time, 
+		    adjustment_state, account_no, bank_name, meeting_name, 
+		    meeting_leader_no,entry_fee
+		FROM 
+		    meetings
+		WHERE 
+		    entry_fee != 0 AND meeting_leader_no = #{userNo}		    
+		ORDER BY 
+		    meeting_date DESC,
+		    meeting_end_time DESC;
+	</select>
+	
+	
+	<!-- SQL : UPDATE -->
+	<update id="updateAdjustment" parameterType="java.util.List">
+	  UPDATE meetings
+	  <set>
+		  adjustment_time = #{adjustmentTime},
+	      adjustment_state = 0
+	  </set> 
+	  WHERE meeting_no = #{meetingNo}
 	</update>
 
-   
+	<!-- SQL : SELECT -->
+	<select id="getTotalCount" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+	  	FROM(	SELECT *
+				FROM members
+				WHERE meeting_no = #{meetingNo} ) countTable	
+	</select>
     
 </mapper>

@@ -1,8 +1,10 @@
 package com.gaga.bo.service.meeting;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.gaga.bo.service.domain.Filter;
 import com.gaga.bo.service.domain.Meeting;
 import com.gaga.bo.service.domain.MeetingReview;
 
@@ -10,9 +12,13 @@ public interface MeetingService {
 	
 	public Meeting getMeeting(int meetingNo) throws Exception;
 	
-	public Map<String, Object> getMeetingListFromRarentClubNo(int clubNo) throws Exception;
+	public List<Meeting> getMeetingListFromParentClubNo(int clubNo) throws Exception;
 	
 	public List<Meeting> getMyMeetingList(int userNo) throws Exception;
+	
+	public List<Meeting> getMeetingListInChat(int userNo) throws Exception;
+	
+	public List<Meeting> getMeetingList(Filter filter) throws Exception;
 	
 	public void addMeeting(Meeting meeting) throws Exception;
 	
@@ -26,7 +32,7 @@ public interface MeetingService {
 
 	public void updateMember(Map<String, String> map) throws Exception;
 	
-	public void deleteMeetingMember(int memberNo) throws Exception;
+	public void deleteMeetingMember(Map<String, String> map) throws Exception;
 
 	
 	public void addMeetingReview(MeetingReview meetingReview) throws Exception;
@@ -38,6 +44,12 @@ public interface MeetingService {
 	public List<MeetingReview> getMeetingReviewList(int meetinNo) throws Exception;
 	
 	public void deleteMeetingReview(int meetingReviewNo) throws Exception;
+	
+	
+	public List<HashMap<Integer, String>> getMainCategory() throws Exception;
+	
+	public List<HashMap<Integer, String>> getSubCategory() throws Exception;
+
 
 
 }

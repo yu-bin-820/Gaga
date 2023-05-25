@@ -29,6 +29,7 @@
     <result property="filterGender" 		column="filter_gender" 			jdbcType="INTEGER" />
     <result property="filterMinAge" 		column="filter_min_age" 		jdbcType="INTEGER" />
     <result property="filterMaxAge" 		column="filter_max_age" 		jdbcType="INTEGER" />
+    <result property="mainCategoryNo" 		column="main_category_no" 		jdbcType="INTEGER"/>
     <result property="filterTag" 			column="filter_tag" 			jdbcType="LONGVARCHAR" />
     <result property="adjustmentTime" 		column="adjustment_time" 		jdbcType="TIMESTAMP" />
     <result property="adjustmentState" 		column="adjustment_state" 		jdbcType="INTEGER" />
@@ -45,6 +46,17 @@
     <result property="meetingReviewerNo" 		column="meeting_reviewer_no" 		jdbcType="INTEGER" />
     <result property="meetingReviewDate" 		column="meeting_review_date" 		jdbcType="TIMESTAMP" />
   </resultMap>
+  
+ <resultMap id="mainCategoryResultMap" type="java.util.HashMap">
+    <id property="mainCategoryNo" 		column="main_category_no" 	jdbcType="INTEGER" />
+    <result property="mainCategoryName" column="main_category_name" jdbcType="VARCHAR" />
+</resultMap>
+
+<resultMap id="subCategoryResultMap" type="java.util.HashMap">
+    <id property="tag" 					column="tag" 				jdbcType="VARCHAR" />
+    <result property="mainCategoryNo" 	column="main_category_no" 	jdbcType="INTEGER" />
+</resultMap>
+	
 	
 <!-- 미팅 파트 -->	
 <!--  미팅 하나 조회 -->
@@ -80,7 +92,7 @@
 
   
  <!-- 부모 클럽에 속하는 미팅 리스트 조회-->
-<select id="getMeetingListFromRarentClubNo" parameterType="int" resultMap="meetingResultMap">
+<select id="getMeetingListFromParentClubNo" parameterType="int" resultMap="meetingResultMap">
   SELECT
     meeting_no,
     entry_fee,
@@ -103,6 +115,7 @@
     filter_gender,
     filter_min_age,
     filter_max_age,
+    main_category_no,
     filter_tag
   FROM
     meetings
@@ -135,6 +148,7 @@
     m.filter_gender,
     m.filter_min_age,
     m.filter_max_age,
+    m.main_category_no,
     m.filter_tag,
     m.adjustment_time,
     m.adjustment_state,
@@ -142,8 +156,11 @@
     m.bank_name,
     mb.state
   FROM meetings m
-  INNER JOIN members mb ON m.meeting_no = mb.meeting_no
-  WHERE mb.user_no = #{userNo}
+  LEFT JOIN members mb ON m.meeting_no = mb.meeting_no
+  WHERE 
+  	mb.user_no = #{userNo}
+  OR 
+  	m.meeting_leader_no = #{userNo}
 </select>
 
   
@@ -171,6 +188,7 @@
     m.filter_gender,
     m.filter_min_age,
     m.filter_max_age,
+    m.main_category_no,
     m.filter_tag,
     m.adjustment_time,
     m.adjustment_state,
@@ -185,7 +203,52 @@
   
   
   <!-- 미팅 리스트 조회 구현 (getMeetingList)-->
-  
+   <select id="getMeetingList" parameterType="filter" resultMap="meetingResultMap">
+    SELECT
+    meeting_no,
+    entry_fee,
+    meeting_date,
+    meeting_start_time,
+    meeting_end_time,
+    meeting_addr,
+    meeting_detail_addr,
+    meeting_lat,
+    meeting_lng,
+    meeting_name,
+    meeting_intro,
+    meeting_leader_no,
+    meeting_max_member_no,
+    meeting_reg_date,
+    meeting_state,
+    meeting_img,
+    filter_gender,
+    filter_min_age,
+    filter_max_age,
+    main_category_no,
+    filter_tag
+  FROM
+    meetings
+  WHERE
+    meeting_state = 0
+  AND
+	filter_gender = #{gender:INTEGER}
+  AND
+	filter_min_age &lt;= #{maxAge:INTEGER}
+  AND
+   filter_max_age &gt;= #{minAge:INTEGER}
+  AND
+   #{age:INTEGER} BETWEEN filter_min_age and filter_max_age
+    <if test="mainCategoryNo != null and mainCategoryNo != 0">
+  	AND main_category_no =  #{mainCategoryNo:INTEGER}
+  </if>
+  <if test="tag != null">
+  	AND filter_tag IN (#{tag : LONGVARCHAR}, #{tag2 : LONGVARCHAR}, #{tag3 : LONGVARCHAR})
+  </if>
+  AND
+   meeting_lat BETWEEN #{swLat:DOUBLE} AND #{neLat:DOUBLE}
+  AND
+   meeting_lng BETWEEN #{swLng:DOUBLE} AND #{neLng:DOUBLE};
+   </select>
   
   <!-- 미팅 생성 -->
 <insert id="addMeeting" parameterType="Meeting">
@@ -210,6 +273,7 @@
     filter_gender,
     filter_min_age,
     filter_max_age,
+    main_category_no,
     filter_tag
   )
   VALUES (
@@ -232,12 +296,13 @@
     #{meetingIntro:LONGVARCHAR},
     #{meetingLeaderNo:INTEGER},
     #{meetingMaxMemberNo:INTEGER},
-    #{meetingRegDate:TIMESTAMP},
+    now(),
     0,
     #{meetingImg:LONGVARCHAR},
     #{filterGender:INTEGER},
     #{filterMinAge:INTEGER},
     #{filterMaxAge:INTEGER},
+    #{mainCategoryNo:INTEGER},
     #{filterTag:LONGVARCHAR}
   )
 </insert>
@@ -253,7 +318,6 @@
     meeting_end_time = #{meetingEndTime},
     meeting_name = #{meetingName},
     meeting_intro = #{meetingIntro},
-    meeting_leader_no = #{meetingLeaderNo},
     meeting_max_member_no = #{meetingMaxMemberNo},
     meeting_state = #{meetingState},
     meeting_img = #{meetingImg},
@@ -271,8 +335,6 @@
   SET
     meeting_success = 1,
     meeting_state = 1,
-    adjustment_time = #{adjustmentTime},
-    adjustment_state = #{adjustmentState},
     account_no = #{accountNo},
     bank_name = #{bankName}
   WHERE
@@ -285,6 +347,9 @@
     DELETE FROM meetings
     WHERE meeting_no = #{meetingNo}
   </delete>
+  
+  
+  
   
   <!-- 미팅 신청 파트 -->
   <!-- 미팅 신청시 회원 추가 -->
@@ -303,10 +368,14 @@
   
   
     <!-- 미팅 멤버 삭제 -->
-    <delete id="deleteMeetingMember" parameterType="int">
+    <delete id="deleteMeetingMember" parameterType="Map">
     DELETE FROM members
-    WHERE member_no = #{memberNo}
+    WHERE meeting_no = #{meetingNo}
+    AND user_no = #{userNo}
   </delete>
+  
+  
+  
   
    <!-- 미팅 리뷰 파트 -->
   <!-- 미팅 리뷰 하나 조회 -->
@@ -370,6 +439,25 @@
     WHERE meeting_review_no = #{meetingReviewNo}
   </delete>
 
+  
+  <!-- 대분류 카테고리 출력 -->
+ <select id="getMainCategory" resultMap="mainCategoryResultMap">
+    SELECT 
+    	main_category_no,
+    	main_category_name
+  	FROM
+  		group_main_category
+  </select>
+    
+  
+  <!-- 대분류 카테고리 선택 시 하위 카테고리 출력 (getSubCategory)-->
+  <select id="getSubCategory" resultMap="subCategoryResultMap">
+    SELECT
+    	main_category_no,
+    	tag
+  	FROM
+  		group_sub_category
+  </select>
   
 
 </mapper>

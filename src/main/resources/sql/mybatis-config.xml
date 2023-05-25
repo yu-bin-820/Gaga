@@ -19,6 +19,7 @@
 		
 		<typeAlias alias="meeting" type="com.gaga.bo.service.domain.Meeting"/>
 		<typeAlias alias="meetingReview" type="com.gaga.bo.service.domain.MeetingReview"/>
+		<typeAlias alias="filter" type="com.gaga.bo.service.domain.Filter"/>
 		
 
 		<typeAlias alias="club" type="com.gaga.bo.service.domain.Club" />
@@ -44,7 +45,7 @@
 
 		<mapper resource="sql/CommunityMapper.xml"/>
 
-		<!-- <mapper resource="sql/ClubMapper.xml"/>  -->
+		<mapper resource="sql/ClubMapper.xml"/>
 
 		<mapper resource="sql/PaymentMapper.xml"/>
 

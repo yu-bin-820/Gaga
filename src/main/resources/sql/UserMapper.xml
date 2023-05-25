@@ -7,35 +7,36 @@
 <mapper namespace="com.gaga.bo.service.user.UserDao">
 
 	<resultMap id="userResultMap" type="user">
-	    <result property="userNo" column="user_no" jdbcType="INTEGER"/>
-	    <result property="userId" column="user_id" jdbcType="VARCHAR"/>
-	    <result property="password" column="password" jdbcType="VARCHAR"/>
-	    <result property="userName" column="user_name" jdbcType="VARCHAR"/>
-	    <result property="birthday" column="birthday" jdbcType="DATE"/>
-	    <result property="gender" column="gender" jdbcType="INTEGER"/>
-	    <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
-	    <result property="phoneNo" column="phone_no" jdbcType="INTEGER"/>
-	    <result property="role" column="role" jdbcType="INTEGER"/>
-	    <result property="joinDay" column="join_day" jdbcType="TIMESTAMP"/>
-	    <result property="temperature" column="temperature" jdbcType="REAL"/>
-	    <result property="outDay" column="out_day" jdbcType="TIMESTAMP"/>
-	    <result property="outReason" column="out_reason" jdbcType="LONGVARCHAR"/>
-	    <result property="profileImg" column="profile_img" jdbcType="LONGVARCHAR"/>
-	    <result property="activityImg" column="activity_img" jdbcType="LONGVARCHAR"/>
-	    <result property="activityImg2" column="activity_img2" jdbcType="LONGVARCHAR"/>
-	    <result property="activityImg3" column="activity_img3" jdbcType="LONGVARCHAR"/>
-	    <result property="userIntro" column="user_intro" jdbcType="LONGVARCHAR"/>
-	    <result property="mainTitleNo" column="main_title_no" jdbcType="INTEGER"/>
-	    <result property="bankCode" column="bank_code" jdbcType="VARCHAR"/>
-	    <result property="bankName" column="bank_name" jdbcType="VARCHAR"/>
-	    <result property="accountNo" column="account_no" jdbcType="VARCHAR"/>
-	    <result property="blacklist" column="blacklist" jdbcType="INTEGER"/>
-	    <result property="filterGender" column="filter_gender" jdbcType="INTEGER"/>
+	    <result property="userNo" 		column="user_no" 		jdbcType="INTEGER"/>
+	    <result property="userId" 		column="user_id" 		jdbcType="VARCHAR"/>
+	    <result property="password" 	column="password" 		jdbcType="VARCHAR"/>
+	    <result property="userName" 	column="user_name" 		jdbcType="VARCHAR"/>
+	    <result property="birthday" 	column="birthday" 		jdbcType="DATE"/>
+	    <result property="gender" 		column="gender" 		jdbcType="INTEGER"/>
+	    <result property="nickName" 	column="nick_name" 		jdbcType="VARCHAR"/>
+	    <result property="phoneNo" 		column="phone_no" 		jdbcType="VARCHAR"/>
+	    <result property="role" 		column="role" 			jdbcType="INTEGER"/>
+	    <result property="joinDay" 		column="join_day" 		jdbcType="TIMESTAMP"/>
+	    <result property="temperature" 	column="temperature" 	jdbcType="REAL"/>
+	    <result property="outDay" 		column="out_day" 		jdbcType="TIMESTAMP"/>
+	    <result property="outReason" 	column="out_reason" 	jdbcType="LONGVARCHAR"/>
+	    <result property="profileImg" 	column="profile_img" 	jdbcType="LONGVARCHAR"/>
+	    <result property="activityImg" 	column="activity_img" 	jdbcType="LONGVARCHAR"/>
+	    <result property="activityImg2" column="activity_img2" 	jdbcType="LONGVARCHAR"/>
+	    <result property="activityImg3" column="activity_img3" 	jdbcType="LONGVARCHAR"/>
+	    <result property="userIntro" 	column="user_intro" 	jdbcType="LONGVARCHAR"/>
+	    <result property="mainTitleNo" 	column="main_title_no" 	jdbcType="INTEGER"/>
+	    <result property="bankCode" 	column="bank_code" 		jdbcType="VARCHAR"/>
+	    <result property="bankName" 	column="bank_name" 		jdbcType="VARCHAR"/>
+	    <result property="accountNo" 	column="account_no" 	jdbcType="VARCHAR"/>
+	    <result property="blacklist" 	column="blacklist" 		jdbcType="INTEGER"/>
+	    <result property="filterGender" column="filter_gender" 	jdbcType="INTEGER"/>
 	    <result property="filterMaxAge" column="filter_max_age" jdbcType="INTEGER"/>
 	    <result property="filterMinAge" column="filter_min_age" jdbcType="INTEGER"/>
-	    <result property="filterTag" column="filter_tag" jdbcType="LONGVARCHAR"/>
-	    <result property="filterTag2" column="filter_tag2" jdbcType="LONGVARCHAR"/>
-	    <result property="filterTag3" column="filter_tag3" jdbcType="LONGVARCHAR"/>
+	    <result property="filterTag" 	column="filter_tag" 	jdbcType="LONGVARCHAR"/>
+	    <result property="filterTag2" 	column="filter_tag2" 	jdbcType="LONGVARCHAR"/>
+	    <result property="filterTag3" 	column="filter_tag3" 	jdbcType="LONGVARCHAR"/>
+	    <result property="state"		column="state"			jdbcType="INTEGER"/>
 	</resultMap>
 	
 	<insert id="addUser" parameterType="user">
@@ -49,7 +50,7 @@
 	    VALUES (
 	        #{userNo:INTEGER}, #{userId:VARCHAR}, #{password:VARCHAR},
 	        #{userName:VARCHAR}, #{birthday:DATE}, #{gender:INTEGER},
-	        #{nickName:VARCHAR}, #{phoneNo:INTEGER}, #{role:INTEGER},
+	        #{nickName:VARCHAR}, #{phoneNo:VARCHAR}, #{role:INTEGER},
 	        #{outDay:TIMESTAMP}, #{outReason:LONGVARCHAR}, 
 	        #{profileImg:LONGVARCHAR}, 
 	        #{activityImg:LONGVARCHAR}, #{activityImg2:LONGVARCHAR}, #{activityImg3:LONGVARCHAR}, 
@@ -64,7 +65,67 @@
 	    )
 	 </insert>  
 	 
-	<update id="updateUser" parameterType="User">
+	 <select id="getUser" parameterType="int" resultMap="userResultMap">
+    SELECT
+        u.user_no, u.user_id, u.password, u.user_name, u.birthday, u.gender, u.nick_name, u.phone_no,
+        u.role, u.join_day, u.out_day, u.out_reason, u.profile_img, u.activity_img,
+        u.activity_img2, u.activity_img3, u.user_intro, u.main_title_no, u.bank_code, u.bank_name,
+        u.account_no, u.blacklist, u.filter_gender, u.filter_min_age, u.filter_max_age, u.filter_tag,
+        u.filter_tag2, u.filter_tag3,
+        (36.5 + COALESCE(
+            SUM(
+                CASE ur.user_score
+                    WHEN 1 THEN -0.2
+                    WHEN 2 THEN -0.1
+                    WHEN 3 THEN 0
+                    WHEN 4 THEN 0.1
+                    WHEN 5 THEN 0.2
+                END
+            ), 0
+        )) AS temperature
+    FROM users u
+    LEFT JOIN user_reviews ur ON u.user_no = ur.reviewed_no
+    WHERE u.user_no = #{userNo}
+    GROUP BY u.user_no
+	</select>
+	
+	<select id="getUserById" parameterType="string" resultMap="userResultMap">
+    SELECT
+        u.user_no, u.user_id, u.password, u.user_name, u.birthday, u.gender, u.nick_name, u.phone_no,
+        u.role, u.join_day, u.out_day, u.out_reason, u.profile_img, u.activity_img,
+        u.activity_img2, u.activity_img3, u.user_intro, u.main_title_no, u.bank_code, u.bank_name,
+        u.account_no, u.blacklist, u.filter_gender, u.filter_min_age, u.filter_max_age, u.filter_tag,
+        u.filter_tag2, u.filter_tag3,
+        (36.5 + COALESCE(
+            SUM(
+                CASE ur.user_score
+                    WHEN 1 THEN -0.2
+                    WHEN 2 THEN -0.1
+                    WHEN 3 THEN 0
+                    WHEN 4 THEN 0.1
+                    WHEN 5 THEN 0.2
+                END
+            ), 0
+        )) AS temperature
+    FROM users u
+    LEFT JOIN user_reviews ur ON u.user_no = ur.reviewed_no
+    WHERE u.user_id = #{userId}
+    GROUP BY u.user_no
+</select>
+
+	
+	<select id="getUserByPhoneNo" parameterType="string" resultMap="userResultMap">
+	    SELECT 
+	    	user_no, user_id, password, user_name, birthday, gender, nick_name, phone_no,
+	        role, join_day, out_day, out_reason, profile_img, activity_img,
+	        activity_img2, activity_img3, user_intro, main_title_no, bank_code, bank_name,
+	        account_no, blacklist, filter_gender, filter_min_age, filter_max_age, filter_tag,
+	        filter_tag2, filter_tag3
+	    FROM users
+	    WHERE phone_no = #{phoneNo}
+	</select>
+	 
+	<update id="updateUser" parameterType="user">
 	    UPDATE users SET
 	        user_id = #{userId},
 	        password = #{password},
@@ -95,17 +156,62 @@
 	    WHERE user_no = #{userNo}
 	</update>
 	
-	<select id="getUser" parameterType="int" resultMap="userResultMap">
-	    SELECT
-	        user_no, user_id, password, user_name, birthday, gender, nick_name, phone_no,
-	        role, join_day, out_day, out_reason, profile_img, activity_img,
-	        activity_img2, activity_img3, user_intro, main_title_no, bank_code, bank_name,
-	        account_no, blacklist, filter_gender, filter_min_age, filter_max_age, filter_tag,
-	        filter_tag2, filter_tag3
-	    FROM users
+	<update id="deleteUser" parameterType="int">
+	    UPDATE users SET
+	        user_id = CONCAT('out_', user_id),
+	        password = CONCAT('out_', password),
+	        user_name = CONCAT('out_', user_name),
+	        gender = 9,
+	        nick_name = CONCAT('out_', nick_name),
+	        phone_no = CONCAT('out_', phone_no),
+	        out_day = NOW(),
+	        out_reason = #{outReason},
+	        profile_img = CONCAT('out_', profile_img),
+	        activity_img = CONCAT('out_', activity_img),
+	        activity_img2 = CONCAT('out_', activity_img2),
+	        activity_img3 = CONCAT('out_', activity_img3),
+	        user_intro = CONCAT('out_', user_intro),
+	<!--     bank_code = CONCAT('out_', bank_code), -->
+	        bank_name = CONCAT('out_', bank_name),
+	        account_no = CONCAT('out_', account_no),
+	        filter_gender = 9,
+	        filter_max_age = 999,
+	        filter_min_age = 200,
+	        filter_tag = CONCAT('out_', filter_tag),
+	        filter_tag2 = CONCAT('out_', filter_tag2),
+	        filter_tag3 = CONCAT('out_', filter_tag3)
 	    WHERE user_no = #{userNo}
+	</update>
+	
+	<select id="getGroupMemberList" parameterType="map" resultMap="userResultMap">
+	    SELECT DISTINCT u.user_no, u.user_id, u.password, u.user_name, u.birthday, 
+	    	   u.gender, u.nick_name, u.phone_no, u.role, u.join_day,
+	           u.out_day, u.out_reason, u.profile_img, u.activity_img,
+	           u.activity_img2, u.activity_img3, u.user_intro, u.main_title_no,
+	           u.bank_code, u.bank_name, u.account_no, u.blacklist,
+	           u.filter_gender, u.filter_max_age, u.filter_min_age, u.filter_tag,
+	           u.filter_tag2, u.filter_tag3, m.state
+	    FROM users u
+	    JOIN members m ON u.user_no = m.user_no
+	    WHERE u.user_no IN (
+	        SELECT mm.user_no
+	        FROM members mm
+	        <where>
+	            <choose>
+	                <when test="groupType == 1">
+	                    mm.club_no = #{groupNo}
+	                </when>
+	                <when test="groupType == 2">
+	                    mm.meeting_no = #{groupNo}
+	                </when>
+	            </choose>
+	            <if test="state != 0">
+	                AND mm.state = #{state}
+	            </if>
+	        </where>
+	    )
 	</select>
 
-	 
-	 
+
+
 </mapper>

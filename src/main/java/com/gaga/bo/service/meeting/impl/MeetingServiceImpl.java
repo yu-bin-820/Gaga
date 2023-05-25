@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.gaga.bo.service.domain.Filter;
 import com.gaga.bo.service.domain.Meeting;
 import com.gaga.bo.service.domain.MeetingReview;
 import com.gaga.bo.service.meeting.MeetingDao;
@@ -66,12 +67,10 @@ public class MeetingServiceImpl implements MeetingService {
 
 
 	@Override
-	public Map<String, Object> getMeetingListFromRarentClubNo(int clubNo) throws Exception {
+	public List<Meeting> getMeetingListFromParentClubNo(int clubNo) throws Exception {
 		// TODO Auto-generated method stub
-		List<Meeting> list = meetingDao.getMeetingListFromRarentClubNo(clubNo);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("list", list);
-		return map;
+
+		return meetingDao.getMeetingListFromParentClubNo(clubNo);
 	}
 
 
@@ -92,9 +91,9 @@ public class MeetingServiceImpl implements MeetingService {
 
 
 	@Override
-	public void deleteMeetingMember(int memberNo) throws Exception {
+	public void deleteMeetingMember(Map<String, String> map) throws Exception {
 		// TODO Auto-generated method stub
-		meetingDao.deleteMeetingMember(memberNo);
+		meetingDao.deleteMeetingMember(map);
 
 		
 	}
@@ -106,6 +105,19 @@ public class MeetingServiceImpl implements MeetingService {
 		List<Meeting> list = meetingDao.getMyMeetingList(userNo);
 		return list;
 	}
+	
+	@Override
+	public List<Meeting> getMeetingListInChat(int userNo) throws Exception {
+		// TODO Auto-generated method stub
+		return meetingDao.getMeetingListInChat(userNo);
+	}
+	
+	@Override
+	public List<Meeting> getMeetingList(Filter filter) throws Exception {
+		// TODO Auto-generated method stub
+		return  meetingDao.getMeetingList(filter);
+	}
+
 
 
 	@Override
@@ -146,5 +158,21 @@ public class MeetingServiceImpl implements MeetingService {
 		meetingDao.deleteMeetingReview(meetingReviewNo);
 
 	}
+
+
+	@Override
+	public List<HashMap<Integer, String>> getMainCategory() throws Exception {
+		// TODO Auto-generated method stub
+		return meetingDao.getMainCategory();
+	}
+
+
+	@Override
+	public List<HashMap<Integer, String>> getSubCategory() throws Exception {
+		// TODO Auto-generated method stub
+		return meetingDao.getSubCategory();
+	}
+
+
 
 }
