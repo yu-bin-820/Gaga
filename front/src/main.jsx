@@ -1,3 +1,8 @@
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
@@ -20,16 +25,22 @@ import ChatList from '@pages/communication/ChatRoomList.jsx';
 import ClubChat from '@pages/communication/ClubChat.jsx';
 import DirectChat from '@pages/communication/DirectChat.jsx';
 import MeetingChat from '@pages/communication/MeetingChat.jsx';
+import UnauthenticatedMain from '@pages/common/UnauthenticatedMain';
+import RootLayout from '@layouts/common/RootLayout.jsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <MainLayout />,
+    element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
         path: '/',
         element: <Main />,
+      },
+      {
+        path: '/unauthenticatedmain',
+        element: <UnauthenticatedMain />,
       },
       {
         path: 'user',

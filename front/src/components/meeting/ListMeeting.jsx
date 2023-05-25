@@ -8,14 +8,15 @@ import { useNavigate } from 'react-router';
 import useSWR from 'swr';
 
 const ListMeeting = () => {
+  const [meetingList, setMeetingList] = useState();
+  const navigate = useNavigate();
 
-    const [meetingList, setMeetingList] = useState();
-    const navigate = useNavigate();
+  const { data: myData, mutate: mutateMe } = useSWR(
+    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+  );
 
-    const { data: myData, mutate: mutateMe } = useSWR(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
-        fetcher
-        );
+
 
     useEffect(()=>{
         const data = {
@@ -111,9 +112,10 @@ const ListMeeting = () => {
                     
                 ))}
             </Box>
-        </Box>
-        </>
-    );
+      
+      </Box>
+    </>
+  );
 };
 
 export default ListMeeting;

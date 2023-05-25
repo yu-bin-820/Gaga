@@ -14,11 +14,11 @@ import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
 import useSocket from '@hooks/common/useSocket';
 import { useEffect } from 'react';
-
-export default function MainBottomNav() {
+import { PropTypes } from 'prop-types';
+export default function MainBottomNav({ pageName }) {
   const navigate = useNavigate();
 
-  const [value, setValue] = React.useState('home');
+  const [value, setValue] = React.useState(pageName);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -31,47 +31,47 @@ export default function MainBottomNav() {
 
   //-------------------------채팅 ------------------------------------------
 
-  const { data: groupsData, mutate: mutateGroups } = useSWR(
-    `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/group/list/userno/${
-      myData?.userNo
-    }`,
-    fetcher
-  );
+  // const { data: groupsData, mutate: mutateGroups } = useSWR(
+  //   `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/group/list/userno/${
+  //     myData?.userNo
+  //   }`,
+  //   fetcher
+  // );
 
-  const [clubSocket, clubDisconnect] = useSocket('club');
-  const [meetingSocket, meetingDisconnect] = useSocket('meeting');
-  const [directSocket, directDisconnect] = useSocket('direct');
-  useEffect(() => {
-    if (
-      myData?.userId !== undefined &&
-      myData?.userId !== null &&
-      clubSocket &&
-      meetingSocket &&
-      directSocket &&
-      groupsData
-    ) {
-      clubSocket.emit('login', {
-        userNo: myData.userNo,
-        groupsData,
-      });
-      meetingSocket.emit('login', {
-        userNo: myData.userNo,
-        groupsData,
-      });
-      directSocket.emit('login', {
-        userNo: myData.userNo,
-        groupsData,
-      });
-    }
-  }, [myData, clubSocket, meetingSocket, directSocket, groupsData]);
+  // const [clubSocket, clubDisconnect] = useSocket('club');
+  // const [meetingSocket, meetingDisconnect] = useSocket('meeting');
+  // const [directSocket, directDisconnect] = useSocket('direct');
+  // useEffect(() => {
+  //   if (
+  //     myData?.userId !== undefined &&
+  //     myData?.userId !== null &&
+  //     clubSocket &&
+  //     meetingSocket &&
+  //     directSocket &&
+  //     groupsData
+  //   ) {
+  //     clubSocket.emit('login', {
+  //       userNo: myData.userNo,
+  //       groupsData,
+  //     });
+  //     meetingSocket.emit('login', {
+  //       userNo: myData.userNo,
+  //       groupsData,
+  //     });
+  //     directSocket.emit('login', {
+  //       userNo: myData.userNo,
+  //       groupsData,
+  //     });
+  //   }
+  // }, [myData, clubSocket, meetingSocket, directSocket, groupsData]);
 
-  useEffect(() => {
-    return () => {
-      clubDisconnect();
-      meetingDisconnect();
-      directDisconnect();
-    };
-  }, [clubDisconnect, meetingDisconnect, directDisconnect]);
+  // useEffect(() => {
+  //   return () => {
+  //     clubDisconnect();
+  //     meetingDisconnect();
+  //     directDisconnect();
+  //   };
+  // }, [clubDisconnect, meetingDisconnect, directDisconnect]);
 
   //-------------------------onClickNavigating ------------------------------------------
   const onClickHome = React.useCallback((MouseEvent) => {
@@ -126,3 +126,7 @@ export default function MainBottomNav() {
     </BottomNavigation>
   );
 }
+
+MainBottomNav.propTypes = {
+  pageName: PropTypes.array,
+};

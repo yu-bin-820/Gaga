@@ -13,6 +13,7 @@ import ChatList from '@components/communication/ChatList';
 import ChatBox from '@components/communication/ChatBox';
 import useInput from '@hooks/common/useInput';
 import useInputOrigin from '@hooks/common/useInputOrigin';
+import CommonTop from '@layouts/common/CommonTop';
 
 const MeetingChat = () => {
   const { chatRoomEntryNo, chatType, setField } = useCommunityStore();
@@ -122,6 +123,7 @@ const MeetingChat = () => {
   // console.log(meetingMessagesData);
   return (
     <div ref={boxRef}>
+      <CommonTop />
       <Box>
         <ChatList chatData={meetingMessagesData} />
         <Box sx={{ position: 'fixed', bottom: 65, left: 0, right: 0 }}>
