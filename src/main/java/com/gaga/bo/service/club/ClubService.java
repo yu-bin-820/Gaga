@@ -31,18 +31,21 @@ public interface ClubService {
 	//클럽 정보 수정 
 	public void updateClub(Club club) throws Exception;
 	
+	//부모클럽번호 수정
+	public void updateParentClubNoToNull(int clubNo) throws Exception;
+	
 	//클럽 삭제
 	public void deleteClub(int clubNo) throws Exception;
 	
 	//멤버관리
 	//클럽 참여 신청
-	public void addClubMember(Map<String, String> map) throws Exception;
+	public void addClubMember(Map<String, Integer> map) throws Exception;
 	
 	//클럽 멤버 정보 수정
-	public void updateClubMember(Map<String, String> map) throws Exception;
+	public void updateClubMember(Map<String, Integer> map) throws Exception;
 	
 	//클럽 멤버 삭제
-	public void deleteClubMember(Map<String, String> map) throws Exception;
+	public void deleteClubMember(Map<String, Integer> map) throws Exception;
 	
 	//카테고리관리 => 미팅에서 가져오기
 }
