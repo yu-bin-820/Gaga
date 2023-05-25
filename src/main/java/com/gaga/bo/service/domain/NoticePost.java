@@ -18,7 +18,7 @@ public class NoticePost {
     	
     }
 
-    // 모든 필드를 포함하는 생성자
+    // 
     public NoticePost(int noticePostNo, int noticePostCategoryNo, String noticePostTitle, String noticePostText, 
                       String noticePostImg, LocalDateTime noticePostRegDate, int userNo) {
         this.noticePostNo = noticePostNo;
@@ -92,5 +92,6 @@ public class NoticePost {
 				+ ", noticePostTitle=" + noticePostTitle + ", noticePostText=" + noticePostText + ", noticePostImg="
 				+ noticePostImg + ", noticePostRegDate=" + noticePostRegDate + ", userNo=" + userNo + "]";
 	}
+
 
 }
