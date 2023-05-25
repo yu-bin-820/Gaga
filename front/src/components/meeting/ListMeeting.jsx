@@ -1,11 +1,13 @@
 import { Button } from '@mui/material';
-import { Box } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Map, MapMarker, useMap } from 'react-kakao-maps-sdk';
+import { CustomOverlayMap, Map, MapMarker, useMap } from 'react-kakao-maps-sdk';
 import { useNavigate } from 'react-router';
 import useSWR from 'swr';
+
+
 
 const ListMeeting = () => {
   const [meetingList, setMeetingList] = useState();
@@ -52,23 +54,68 @@ const ListMeeting = () => {
 
     const EventMarkerContainer = ({ meetingLat, meetingLng, meetingName }) => {
         const map = useMap()
-        const [isVisible, setIsVisible] = useState(false)
+        const [isOpen, setIsOpen] = useState(false)
 
-        const content = <div style={{ color: "#000" }}> {meetingName} </div>
-
-        if (isClicked) {
-            spriteOrigin = clickOrigin
-        }
+        const content = <CustomOverlayMap position={{lat : meetingLat,lng : meetingLng,}}zIndex={1000} >
+          <div className="wrap">
+            <div className="info">
+              <div className="title">
+                {meetingName}
+                <div
+                  className="close"
+                  onClick={() => setIsOpen(false)}
+                  title="닫기"
+                ></div>
+              </div>
+              <Box sx={{backgroundColor : 'red', zIndex:'tooltip'}}>
+                <Stack direction='row' spacing={2}>
+                    <Box>kdkdk</Box>
+                    <Stack>
+                        <Box>sldf</Box>
+                        <Box>sdf</Box>
+                    </Stack>
+                </Stack>
+              </Box>
+              <div className="body">
+                <div className="img">
+                  <img
+                    src="//t1.daumcdn.net/thumb/C84x76/?fname=http://t1.daumcdn.net/cfile/2170353A51B82DE005"
+                    width="73"
+                    height="70"
+                    alt="카카오 스페이스닷원"
+                  />
+                </div>
+                <div className="desc">
+                  <div className="ellipsis">
+                    제주특별자치도 제주시 첨단로 242
+                  </div>
+                  <div className="jibun ellipsis">
+                    (우) 63309 (지번) 영평동 2181
+                  </div>
+                  <div>
+                    <a
+                      href="https://www.kakaocorp.com/main"
+                      target="_blank"
+                      className="link"
+                      rel="noreferrer"
+                    >
+                      홈페이지
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          ;
+        </CustomOverlayMap>
     
         return (
           <MapMarker
             position={{lat : meetingLat,lng : meetingLng,}} // 마커를 표시할 위치
             // @ts-ignore
-            onClick={(marker) => map.panTo(marker.getPosition())}
-            onMouseOver={() => setIsVisible(true)}
-            onMouseOut={() => setIsVisible(false)}
+            onClick={() => setIsOpen(true)}
           >
-            {isVisible && content}
+            {isOpen && content}
           </MapMarker>
         )
       }
@@ -94,8 +141,6 @@ const ListMeeting = () => {
         meetingLat={meeting.meetingLat}
         meetingLng={meeting.meetingLng}
         meetingName={meeting.meetingName}
-        onClick={()=> setSeleteMarker(index)}
-        isClicked={selectedMarker ===index}
       />
       ))}
     </Map>
