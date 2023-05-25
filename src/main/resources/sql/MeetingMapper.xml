@@ -229,7 +229,7 @@
   FROM
     meetings
   WHERE
-    meeting_state = 0
+    meeting_state = 1
   AND
 	filter_gender = #{gender:INTEGER}
   AND
@@ -287,7 +287,7 @@
     <if test="parentClubNo==0">
       null
     </if>,
-    0,
+    1,
     #{meetingAddr:LONGVARCHAR},
     #{meetingDetailAddr:LONGVARCHAR},
     #{meetingLat:DOUBLE},
@@ -297,7 +297,7 @@
     #{meetingLeaderNo:INTEGER},
     #{meetingMaxMemberNo:INTEGER},
     now(),
-    0,
+    1,
     #{meetingImg:LONGVARCHAR},
     #{filterGender:INTEGER},
     #{filterMinAge:INTEGER},
@@ -333,8 +333,8 @@
 <update id="updateMeetingSuccess" parameterType="Meeting">
   UPDATE meetings
   SET
-    meeting_success = 1,
-    meeting_state = 1,
+    meeting_success = 2,
+    meeting_state = 2,
     account_no = #{accountNo},
     bank_name = #{bankName}
   WHERE

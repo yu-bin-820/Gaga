@@ -50,22 +50,24 @@ public class MeetingRestController {
 	
 	//test 미완료
 	@GetMapping("list/clubno/{clubNo}")
-	public List getMeetingListFromParentClubNo(@PathVariable int clubNo) throws Exception{
+	public List<Meeting> getMeetingListFromParentClubNo(@PathVariable int clubNo) throws Exception{
 		
 		return meetingService.getMeetingListFromParentClubNo(clubNo);
 	}
 	
 	@GetMapping("list/inchat/no/{userNo}")
-	public List getMeetingListInChat(@PathVariable int userNo) throws Exception{
+	public List<Meeting> getMeetingListInChat(@PathVariable int userNo) throws Exception{
 		
 		return meetingService.getMeetingListInChat(userNo);
 	}
 	
 	@PostMapping("list")
-	public List getMeetingList(@RequestBody Filter filter) throws Exception{
+	public List<Meeting> getMeetingList(@RequestBody Filter filter) throws Exception{
 		
 		System.out.println(filter);
-		return meetingService.getMeetingList(filter);
+		
+		List<Meeting> list = meetingService.getMeetingList(filter);
+		return list;
 	}
 	
 	@PatchMapping("")
@@ -73,7 +75,6 @@ public class MeetingRestController {
 		meetingService.updateMeeting(meeting);
 	}
 	
-	//test 미완료
 	@PatchMapping("meetingsuccess")
 	public void updateMeetingSuccess(@RequestBody Meeting meeting) throws Exception{
 		meetingService.updateMeetingSuccess(meeting);
@@ -96,7 +97,7 @@ public class MeetingRestController {
 	
 	//멤버관련
 	@GetMapping("list/mymeeting/{userNo}")
-	public List getMyMeetingList(@PathVariable int userNo ) throws Exception{
+	public List<Meeting> getMyMeetingList(@PathVariable int userNo ) throws Exception{
 		
 		return meetingService.getMyMeetingList(userNo);
 	}
@@ -155,12 +156,14 @@ public class MeetingRestController {
 	//카테고리관련
 	@GetMapping("maincategory")
 	public List getMainCategoryList() throws Exception {
+		System.out.println("meeting.getmaincategory : Get");
 		
 		return meetingService.getMainCategory();
 	}
 	
 	@GetMapping("subcategory")
 	public List getSubCategoryList() throws Exception {
+		System.out.println("meeting.getsubcategory : Get");
 		
 		return meetingService.getSubCategory();
 	}
