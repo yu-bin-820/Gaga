@@ -3,7 +3,6 @@ package com.gaga.bo.web.admin;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.gaga.bo.service.admin.AdminService;
 import com.gaga.bo.service.domain.NoticePost;
+import com.gaga.bo.service.domain.Report;
 import com.gaga.bo.service.domain.User;
 
 @RestController
@@ -132,7 +132,6 @@ public class AdminRestController {
 					filteredBlacklist.add(user);
 				}
 			}
-
 			return ResponseEntity.ok(filteredBlacklist);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -144,4 +143,24 @@ public class AdminRestController {
 		User user = adminService.getBlackList(userNo);
 		return ResponseEntity.ok(user);
 	}
+	
+	//신고게시판
+	@GetMapping("getReportAdmin/{reportedNo}")
+	public ResponseEntity<List<Report>> getReportAdmin(@PathVariable int reportedNo) throws Exception {
+	    List<Report> reports = adminService.getReportAdmin(reportedNo);
+	    return ResponseEntity.ok(reports);
+	}
+	
+	@GetMapping("listReportAdmin")
+	public ResponseEntity<List<Report>> listReportAdmin() throws Exception {
+	    System.out.println("did u call me?");
+		List<Report> reports = adminService.listReportAdmin();
+	    
+	    if (!reports.isEmpty()) {
+	        return ResponseEntity.ok(reports);
+	    }
+	    
+	    return ResponseEntity.notFound().build();
+	}
 }
+

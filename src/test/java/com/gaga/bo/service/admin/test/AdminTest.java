@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.gaga.bo.service.admin.AdminService;
 import com.gaga.bo.service.domain.NoticePost;
+import com.gaga.bo.service.domain.Report;
 import com.gaga.bo.service.domain.User;
 
 @SpringBootTest
@@ -103,16 +104,28 @@ class AdminTest {
         assertTrue(blacklistedUsers.size() > 0);
     }
 
-//  @Test
+    //@Test
     public void testGetBlackList() throws Exception {
         int userNo = 6;
-
-        // Get the user's blacklist status
         User blacklistStatus = adminService.getBlackList(userNo);
-
-        // Verify if the user is blacklisted
         assertEquals(1, blacklistStatus.getBlacklist());
     }
-
+    ////////// 신고게시판
+    //@Test
+    public void testGetReportAdmin() {
+        int reportedNo = 3; // 테스트할 reportedNo 값
+        List<Report> reports = adminService.getReportAdmin(reportedNo);
+        // report의 데이터를 확인하는 로직
+        for (Report report : reports) {
+            assertEquals(3, report.getReportedNo());
+        }
+    }
+    
+    //@Test
+    public void testListReportListAdmin() {
+        List<Report> report = adminService.listReportAdmin();
+        // report의 데이터를 확인하는 로직
+        assertTrue(report.size() > 0);
+    }
 	
 }
