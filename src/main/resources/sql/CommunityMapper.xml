@@ -26,6 +26,10 @@
     <result column="user_score" property="userScore" jdbcType="INTEGER"/>
   </resultMap>
 
+  <resultMap id="titleResultMap" type="title">
+    <id column="title_no" property="titleNo" jdbcType="INTEGER"/>
+    <result column="title_name" property="titleName" jdbcType="VARCHAR"/>
+  </resultMap>
   
   <!-- ReportQueries -->
 	
@@ -134,5 +138,94 @@
     		AND reviewed_no=#{reviewedNo}
      	</where>
     </delete>
+    
+	<!-- TitleQueries -->
+		<!-- SELECT List Query -->
+		<select id="getUserEarnedTitleList" resultMap="titleResultMap">
+			SELECT t.title_no, t.title_name
+			FROM titles t
+			JOIN user_earned_titles uet
+			ON t.title_no = uet.title_no
+			WHERE uet.user_no = #{userNo}
+		</select>
+		<!-- INSERT Query -->
+				<!-- map parameter keys = userNo, leaderState, mainCategoryNo -->
+		<insert id="addUserEarnedTitle" parameterType ="map">
+			INSERT INTO user_earned_titles (user_no, title_no)
+			SELECT #{userNo}, t.title_no
+			FROM titles t
+			<where>
+			<if test = "leaderState == 1">
+			t.leader_state = 1
+			</if>
+			<if test = "leaderState == 0">
+			t.leader_state = 0
+			</if>
+			<if test ="mainCategoryNo == 0"> 
+	  	AND t.main_category_no = 0      
+	  	</if>
+	  	<if test ="mainCategoryNo != 0"> 
+	  	AND t.main_category_no = #{mainCategoryNo}      
+	  	</if>
+      AND t.count &lt;= (
+      									<if test = "leaderState == 1">
+      									 SELECT COUNT(*)
+                  			 FROM meetings m
+                  			 <where>
+                  			  m.meeting_success = 1
+                  			 	AND m.meeting_leader_no = #{userNo}
+                  			 	<if test ="mainCategoryNo != 0">
+                  			 	AND m.main_category_no = #{mainCategoryNo}
+                  			 	</if>
+                  			 </where>
+                  			</if>
+                  			<if test = "leaderState == 0">
+      										 SELECT COUNT(*)
+													 FROM members mb
+													 JOIN meetings mt 
+													 ON mb.meeting_no = mt.meeting_no
+											 		 <where>
+														mt.meeting_success = 1
+														AND (mb.state=2 OR mb.state=3)
+														AND mb.user_no = #{userNo}
+														<if test="mainCategoryNo != 0">
+															AND mt.main_category_no = #{mainCategoryNo}
+														</if>
+											 		 </where>
+                  			 </if> 
+                  			)
+			AND NOT EXISTS (
+											SELECT 1 
+        		          FROM user_earned_titles uet
+            		      WHERE uet.title_no = t.title_no 
+            		      AND uet.user_no = #{userNo}
+                     )
+      </where>
+		</insert>
+		<!-- SelectCountQueries 
+		<in id="countSuccessMeeting" parameterType = "int">
+			SELECT COUNT(meeting_no) 
+			FROM meetings
+			<where>
+				meeting_leader_no = #{userNo}
+				AND meeting_success = 1
+			</where>
+		</select>
+		-->
+	<!-- ffffff
+		<select id="countEarnedClub" parameterType = "int">
+			SELECT COUNT(club_no) 
+			FROM clubs
+			<where>
+				club_leader_no = #{userNo}
+			</where>
+		</select>
+		
+		<select>
+			SELECT COUNT
+		</select>
+				 -->
+		<!--  InsertQueries -->
+    
 
 </mapper>

@@ -1,7 +1,12 @@
 package com.gaga.bo.web.user;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +28,7 @@ public class UserRestController {
 		System.out.println(this.getClass());
 	}
 	
-	@GetMapping("/userno/{userNo}")
+	@GetMapping("/userno/{userNo}")		//회원번호로 유저
 	public User getUser( @PathVariable int userNo ) throws Exception{
 		
 		System.out.println("/rest/user/getUser : GET");
@@ -52,7 +57,9 @@ public class UserRestController {
 	
 	@GetMapping("/login")
 	public User getLoginUser(HttpSession session) throws Exception {
-		System.out.println("::: get/login");
+
+		System.out.println("::: get/login : " + (User)session.getAttribute("user"));
+		
 		return (User)session.getAttribute("user");
 	}
 	
@@ -61,19 +68,43 @@ public class UserRestController {
 									HttpSession session ) throws Exception{
 	
 		System.out.println("/rest/user/login : POST");
-		//Business Logic
 		System.out.println("::"+user);
+		
+		//Business Logic
 		User dbUser=userService.getUserById(user.getUserId());
 
-		if( dbUser==null ) {
-		dbUser = new User();
+		if( dbUser!=null ) {
+			if( user.getPassword().equals(dbUser.getPassword())){
+				session.setAttribute("user", dbUser);
+			}
 		}
-		
-		if( user.getPassword().equals(dbUser.getPassword())){
-			session.setAttribute("user", dbUser);
-		}
-		
+		System.out.println("::"+dbUser);		
 		return dbUser;
+	}
+	
+	@DeleteMapping("/logout")
+	public ResponseEntity<String> logout(HttpSession session, HttpServletResponse response,
+			 HttpServletRequest request) throws Exception{
+		
+		System.out.println("/rest/user/logout : DELETE 로그아웃 요청옴");
+		
+//		session.removeAttribute("user");
+		session.removeAttribute("access_token"); // 네이버 로그인 토큰 정보 제거
+		System.out.println("1");
+		session.invalidate();
+		System.out.println("2");
+	    // 쿠키 삭제
+	    Cookie[] cookies = request.getCookies();
+	    if (cookies != null) {
+	        for (Cookie cookie : cookies) {
+	            cookie.setMaxAge(0);
+	            response.addCookie(cookie);
+	        }
+	    }
+	    System.out.println("3");
+		
+		// 성공 메시지를 반환합니다.
+		return new ResponseEntity<>("로그아웃 완료!", HttpStatus.OK);
 	}
 	
 	@GetMapping("/addUser")
@@ -104,7 +135,7 @@ public class UserRestController {
 	
 	@PostMapping("/updateUser")
 	public ResponseEntity<User> updateUser(@RequestBody User user) throws Exception {
-		System.out.println("/resr/user/updateUser : POST");
+		System.out.println("/rest/user/updateUser : POST");
 //		String userId = user.getUserId();
 //		
 //		// 아이디 중복 확인
@@ -119,14 +150,90 @@ public class UserRestController {
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
 	
-	
-
-    @GetMapping("/kakaoLogin")
-    public String kakaoLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
-        String access_Token = userService.getAccessKakaoToken(code);
-        HashMap<String, Object> user = userService.getKakaoUserInfo(access_Token);
-        session.setAttribute("user", user);
-        return "redirect:/main.jsx";
+	@DeleteMapping("/deleteUser/{userNo}")
+    public ResponseEntity<Void> deleteUser(@PathVariable int userNo) {
+        try {
+            userService.deleteUser(userNo);
+            System.out.println("회원번호="+userNo+"유저정보 삭제완료");
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+        	System.out.println("오류가 발생했습니다: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
+        
     }
+
+	@GetMapping("/naverLogin")
+	public ResponseEntity<User> naverLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
+	    String access_Token = userService.getAccessNaverToken(code);
+	    Map<String, Object> userInfoMap = userService.getNaverUserInfo(access_Token);
+	    System.out.println("usercontroller nlogin= "+userInfoMap);
+
+	    User user = new User();
+
+	    session.setAttribute("user", user);
+	    return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+	
+	@GetMapping("/kakaoLogin")
+	public ResponseEntity<User> kakaoLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
+	    String access_Token = userService.getAccessKakaoToken(code);
+	    Map<String, Object> userInfoMap = userService.getKakaoUserInfo(access_Token);
+	    System.out.println("usercontroller klogin= "+userInfoMap);
+
+	    User user = new User();
+
+	    session.setAttribute("user", user);
+	    return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+	
+	@GetMapping("/list/grouptype/{groupType}/no/{groupNo}/state/{state}")
+	public List<User> getGroupMemberList(@PathVariable("groupType") int groupType,
+										@PathVariable("groupNo") int groupNo,
+										@PathVariable("state") int state) throws Exception{
+		
+		Map<String, Integer> map = new HashMap<>();
+		map.put("groupType", groupType);
+	    map.put("groupNo", groupNo);
+	    map.put("state", state);
+	    
+	    
+		return userService.getGroupMemberList(map);
+	} 
+
+	@PostMapping("/phoneAuth")
+	public Boolean phoneAuth(@RequestBody String tel, HttpSession session) {
+		System.out.println("핸드폰 인증 요청 옴");
+	    try {
+	        // 이미 가입된 전화번호가 있는지 확인
+	        User user = userService.getUserByPhoneNo(tel);
+	        if(user != null && user.getPhoneNo().equals(tel)) {
+	            return true;
+	        }
+	    } catch (Exception e) {
+	        System.out.println("폰인증 에러"+e);
+	        e.printStackTrace();
+	    }
+	
+	    String code = userService.sendRandomSmsMessage(tel);
+	    session.setAttribute("rand", code);
+	    
+	    return false;
+	}
+	
+	@PostMapping("/phoneAuthOk")
+	public Boolean phoneAuthOk(@RequestBody String code, HttpSession session) {
+	    String rand = (String) session.getAttribute("rand");
+
+	    System.out.println(rand + "<-인증번호 : 회원이입력한 인증번호->" + code);
+
+	    if (rand.equals(code)) {
+	        session.removeAttribute("rand");
+	        return true;
+	    } 
+
+	    return false;
+	}
 
 }

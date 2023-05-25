@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.gaga.bo.service.domain.Report;
+import com.gaga.bo.service.domain.Title;
 import com.gaga.bo.service.domain.User;
 import com.gaga.bo.service.domain.UserReview;
 
@@ -56,5 +57,9 @@ public interface CommunityDao {
 	public void updateUserReview(UserReview userReview) throws Exception;
 	
 	public void deleteUserReview(UserReview userReview) throws Exception;
-
+	
+	///Title Method
+	public void addUserEarnedTitle(Map<String,Integer> userNoMainCategoryNoLeaderState) throws Exception;
+	
+	public List<Title> getUserEarnedTitleList(int userNo) throws Exception;
 }

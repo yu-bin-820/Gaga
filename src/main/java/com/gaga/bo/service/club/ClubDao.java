@@ -26,7 +26,10 @@ public interface ClubDao {
 	
 	//SELECT LIST 내가 참여한 클럽 목록 조회
 	public List<Club> getMyClubList(int userNo) throws Exception;
-	  
+	
+	//SELECT LIST 비회원, 미인증회원 메인화면 클럽 목록
+	public List<Club> getMainClubList(int mainCategoryNo) throws Exception;
+	
 	//UPDATE 
 	public void updateClub(Club club) throws Exception;
 	
@@ -37,16 +40,14 @@ public interface ClubDao {
 	//INSERT
 	public void addClubMember(Map<String, String> map) throws Exception;
 	
+	//SELECT
+	//public L
 	//UPDATE
 	public void updateClubMember(Map<String, String> map) throws Exception;
 	
 	//DELETE
-	public void deleteClubMember(int memberNo) throws Exception;
+	public void deleteClubMember(Map<String, String> map) throws Exception;
 		
-	//카테고리
-	//SELECT
-	public List<HashMap<Integer, String>> getMainCategory() throws Exception;
-	
-	public List<HashMap<Integer, String>> getSubCategory(int mainCategoryNo) throws Exception;
+	//카테고리 => 미팅에서 가져오기
 
 }

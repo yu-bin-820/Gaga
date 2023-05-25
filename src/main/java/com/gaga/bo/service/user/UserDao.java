@@ -1,5 +1,8 @@
 package com.gaga.bo.service.user;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.gaga.bo.service.domain.User;
@@ -19,6 +22,6 @@ public interface UserDao {
 		
 	public void deleteUser(int userNo) throws Exception;
 	
-	public boolean chechDuplication(String userId) throws Exception;
+	public List<User> getGroupMemberList(Map<String, Integer> map) throws Exception;
 	
 }

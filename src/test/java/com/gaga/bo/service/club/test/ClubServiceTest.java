@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,14 +30,14 @@ public class ClubServiceTest {
 		
 		Club club = new Club();
 		
-		club.setClubNo(5);
-		club.setClubName("test55"); 
-		club.setClubLeaderNo(3);
-		club.setClubIntro("test55");
+		//club.setClubNo(1);
+		club.setClubName("test11"); 
+		club.setClubLeaderNo(5);
+		club.setClubIntro("test11");
 		club.setClubRegDate(LocalDateTime.now()); 
 		club.setClubState(0);
-		club.setClubImg("testImg55"); 
-		club.setClubRegion("test55");
+		club.setClubImg("testImg11"); 
+		club.setClubRegion("test11");
 		club.setFilterGender(0); 
 		club.setFilterMinAge(55); 
 		club.setFilterMaxAge(60);
@@ -49,13 +50,15 @@ public class ClubServiceTest {
 	
 	//@Test
 	public void getClubTest() throws Exception{
-		
+		System.out.println("결과내놔11");
 		Club club = new Club();
 		
-		club = clubService.getClub(1);
-		
-		System.out.println(club.toString());
+		club = clubService.getClub(10);
+		System.out.println("결과내놔22");
+		System.out.println("결과내놔33");
 
+		System.out.println("출력이 되는가"+club);
+		
 	}
 	
 	//@Test
@@ -71,12 +74,17 @@ public class ClubServiceTest {
 	}
 	
 	
-	//@Test  //=> 필터적용 후 검색되는지 다시 확인
+	//@Test
 	public void getSearchClubListTest() throws Exception{
 		
 		Filter filter = new Filter();
 		
-		//filter.setMainCategoryNo(1);
+		filter.setMainCategoryNo(1);
+		filter.setMaxAge(100);
+		filter.setMinAge(10);
+		filter.setGender(0);
+		filter.setAge(57);
+		filter.setTag("축구");
 		
 		List<Club> clubList = clubService.getSearchClubList(filter);
 	
@@ -96,13 +104,32 @@ public class ClubServiceTest {
 	//@Test
 	public void getMyClubListTest() throws Exception{
 		
-		List<Club> clubList = clubService.getMyClublist(2);
+		List<Club> clubList = clubService.getMyClublist(4);
 		
-		for(Club club : clubList) {
-			System.out.println(club);
+		System.out.println("클럽리스트 결과 출력 시작");
+		if (clubList != null) {
+		    for (Club club : clubList) {
+		        System.out.println(club);
+		    }
+		} else {
+		    System.out.println("출력할 정보가 없습니다.");
 		}
 		
+		System.out.println("클럽리스트 결과 출력 끝");
+		
 	}
+	
+	//@Test
+	public void getMainClubList() throws Exception{
+		
+		List<Club> clubList = clubService.getMainClubList(1);
+		
+		for(Club club : clubList) { 
+			
+			System.out.println(club); 
+		}
+	}
+	
 	
 	//@Test
 	public void updateClubTest() throws Exception{
@@ -110,7 +137,7 @@ public class ClubServiceTest {
 		Club club = new Club();
 		
 		//업데이트 전
-		club = clubService.getClub(1);
+		club = clubService.getClub(10);
 		
 		club.setClubIntro("change");
 		club.setClubMaxMemberNo(100);
@@ -124,8 +151,8 @@ public class ClubServiceTest {
 	
 	//@Test
 	public void deleteClubTest() throws Exception{
-		clubService.deleteClub(1);
-		System.out.println("삭제는 잘 되었니" + clubService.getClub(1));	
+		clubService.deleteClub(10);
+		System.out.println("삭제는 잘 되었니" + clubService.getClub(10));	
 		
 	}
 	
@@ -133,8 +160,8 @@ public class ClubServiceTest {
 	public void addClubMemberTest() throws Exception{
 		
 		Map<String, String> map = new HashMap<>();
-		map.put("userNo", "2");
-		map.put("clubNo", "3");
+		map.put("userNo", "7");
+		map.put("clubNo", "7");
 		
 		clubService.addClubMember(map);
 		
@@ -144,17 +171,21 @@ public class ClubServiceTest {
 	public void updateClubMemberTest() throws Exception{
 		
 		Map<String, String> map = new HashMap<>();
-		map.put("clubNo", "3");
-		map.put("userNo", "2");
+		map.put("clubNo", "7");
+		map.put("userNo", "7");
 		
 		clubService.updateClubMember(map);
 		
 	}
 	
-	@Test
+	//@Test
 	public void deleteClubMember() throws Exception{
 		
-		clubService.deleteClubMember(2);
+		Map<String, String> map = new HashMap<>();
+		map.put("clubNo", "7");
+		map.put("userNo", "7");
+		
+		clubService.deleteClubMember(map);
 	}
 
 	

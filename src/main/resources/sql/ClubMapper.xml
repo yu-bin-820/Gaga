@@ -21,6 +21,7 @@
 	  <result property="filterMaxAge" column="filter_max_age" jdbcType="INTEGER"/>
 	  <result property="filterTag" column="filter_tag" jdbcType="VARCHAR"/>
 	  <result property="mainCategoryNo" column="main_category_no" jdbcType="INTEGER"/>
+	  <result property="memberCount" column="member_count" jdbcType="INTEGER" />
 	</resultMap>
 	
 	<resultMap id="mainCategoryResultMap" type="java.util.HashMap">
@@ -71,18 +72,34 @@
 	         club_reg_date, club_state, club_img, club_region, filter_gender,
 	         filter_min_age, filter_max_age, filter_tag, main_category_no
 	  FROM clubs
-      WHERE club_state = 1
+      WHERE club_state = 0
       		AND filter_gender = #{gender:INTEGER}
   			AND filter_min_age &lt;= #{maxAge:INTEGER}
             AND filter_max_age &gt;= #{minAge:INTEGER}
   			AND #{age:INTEGER} BETWEEN filter_min_age AND filter_max_age
-  	<if test="mainCategoryNo != null">
+  	  <if test="mainCategoryNo != null">
   			AND main_category_no =  #{mainCategoryNo:INTEGER}
   	</if>
   	<if test="tag != null">
   			AND filter_tag IN (#{tag : LONGVARCHAR}, #{tag2 : LONGVARCHAR}, #{tag3 : LONGVARCHAR})
   	</if>
 	</select>
+	
+	<!-- SELECT LIST 클럽 목록 출력(비회원 메인화면) -->
+	<select id="getMainClubList" parameterType="int" resultMap="ClubResultMap">
+	 SELECT c.club_no, c.club_name, c.club_intro, c.club_leader_no, c.club_max_member_no,
+   		    c.club_reg_date, c.club_state, c.club_img, c.club_region, c.filter_gender,
+    		c.filter_min_age, c.filter_max_age, c.filter_tag, c.main_category_no,
+   		    COUNT(members.member_no) AS member_count
+	 FROM clubs c
+	 JOIN meetings m ON c.club_no = m.parent_club_no
+	 LEFT JOIN members ON c.club_no = members.club_no
+	 WHERE c.main_category_no = #{mainCategoryNo}
+	 GROUP BY c.club_no, m.meeting_no
+	 ORDER BY member_count DESC, m.meeting_reg_date DESC
+ 
+	</select>
+	
 	
 	<!-- SELECT LIST 회원이 참여한 클럽 목록 조회 -->
 	<select id="getMyClubList" parameterType="int" resultMap="ClubResultMap">
@@ -102,7 +119,7 @@
 			club_name = #{clubName:VARCHAR},
 		    club_intro = #{clubIntro:VARCHAR},
 		    club_max_member_no = #{clubMaxMemberNo:INTEGER},
-		    club_state = #{clubState:INTEGER}
+		    club_state = #{clubState:INTEGER},
 		    club_img = #{clubImg:VARCHAR},
 		    club_region = #{clubRegion:VARCHAR},
 		    filter_gender = #{filterGender:INTEGER},
@@ -122,22 +139,26 @@
 	<!-- 멤버관리 -->
 	<!-- INSERT -->
 	<insert id="addClubMember" parameterType="Map">
-	  INSERT INTO members (user_no, club_no, state, confirmed_date)
-	  VALUES (#{userNo:INTEGER}, #{clubNo:INTEGER}, 1, NOW() )
+	  INSERT INTO members (user_no, club_no, state)
+	  VALUES (#{userNo:INTEGER}, #{clubNo:INTEGER}, 1)
 	</insert>
 	
 	<!-- UPDATE -->
 	<update id="updateClubMember" parameterType="Map">
 	  UPDATE members
-      SET state = 2
+	  	<set>
+	  	    state = 2, 
+	  	    confirmed_date = NOW()
+	  	</set>
+
       WHERE club_no = #{clubNo:INTEGER} AND user_no = #{userNo:INTEGER}
 	</update>
 	
 	<!-- DELETE -->
-	<delete id="deleteClubMember" parameterType="int">
+	<delete id="deleteClubMember" parameterType="Map">
 	  DELETE 
 	  FROM members
-      WHERE member_no = #{memberNo:INTEGER}
+      WHERE club_no = #{clubNo:INTEGER} AND user_no = #{userNo:INTEGER}
 	</delete>
 	
 </mapper>
