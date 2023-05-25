@@ -1,6 +1,7 @@
 package com.gaga.bo.service.payment.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,20 +46,20 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public void updatePayment(int userNo, int meetingNo) throws Exception {
+	public void updatePayment(String payNo) throws Exception {
 		
 		System.out.println("환불시 결제 상태 변경 서비스");
-		
-		paymentDao.updatePayment(userNo, meetingNo);
+
+		paymentDao.updatePayment(payNo);
 			
 	}
 
 	@Override
-	public String getPayNoByUserMeeting(int userNo, int meetingNo) throws Exception {
+	public String getPayNoByUserMeeting(Map<String, Integer> refund) throws Exception {
 		
 		System.out.println("모임, 유저번호로 결제번호 출력 서비스");
 		
-		return paymentDao.getPayNoByUserMeeting(userNo, meetingNo);
+		return paymentDao.getPayNoByUserMeeting(refund);
 	}
 
 	@Override
@@ -86,15 +87,6 @@ public class PaymentServiceImpl implements PaymentService {
 		
 	}
 
-	@Override
-	public void updateAdjustment(Meeting meeting) throws Exception {
-		
-		System.out.println("정산 정보 추가 서비스");
-		
-		paymentDao.updateAdjustment(meeting);
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void updateAdjustmentState(Meeting meeting) throws Exception {

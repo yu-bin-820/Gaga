@@ -52,7 +52,7 @@
 	 	INSERT 
 	 	INTO payments (pay_no, user_no, meeting_no, meeting_name, pay_time, refund_time, pay_state, entry_fee)
         VALUES (#{payNo:VARCHAR}, #{userNo:INTEGER}, #{meetingNo:INTEGER}, #{meetingName:VARCHAR}, 
-        #{payTime:TIMESTAMP}, #{refundTime}, #{payState:INTEGER}, #{entryFee:INTEGER})
+        #{payTime:TIMESTAMP}, #{refundTime:TIMESTAMP}, #{payState:INTEGER}, #{entryFee:INTEGER})
 	</insert>
 	
 	<!-- SQL : SELECT -->
@@ -76,17 +76,16 @@
 	    WHERE user_no = #{userNo}
 	</select>
 	
-	<update id="updatePayment" parameterType="int">
+	<update id="updatePayment" parameterType="String">
 	  UPDATE payments
-	  <set>
-	    pay_state = 1
-	  </set>
-	  WHERE pay_no IN (
-	    SELECT p.pay_no
-	    FROM (SELECT pay_no FROM payments WHERE user_no = #{userNo} AND meeting_no = #{meetingNo}) AS p
-	  )
+	  SET pay_state = 1,
+	      refund_time = NOW()
+	  WHERE pay_no = #{payNo}
 	</update>
+
 	
+	
+	<!-- 정산 SQL -->
 	<!-- SQL : SELECT -->
 	<select id="getAllAdjustmentList" resultMap="meetingResultMap">
 		SELECT 
@@ -96,7 +95,7 @@
 		FROM 
 		    meetings
 		WHERE 
-		    entry_fee != 0
+		    entry_fee != 0 AND meeting_success = 1
 		ORDER BY 
 		    meeting_date DESC,
 		    meeting_end_time DESC;
@@ -112,7 +111,7 @@
 		FROM 
 		    meetings
 		WHERE 
-		    entry_fee != 0 AND meeting_leader_no = #{userNo}		    
+		    entry_fee != 0 AND meeting_success = 1 AND meeting_leader_no = #{userNo}		    
 		ORDER BY 
 		    meeting_date DESC,
 		    meeting_end_time DESC;
@@ -120,13 +119,13 @@
 	
 	
 	<!-- SQL : UPDATE -->
-	<update id="updateAdjustment" parameterType="java.util.List">
+	<update id="updateAdjustmentState" parameterType="meeting">
 	  UPDATE meetings
 	  <set>
-		  adjustment_time = #{adjustmentTime},
-	      adjustment_state = 0
+		  adjustment_time = NOW(),
+	      adjustment_state = 1
 	  </set> 
-	  WHERE meeting_no = #{meetingNo}
+	  	  WHERE meeting_no = #{meetingNo}
 	</update>
 
 	<!-- SQL : SELECT -->
@@ -136,5 +135,7 @@
 				FROM members
 				WHERE meeting_no = #{meetingNo} ) countTable	
 	</select>
+	
+	<!-- 정산 상태별 정렬 1. 정산대기(adjustmentState=0) 2. 모임 끝 시간이 최신 -->
     
 </mapper>

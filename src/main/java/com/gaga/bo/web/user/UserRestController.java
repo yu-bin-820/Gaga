@@ -57,7 +57,9 @@ public class UserRestController {
 	
 	@GetMapping("/login")
 	public User getLoginUser(HttpSession session) throws Exception {
-		System.out.println("::: get/login");
+
+		System.out.println("::: get/login : " + (User)session.getAttribute("user"));
+		
 		return (User)session.getAttribute("user");
 	}
 	
@@ -66,18 +68,17 @@ public class UserRestController {
 									HttpSession session ) throws Exception{
 	
 		System.out.println("/rest/user/login : POST");
-		//Business Logic
 		System.out.println("::"+user);
+		
+		//Business Logic
 		User dbUser=userService.getUserById(user.getUserId());
 
-		if( dbUser==null ) {
-		dbUser = new User();
+		if( dbUser!=null ) {
+			if( user.getPassword().equals(dbUser.getPassword())){
+				session.setAttribute("user", dbUser);
+			}
 		}
-		
-		if( user.getPassword().equals(dbUser.getPassword())){
-			session.setAttribute("user", dbUser);
-		}
-		
+		System.out.println("::"+dbUser);		
 		return dbUser;
 	}
 	
