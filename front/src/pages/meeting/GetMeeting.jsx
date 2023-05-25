@@ -47,7 +47,7 @@ const GetMeeting = () => {
                 console.error(error);
             }
         },
-        [meeting, navigate]
+        []
     );
 
     const onClickAddMember=useCallback((event)=>{
