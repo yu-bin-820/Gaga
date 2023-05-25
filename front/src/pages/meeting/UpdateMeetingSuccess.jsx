@@ -57,7 +57,7 @@ const UpdateMeetingSuccess = () => {
           required
           value={meeting.bankName}
         />
-        <Button onClick={onClickMeetingSuccess}>하기 </Button>
+        <Button onClick={onClickMeetingSuccess}>성사하기 </Button>
 
         </Box>
     );

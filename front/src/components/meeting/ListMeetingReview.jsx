@@ -20,7 +20,7 @@ const ListMeetingReview = () => {
             .catch((error)=>{
                 console.log(error);
             });
-        },[meetingReviewList]);
+        },[meetingno]);
 
         const onClickUpdateMeetingReview = React.useCallback((MouseEvent)=>{
             const { id } = event.target;
@@ -42,6 +42,7 @@ const ListMeetingReview = () => {
                     const response = await axios.delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`, {
                         data: data,
                     });
+                    navigate(`/meeting/meetingno/${meetingno}`)
                     
                 } catch (error) {
                     console.error(error);

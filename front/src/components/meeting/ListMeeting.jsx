@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import { Map, MapMarker, useMap } from 'react-kakao-maps-sdk';
 import { useNavigate } from 'react-router';
 import useSWR from 'swr';
 
@@ -19,13 +19,13 @@ const ListMeeting = () => {
 
     useEffect(()=>{
         const data = {
-            gender: myData.filterGender,
-            maxAge: myData.filterMaxAge,
-            minAge: myData.filterMinAge,
-            tag: myData.filterTag,
-            tag2: myData.filterTag2,
-            tag3: myData.filterTag3,
-            birthday:  myData.birthday,
+            gender: myData?.filterGender,
+            maxAge: myData?.filterMaxAge,
+            minAge: myData?.filterMinAge,
+            tag: myData?.filterTag,
+            tag2: myData?.filterTag2,
+            tag3: myData?.filterTag3,
+            birthday:  myData?.birthday,
             age: 21,
             swLat: 0,
             swLng: 0,
@@ -42,15 +42,62 @@ const ListMeeting = () => {
             .catch((error)=>{
                 console.log(error);
             });
-    },[myData,meetingList]);
+    },[myData]);
 
     const onClickMeeting=useCallback((event)=>{
         const { id } = event.target;
         navigate(`/meeting/meetingno/${id}`);
-    },[meetingList]);
+    },[navigate]);
+
+    const EventMarkerContainer = ({ meetingLat, meetingLng, meetingName }) => {
+        const map = useMap()
+        const [isVisible, setIsVisible] = useState(false)
+
+        const content = <div style={{ color: "#000" }}> {meetingName} </div>
+
+        if (isClicked) {
+            spriteOrigin = clickOrigin
+        }
+    
+        return (
+          <MapMarker
+            position={{lat : meetingLat,lng : meetingLng,}} // 마커를 표시할 위치
+            // @ts-ignore
+            onClick={(marker) => map.panTo(marker.getPosition())}
+            onMouseOver={() => setIsVisible(true)}
+            onMouseOut={() => setIsVisible(false)}
+          >
+            {isVisible && content}
+          </MapMarker>
+        )
+      }
 
     return (
         <>
+        <Map // 지도를 표시할 Container
+      center={{
+        // 지도의 중심좌표
+        lat: 37.123,
+        lng: 127.654,
+      }}
+      style={{
+        // 지도의 크기
+        width: "100%",
+        height: "450px",
+      }}
+      level={3} // 지도의 확대 레벨
+    >
+      {meetingList?.map((meeting, index) => (
+        <EventMarkerContainer
+        key={`EventMarkerContainer-${meeting.meetingNo}`}
+        meetingLat={meeting.meetingLat}
+        meetingLng={meeting.meetingLng}
+        meetingName={meeting.meetingName}
+        onClick={()=> setSeleteMarker(index)}
+        isClicked={selectedMarker ===index}
+      />
+      ))}
+    </Map>
 
         <Box sx={{marginTop:'100px'}}>
             <Box>
