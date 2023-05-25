@@ -65,7 +65,6 @@ public class UserRestController {
 	
 		System.out.println("/rest/user/login : POST");
 		//Business Logic
-		System.out.println("::"+user);
 		User dbUser=userService.getUserById(user.getUserId());
 
 		if( dbUser==null ) {
@@ -75,8 +74,9 @@ public class UserRestController {
 		if( user.getPassword().equals(dbUser.getPassword())){
 			session.setAttribute("user", dbUser);
 		}
-		
+		System.out.println("::"+user);
 		return dbUser;
+		
 	}
 	
 	@DeleteMapping("/logout")
@@ -206,12 +206,12 @@ public class UserRestController {
 	}
 	
 	@PostMapping("/phoneAuthOk")
-	public Boolean phoneAuthOk(@RequestBody String code, HttpSession session) {
+	public Boolean phoneAuthOk(@RequestBody String phoneAuthCode, HttpSession session) {
 	    String rand = (String) session.getAttribute("rand");
 
-	    System.out.println(rand + "<-인증번호 : 회원이입력한 인증번호->" + code);
-
-	    if (rand.equals(code)) {
+	    System.out.println(rand + " <-서버발송 인증번호 || 회원이입력한 인증번호-> " + phoneAuthCode);
+	    phoneAuthCode = phoneAuthCode.replace("=", ""); // = 기호 제거
+	    if (rand.equals(phoneAuthCode)) {
 	        session.removeAttribute("rand");
 	        return true;
 	    } 

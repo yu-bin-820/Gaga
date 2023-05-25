@@ -110,7 +110,7 @@
     LEFT JOIN user_reviews ur ON u.user_no = ur.reviewed_no
     WHERE u.user_id = #{userId}
     GROUP BY u.user_no
-</select>
+	</select>
 
 	
 	<select id="getUserByPhoneNo" parameterType="string" resultMap="userResultMap">
