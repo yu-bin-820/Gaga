@@ -3,6 +3,7 @@ import { Box } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
+import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { useNavigate } from 'react-router';
 import useSWR from 'swr';
 
@@ -41,14 +42,16 @@ const ListMeeting = () => {
             .catch((error)=>{
                 console.log(error);
             });
-    },[myData]);
+    },[myData,meetingList]);
 
     const onClickMeeting=useCallback((event)=>{
         const { id } = event.target;
         navigate(`/meeting/meetingno/${id}`);
-    },[]);
+    },[meetingList]);
 
     return (
+        <>
+
         <Box sx={{marginTop:'100px'}}>
             <Box>
                 {meetingList?.map((meeting,i)=>(
@@ -62,6 +65,7 @@ const ListMeeting = () => {
                 ))}
             </Box>
         </Box>
+        </>
     );
 };
 

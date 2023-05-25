@@ -3,11 +3,12 @@ import { Box } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import useSWR from 'swr';
 
 const ListMyMeeting = () => {
     
+    const { userno } = useParams();
     const [meetingList, setMeetingList] = useState();
     const navigate = useNavigate();
 
@@ -18,7 +19,7 @@ const ListMyMeeting = () => {
 
     useEffect(()=>{
         axios
-            .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${myData.userNo}`)
+            .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${userno}`)
             .then((response)=>{
                 console.log(response.data);
                 setMeetingList(response.data);
