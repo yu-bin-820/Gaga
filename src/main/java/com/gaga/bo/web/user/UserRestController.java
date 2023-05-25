@@ -1,5 +1,7 @@
 package com.gaga.bo.web.user;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -55,7 +57,9 @@ public class UserRestController {
 	
 	@GetMapping("/login")
 	public User getLoginUser(HttpSession session) throws Exception {
-		System.out.println("::: get/login");
+
+		System.out.println("::: get/login : " + (User)session.getAttribute("user"));
+		
 		return (User)session.getAttribute("user");
 	}
 	
@@ -64,17 +68,22 @@ public class UserRestController {
 									HttpSession session ) throws Exception{
 	
 		System.out.println("/rest/user/login : POST");
+		System.out.println("::"+user);
+		
 		//Business Logic
 		User dbUser=userService.getUserById(user.getUserId());
 
-		if( dbUser==null ) {
-		dbUser = new User();
+		if( dbUser!=null ) {
+			if( user.getPassword().equals(dbUser.getPassword())){
+				session.setAttribute("user", dbUser);
+			}
 		}
 		
 		if( user.getPassword().equals(dbUser.getPassword())){
 			session.setAttribute("user", dbUser);
 		}
 		System.out.println("::"+user);
+		System.out.println("::"+dbUser);		
 		return dbUser;
 		
 	}
@@ -184,6 +193,20 @@ public class UserRestController {
 	    session.setAttribute("user", user);
 	    return new ResponseEntity<>(user, HttpStatus.OK);
 	}
+	
+	@GetMapping("/list/grouptype/{groupType}/no/{groupNo}/state/{state}")
+	public List<User> getGroupMemberList(@PathVariable("groupType") int groupType,
+										@PathVariable("groupNo") int groupNo,
+										@PathVariable("state") int state) throws Exception{
+		
+		Map<String, Integer> map = new HashMap<>();
+		map.put("groupType", groupType);
+	    map.put("groupNo", groupNo);
+	    map.put("state", state);
+	    
+	    
+		return userService.getGroupMemberList(map);
+	} 
 
 	@PostMapping("/phoneAuth")
 	public Boolean phoneAuth(@RequestBody String tel, HttpSession session) {

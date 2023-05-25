@@ -10,6 +10,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -320,6 +321,13 @@ public class UserServiceImpl implements UserService {
 		return userInfo;
 	}
 
+
+	@Override
+	public List<User> getGroupMemberList(Map<String, Integer> map) throws Exception {
+		
+		return userDao.getGroupMemberList(map);
+	}
+
 	@Override			//네이버 핸드폰 인증을 위한 랜덤 난수 생성+문자 보내기 메소드
 	public String sendRandomSmsMessage(String tel) {
 		NaverSens message = new NaverSens();
@@ -334,6 +342,7 @@ public class UserServiceImpl implements UserService {
 	    message.send_msg(tel, numStr);
 
 	    return numStr;
+
 	}
 
 

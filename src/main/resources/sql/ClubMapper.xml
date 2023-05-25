@@ -155,10 +155,10 @@
 	</update>
 	
 	<!-- DELETE -->
-	<delete id="deleteClubMember" parameterType="int">
+	<delete id="deleteClubMember" parameterType="Map">
 	  DELETE 
 	  FROM members
-      WHERE member_no = #{memberNo:INTEGER}
+      WHERE club_no = #{clubNo:INTEGER} AND user_no = #{userNo:INTEGER}
 	</delete>
 	
 </mapper>

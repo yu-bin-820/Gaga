@@ -42,7 +42,7 @@ public interface ClubService {
 	public void updateClubMember(Map<String, String> map) throws Exception;
 	
 	//클럽 멤버 삭제
-	public void deleteClubMember(int memberNo) throws Exception;
+	public void deleteClubMember(Map<String, String> map) throws Exception;
 	
 	//카테고리관리 => 미팅에서 가져오기
 }

@@ -40,11 +40,13 @@ public interface ClubDao {
 	//INSERT
 	public void addClubMember(Map<String, String> map) throws Exception;
 	
+	//SELECT
+	//public L
 	//UPDATE
 	public void updateClubMember(Map<String, String> map) throws Exception;
 	
 	//DELETE
-	public void deleteClubMember(int memberNo) throws Exception;
+	public void deleteClubMember(Map<String, String> map) throws Exception;
 		
 	//카테고리 => 미팅에서 가져오기
 

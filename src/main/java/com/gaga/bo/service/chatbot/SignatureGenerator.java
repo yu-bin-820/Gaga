@@ -7,7 +7,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.stereotype.Service;
 
-//@Service
+@Service
 public class SignatureGenerator {
 
     public String generateSignature(String message, String secretKey) {

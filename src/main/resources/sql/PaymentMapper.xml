@@ -63,7 +63,7 @@
 	</select>
 	
 	<!-- SQL : SELECT -->
-	<select 	id="getPaymentByUserMeeting"  parameterType="int" resultType="java.lang.String" >
+	<select 	id="getPayNoByUserMeeting"  parameterType="int" resultType="java.lang.String" >
 	 	SELECT pay_no
 		FROM payments
 		WHERE user_no = #{userNo} AND meeting_no = #{meetingNo}
@@ -75,15 +75,6 @@
 	    FROM payments
 	    WHERE user_no = #{userNo}
 	</select>
-	
-	<!-- SQL : UPDATE 
-	<update id="updatePayment" parameterType="java.lang.String">
-		UPDATE payments
-	  	<set>
-	  		pay_state = 1
-	    </set>
-		WHERE pay_no = #{payNo}	  
-	</update>-->
 	
 	<update id="updatePayment" parameterType="int">
 	  UPDATE payments
