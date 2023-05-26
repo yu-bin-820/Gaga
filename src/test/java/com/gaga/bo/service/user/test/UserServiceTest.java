@@ -62,7 +62,7 @@ class UserServiceTest {
     	System.out.println("회원정보8번의 유저정보 겟 테스트"+user);
     }
     
-    //@Test    //테스트 완료
+    @Test    //테스트 완료
     public void getUserByIdTest() throws Exception{
     	String userId="user3";
     	

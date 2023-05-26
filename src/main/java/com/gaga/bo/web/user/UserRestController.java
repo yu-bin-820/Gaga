@@ -287,5 +287,14 @@ public class UserRestController {
 
 	    return false;
 	}
+	
+	@PostMapping(value = "/mailAuth")
+	public String mailConfirm(@RequestBody Map<String, String> body) throws Exception {
+	    String email = body.get("email");
+	    String code = userService.sendSimpleMessage(email);
+	    System.out.println("사용자에게 발송한 인증코드 ==> " + code);
+
+	    return code;
+	}
 
 }
