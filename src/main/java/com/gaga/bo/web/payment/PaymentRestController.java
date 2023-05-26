@@ -1,6 +1,7 @@
 package com.gaga.bo.web.payment;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,7 +20,7 @@ import com.gaga.bo.service.meeting.MeetingService;
 import com.gaga.bo.service.payment.PaymentService;
 
 @RestController
-@RequestMapping("/rest/payment")
+@RequestMapping("rest/payment")
 public class PaymentRestController {
 	
 	//Field
@@ -43,6 +44,10 @@ public class PaymentRestController {
 		
 		System.out.println("결제 내역 추가 Ctrl" + payment);
 		
+		/* 테스트 데이터
+		 * { "payNo": "imp_1234543231", "userNo": 11, "meetingNo": 4, "meetingName":
+		 * "meeting4", "payTime": "2023-05-25T14:31:52.039Z", "entryFee": 3000 }
+		 */
 		paymentService.addPayment(payment);
 				
 	}
@@ -55,13 +60,17 @@ public class PaymentRestController {
 		return paymentService.getPayment(payNo);
 		
 	}
-	
-	@PatchMapping("refund/{userNo}/{meetingNo}")
-	public void updatePayment(@RequestAttribute int userNo, @RequestAttribute int meetingNo) throws Exception{
+
+	@PatchMapping("refund")
+	public void updatePayment(@RequestBody Map<String, Integer> refund) throws Exception{
 		
-		System.out.println("환불시 결제 상태 변경 Ctrl");
+		System.out.println("환불시 결제번호 출력 Ctrl");
 		
-		paymentService.updatePayment(userNo, meetingNo);
+		String payNo = paymentService.getPayNoByUserMeeting(refund);
+		
+		System.out.println("결제번호는?" + payNo);
+		
+		paymentService.updatePayment(payNo);
 	}
 	
 	@GetMapping("list/{userNo}")
@@ -72,24 +81,8 @@ public class PaymentRestController {
 		return paymentService.getPaymentList(userNo);
 	}
 	
-	@GetMapping()
-	public String getPayNoByUserMeeting(@PathVariable int userNo, @PathVariable int meetingNo) throws Exception{
-		
-		System.out.println("모임, 유저번호로 결제번호 출력 Ctrl => 결제번호로 환불처리");
-		
-		return paymentService.getPayNoByUserMeeting(userNo, meetingNo);
-	}
-	
 		
 	//정산 	
-	@PatchMapping("updateAdjustment")
-	public void updateAdjustment(@RequestBody Meeting meeting) throws Exception{
-		
-		System.out.println("정산 정보 추가 Ctrl");
-		
-		paymentService.updateAdjustment(meeting);		
-	}
-	
 	@GetMapping("adjustment")
 	public List<Meeting> getAllAdjustmentList() throws Exception{
 		
@@ -107,7 +100,7 @@ public class PaymentRestController {
 		return paymentService.getAdjustmentList(userNo);
 	}
 	
-	@PatchMapping("adjutment")
+	@PatchMapping("adjustment")
 	public void updateAdjustmentState(@RequestBody Meeting meeting) throws Exception{
 		
 		System.out.println("정산 상태 변경 Ctrl");

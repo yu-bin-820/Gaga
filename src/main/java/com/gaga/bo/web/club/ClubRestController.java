@@ -54,7 +54,7 @@ public class ClubRestController {
 		
 	}
 	
-	@GetMapping("/list/create/{clubLeaderNo}")
+	@GetMapping("list/create/{clubLeaderNo}")
 	public List<Club> getCreateClubList(@PathVariable int clubLeaderNo) throws Exception{
 		
 		System.out.println("회원이 생성한 클럽 목록 조회 Ctrl");
@@ -71,7 +71,7 @@ public class ClubRestController {
 		return clubService.getSearchClubList(filter);
 	}
 	
-	@GetMapping("/list/join/{userNo}")
+	@GetMapping("list/join/{userNo}")
 	public List<Club> getMyClubList(@PathVariable int userNo) throws Exception{
 		
 		System.out.println("회원이 참여한 클럽 목록 조회 Ctrl");
@@ -79,7 +79,7 @@ public class ClubRestController {
 		return clubService.getMyClublist(userNo);
 	}
 	
-	@GetMapping("/list/nonUser/{mainCategoryNo}")
+	@GetMapping("list/nonuser/{mainCategoryNo}")
 	public List<Club> getMainClubList(@PathVariable int mainCategoryNo) throws Exception{
 		
 		System.out.println("비회원, 미인증 회원 메인화면 클럽 목록 Ctrl");
@@ -95,17 +95,18 @@ public class ClubRestController {
 		clubService.updateClub(club);
 	}
 	
-	@DeleteMapping("")
-	public void deleteClub(@RequestBody Club club) throws Exception{
+	@DeleteMapping("{clubNo}") //==> 외래키 조건 다시 확인하기
+	public void deleteClub(@PathVariable int clubNo) throws Exception{
 		
 		System.out.println("클럽 삭제 Ctrl");
 		
-		clubService.deleteClub(club.getClubNo());
+		clubService.updateParentClubNoToNull(clubNo);
+		clubService.deleteClub(clubNo);
 	}
 
 	//멤버관리
 	@PostMapping("member")
-	public void addClubMember(@RequestBody Map<String, String> member) throws Exception{
+	public void addClubMember(@RequestBody Map<String, Integer> member) throws Exception{
 		
 		System.out.println("클럽 참여 신청 Ctrl");
 		
@@ -113,7 +114,7 @@ public class ClubRestController {
 	}
 	
 	@PatchMapping("member")
-	public void updateClubMember(@RequestBody Map<String, String> member) throws Exception{
+	public void updateClubMember(@RequestBody Map<String, Integer> member) throws Exception{
 		
 		System.out.println("클럽 참여 신청 멤버 상태 변경 Ctrl");
 		
@@ -121,8 +122,8 @@ public class ClubRestController {
 	
 	}
 	
-	@DeleteMapping("member")
-	public void deleteClubMember(@RequestBody Map<String, String> member) throws Exception{
+	@PostMapping("member/delete")
+	public void deleteClubMember(@RequestBody Map<String, Integer> member) throws Exception{
 		
 		System.out.println("클럽 참여 멤버 제거 Ctrl");
 		

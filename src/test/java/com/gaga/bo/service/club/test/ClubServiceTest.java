@@ -159,9 +159,9 @@ public class ClubServiceTest {
 	//@Test
 	public void addClubMemberTest() throws Exception{
 		
-		Map<String, String> map = new HashMap<>();
-		map.put("userNo", "7");
-		map.put("clubNo", "7");
+		Map<String, Integer> map = new HashMap<>();
+		map.put("userNo", 7);
+		map.put("clubNo", 7);
 		
 		clubService.addClubMember(map);
 		
@@ -170,9 +170,9 @@ public class ClubServiceTest {
 	//@Test
 	public void updateClubMemberTest() throws Exception{
 		
-		Map<String, String> map = new HashMap<>();
-		map.put("clubNo", "7");
-		map.put("userNo", "7");
+		Map<String, Integer> map = new HashMap<>();
+		map.put("clubNo", 7);
+		map.put("userNo", 7);
 		
 		clubService.updateClubMember(map);
 		
@@ -181,9 +181,9 @@ public class ClubServiceTest {
 	//@Test
 	public void deleteClubMember() throws Exception{
 		
-		Map<String, String> map = new HashMap<>();
-		map.put("clubNo", "7");
-		map.put("userNo", "7");
+		Map<String, Integer> map = new HashMap<>();
+		map.put("clubNo", 7);
+		map.put("userNo", 7);
 		
 		clubService.deleteClubMember(map);
 	}

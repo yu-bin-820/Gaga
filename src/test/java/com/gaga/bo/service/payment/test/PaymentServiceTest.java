@@ -23,7 +23,9 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 public class PaymentServiceTest {
@@ -120,7 +122,7 @@ public class PaymentServiceTest {
     	System.out.println(userNo+"  "+meetingNo);
     	
     	//payState 0->1
-    	paymentService.updatePayment(userNo, meetingNo);
+    	//paymentService.updatePayment(userNo, meetingNo);
     	
     	//업데이트 후
    	
@@ -138,7 +140,7 @@ public class PaymentServiceTest {
     	meeting.setAdjustmentTime(Timestamp.valueOf(LocalDateTime.now()));
     	meeting.setAdjustmentState(0);
 
-    	paymentService.updateAdjustment(meeting);
+    	paymentService.updateAdjustmentState(meeting);
     	
     	System.out.println("업데이트 왜 안돼111"+meeting.toString());
     	meeting = meetingService.getMeeting(21);
