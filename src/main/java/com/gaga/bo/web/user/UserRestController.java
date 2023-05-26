@@ -1,5 +1,7 @@
 package com.gaga.bo.web.user;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,10 +70,11 @@ public class UserRestController {
 									HttpSession session ) throws Exception{
 	
 		System.out.println("/rest/user/login : POST");
-		System.out.println("::"+user);
+		System.out.println("::11"+user);
 		
 		//Business Logic
 		User dbUser=userService.getUserById(user.getUserId());
+		System.out.println("::22"+user);
 
 		if( dbUser!=null ) {
 			if( user.getPassword().equals(dbUser.getPassword())){
@@ -169,30 +172,73 @@ public class UserRestController {
         }
         
     }
-
+	
+//	@GetMapping("/naverLogin")
+//	public ResponseEntity<User> naverLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
+//	    String access_Token = userService.getAccessNaverToken(code);
+//	    Map<String, Object> userInfoMap = userService.getNaverUserInfo(access_Token);
+//	    System.out.println("usercontroller nlogin= "+userInfoMap);
+//
+//	    User user = new User();
+//
+//	    session.setAttribute("user", user);
+//	    return new ResponseEntity<>(user, HttpStatus.OK);
+//	}
+	
 	@GetMapping("/naverLogin")
-	public ResponseEntity<User> naverLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
+	public void naverLogin(@RequestParam(value = "code", required = false) String code, HttpSession session, HttpServletResponse response) throws Exception {
 	    String access_Token = userService.getAccessNaverToken(code);
 	    Map<String, Object> userInfoMap = userService.getNaverUserInfo(access_Token);
 	    System.out.println("usercontroller nlogin= "+userInfoMap);
 
 	    User user = new User();
 
+	    user.setUserId((String) userInfoMap.get("id"));
+	    user.setUserName((String) userInfoMap.get("name"));
+	    user.setNickName((String) userInfoMap.get("nickname"));
+	    user.setPhoneNo((String) userInfoMap.get("mobile"));
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	    LocalDate birthday = LocalDate.parse((String) userInfoMap.get("birthday"), formatter);
+	    user.setBirthday(birthday);
+//	    user.setGender(Integer.parseInt((String) userInfoMap.get("gender")));
+	    user.setGender((Integer) userInfoMap.get("gender"));
+	    
 	    session.setAttribute("user", user);
-	    return new ResponseEntity<>(user, HttpStatus.OK);
+	    System.out.println("네이버로그인 유저정보"+user);
+	    response.sendRedirect("http://192.168.0.159:5173");
 	}
 	
 	@GetMapping("/kakaoLogin")
-	public ResponseEntity<User> kakaoLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
+	public void kakaoLogin(@RequestParam(value = "code", required = false) String code, HttpSession session, HttpServletResponse response) throws Exception {
 	    String access_Token = userService.getAccessKakaoToken(code);
 	    Map<String, Object> userInfoMap = userService.getKakaoUserInfo(access_Token);
 	    System.out.println("usercontroller klogin= "+userInfoMap);
 
 	    User user = new User();
+	    
+	    user.setUserId((String) userInfoMap.get("email"));
+	    user.setUserName((String) userInfoMap.get("nickname"));
+	    user.setNickName((String) userInfoMap.get("nickname"));
+	    user.setPassword( (String) userInfoMap.get("email"));
+	    user.setPhoneNo("01051884079");
+	    user.setBirthday(LocalDate.now());
+	    user.setGender(1);
 
 	    session.setAttribute("user", user);
-	    return new ResponseEntity<>(user, HttpStatus.OK);
+	    response.sendRedirect("http://192.168.0.159:5173");
 	}
+//	
+//	@GetMapping("/kakaoLogin")
+//	public ResponseEntity<User> kakaoLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
+//	    String access_Token = userService.getAccessKakaoToken(code);
+//	    Map<String, Object> userInfoMap = userService.getKakaoUserInfo(access_Token);
+//	    System.out.println("usercontroller klogin= "+userInfoMap);
+//
+//	    User user = new User();
+//
+//	    session.setAttribute("user", user);
+//	    return new ResponseEntity<>(user, HttpStatus.OK);
+//	}
 	
 	@GetMapping("/list/grouptype/{groupType}/no/{groupNo}/state/{state}")
 	public List<User> getGroupMemberList(@PathVariable("groupType") int groupType,
