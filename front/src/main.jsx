@@ -27,6 +27,8 @@ import DirectChat from '@pages/communication/DirectChat.jsx';
 import MeetingChat from '@pages/communication/MeetingChat.jsx';
 import UnauthenticatedMain from '@pages/common/UnauthenticatedMain';
 import RootLayout from '@layouts/common/RootLayout.jsx';
+import GroupThumbnail from './components/common/GroupThumbnail';
+import Test from '@pages/communication/Test.jsx';
 
 const router = createBrowserRouter([
   {
@@ -99,6 +101,10 @@ const router = createBrowserRouter([
           {
             path: 'profile/:userno',
             element: <Profile />,
+          },
+          {
+            path: 'test',
+            element: <Test />,
           },
         ],
       },
