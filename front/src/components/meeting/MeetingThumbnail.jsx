@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Box, Stack, ThemeProvider, createTheme } from '@mui/system';
 import { Avatar, AvatarGroup, Chip, ImageListItem, Paper } from '@mui/material';
 import { styled } from '@mui/system';
+import PropTypes from 'prop-types';
+
 
 const StyledAvatarGroup = styled(AvatarGroup)({
   '& .MuiAvatar-root': {
@@ -11,7 +13,9 @@ const StyledAvatarGroup = styled(AvatarGroup)({
   },
 });
 
-const GroupThumbnail = () => {
+const MeetingThumbnail = ({ meeting }) => {
+  const { meetingName, meetingAddr, meetingMaxMemberNo} = meeting;
+
   return (
     <Box
       sx={{
@@ -39,17 +43,17 @@ const GroupThumbnail = () => {
           />
         </ImageListItem>
         <Box>
-          <Chip label="축구" size="small" />
+          <Chip label={meeting.filterTag} size="small" />
           <Box
             sx={{ color: 'text.primary', fontSize: 16, fontWeight: 'medium' }}
           >
-            모임 제목입니다
+            {meetingName}
           </Box>
 
           <Box
             sx={{ color: 'text.secondary', display: 'inline', fontSize: 12 }}
           >
-            서울시 강남구 강남대로
+            {meetingAddr}
           </Box>
           <Stack direction="row" spacing={2}>
             <StyledAvatarGroup max={6}>
@@ -81,7 +85,7 @@ const GroupThumbnail = () => {
                 fontSize: 14,
               }}
             >
-              17/20
+              17/{meetingMaxMemberNo}
             </Box>
           </Stack>
         </Box>
@@ -90,4 +94,15 @@ const GroupThumbnail = () => {
   );
 };
 
-export default GroupThumbnail;
+
+MeetingThumbnail.propTypes = {
+  meeting: PropTypes.shape({
+    filterTag: PropTypes.string.isRequired,
+    meetingName: PropTypes.string.isRequired,
+    meetingAddr: PropTypes.string.isRequired,
+    meetingMaxMemberNo: PropTypes.number.isRequired,
+  }).isRequired,
+};
+
+
+export default MeetingThumbnail;

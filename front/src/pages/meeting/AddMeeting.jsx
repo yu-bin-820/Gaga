@@ -2,6 +2,7 @@ import AddMeeting1 from '@components/meeting/AddMeeting1';
 import AddMeetingName from '@components/meeting/AddMeetingName';
 import ListCategory from '@components/meeting/ListCategory';
 import SelectMeetingType from '@components/meeting/SelectMeetingType';
+import AddMeetingMap from '@components/meeting/map/AddMeetingMap';
 import { useTheme } from '@emotion/react';
 import CommonTop from '@layouts/common/CommonTop';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
@@ -30,6 +31,8 @@ const AddMeeting = () => {
       case 2:
         return <AddMeetingName />;
       case 3:
+        return <AddMeetingMap />;
+      case 4:
         return <AddMeeting1 />;
       default:
         throw new Error('Unknown step');

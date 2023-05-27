@@ -5,6 +5,8 @@ import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import useSWR from 'swr';
+import MeetingThumbnail from './MeetingThumbnail';
+import GroupThumbnail from '@components/common/GroupThumbnail';
 
 const ListMyMeeting = () => {
     
@@ -52,9 +54,10 @@ const ListMyMeeting = () => {
     return (
         <Box>
             <Box>
+                meeting.state 0 : leader / 1 : 신청중 / 2: 확정
                 {meetingList?.map((meeting,i)=>(
                     <Box key={i}>
-                    <h5>{meeting.meetingName}</h5>
+                    <MeetingThumbnail meeting={meeting}/>
                     <h5>{meeting.state}</h5>
                     <Button 
                     id={meeting.meetingNo}

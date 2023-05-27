@@ -1,9 +1,44 @@
-import { Button } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Collapse, Divider, List, ListItemButton, ListItemIcon, ListItemText, Paper, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+import { styled } from '@mui/material/styles';
+import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
+
+const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
+    '& .MuiToggleButtonGroup-grouped': {
+      margin: theme.spacing(0.5),
+      border: 0,
+      '&.Mui-disabled': {
+        border: 0,
+      },
+      '&:not(:first-of-type)': {
+        borderRadius: theme.shape.borderRadius,
+      },
+      '&:first-of-type': {
+        borderRadius: theme.shape.borderRadius,
+      },
+    },
+    display: 'flex',
+    flexWrap: 'wrap',
+  }));
 
 const ListCategory = () => {
+
+    const {
+        mainCategoryNo,
+        filterTag,
+        onChangeField
+      } = useMeetingFormStore();
+
+    const [alignment, setAlignment] = React.useState('left');
+  
+    const handleAlignment = (event, newAlignment) => {
+      setAlignment(newAlignment);
+    };
+
     const [mainCategoryList, setMainCategoryList] = useState();
     const [subCategoryList, setSubCategoryList] = useState();
     const [open, setOpen] = useState(true);
@@ -36,37 +71,41 @@ const ListCategory = () => {
         setOpen(!open);
     };
 
+    const [expanded, setExpanded] = React.useState(false);
+
+    const handleChange = (panel) => (event, isExpanded) => {
+      setExpanded(isExpanded ? panel : false);
+    };
+
     return (
         <Box>
-            <Box>
-                {mainCategoryList?.map((mainCategory,i)=>(
-                    <Box key={i}>
-                    <Button
-                    id={mainCategory.mainCategoryNo}
-                    onClick={handleClick}>{mainCategory.mainCategoryName}</Button>
-                    <Box>
+          <Box>
+            {mainCategoryList?.map((mainCategory, i) => (
+              <Accordion 
+              key={i} 
+              expanded={expanded === i} 
+              onChange={handleChange(i)}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id={mainCategory.mainCategoryNo}>
+                  <Typography sx={{ width: '33%', flexShrink: 0 }}>{mainCategory.mainCategoryName}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <StyledToggleButtonGroup size="small" value={alignment} exclusive onChange={handleAlignment} aria-label="text alignment">
                     {subCategoryList?.map((subCategory, k) => {
-            if (subCategory.mainCategoryNo === mainCategory.mainCategoryNo) {
-              return (
-                <Box key={k}>
-                  <Button
-                    id={subCategory.tag}
-                    onClick={handleClick}
-                  >
-                    {subCategory.tag}
-                  </Button>
-                </Box>
-              );
-            }
-            return null;
-          })}
-                    </Box>
-                </Box>
-                    
-                ))}
-            </Box>
+                      if (subCategory.mainCategoryNo === mainCategory.mainCategoryNo) {
+                        return (
+                          <ToggleButton key={k} value={subCategory.tag} aria-label={subCategory.tag} onClick={handleClick}>
+                            {subCategory.tag}
+                          </ToggleButton>
+                        );
+                      }
+                    })}
+                  </StyledToggleButtonGroup>
+                </AccordionDetails>
+              </Accordion>
+            ))}
+          </Box>
         </Box>
-    );
-};
-
-export default ListCategory;
+      );
+    };
+    
+    export default ListCategory;
