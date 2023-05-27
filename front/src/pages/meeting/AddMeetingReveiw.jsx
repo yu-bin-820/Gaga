@@ -1,6 +1,6 @@
 import useInput from '@hooks/common/useInput';
-import { Button, TextField } from '@mui/material';
-import { Box } from '@mui/system';
+import { Button, Rating, TextField } from '@mui/material';
+import { Box, Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import React, { useCallback } from 'react';
@@ -50,6 +50,16 @@ const AddMeetingReveiw = () => {
       }, [meetingReview]);
       return (
         <Box sx={{ marginTop: '64px' }}>
+          <Stack spacing={1}>
+            <Rating 
+            name="meetingScore" 
+            defaultValue={5} 
+            precision={0.5}
+            onChange={onChangeMeetingReview}
+            required
+            value={meetingReview.meetingScore}
+            size="large" />
+          </Stack>
           <TextField
             fulWidth
             label="meetingScore"
