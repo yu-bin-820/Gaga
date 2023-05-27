@@ -75,6 +75,27 @@
 			jdbcType="LONGVARCHAR" />
 	</resultMap>
 
+	<resultMap id="reportResultMap" type="report">
+		<id column="report_no" property="reportNo" jdbcType="INTEGER" />
+		<result column="reporting_no" property="reportingNo"
+			jdbcType="INTEGER" />
+		<result column="reported_no" property="reportedNo"
+			jdbcType="INTEGER" />
+		<result column="report_category_no" property="reportCategoryNo"
+			jdbcType="INTEGER" />
+		<result column="report_content" property="reportContent"
+			jdbcType="VARCHAR" />
+		<result column="report_date" property="reportDate"
+			jdbcType="TIMESTAMP" />
+		<result column="report_img" property="reportImg"
+			jdbcType="VARCHAR" />
+		<result column="report_img2" property="reportImg2"
+			jdbcType="VARCHAR" />
+		<result column="report_img3" property="reportImg3"
+			jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+	</resultMap>
+
 	<!-- 관리자게시판 -->
 	<insert id="addNoticePost"
 		parameterType="com.gaga.bo.service.domain.NoticePost">
@@ -140,13 +161,15 @@
 	<select id="getBlackList" resultMap="userResultMap">
 		SELECT *
 		FROM users
-		WHERE blacklist != 0 AND user_no = #{userNo}
+		WHERE
+		blacklist != 0 AND user_no = #{userNo}
 	</select>
 
 	<select id="listBlackList" resultMap="userResultMap">
 		SELECT *
 		FROM users
-		WHERE blacklist != 0
+		WHERE
+		blacklist != 0
 	</select>
 
 	<insert id="deleteBlackList"
@@ -155,7 +178,26 @@
 		SET blacklist = 0
 		WHERE user_no = #{userNo}
 	</insert>
-	
-	<!-- 블랙리스트 CRUD -->
-	
+
+	<!-- 신고조회 CRUD -->
+
+	<select id="getReportAdmin" resultMap="reportResultMap">
+		SELECT
+		r.reported_no,
+		r.reporting_no, r.report_category_no, r.report_date,
+		r.report_content,
+		r.report_img, r.report_img2, r.report_img3, u.user_id, u.user_name
+		FROM reports r
+		INNER JOIN users u ON r.reported_no = u.user_no
+		WHERE
+		r.reported_no = #{reportedNo}
+	</select>
+
+	<select id="listReportAdmin" resultMap="reportResultMap">
+		SELECT
+		r.report_category_no, r.reported_no, r.report_date, u.user_id
+		FROM
+		reports r
+		INNER JOIN users u ON r.reported_no = u.user_no
+	</select>
 </mapper>

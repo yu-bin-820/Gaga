@@ -13,6 +13,8 @@ public class Report {
 	private String reportImg;
 	private String reportImg2;
 	private String reportImg3;
+	//신고게시판 화면용도
+	private String userId;
 	
 	///Constructor()
 	public Report() {
@@ -91,6 +93,14 @@ public class Report {
 		this.reportImg3 = reportImg3;
 	}
 	
+	//신고게시판용도
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
 	///toString()
 	@Override
 	public String toString() {
@@ -98,8 +108,6 @@ public class Report {
 				+ ", reportCategoryNo=" + reportCategoryNo + ", reportContent=" + reportContent + ", reportDate="
 				+ reportDate + ", reportImg=" + reportImg + ", reportImg2=" + reportImg2 + ", reportImg3=" + reportImg3
 				+ "]";
-	}
-	
-	
+	}	
 
 }

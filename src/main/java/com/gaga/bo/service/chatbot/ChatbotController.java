@@ -75,7 +75,7 @@ public class ChatbotController {
         if (isGptMode) {
             try {
                 // GPT 엔드포인트를 호출
-                String gptApiUrl = "http://localhost:8080/rest/gpt";
+                String gptApiUrl = "http://192.168.0.37:8080/rest/gpt";
                 JSONObject requestBodyJson = new JSONObject();
                 requestBodyJson.put("prompt", inputText);
                 HttpHeaders headers = new HttpHeaders();
