@@ -6,6 +6,8 @@ import useSWR from 'swr';
 import axios from 'axios';
 import React, { useCallback, useState } from 'react';
 import { Navigate } from 'react-router';
+import MainTop from '@layouts/common/MainTop';
+
 
 import Avatar from '@mui/material/Avatar';
 
@@ -139,6 +141,7 @@ const Login = () => {
   }
   return (
     <>
+      <MainTop />
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -216,6 +219,9 @@ const Login = () => {
               >
                 Sign In
               </Button>
+              <Button component={Link} to="/user/adduser">
+                회원가입
+              </Button><br/>
               <a
                 href="https://nid.naver.com/oauth2.0/authorize?client_id=FzMGbETEgw2xNeSUlIIF&response_type=code&redirect_uri=http://192.168.0.159:8080/rest/user/naverLogin&state=test"
                 onClick={handleNaverLogin}
@@ -239,8 +245,6 @@ const Login = () => {
                 />
               </a>
               <br />
-              <br />
-
               <TextField
                 label="전화번호"
                 name="tel"

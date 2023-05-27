@@ -27,6 +27,7 @@ import DirectChat from '@pages/communication/DirectChat.jsx';
 import MeetingChat from '@pages/communication/MeetingChat.jsx';
 import UnauthenticatedMain from '@pages/common/UnauthenticatedMain';
 import RootLayout from '@layouts/common/RootLayout.jsx';
+import AddUser from '@pages/user/AddUser.jsx';
 
 const router = createBrowserRouter([
   {
@@ -44,7 +45,9 @@ const router = createBrowserRouter([
       },
       {
         path: 'user',
-        children: [{ path: 'login', element: <Login /> }],
+        children: [
+          { path: 'login', element: <Login /> },
+          { path: 'adduser', element: <AddUser /> }],
       },
       {
         path: 'meeting',
