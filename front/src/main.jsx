@@ -29,6 +29,9 @@ import UnauthenticatedMain from '@pages/common/UnauthenticatedMain';
 import RootLayout from '@layouts/common/RootLayout.jsx';
 import AddUser from '@pages/user/AddUser.jsx';
 
+import GroupThumbnail from './components/common/GroupThumbnail';
+import Test from '@pages/communication/Test.jsx';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -102,6 +105,10 @@ const router = createBrowserRouter([
           {
             path: 'profile/:userno',
             element: <Profile />,
+          },
+          {
+            path: 'test',
+            element: <Test />,
           },
         ],
       },

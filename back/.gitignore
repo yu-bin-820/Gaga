@@ -4,7 +4,7 @@ node_modules/
 
 # 의존성 패키지
 /node_modules
-
+/uploads
 # 로그 파일
 /logs
 
