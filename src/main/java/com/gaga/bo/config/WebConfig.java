@@ -21,6 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
 	public void addCorsMappings(CorsRegistry registry) {
 							  //파라메터인 CorsRegistry클래스의 메소드를 통해 메타데이터를 설정한다.
 		registry.addMapping("/**") //Controller Mapping Path에 따라 CORS 허용/불허
+//				.allowedOrigins("http://127.0.0.1:5173")
 				.allowedOriginPatterns("http://*:[5173]") //ORIGIN URL에 따라 CORS 허용/불허
 				.allowedMethods("*") //Request 메소드에 따라 CORS 허용/불허 
 				.allowedHeaders("*") //헤더 설정에 따라 CORS 허용/불허
