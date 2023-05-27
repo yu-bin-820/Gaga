@@ -20,7 +20,8 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SettingsMenuTop from './SettingsMenuTop';
-
+import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
+import SendIcon from '@mui/icons-material/Send';
 const ProfileTop = () => {
   const navigate = useNavigate();
   const { userNo } = useParams();
@@ -29,28 +30,6 @@ const ProfileTop = () => {
     fetcher
   );
 
-  const [settingsMenuOpen, setSettingsMenuOpen] = useState(false);
-
-  const onClickLogOut = useCallback(async () => {
-    await axios
-      .delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/user/logout`, {
-        withCredentials: true,
-      })
-      .then(() => {
-        mutateMe();
-      });
-  }, [mutateMe]);
-
-  const onClickSettings = useCallback(() => {
-    // navigate('/settings');
-    setSettingsMenuOpen(true);
-  }, []);
-  const toggleSettingsMenu = useCallback(
-    (state) => () => {
-      setSettingsMenuOpen(state);
-    },
-    []
-  );
   if (!myData) {
     return <Navigate replace to="/" />;
   }
@@ -63,46 +42,31 @@ const ProfileTop = () => {
         sx={{ height: '50px' }}
       >
         <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Button onClick={onClickLogOut}>Logout</Button>
-            {myData?.userNo == userNo && (
-              <IconButton onClick={onClickSettings}>
-                <SettingsIcon />
-              </IconButton>
+          <Toolbar
+            disableGutters
+            sx={{ display: 'flex', justifyContent: 'space-between' }}
+          >
+            <IconButton
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
+              <ArrowBackIosNewIcon />
+            </IconButton>
+            {myData?.userNo != userNo && (
+              <>
+                <IconButton sx={{ marginLeft: 'auto' }}>
+                  <SendIcon />
+                </IconButton>
+
+                <IconButton sx={{ marginRight: '-10px' }}>
+                  <PrivacyTipIcon />
+                </IconButton>
+              </>
             )}
           </Toolbar>
         </Container>
       </AppBar>
-      <SwipeableDrawer
-        anchor="right"
-        open={settingsMenuOpen}
-        onClose={toggleSettingsMenu(false)}
-        onOpen={toggleSettingsMenu(true)}
-      >
-        <Box sx={{ minWidth: '300px' }}>
-          <List>
-            <ListItem>
-              <IconButton
-                onClick={() => {
-                  setSettingsMenuOpen(false);
-                }}
-              >
-                <ArrowBackIosNewIcon />
-              </IconButton>
-              <Typography>설정</Typography>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText primary="개인 정보 수정" />
-            </ListItem>
-            <Divider />
-          </List>
-        </Box>
-      </SwipeableDrawer>
     </Box>
   );
 };

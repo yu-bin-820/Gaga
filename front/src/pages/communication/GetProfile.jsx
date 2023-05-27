@@ -19,6 +19,7 @@ import useSWR from 'swr';
 import ProfileMeetingClubTabs from '@components/communication/ProfileMeetingClubTabs';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
+import { useParams } from 'react-router';
 
 const TeperatureLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -34,8 +35,15 @@ const TeperatureLinearProgress = styled(LinearProgress)(({ theme }) => ({
 }));
 
 const GetProfile = () => {
-  const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+  const [imageLoadingError, setImageLoadingError] = useState(false);
+
+  const handleImageError = useCallback(() => {
+    setImageLoadingError(true);
+  }, []);
+
+  const { userNo } = useParams();
+  const { data: userData, mutate: mutateUser } = useSWR(
+    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/userno/${userNo}`,
     fetcher
   );
   const boxRef = useRef();
@@ -53,7 +61,9 @@ const GetProfile = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
+  if (!userData) {
+    <>로딩중..</>;
+  }
   return (
     <>
       <ProfileTop />
@@ -75,17 +85,19 @@ const GetProfile = () => {
         >
           <Stack direction={'row'} spacing={10} alignItems={'center'}>
             <Avatar
-              alt={myData?.nickName}
+              alt={userData?.nickName}
               src={`http://${
                 import.meta.env.VITE_SPRING_HOST
-              }/upload_images/user/${myData?.profileImg}`}
+              }/upload_images/user/${userData?.profileImg}`}
               sx={{ width: 76, height: 76 }}
             />
             <Stack direction="column" spacing={0} alignItems="center">
               <Typography sx={{ fontSize: 15 }}>
-                {myData?.mainTitleNo}
+                {userData?.mainTitleNo}
               </Typography>
-              <Typography sx={{ fontSize: 20 }}>{myData?.nickName}</Typography>
+              <Typography sx={{ fontSize: 20 }}>
+                {userData?.nickName}
+              </Typography>
             </Stack>
           </Stack>
         </Box>
@@ -100,9 +112,9 @@ const GetProfile = () => {
         >
           <TeperatureLinearProgress
             variant="determinate"
-            value={myData?.temperature * 1.369}
+            value={userData?.temperature * 1.369}
           />
-          <Typography>{myData?.temperature}°C</Typography>
+          <Typography>{userData?.temperature}°C</Typography>
         </Box>
         <Stack
           direction={'row'}
@@ -115,10 +127,7 @@ const GetProfile = () => {
             alignItems: 'center',
           }}
         >
-          <Typography>{myData?.userIntro}</Typography>
-          <IconButton sx={{ marginLeft: 'auto' }}>
-            <EditNoteIcon />
-          </IconButton>
+          <Typography>{userData?.userIntro}</Typography>
         </Stack>
         <Stack
           direction={'row'}
@@ -132,9 +141,9 @@ const GetProfile = () => {
             alignItems: 'center',
           }}
         >
-          {myData?.filterTag && <Chip label={myData?.filterTag} />}
-          {myData?.filterTag2 && <Chip label={myData?.filterTag2} />}
-          {myData?.filterTag3 && <Chip label={myData?.filterTag3} />}
+          {userData?.filterTag && <Chip label={userData?.filterTag} />}
+          {userData?.filterTag2 && <Chip label={userData?.filterTag2} />}
+          {userData?.filterTag3 && <Chip label={userData?.filterTag3} />}
         </Stack>
 
         <Box
@@ -145,40 +154,108 @@ const GetProfile = () => {
         >
           <ImageList sx={{ width: 350, height: 100 }} cols={3} rowHeight={100}>
             <ImageListItem>
-              <img
-                src={`http://${
-                  import.meta.env.VITE_SPRING_HOST
-                }/upload_images/user/${myData?.activityImg}`}
-                alt={`http://${
-                  import.meta.env.VITE_SPRING_HOST
-                }/upload_images/common/no_image.jpg`}
-                loading="lazy"
-              />
+              {!imageLoadingError ? (
+                <img
+                  src={`http://${
+                    import.meta.env.VITE_SPRING_HOST
+                  }/upload_images/user/${userData?.activityImg}`}
+                  alt="noImg"
+                  loading="lazy"
+                  onError={handleImageError}
+                />
+              ) : (
+                <Box
+                  sx={{
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'grey',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: '1.2rem',
+                      color: 'white',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    No Img
+                  </Typography>
+                </Box>
+              )}
             </ImageListItem>
             <ImageListItem>
-              <img
-                src={`http://${
-                  import.meta.env.VITE_SPRING_HOST
-                }/upload_images/user/${myData?.activityImg2}`}
-                alt="noImg"
-                loading="lazy"
-              />
+              {!imageLoadingError ? (
+                <img
+                  src={`http://${
+                    import.meta.env.VITE_SPRING_HOST
+                  }/upload_images/user/${userData?.activityImg2}`}
+                  alt="noImg"
+                  loading="lazy"
+                  onError={handleImageError}
+                />
+              ) : (
+                <Box
+                  sx={{
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'grey',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: '1.2rem',
+                      color: 'white',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    No Img
+                  </Typography>
+                </Box>
+              )}
             </ImageListItem>
             <ImageListItem>
-              <img
-                src={`http://${
-                  import.meta.env.VITE_SPRING_HOST
-                }/upload_images/user/${myData?.activityImg3}`}
-                alt="noImg"
-                loading="lazy"
-              />
+              {!imageLoadingError ? (
+                <img
+                  src={`http://${
+                    import.meta.env.VITE_SPRING_HOST
+                  }/upload_images/user/${userData?.activityImg3}`}
+                  alt="noImg"
+                  loading="lazy"
+                  onError={handleImageError}
+                />
+              ) : (
+                <Box
+                  sx={{
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'grey',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: '1.2rem',
+                      color: 'white',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    No Img
+                  </Typography>
+                </Box>
+              )}
             </ImageListItem>
           </ImageList>
         </Box>
         <ProfileMeetingClubTabs />
       </Box>
-
-      <MainBottomNav pageName={'profile'} />
     </>
   );
 };

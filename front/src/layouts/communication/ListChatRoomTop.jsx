@@ -6,7 +6,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Button, IconButton, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/system';
-const ChatRoomListTop = () => {
+const ListChatRoomTop = () => {
   const navigate = useNavigate();
   return (
     <AppBar
@@ -26,4 +26,4 @@ const ChatRoomListTop = () => {
   );
 };
 
-export default ChatRoomListTop;
+export default ListChatRoomTop;

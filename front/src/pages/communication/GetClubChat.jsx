@@ -4,7 +4,7 @@ import fetcher from '@utils/fetcher';
 import React from 'react';
 import { Button, Input, MessageBox, MessageList } from 'react-chat-elements';
 import useSWR from 'swr';
-const ClubChat = () => {
+const GetClubChat = () => {
   const { chatRoomEntryNo, chatType, setField } = useCommunityStore();
 
   const { data: myData, mutate: mutateMe } = useSWR(
@@ -37,4 +37,4 @@ const ClubChat = () => {
   );
 };
 
-export default ClubChat;
+export default GetClubChat;
