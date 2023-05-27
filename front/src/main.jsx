@@ -16,12 +16,12 @@ import UpdateMeeting from '@pages/meeting/UpdateMeeting.jsx';
 import AddMeeting from '@pages/meeting/AddMeeting.jsx';
 import AddMeetingMember from '@pages/meeting/AddMeetingMember.jsx';
 import Login from '@pages/user/Login.jsx';
-import Profile from '@pages/communication/Profile.jsx';
+import GetProfile from '@pages/communication/GetProfile.jsx';
 import ListMeetingMember from '@pages/meeting/ListMeetingMember.jsx';
 import UpdateMeetingSuccess from '@pages/meeting/UpdateMeetingSuccess.jsx';
 import AddMeetingReveiw from '@pages/meeting/AddMeetingReveiw.jsx';
 import UpdateMeetingReview from '@pages/meeting/UpdateMeetingReview.jsx';
-import ChatList from '@pages/communication/ChatRoomList.jsx';
+import ListChatRoom from '@pages/communication/ListChatRoom.jsx';
 import ClubChat from '@pages/communication/ClubChat.jsx';
 import DirectChat from '@pages/communication/DirectChat.jsx';
 import MeetingChat from '@pages/communication/MeetingChat.jsx';
@@ -29,6 +29,8 @@ import UnauthenticatedMain from '@pages/common/UnauthenticatedMain';
 import RootLayout from '@layouts/common/RootLayout.jsx';
 import GroupThumbnail from './components/common/GroupThumbnail';
 import Test from '@pages/communication/Test.jsx';
+import GetReport from '@pages/communication/GetReport.jsx';
+import AddReport from '@pages/communication/AddReport.jsx';
 
 const router = createBrowserRouter([
   {
@@ -99,12 +101,20 @@ const router = createBrowserRouter([
         path: 'community',
         children: [
           {
-            path: 'profile/:userno',
-            element: <Profile />,
+            path: 'profile/:userNo',
+            element: <GetProfile />,
           },
           {
             path: 'test',
             element: <Test />,
+          },
+          {
+            path: 'report/reportno/:reportNo',
+            element: <GetReport />,
+          },
+          {
+            path: 'report/add/',
+            element: <AddReport />,
           },
         ],
       },
@@ -113,7 +123,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'list',
-            element: <ChatList />,
+            element: <ListChatRoom />,
           },
           {
             path: 'club/message/list',

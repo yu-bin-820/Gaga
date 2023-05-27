@@ -14,7 +14,7 @@ import CommonTop from '@layouts/common/CommonTop';
 import MainBottomNav from '@layouts/common/MainBottomNav';
 import ChatRoomListTop from '@layouts/communication/ChatRoomListTop';
 
-export default function ChatList() {
+export default function ListChatRoom() {
   const navigate = useNavigate();
 
   const { chatRoomEntryNo, chatType, setField } = useCommunityStore();
