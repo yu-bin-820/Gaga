@@ -98,20 +98,16 @@ public class UserRestController {
 		System.out.println("/rest/user/logout : DELETE 로그아웃 요청옴");
 		
 //		session.removeAttribute("user");
-		session.removeAttribute("access_token"); // 네이버 로그인 토큰 정보 제거
-		System.out.println("1");
+		session.removeAttribute("access_token"); 	// 네이버/카카오 로그인 토큰 정보 제거
 		session.invalidate();
-		System.out.println("2");
-	    // 쿠키 삭제
-	    Cookie[] cookies = request.getCookies();
+	    Cookie[] cookies = request.getCookies();	// 쿠키 삭제
 	    if (cookies != null) {
 	        for (Cookie cookie : cookies) {
 	            cookie.setMaxAge(0);
 	            response.addCookie(cookie);
 	        }
 	    }
-	    System.out.println("3");
-		
+	    System.out.println("로그아웃 완료");
 		// 성공 메시지를 반환합니다.
 		return new ResponseEntity<>("로그아웃 완료!", HttpStatus.OK);
 	}
@@ -126,17 +122,20 @@ public class UserRestController {
 	}
 	
 	@PostMapping("/addUser")
-	public ResponseEntity<User> addUser(@RequestBody User user) throws Exception {
+	public ResponseEntity<User> addUser(@RequestBody User user, HttpSession session) throws Exception {
 		System.out.println("/resr/user/addUser : POST");
 		String userId = user.getUserId();
-		
+		System.out.println("회원가입 요청온 유저정보: "+user);
 		// 아이디 중복 확인
-	    boolean isDuplicate = userService.checkDuplication(userId);
+	    boolean isDuplicate = userService.checkDuplication(user.getUserId());
 	    if (isDuplicate) {
 	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	    }
 		// Business Logic
 		userService.addUser(user);
+		
+		// 회원 가입 후 자동 로그인 처리를 위해 세션에 사용자 정보 저장
+	    session.setAttribute("user", user);
 
 		// 일반적으로 새로 생성된 리소스를 반환합니다.
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
@@ -288,7 +287,7 @@ public class UserRestController {
 	    return false;
 	}
 	
-	@PostMapping(value = "/mailAuth")
+	@PostMapping(value = "/mailAuth") 		//이메일 인증, 회원 아이디(이메일)에 대해 인증 코드 발송
 	public String mailConfirm(@RequestBody Map<String, String> body) throws Exception {
 	    String email = body.get("email");
 	    String code = userService.sendSimpleMessage(email);
