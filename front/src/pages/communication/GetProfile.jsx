@@ -19,9 +19,10 @@ import useSWR from 'swr';
 import ProfileMeetingClubTabs from '@components/communication/ProfileMeetingClubTabs';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import AddUserReviewDialog from '@components/communication/AddUserReviewDialog';
 
-const TeperatureLinearProgress = styled(LinearProgress)(({ theme }) => ({
+const TemperatureLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
   borderRadius: 5,
   [`&.${linearProgressClasses.colorPrimary}`]: {
@@ -35,17 +36,36 @@ const TeperatureLinearProgress = styled(LinearProgress)(({ theme }) => ({
 }));
 
 const GetProfile = () => {
+  const navigate = useNavigate();
+
   const [imageLoadingError, setImageLoadingError] = useState(false);
+  const [addUserReviewDialogOpen, setAddUserReviewDialogOpen] = useState(false);
 
   const handleImageError = useCallback(() => {
     setImageLoadingError(true);
   }, []);
 
   const { userNo } = useParams();
+
+  const { data: myData, mutate: mutateMe } = useSWR(
+    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+  );
+
   const { data: userData, mutate: mutateUser } = useSWR(
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/userno/${userNo}`,
     fetcher
   );
+
+  const { data: userReviewData, mutate: mutateUserReview } = useSWR(
+    `http://${
+      import.meta.env.VITE_SPRING_HOST
+    }/rest/community/userreview/reviewerno/${
+      myData?.userNo
+    }/reviewedno/${userNo}`,
+    fetcher
+  );
+
   const boxRef = useRef();
 
   useEffect(() => {
@@ -61,7 +81,20 @@ const GetProfile = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-  if (!userData) {
+
+  const onClickTemperature = useCallback(() => {
+    if (userNo === myData?.userNo) {
+      () => {};
+    } else {
+      if (userReviewData) {
+        alert('이미 평가한 회원입니다!');
+      } else {
+        setAddUserReviewDialogOpen(true);
+      }
+    }
+  }, [userReviewData, myData, userNo]);
+
+  if (!userData || !myData) {
     <>로딩중..</>;
   }
   return (
@@ -101,21 +134,23 @@ const GetProfile = () => {
             </Stack>
           </Stack>
         </Box>
-        <Box
-          sx={{
-            marginTop: '30px',
-            marginBottom: '30px',
-            marginLeft: '30px',
-            marginRight: '30px',
-            justifyContent: 'center',
-          }}
-        >
-          <TeperatureLinearProgress
-            variant="determinate"
-            value={userData?.temperature * 1.369}
-          />
-          <Typography>{userData?.temperature}°C</Typography>
-        </Box>
+        <div onClick={onClickTemperature}>
+          <Box
+            sx={{
+              marginTop: '30px',
+              marginBottom: '30px',
+              marginLeft: '30px',
+              marginRight: '30px',
+              justifyContent: 'center',
+            }}
+          >
+            <TemperatureLinearProgress
+              variant="determinate"
+              value={userData?.temperature * 1.369}
+            />
+            <Typography>{userData?.temperature}°C</Typography>
+          </Box>
+        </div>
         <Stack
           direction={'row'}
           sx={{
@@ -152,7 +187,11 @@ const GetProfile = () => {
             justifyContent: 'center',
           }}
         >
-          <ImageList sx={{ width: 350, height: 100 }} cols={3} rowHeight={100}>
+          <ImageList
+            sx={{ width: 350, height: 100, ooverflow: 'hidden' }}
+            cols={3}
+            rowHeight={100}
+          >
             <ImageListItem>
               {!imageLoadingError ? (
                 <img
@@ -256,6 +295,13 @@ const GetProfile = () => {
         </Box>
         <ProfileMeetingClubTabs />
       </Box>
+      {/* --------------------- Dialogs ----------------------------------- */}
+      <AddUserReviewDialog
+        open={addUserReviewDialogOpen}
+        setOpen={setAddUserReviewDialogOpen}
+        reviewerNo={myData?.userNo}
+        reviewedNo={userNo}
+      />
     </>
   );
 };

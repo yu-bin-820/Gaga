@@ -44,7 +44,7 @@ const ListReportCategory = () => {
         </ListItem>
         <Divider />
         {reportCategry.map((category, i) => (
-          <>
+          <div key={i}>
             <ListItem key={i} onClick={onClickCategory} data-value={i + 1}>
               <Stack
                 direction={'row'}
@@ -70,7 +70,7 @@ const ListReportCategory = () => {
               </Stack>
             </ListItem>
             <Divider />
-          </>
+          </div>
         ))}
       </List>
     </Box>

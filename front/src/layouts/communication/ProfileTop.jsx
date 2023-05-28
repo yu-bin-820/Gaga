@@ -31,10 +31,20 @@ const ProfileTop = ({ userNo }) => {
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+  const { data: reportData, mutate: mutateReport } = useSWR(
+    `http://${
+      import.meta.env.VITE_SPRING_HOST
+    }/rest/community/report/reportingno/${myData?.userNo}/reportedno/${userNo}`,
+    fetcher
+  );
 
   const onClickReport = useCallback(() => {
-    navigate(`/community/report/add/category/reportedno/${userNo}`);
-  }, [navigate]);
+    if (reportData) {
+      alert('이미 신고한 회원입니다!');
+    } else {
+      navigate(`/community/report/add/category/reportedno/${userNo}`);
+    }
+  }, [navigate, reportData, userNo]);
   if (!myData) {
     return <Navigate replace to="/" />;
   }
