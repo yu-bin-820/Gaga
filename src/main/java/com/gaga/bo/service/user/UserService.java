@@ -1,9 +1,13 @@
 package com.gaga.bo.service.user;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,5 +42,12 @@ public interface UserService {
 	public List<User> getGroupMemberList(Map<String, Integer> map) throws Exception;
 
 	public String sendRandomSmsMessage(String tel);
+	
+	public MimeMessage creatMessage(String to) throws MessagingException, UnsupportedEncodingException;
+    // 랜덤 인증코드 생성
+    public String createKey();
+    // 메일 발송
+    public String sendSimpleMessage(String to) throws Exception;
+
 
 }
