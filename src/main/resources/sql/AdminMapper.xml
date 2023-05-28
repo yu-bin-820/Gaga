@@ -179,7 +179,7 @@
 		WHERE user_no = #{userNo}
 	</insert>
 
-	<!-- 신고조회 CRUD -->
+	<!--  신고조회 CRUD--> 
 
 	<select id="getReportAdmin" resultMap="reportResultMap">
 		SELECT
