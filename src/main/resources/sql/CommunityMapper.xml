@@ -37,7 +37,7 @@
 	  <insert id="addReport" parameterType="com.gaga.bo.service.domain.Report">
 	    INSERT INTO reports (reporting_no, reported_no, report_category_no, report_content, report_date, report_img, report_img2, report_img3)
 	    VALUES (#{reportingNo:INTEGER}, #{reportedNo:INTEGER}, #{reportCategoryNo:INTEGER},
-	            #{reportContent:VARCHAR}, #{reportDate:TIMESTAMP}, #{reportImg:VARCHAR},
+	            #{reportContent:VARCHAR}, now(), #{reportImg:VARCHAR},
 	            #{reportImg2:VARCHAR}, #{reportImg3:VARCHAR})
 	  </insert>
 	  
@@ -55,6 +55,24 @@
             report_img3
         FROM reports
         WHERE report_no = #{reportNo}
+  	</select>
+  	<!-- SelectOneQuery -->
+  	<select id="getReportByUserNo" parameterType="report" resultMap="reportResultMap">
+  	  	SELECT 
+            report_no,
+            reporting_no,
+            reported_no,
+            report_category_no,
+            report_content,
+            report_date,
+            report_img,
+            report_img2,
+            report_img3
+        FROM reports
+        <where>
+      	  reporting_no = #{reportingNo}
+      	  AND reported_no = #{reportedNo}
+        </where>
   	</select>
 	  <!-- SelectListQuery -->
 		<select id="getReportList" parameterType="user" resultMap="reportResultMap">
