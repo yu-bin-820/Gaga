@@ -38,14 +38,12 @@
 	<!-- SQL : INSERT -->
 	<insert id="addClub" parameterType="club">
 	  INSERT 
-	  INTO clubs (club_name, club_intro, club_leader_no, club_max_member_no,
-	    club_reg_date, club_state, club_img, club_region, filter_gender, filter_min_age, 
-	    filter_max_age, filter_tag, main_category_no)
+	  INTO clubs (club_name, club_intro, club_leader_no, club_max_member_no, club_state,
+	    club_img, club_region, filter_gender, filter_min_age, filter_max_age, filter_tag, main_category_no)
 	  VALUES 
 	   (#{clubName:VARCHAR}, #{clubIntro:VARCHAR}, #{clubLeaderNo:INTEGER}, #{clubMaxMemberNo:INTEGER},
-	    #{clubRegDate:TIMESTAMP}, #{clubState:INTEGER}, #{clubImg:VARCHAR}, #{clubRegion:VARCHAR},
-	    #{filterGender:INTEGER}, #{filterMinAge:INTEGER}, #{filterMaxAge:INTEGER}, #{filterTag:VARCHAR},
-	    #{mainCategoryNo:INTEGER})
+	   	#{clubState:INTEGER}, #{clubImg:VARCHAR}, #{clubRegion:VARCHAR}, #{filterGender:INTEGER}, 
+	   	#{filterMinAge:INTEGER}, #{filterMaxAge:INTEGER}, #{filterTag:VARCHAR}, #{mainCategoryNo:INTEGER})
 	</insert>
 	
 	<!-- SELECT ONE -->
@@ -130,6 +128,13 @@
 		WHERE club_no = #{clubNo:INTEGER}
 	</update>
 	
+	<!-- UPDATE -->
+	<update id="updateParentClubNoToNull" parameterType="int">
+	  UPDATE meetings
+	  SET parent_club_no = NULL
+	  WHERE parent_club_no = #{clubNo:INTEGER}
+	</update>
+	
 	<!-- DELETE -->
 	<delete id="deleteClub" parameterType="int">
 		DELETE FROM clubs
@@ -148,7 +153,7 @@
 	  UPDATE members
 	  	<set>
 	  	    state = 2, 
-	  	    confirmed_date = NOW()
+	  	    confirmed_time = NOW()
 	  	</set>
 
       WHERE club_no = #{clubNo:INTEGER} AND user_no = #{userNo:INTEGER}

@@ -1,6 +1,7 @@
 package com.gaga.bo.service.payment;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -19,13 +20,13 @@ public interface PaymentDao {
 	public Payment getPayment(String payNo) throws Exception;
 	
 	//SELECT ONE
-	public String getPayNoByUserMeeting(int userNo, int meetingNo) throws Exception;
+	public String getPayNoByUserMeeting(Map<String, Integer> refund) throws Exception;
 	
 	//SELECT LIST
 	public List<Payment> getPaymentList(int userNo) throws Exception;
 	
 	//UPDATE
-	public void updatePayment(int userNo, int meetingNo) throws Exception;
+	public void updatePayment(String payNo) throws Exception;
 	
 	//정산
 	//SELECT LIST 정산정보 전체 목록 조회(이후 상태별 조회)
@@ -33,12 +34,8 @@ public interface PaymentDao {
 	
 	//SELECT LIST 회원별 정산 목록 조회
 	public List<Meeting> getAdjustmentList(int userNo) throws Exception;
-	
-	//SELECT LIST 
-	//UPDATE time, state, bankName, accountNo
-	public void updateAdjustment(Meeting meeting) throws Exception;
-	
-	//UPDATE 정산상태 변경  state 2->1
+
+	//UPDATE 정산상태 변경 0:정산대기 1:정산성공 2:정산실패
 	public void updateAdjustmentState(Meeting meeting) throws Exception;
 	
 	//멤버 수 출력

@@ -33,20 +33,22 @@ public interface ClubDao {
 	//UPDATE 
 	public void updateClub(Club club) throws Exception;
 	
+	//UPDATE
+	public void updateParentClubNoToNull(int clubNo) throws Exception;
+	
 	//DELETE
 	public void deleteClub(int clubNo) throws Exception;
-	
+
 	//멤버관리
 	//INSERT
-	public void addClubMember(Map<String, String> map) throws Exception;
+	public void addClubMember(Map<String, Integer> map) throws Exception;
 	
 	//SELECT
-	//public L
 	//UPDATE
-	public void updateClubMember(Map<String, String> map) throws Exception;
+	public void updateClubMember(Map<String, Integer> map) throws Exception;
 	
 	//DELETE
-	public void deleteClubMember(Map<String, String> map) throws Exception;
+	public void deleteClubMember(Map<String, Integer> map) throws Exception;
 		
 	//카테고리 => 미팅에서 가져오기
 

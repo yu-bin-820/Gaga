@@ -89,6 +89,15 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
+	public void updateParentClubNoToNull(int clubNo) throws Exception {
+		
+		System.out.println("부모클럽번호 수정 서비스");
+		
+		clubDao.updateParentClubNoToNull(clubNo);
+		
+	}
+
+	@Override
 	public void deleteClub(int clubNo) throws Exception {
 		
 		System.out.println("클럽 삭제 서비스");
@@ -99,7 +108,7 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
-	public void addClubMember(Map<String, String> map) throws Exception {
+	public void addClubMember(Map<String, Integer> map) throws Exception {
 		
 		System.out.println("클럽 참여 신청 서비스");
 		// TODO Auto-generated method stub
@@ -108,7 +117,7 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
-	public void updateClubMember(Map<String, String> map) throws Exception {
+	public void updateClubMember(Map<String, Integer> map) throws Exception {
 		
 		System.out.println("클럽 참여 신청 멤버 상태 변경 서비스");
 		// TODO Auto-generated method stub
@@ -117,7 +126,7 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
-	public void deleteClubMember(Map<String, String> map) throws Exception {
+	public void deleteClubMember(Map<String, Integer> map) throws Exception {
 		
 		System.out.println("클럽 참여 멤버 제거 서비스");
 		// TODO Auto-generated method stub
