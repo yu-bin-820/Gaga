@@ -22,14 +22,19 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import SettingsMenuTop from './SettingsMenuTop';
 import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
 import SendIcon from '@mui/icons-material/Send';
-const ProfileTop = () => {
+import PropTypes from 'prop-types';
+
+const ProfileTop = ({ userNo }) => {
   const navigate = useNavigate();
-  const { userNo } = useParams();
+
   const { data: myData, mutate: mutateMe } = useSWR(
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
+  const onClickReport = useCallback(() => {
+    navigate(`/community/report/add/category/reportedno/${userNo}`);
+  }, [navigate]);
   if (!myData) {
     return <Navigate replace to="/" />;
   }
@@ -59,7 +64,10 @@ const ProfileTop = () => {
                   <SendIcon />
                 </IconButton>
 
-                <IconButton sx={{ marginRight: '-10px' }}>
+                <IconButton
+                  onClick={onClickReport}
+                  sx={{ marginRight: '-10px' }}
+                >
                   <PrivacyTipIcon />
                 </IconButton>
               </>
@@ -70,5 +78,7 @@ const ProfileTop = () => {
     </Box>
   );
 };
-
+ProfileTop.propTypes = {
+  userNo: PropTypes.number,
+};
 export default ProfileTop;

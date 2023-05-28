@@ -124,7 +124,7 @@ const GetMeetingChat = () => {
   return (
     <div ref={boxRef}>
       <GetChatTop
-        groupType={1}
+        groupType={2}
         groupNo={chatRoomEntryNo}
         groupLeader={chatRoomLeader}
       />

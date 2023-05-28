@@ -66,7 +66,7 @@ const GetProfile = () => {
   }
   return (
     <>
-      <ProfileTop />
+      <ProfileTop userNo={userNo} />
       <Box
         sx={{
           marginTop: '64px',
@@ -93,7 +93,7 @@ const GetProfile = () => {
             />
             <Stack direction="column" spacing={0} alignItems="center">
               <Typography sx={{ fontSize: 15 }}>
-                {userData?.mainTitleNo}
+                {userData?.mainTitleName}
               </Typography>
               <Typography sx={{ fontSize: 20 }}>
                 {userData?.nickName}

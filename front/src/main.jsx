@@ -34,6 +34,8 @@ import Test from '@pages/communication/Test.jsx';
 import GetReport from '@pages/communication/GetReport.jsx';
 import AddReport from '@pages/communication/AddReport.jsx';
 import GetProfile from '@pages/communication/GetProfile.jsx';
+import CommonTop from '@layouts/common/CommonTop.jsx';
+import ListReportCategory from '@pages/communication/ListReportCategory.jsx';
 
 const router = createBrowserRouter([
   {
@@ -132,8 +134,18 @@ const router = createBrowserRouter([
             element: <GetReport />,
           },
           {
-            path: 'report/add/',
-            element: <AddReport />,
+            path: 'report/add',
+            element: <CommonTop pageName="회원 신고하기" />,
+            children: [
+              {
+                path: 'category/reportedno/:reportedNo',
+                element: <ListReportCategory />,
+              },
+              {
+                path: 'categoryno/:categoryNo/reportedno/:reportedNo',
+                element: <AddReport />,
+              },
+            ],
           },
         ],
       },
