@@ -124,13 +124,43 @@ router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
       where: { user_no: req.params.userNo },
     });
 
-    const ownedClubs = await user.getOwnedClub(); // getOwnedClub 호출
+    const ownedClubs = await user.getOwnedClub({
+      include: [
+        {
+          model: User,
+          attributes: ['user_no', 'nick_name', 'profile_img'],
+          as: 'ClubLeader',
+        },
+      ],
+    }); // getOwnedClub 호출
     const joinedClubs = await user.getClubs({
       through: { where: { state: 2 } },
+      include: [
+        {
+          model: User,
+          attributes: ['user_no', 'nick_name', 'profile_img'],
+          as: 'ClubLeader',
+        },
+      ],
     });
-    const ownedMeetings = await user.getOwnedMeeting(); // getOwnedClub 호출
+    const ownedMeetings = await user.getOwnedMeeting({
+      include: [
+        {
+          model: User,
+          attributes: ['user_no', 'nick_name', 'profile_img'],
+          as: 'MeetingLeader',
+        },
+      ],
+    }); // getOwnedClub 호출
     const joinedMeetings = await user.getMeetings({
       through: { where: { state: 2 } },
+      include: [
+        {
+          model: User,
+          attributes: ['user_no', 'nick_name', 'profile_img'],
+          as: 'MeetingLeader',
+        },
+      ],
     });
     const unsortedGroups = [
       ...ownedClubs,

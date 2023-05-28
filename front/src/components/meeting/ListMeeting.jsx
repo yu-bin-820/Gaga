@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import fetcher from "@utils/fetcher";
 import axios from "axios";
@@ -8,6 +8,8 @@ import { useNavigate } from "react-router";
 import useSWR from "swr";
 
 const ListMeeting = () => {
+  const [latitude, setLatitude] = useState();
+  const [longtitude, setLongtitude] = useState();
   const [meetingList, setMeetingList] = useState();
   const navigate = useNavigate();
 
@@ -15,6 +17,24 @@ const ListMeeting = () => {
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setLatitude(latitude);
+          setLongtitude(longitude);
+        },
+        (err) => {
+          console.log(err.message);
+        }
+      );
+    } else {
+      console.log("geolocation을 사용할 수 없어요..");
+    }
+  }, []);
 
   useEffect(() => {
     const data = {
@@ -31,6 +51,7 @@ const ListMeeting = () => {
       neLat: 1000,
       neLng: 1000,
     };
+
     axios
       .post(
         `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list`,
@@ -54,61 +75,42 @@ const ListMeeting = () => {
     [navigate]
   );
 
-  const EventMarkerContainer = ({ meetingLat, meetingLng, meetingName }) => {
+  const EventMarkerContainer = ({
+    meetingLat,
+    meetingLng,
+    meetingName,
+    meetingNo,
+  }) => {
     const map = useMap();
+
     const [isOpen, setIsOpen] = useState(false);
 
     const content = (
       <CustomOverlayMap
         position={{ lat: meetingLat, lng: meetingLng }}
         zIndex={1000}
+        yAnchor={1.1}
       >
-        <div className="wrap">
-          <div className="info">
-            <div className="title">
-              {meetingName}
-              <div
-                className="close"
-                onClick={() => setIsOpen(false)}
-                title="닫기"
-              ></div>
-            </div>
-            <Box sx={{ backgroundColor: "red", zIndex: "tooltip" }}>
-              <Stack direction="row" spacing={2}>
-                <Box>kdkdk</Box>
-                <Stack>
-                  <Box>sldf</Box>
-                  <Box>sdf</Box>
-                </Stack>
-              </Stack>
-            </Box>
-            <div className="body">
-              <div className="img">
-                <img
-                  src="//t1.daumcdn.net/thumb/C84x76/?fname=http://t1.daumcdn.net/cfile/2170353A51B82DE005"
-                  width="73"
-                  height="70"
-                  alt="카카오 스페이스닷원"
-                />
-              </div>
-              <div className="desc">
-                <div className="ellipsis">제주특별자치도 제주시 첨단로 242</div>
-                <div className="jibun ellipsis">
-                  (우) 63309 (지번) 영평동 2181
-                </div>
-                <div>
-                  <a
-                    href="https://www.kakaocorp.com/main"
-                    target="_blank"
-                    className="link"
-                    rel="noreferrer"
-                  >
-                    홈페이지
-                  </a>
-                </div>
-              </div>
-            </div>
+        <div className="info">
+          <div className="title">
+            <div
+              className="close"
+              onClick={() => setIsOpen(false)}
+              title="닫기"
+            ></div>
           </div>
+          <Box sx={{ backgroundColor: "red", zIndex: "tooltip" }}>
+            <Stack direction="row" spacing={2}>
+              <Box>{meetingName}</Box>
+              <Stack>
+                <Box>sldf</Box>
+                <Box>sdf</Box>
+                <Button id={meetingNo} onClick={onClickMeeting}>
+                  상세조회
+                </Button>
+              </Stack>
+            </Stack>
+          </Box>
         </div>
         ;
       </CustomOverlayMap>
@@ -116,8 +118,7 @@ const ListMeeting = () => {
 
     return (
       <MapMarker
-        position={{ lat: meetingLat, lng: meetingLng }} // 마커를 표시할 위치
-        // @ts-ignore
+        position={{ lat: meetingLat, lng: meetingLng }}
         onClick={() => setIsOpen(true)}
       >
         {isOpen && content}
@@ -125,20 +126,22 @@ const ListMeeting = () => {
     );
   };
 
+  if (!latitude || !longtitude) {
+    return (
+      <Stack sx={{ color: "grey.500" }} spacing={2} direction="row">
+        <CircularProgress color="success" />
+      </Stack>
+    );
+  }
   return (
     <>
-      <Map // 지도를 표시할 Container
-        center={{
-          // 지도의 중심좌표
-          lat: 37.123,
-          lng: 127.654,
-        }}
+      <Map
+        center={{ lat: latitude, lng: longtitude }} // 초기 중심 좌표 설정
         style={{
-          // 지도의 크기
           width: "100%",
           height: "450px",
         }}
-        level={3} // 지도의 확대 레벨
+        level={3}
       >
         {meetingList?.map((meeting, index) => (
           <EventMarkerContainer
@@ -146,6 +149,7 @@ const ListMeeting = () => {
             meetingLat={meeting.meetingLat}
             meetingLng={meeting.meetingLng}
             meetingName={meeting.meetingName}
+            meetingNo={meeting.meetingNo}
           />
         ))}
       </Map>

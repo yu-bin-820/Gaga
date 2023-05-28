@@ -10,11 +10,10 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import { useNavigate } from 'react-router';
 import useCommunityStore from '@stores/communication/useCommunityStore';
-import CommonTop from '@layouts/common/CommonTop';
 import MainBottomNav from '@layouts/common/MainBottomNav';
-import ChatRoomListTop from '@layouts/communication/ChatRoomListTop';
+import ListChatRoomTop from '@layouts/communication/ListChatRoomTop.jsx';
 
-export default function ChatList() {
+export default function ListChatRoom() {
   const navigate = useNavigate();
 
   const { chatRoomEntryNo, chatType, setField } = useCommunityStore();
@@ -58,7 +57,7 @@ export default function ChatList() {
 
       setField('chatRoomEntryNo', selectedData.chatRoomEntryNo);
       setField('chatType', selectedData.chatType);
-
+      setField('chatRoomLeader', selectedData.chatRoomLeader);
       if (selectedData.chatType === 'club') {
         navigate(`/chat/club/message/list`);
       } else if (selectedData.chatType === 'meeting') {
@@ -69,6 +68,8 @@ export default function ChatList() {
     },
     [setField, navigate]
   );
+
+  console.log(groupsData);
   return (
     <>
       <Box
@@ -79,7 +80,7 @@ export default function ChatList() {
           typography: 'body1',
         }}
       >
-        <ChatRoomListTop />
+        <ListChatRoomTop />
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
@@ -111,8 +112,13 @@ export default function ChatList() {
                       ? {
                           chatRoomEntryNo: group.meeting_no,
                           chatType: 'meeting',
+                          chatRoomLeader: group.MeetingLeader,
                         }
-                      : { chatRoomEntryNo: group.club_no, chatType: 'club' }
+                      : {
+                          chatRoomEntryNo: group.club_no,
+                          chatType: 'club',
+                          chatRoomLeader: group.ClubLeader,
+                        }
                   )}
                   onClick={onClickGroupChatOne}
                 >

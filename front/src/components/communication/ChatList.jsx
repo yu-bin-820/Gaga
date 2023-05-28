@@ -1,10 +1,30 @@
 import { Box } from '@mui/material';
 import Chat from './Chat';
 import PropTypes from 'prop-types';
+import { useCallback, useEffect, useRef } from 'react';
 
 const ChatList = ({ chatData }) => {
+  const boxRef = useRef(null);
+
+  const scrollToBottom = useCallback(() => {
+    if (boxRef.current) {
+      boxRef.current.scrollTop = boxRef.current.scrollHeight;
+      console.log(
+        boxRef.current.scrollTop,
+        boxRef.current.scrollHeight,
+        boxRef.current.clientHeight
+      );
+      boxRef.current.scrollTo({ top: boxRef.current.scrollHeight });
+    }
+  }, [boxRef]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatData, scrollToBottom]);
+
   return (
     <Box
+      ref={boxRef}
       sx={{
         marginTop: '64px',
         marginBottom: '64px',

@@ -14,9 +14,10 @@ import ChatBox from '@components/communication/ChatBox';
 import useInput from '@hooks/common/useInput';
 import useInputOrigin from '@hooks/common/useInputOrigin';
 import CommonTop from '@layouts/common/CommonTop';
+import GetChatTop from '@layouts/communication/GetChatTop';
 
-const MeetingChat = () => {
-  const { chatRoomEntryNo, chatType, setField } = useCommunityStore();
+const GetMeetingChat = () => {
+  const { chatRoomEntryNo, chatRoomLeader } = useCommunityStore();
 
   const boxRef = useRef();
 
@@ -25,7 +26,7 @@ const MeetingChat = () => {
     fetcher
   );
 
-  const [socket] = useSocket('meeting');
+  const [socket, discconect] = useSocket('meeting');
 
   const { data: meetingMessagesData, mutate: mutateMeetingMessages } = useSWR(
     `http://${
@@ -46,13 +47,12 @@ const MeetingChat = () => {
     }
   }, [boxRef]);
 
-  // useEffect(() => {
-  //   return () => {
-  //     discconect();
-  //   };
-  // }, [chattype, discconect]);
+  useEffect(() => {
+    return () => {
+      discconect();
+    };
+  }, [discconect]);
 
-  // console.log(data);
   const onSubmitForm = useCallback(
     (e) => {
       e.preventDefault();
@@ -123,7 +123,11 @@ const MeetingChat = () => {
   // console.log(meetingMessagesData);
   return (
     <div ref={boxRef}>
-      <CommonTop />
+      <GetChatTop
+        groupType={1}
+        groupNo={chatRoomEntryNo}
+        groupLeader={chatRoomLeader}
+      />
       <Box>
         <ChatList chatData={meetingMessagesData} />
         <Box sx={{ position: 'fixed', bottom: 65, left: 0, right: 0 }}>
@@ -141,4 +145,4 @@ const MeetingChat = () => {
   );
 };
 
-export default MeetingChat;
+export default GetMeetingChat;

@@ -4,7 +4,7 @@ import ListMyMeeting from "@components/meeting/ListMyMeeting";
 
 import MainBottomNav from "@layouts/common/MainBottomNav";
 import MyProfileTop from "@layouts/communication/MyProfileTop";
-import { BottomNavigation } from "@mui/material";
+import BottomNavigation from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 

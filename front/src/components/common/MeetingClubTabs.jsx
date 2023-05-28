@@ -6,7 +6,6 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import ListMeeting from "@components/meeting/ListMeeting";
 import ListClub from "@components/club/ListClub";
-import ListMyClub from "@components/club/ListMyClub";
 
 export default function MeetingClubTabs() {
   const [value, setValue] = React.useState("meeting");
@@ -44,7 +43,6 @@ export default function MeetingClubTabs() {
           <TabPanel value="club">
             나오라고오오오
             <ListClub />
-            <ListMyClub />
           </TabPanel>
         </Box>
       </TabContext>

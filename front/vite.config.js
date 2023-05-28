@@ -10,16 +10,26 @@ export default defineConfig({
   plugins: [react(), jsconfigPaths()],
   server: {
     proxy: {
+      //   '/rest': {
+      //     target: 'http://192.168.0.11:8080',
+      //     changeOrigin: true,
+      //     rewrite: (path) => path.replace(/^\/rest/, ''),
+      //     ws: true,
+      //   },
+      // '/socket.io': {
+      //   target: 'http://192.168.45.246:8909',
+      //   changeOrigin: true,
+      //   ws: true,
+      // },
       '/rest': {
-        target: 'http://192.168.45.246:8080',
+        target: 'http://192.168.0.11:8080',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/rest/, ''),
-        ws: true,
-      },
-      '/socket.io': {
-        target: 'http://192.168.45.246:8909',
-        changeOrigin: true,
-        ws: true,
+        // withCredentials 옵션 설정
+        headers: {
+          'Access-Control-Allow-Origin': 'http://localhost:8080',
+          'Access-Control-Allow-Credentials': 'true',
+        },
       },
     },
   },

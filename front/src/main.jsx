@@ -16,22 +16,27 @@ import UpdateMeeting from "@pages/meeting/UpdateMeeting.jsx";
 import AddMeeting from "@pages/meeting/AddMeeting.jsx";
 import AddMeetingMember from "@pages/meeting/AddMeetingMember.jsx";
 import Login from "@pages/user/Login.jsx";
-import Profile from "@pages/communication/Profile.jsx";
+import GetMyProfile from "@pages/communication/GetMyProfile.jsx";
 import ListMeetingMember from "@pages/meeting/ListMeetingMember.jsx";
 import UpdateMeetingSuccess from "@pages/meeting/UpdateMeetingSuccess.jsx";
 import AddMeetingReveiw from "@pages/meeting/AddMeetingReveiw.jsx";
 import UpdateMeetingReview from "@pages/meeting/UpdateMeetingReview.jsx";
-import ChatList from "@pages/communication/ChatRoomList.jsx";
-import ClubChat from "@pages/communication/ClubChat.jsx";
-import DirectChat from "@pages/communication/DirectChat.jsx";
-import MeetingChat from "@pages/communication/MeetingChat.jsx";
+import ListChatRoom from "@pages/communication/ListChatRoom.jsx";
+import GetClubChat from "@pages/communication/GetClubChat.jsx";
+import GetDirectChat from "@pages/communication/GetDirectChat.jsx";
+import GetMeetingChat from "@pages/communication/GetMeetingChat.jsx";
 import UnauthenticatedMain from "@pages/common/UnauthenticatedMain";
 import RootLayout from "@layouts/common/RootLayout.jsx";
-import GroupThumbnail from "./components/common/GroupThumbnail";
+import AddUser from "@pages/user/AddUser.jsx";
+import UpdateUser from "@pages/user/UpdateUser.jsx";
+
 import Test from "@pages/communication/Test.jsx";
+import GetReport from "@pages/communication/GetReport.jsx";
+import AddReport from "@pages/communication/AddReport.jsx";
+import GetProfile from "@pages/communication/GetProfile.jsx";
+import ListGroupMemberList from "@components/user/ListGroupMember.jsx";
 import AddClub from "@pages/club/AddClub.jsx";
 import GetClub from "@pages/club/GetClub.jsx";
-import ListGroupMemberList from "@components/user/ListGroupMember.jsx";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +54,23 @@ const router = createBrowserRouter([
       },
       {
         path: "user",
+        children: [
+          {
+            path: "login",
+            element: <Login />,
+          },
+          {
+            path: "adduser",
+            element: <AddUser />,
+          },
+          {
+            path: "updateuser",
+            element: <UpdateUser />,
+          },
+        ],
+      },
+      {
+        path: "meeting",
         children: [
           {
             path: "login",
@@ -111,12 +133,23 @@ const router = createBrowserRouter([
         path: "community",
         children: [
           {
-            path: "profile/:userno",
-            element: <Profile />,
+            path: "profile",
+            children: [
+              { path: "mine", element: <GetMyProfile /> },
+              { path: "userno/:userNo", element: <GetProfile /> },
+            ],
           },
           {
             path: "test",
             element: <Test />,
+          },
+          {
+            path: "report/reportno/:reportNo",
+            element: <GetReport />,
+          },
+          {
+            path: "report/add/",
+            element: <AddReport />,
           },
         ],
       },
@@ -125,19 +158,19 @@ const router = createBrowserRouter([
         children: [
           {
             path: "list",
-            element: <ChatList />,
+            element: <ListChatRoom />,
           },
           {
             path: "club/message/list",
-            element: <ClubChat />,
+            element: <GetClubChat />,
           },
           {
             path: "meeting/message/list",
-            element: <MeetingChat />,
+            element: <GetMeetingChat />,
           },
           {
             path: "direct/message/list",
-            element: <DirectChat />,
+            element: <GetDirectChat />,
           },
         ],
       },
