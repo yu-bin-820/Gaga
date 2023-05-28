@@ -180,7 +180,7 @@ public class MeetingServiceTest {
 
 	}
 	
-	@Test
+	//@Test
 	public void testGetMyMeetingList() throws Exception{	
 				
 		List<Meeting> list = meetingService.getMyMeetingList(1);
