@@ -6,7 +6,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Button, IconButton, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/system';
-const ChatRoomListTop = () => {
+const SettingsMenuTop = () => {
   const navigate = useNavigate();
   return (
     <AppBar
@@ -17,13 +17,17 @@ const ChatRoomListTop = () => {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography variant="hs10" component="h4" sx={{ color: 'dimgray' }}>
-            채팅
-          </Typography>
+          <IconButton
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            <ArrowBackIosNewIcon />
+          </IconButton>
         </Toolbar>
       </Container>
     </AppBar>
   );
 };
 
-export default ChatRoomListTop;
+export default SettingsMenuTop;

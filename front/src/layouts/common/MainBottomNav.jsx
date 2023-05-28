@@ -83,8 +83,8 @@ export default function MainBottomNav({ pageName }) {
   }, []);
 
   const onClickProfile = React.useCallback(() => {
-    navigate(`/community/profile/${myData.userNo}`);
-  }, [myData, navigate]);
+    navigate(`/community/profile/mine`);
+  }, [navigate]);
 
   const onClickChat = React.useCallback(() => {
     navigate(`/chat/list`);
@@ -128,5 +128,5 @@ export default function MainBottomNav({ pageName }) {
 }
 
 MainBottomNav.propTypes = {
-  pageName: PropTypes.array,
+  pageName: PropTypes.string,
 };
