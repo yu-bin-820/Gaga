@@ -21,7 +21,7 @@ const ListMyMeeting = () => {
 
     useEffect(()=>{
         axios
-            .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${userNo}`)
+            .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${userNo ? userNo: myData.userNo}`)
             .then((response)=>{
                 console.log(response.data);
                 setMeetingList(response.data);
@@ -29,7 +29,7 @@ const ListMyMeeting = () => {
             .catch((error)=>{
                 console.log(error);
             });
-    },[myData]);
+    },[userNo]);
 
     const onClickMeeting=useCallback((event)=>{
         const { id } = event.target;

@@ -1,15 +1,15 @@
-import { Button, CircularProgress } from '@mui/material';
-import { Box, Stack } from '@mui/system';
-import fetcher from '@utils/fetcher';
-import axios from 'axios';
-import React, { useCallback, useEffect, useState } from 'react';
-import { CustomOverlayMap, Map, MapMarker, useMap } from 'react-kakao-maps-sdk';
-import { useNavigate } from 'react-router';
-import useSWR from 'swr';
+import { Button, CircularProgress } from "@mui/material";
+import { Box, Stack } from "@mui/system";
+import fetcher from "@utils/fetcher";
+import axios from "axios";
+import React, { useCallback, useEffect, useState } from "react";
+import { CustomOverlayMap, Map, MapMarker, useMap } from "react-kakao-maps-sdk";
+import { useNavigate } from "react-router";
+import useSWR from "swr";
 
 const ListMeeting = () => {
   const [latitude, setLatitude] = useState();
-  const [longtitude,setLongtitude] = useState();
+  const [longtitude, setLongtitude] = useState();
   const [meetingList, setMeetingList] = useState();
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ const ListMeeting = () => {
         }
       );
     } else {
-      console.log('geolocation을 사용할 수 없어요..');
+      console.log("geolocation을 사용할 수 없어요..");
     }
   }, []);
 
@@ -53,7 +53,10 @@ const ListMeeting = () => {
     };
 
     axios
-      .post(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list`, data)
+      .post(
+        `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list`,
+        data
+      )
       .then((response) => {
         console.log(data);
         console.log(response.data);
@@ -88,29 +91,31 @@ const ListMeeting = () => {
         zIndex={1000}
         yAnchor={1.1}
       >
-            <div className="info">
-              <div className="title">
-                <div
-                  className="close"
-                  onClick={() => setIsOpen(false)}
-                  title="닫기"
-                ></div>
-              </div>
-              <Box sx={{backgroundColor : 'red', zIndex:'tooltip'}}>
-                <Stack direction='row' spacing={2}>
-                    <Box>{meetingName}</Box>
-                    <Stack>
-                        <Box>sldf</Box>
-                        <Box>sdf</Box>
-                        <Button id={meetingNo} onClick={onClickMeeting}>상세조회</Button>
-                    </Stack>
-                </Stack>
-              </Box>
-            </div>
-          ;
-          </CustomOverlayMap>
+        <div className="info">
+          <div className="title">
+            <div
+              className="close"
+              onClick={() => setIsOpen(false)}
+              title="닫기"
+            ></div>
+          </div>
+          <Box sx={{ backgroundColor: "red", zIndex: "tooltip" }}>
+            <Stack direction="row" spacing={2}>
+              <Box>{meetingName}</Box>
+              <Stack>
+                <Box>sldf</Box>
+                <Box>sdf</Box>
+                <Button id={meetingNo} onClick={onClickMeeting}>
+                  상세조회
+                </Button>
+              </Stack>
+            </Stack>
+          </Box>
+        </div>
+        ;
+      </CustomOverlayMap>
     );
-      
+
     return (
       <MapMarker
         position={{ lat: meetingLat, lng: meetingLng }}
@@ -120,22 +125,21 @@ const ListMeeting = () => {
       </MapMarker>
     );
   };
-      
-      if(!latitude || !longtitude ) {
-        return (
-          <Stack sx={{ color: 'grey.500' }} spacing={2} direction="row">
-            <CircularProgress color="success" />
-          </Stack>
-        );
-      }
+
+  if (!latitude || !longtitude) {
+    return (
+      <Stack sx={{ color: "grey.500" }} spacing={2} direction="row">
+        <CircularProgress color="success" />
+      </Stack>
+    );
+  }
   return (
     <>
-    
       <Map
         center={{ lat: latitude, lng: longtitude }} // 초기 중심 좌표 설정
         style={{
-          width: '100%',
-          height: '450px',
+          width: "100%",
+          height: "450px",
         }}
         level={3}
       >
@@ -150,7 +154,7 @@ const ListMeeting = () => {
         ))}
       </Map>
 
-      <Box sx={{ marginTop: '100px' }}>
+      <Box sx={{ marginTop: "100px" }}>
         <Box>
           {meetingList?.map((meeting, i) => (
             <Box key={i}>

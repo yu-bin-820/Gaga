@@ -1,5 +1,5 @@
 import ListMeetingReview from '@components/meeting/ListMeetingReview';
-import { BottomNavigation, BottomNavigationAction, Box, Button, ImageListItem } from '@mui/material';
+import { BottomNavigation, BottomNavigationAction, Box, Button, ImageListItem, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
@@ -8,7 +8,7 @@ import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import GetMeetingStaticMap from '@components/meeting/map/GetMeetingStaticMap';
-import { styled } from '@mui/system';
+import { Stack, styled } from '@mui/system';
 
 
 const CenteredText = styled('h5')({
@@ -99,15 +99,23 @@ const GetMeeting = () => {
     <br/>
     <br/>
     <h4>{meeting?.meetingName}</h4>
-    <CenteredText>
-    <PeopleIcon/><h5>2/{meeting?.meetingMaxMemberNo}</h5>
-    </CenteredText>
-    <CenteredText>
-    <CalendarMonthIcon/> {meeting?.meetingDate}
-    </CenteredText>
-    <CenteredText>
-        <QueryBuilderIcon/> {meeting?.meetingStartTime} ~ {meeting?.meetingEndTime}
-    </CenteredText>
+    <Stack spacing={2}>
+
+        <Stack direction={'row'} spacing={1} alignItems={'center'}>
+        <PeopleIcon/>
+        <Typography sx={{fontSize : 13 }}>
+        2/{meeting?.meetingMaxMemberNo}
+        </Typography>
+        </Stack>
+
+        <CenteredText>
+        <CalendarMonthIcon/> {meeting?.meetingDate}
+        </CenteredText>
+
+        <CenteredText>
+            <QueryBuilderIcon/> {meeting?.meetingStartTime} ~ {meeting?.meetingEndTime}
+        </CenteredText>
+    </Stack>
     <CenteredText>
         <LocationOnIcon/> {meeting?.meetingAddr}
     </CenteredText>
