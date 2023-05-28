@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.gaga.bo.service.community.CommunityService;
 import com.gaga.bo.service.domain.Report;
 import com.gaga.bo.service.domain.User;
+import com.gaga.bo.service.domain.UserReview;
 import com.gaga.bo.service.user.UserService;
 
 @RestController
@@ -44,6 +46,7 @@ public class CommunityRestController {
 		System.out.println(this.getClass());
 	}
 	
+	//------------------------Profile Request Mapping----------------------------------------------------------
 	@PatchMapping("profileimg/userno/{userNo}")
 	public void updateProfileImg(@PathVariable int userNo, @RequestParam("file") MultipartFile file, HttpSession session) throws Exception {
 		User user = userService.getUser(userNo);
@@ -106,15 +109,20 @@ public class CommunityRestController {
 		session.setAttribute("user", user);
 	}
 	
+	
+	//------------------------Report Request Mapping----------------------------------------------------------
+
 	@GetMapping("report/reportingno/{reportingNo}/reportedno/{reportedNo}")
-	public Report getReport(
-							@PathVariable("reportingNo") int reportingNo,
-							@PathVariable("reportedNo") int reportedNo
-																		 )throws Exception {
+	public Report getReportByUserNo(
+									@PathVariable("reportingNo") int reportingNo,
+									@PathVariable("reportedNo") int reportedNo
+																				 )throws Exception {
 		Report report = new Report();
 		report.setReportingNo(reportingNo);
 		report.setReportedNo(reportedNo);
-		return communityService.getReportByUserNo(report);
+		report = communityService.getReportByUserNo(report);
+		System.out.println(":: getReportByUserNo ::" + report);
+		return report;
 	}
 	
 	
@@ -157,6 +165,29 @@ public class CommunityRestController {
 		}
 		
 		communityService.addReport(report);
+	}
 	
+	//------------------------UserReview Request Mapping----------------------------------------------------------
+	@GetMapping("userreview/reviewerno/{reviewerNo}/reviewedno/{reviewedNo}")
+	public UserReview getUserReview(
+									@PathVariable("reviewerNo") int reviewerNo,
+									@PathVariable("reviewedNo") int reviewedNo
+																			  ) throws Exception {
+		UserReview userReview = new UserReview();
+		userReview.setReviewerNo(reviewerNo);
+		userReview.setReviewedNo(reviewedNo);
+		userReview = communityService.getUserReview(userReview);
+		System.out.println(" :: getUserReviewByUserNo :: " + userReview);
+		return userReview;
+	}
+	
+	@PostMapping("userreview")
+	public void addUserReview(
+							  @RequestBody UserReview userReview
+								  							    ) throws Exception {
+		
+		System.out.println(userReview);
+		communityService.addUserReview(userReview);
+		
 	}
 }
