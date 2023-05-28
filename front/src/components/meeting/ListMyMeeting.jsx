@@ -10,7 +10,7 @@ import GroupThumbnail from '@components/common/GroupThumbnail';
 
 const ListMyMeeting = () => {
     
-    const { userno } = useParams();
+    const { userNo } = useParams();
     const [meetingList, setMeetingList] = useState();
     const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ const ListMyMeeting = () => {
 
     useEffect(()=>{
         axios
-            .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${userno}`)
+            .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${userNo}`)
             .then((response)=>{
                 console.log(response.data);
                 setMeetingList(response.data);
