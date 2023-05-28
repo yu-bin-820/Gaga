@@ -1,94 +1,106 @@
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
-import ReactDOM from 'react-dom/client';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from '@emotion/react';
-import CssBaseline from '@mui/material/CssBaseline';
-import theme from './theme.js';
-import MainLayout from '@layouts/common/MainLayout.jsx';
-import ErrorPage from '@pages/common/ErrorPage.jsx';
-import Main from '@pages/common/Main.jsx';
-import GetMeeting from '@pages/meeting/GetMeeting.jsx';
-import UpdateMeeting from '@pages/meeting/UpdateMeeting.jsx';
-import AddMeeting from '@pages/meeting/AddMeeting.jsx';
-import AddMeetingMember from '@pages/meeting/AddMeetingMember.jsx';
-import Login from '@pages/user/Login.jsx';
-import Profile from '@pages/communication/Profile.jsx';
-import ListMeetingMember from '@pages/meeting/ListMeetingMember.jsx';
-import UpdateMeetingSuccess from '@pages/meeting/UpdateMeetingSuccess.jsx';
-import AddMeetingReveiw from '@pages/meeting/AddMeetingReveiw.jsx';
-import UpdateMeetingReview from '@pages/meeting/UpdateMeetingReview.jsx';
-import ChatList from '@pages/communication/ChatRoomList.jsx';
-import ClubChat from '@pages/communication/ClubChat.jsx';
-import DirectChat from '@pages/communication/DirectChat.jsx';
-import MeetingChat from '@pages/communication/MeetingChat.jsx';
-import UnauthenticatedMain from '@pages/common/UnauthenticatedMain';
-import RootLayout from '@layouts/common/RootLayout.jsx';
-import GroupThumbnail from './components/common/GroupThumbnail';
-import Test from '@pages/communication/Test.jsx';
+import ReactDOM from "react-dom/client";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "@emotion/react";
+import CssBaseline from "@mui/material/CssBaseline";
+import theme from "./theme.js";
+import MainLayout from "@layouts/common/MainLayout.jsx";
+import ErrorPage from "@pages/common/ErrorPage.jsx";
+import Main from "@pages/common/Main.jsx";
+import GetMeeting from "@pages/meeting/GetMeeting.jsx";
+import UpdateMeeting from "@pages/meeting/UpdateMeeting.jsx";
+import AddMeeting from "@pages/meeting/AddMeeting.jsx";
+import AddMeetingMember from "@pages/meeting/AddMeetingMember.jsx";
+import Login from "@pages/user/Login.jsx";
+import Profile from "@pages/communication/Profile.jsx";
+import ListMeetingMember from "@pages/meeting/ListMeetingMember.jsx";
+import UpdateMeetingSuccess from "@pages/meeting/UpdateMeetingSuccess.jsx";
+import AddMeetingReveiw from "@pages/meeting/AddMeetingReveiw.jsx";
+import UpdateMeetingReview from "@pages/meeting/UpdateMeetingReview.jsx";
+import ChatList from "@pages/communication/ChatRoomList.jsx";
+import ClubChat from "@pages/communication/ClubChat.jsx";
+import DirectChat from "@pages/communication/DirectChat.jsx";
+import MeetingChat from "@pages/communication/MeetingChat.jsx";
+import UnauthenticatedMain from "@pages/common/UnauthenticatedMain";
+import RootLayout from "@layouts/common/RootLayout.jsx";
+import GroupThumbnail from "./components/common/GroupThumbnail";
+import Test from "@pages/communication/Test.jsx";
+import AddClub from "@pages/club/AddClub.jsx";
+import GetClub from "@pages/club/GetClub.jsx";
+import ListGroupMemberList from "@components/user/ListGroupMember.jsx";
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: '/',
+        path: "/",
         element: <Main />,
       },
       {
-        path: '/unauthenticatedmain',
+        path: "/unauthenticatedmain",
         element: <UnauthenticatedMain />,
       },
       {
-        path: 'user',
-        children: [{ path: 'login', element: <Login /> }],
-      },
-      {
-        path: 'meeting',
+        path: "user",
         children: [
           {
-            path: 'addmeeting',
+            path: "login",
+            element: <Login />,
+          },
+          {
+            path: "memberlist",
+            element: <ListGroupMemberList />,
+          },
+        ],
+      },
+      {
+        path: "meeting",
+        children: [
+          {
+            path: "addmeeting",
             element: <AddMeeting />,
           },
           {
-            path: 'meetingno/:meetingno',
+            path: "meetingno/:meetingno",
             element: <GetMeeting />,
           },
           {
-            path: 'updatemeeting/:meetingno',
+            path: "updatemeeting/:meetingno",
             element: <UpdateMeeting />,
           },
           {
-            path: 'updatemeetingsuccess/meetingno/:meetingno',
+            path: "updatemeetingsuccess/meetingno/:meetingno",
             element: <UpdateMeetingSuccess />,
           },
           {
-            path: 'member',
+            path: "member",
             children: [
               {
-                path: 'addmember/:meetingno',
+                path: "addmember/:meetingno",
                 element: <AddMeetingMember />,
               },
               {
-                path: 'listmember/meetingno/:meetingno',
+                path: "listmember/meetingno/:meetingno",
                 element: <ListMeetingMember />,
               },
             ],
           },
           {
-            path: 'review',
+            path: "review",
             children: [
               {
-                path: 'addreview/meetingno/:meetingno',
+                path: "addreview/meetingno/:meetingno",
                 element: <AddMeetingReveiw />,
               },
               {
-                path: 'updatereview/reviewno/:reviewno',
+                path: "updatereview/reviewno/:reviewno",
                 element: <UpdateMeetingReview />,
               },
             ],
@@ -96,36 +108,49 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: 'community',
+        path: "community",
         children: [
           {
-            path: 'profile/:userno',
+            path: "profile/:userno",
             element: <Profile />,
           },
           {
-            path: 'test',
+            path: "test",
             element: <Test />,
           },
         ],
       },
       {
-        path: 'chat',
+        path: "chat",
         children: [
           {
-            path: 'list',
+            path: "list",
             element: <ChatList />,
           },
           {
-            path: 'club/message/list',
+            path: "club/message/list",
             element: <ClubChat />,
           },
           {
-            path: 'meeting/message/list',
+            path: "meeting/message/list",
             element: <MeetingChat />,
           },
           {
-            path: 'direct/message/list',
+            path: "direct/message/list",
             element: <DirectChat />,
+          },
+        ],
+      },
+      {
+        path: "club",
+        children: [
+          {
+            path: "addclub",
+            element: <AddClub />,
+          },
+          {
+            path: "no/:clubno",
+            element: <GetClub />,
           },
         ],
       },
@@ -133,7 +158,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <ThemeProvider theme={theme}>
     <CssBaseline>
       <RouterProvider router={router} />
