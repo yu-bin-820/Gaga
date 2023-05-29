@@ -9,6 +9,8 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import GetMeetingStaticMap from '@components/meeting/map/GetMeetingStaticMap';
 import { Stack, styled } from '@mui/system';
+import MeetingMember from '@components/meeting/MeetingMember';
+import GetMeetingTop from '@layouts/meeting/GetMeetingTop';
 
 
 const CenteredText = styled('h5')({
@@ -20,11 +22,10 @@ const GetMeeting = () => {
 
     const { meetingno } = useParams();
     const [meeting, setMeeting] = useState();
+    const [pendingMemberList, setPendingMemberList] = useState();
+    const [confirmedMemberList, setConfirMemberList] = useState();
 
     const navigate = useNavigate();
-    const onClickUpdate = useCallback((MouseEvent)=>{
-        navigate(`/meeting/updatemeeting/${ meetingno }`);
-    },[]);
 
     useEffect(()=>{
         axios
@@ -38,29 +39,31 @@ const GetMeeting = () => {
             });
         },[]);
 
-    const onClickDelete = useCallback(
-        async (event) => {
-            event.preventDefault();
-
-            try {
-            const data = {
-                meetingNo: meeting?.meetingNo
-            };
-
-            console.log(data);
-
-            const response = await axios.delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting`, {
-                data: data,
+    useEffect(()=>{
+        axios
+            .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/user/list/grouptype/2/no/${meetingno}/state/2`)
+            .then((response)=>{
+                console.log(response.data);
+                setConfirMemberList(response.data);
+            })
+            .catch((error)=>{
+                console.log(error);
             });
+        },[]);
+        
 
-            navigate(`/`);
-                
-            } catch (error) {
-                console.error(error);
-            }
-        },
-        []
-    );
+        useEffect(()=>{
+        axios
+            .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/user/list/grouptype/2/no/${meetingno}/state/1`)
+            .then((response)=>{
+                console.log(response.data);
+                setPendingMemberList(response.data);
+            })
+            .catch((error)=>{
+                console.log(error);
+            });
+        },[]);
+
 
     const onClickAddMember=useCallback((event)=>{
         navigate(`/meeting/member/addmember/${meetingno}`);
@@ -70,7 +73,9 @@ const GetMeeting = () => {
 
 
     return (
-    <Box sx={{ marginTop: '64px', marginBottom: '50px' }}>
+        <>
+        <GetMeetingTop/>
+    <Box sx={{ marginTop: '50px', marginBottom: '64px' }}>
         <div style={{ position: 'relative', marginBottom: '10px' }}>
         <ImageListItem
             sx={{
@@ -99,12 +104,13 @@ const GetMeeting = () => {
     <br/>
     <br/>
     <h4>{meeting?.meetingName}</h4>
+
     <Stack spacing={2}>
 
         <Stack direction={'row'} spacing={1} alignItems={'center'}>
         <PeopleIcon/>
         <Typography sx={{fontSize : 13 }}>
-        2/{meeting?.meetingMaxMemberNo}
+        {meeting?.memberCount}/{meeting?.meetingMaxMemberNo}
         </Typography>
         </Stack>
 
@@ -123,12 +129,24 @@ const GetMeeting = () => {
     &nbsp; &nbsp; &nbsp;{meeting?.meetingDetailAddr}
     </h5>
     <br/>
+    {meeting && (
     <Box>
-    <GetMeetingStaticMap/>
+        <GetMeetingStaticMap meeting={meeting} />
     </Box>
+    )}
+    <h5>확정 멤버</h5>
+    {confirmedMemberList?.map((confirmedMember,i)=>(
 
-    <Button onClick={onClickUpdate}>수정하기</Button>
-    <Button onClick={onClickDelete}>삭제하기</Button>
+    <MeetingMember key={i} member={confirmedMember} />
+
+    ))}
+    <h5>신청 멤버</h5>
+    {pendingMemberList?.map((pendingMember,i)=>(
+
+    <MeetingMember key={i} member={pendingMember} />
+
+    ))}
+
     <ListMeetingReview/>
     <BottomNavigation
         showLabels
@@ -141,6 +159,8 @@ const GetMeeting = () => {
         <BottomNavigationAction label="참여하기" onClick={onClickAddMember}/>
       </BottomNavigation>
     </Box>
+
+    </>
     );
 };
 
