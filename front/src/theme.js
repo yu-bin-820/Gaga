@@ -13,6 +13,9 @@ const theme = createTheme({
     error: {
       main: red.A400,
     },
+    info: {
+      main: '#d3d3d3',
+    },
   },
 });
 

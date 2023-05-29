@@ -24,7 +24,7 @@ import UpdateMeetingReview from '@pages/meeting/UpdateMeetingReview.jsx';
 import ListChatRoom from '@pages/communication/ListChatRoom.jsx';
 import GetClubChat from '@pages/communication/GetClubChat.jsx';
 import GetDirectChat from '@pages/communication/GetDirectChat.jsx';
-import GetMeetingChat from '@pages/communication/GetMeetingChat.jsx';
+import GetGroupChat from '@pages/communication/GetGroupChat.jsx';
 import UnauthenticatedMain from '@pages/common/UnauthenticatedMain';
 import RootLayout from '@layouts/common/RootLayout.jsx';
 import AddUser from '@pages/user/AddUser.jsx';
@@ -173,12 +173,8 @@ const router = createBrowserRouter([
             element: <ListChatRoom />,
           },
           {
-            path: 'club/message/list',
-            element: <GetClubChat />,
-          },
-          {
-            path: 'meeting/message/list',
-            element: <GetMeetingChat />,
+            path: 'group/message/list',
+            element: <GetGroupChat />,
           },
           {
             path: 'direct/message/list',

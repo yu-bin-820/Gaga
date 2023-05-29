@@ -20,159 +20,104 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TuneIcon from '@mui/icons-material/Tune';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { Search } from '@mui/icons-material';
+import { Stack } from '@mui/system';
+import { Badge } from '@mui/material';
+import ListAlarmDialog from '@components/communication/ListAlarmDialog';
 
 const MainTop = () => {
-  const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
-  const navigate = useNavigate();
+  const [anchorAlarmEl, setAnchorAlarmEl] = useState();
+  const [alarmData, setAlarmData] = useState([]);
+  const { data: myData, mutate: mutateMe } = useSWR(
+    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+  );
+  const { data: unreadsData, mutate: mutateUnreads } = useSWR(
+    `http://${
+      import.meta.env.VITE_EXPRESS_HOST
+    }/rest/chat/group/message/unreads/userno/${myData?.userNo}`,
+    fetcher
+  );
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
+  // console.log(unreadsData);
+  const onClickAlram = useCallback(
+    (e) => {
+      axios
+        .get(
+          `http://${
+            import.meta.env.VITE_EXPRESS_HOST
+          }/rest/chat/alarm/receiverno/${myData?.userNo}`,
+          { withCredentials: true }
+        )
+        .then((response) => {
+          setAlarmData(response.data);
+          mutateUnreads();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+      setAnchorAlarmEl(e.currentTarget);
+    },
+    [myData]
+  );
   return (
-    <AppBar
-      position="fixed"
-      color="secondary"
-      elevation={0}
-      sx={{ height: '50px' }}
-    >
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontWeight: 700,
-              color: '#036635',
-              textDecoration: 'none',
-            }}
-            component={Link}
-            to="/"
-          >
-            GAGA
-          </Typography>
+    <>
+      <AppBar
+        position="fixed"
+        color="secondary"
+        elevation={0}
+        sx={{ height: '50px' }}
+      >
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+              <Typography
+                variant="h5"
+                noWrap
+                component="a"
+                href=""
+                sx={{
+                  mr: 2,
+                  display: { xs: 'flex', md: 'none' },
+                  flexGrow: 1,
+                  fontWeight: 700,
+                  color: '#036635',
+                  textDecoration: 'none',
+                }}
+              >
+                GAGA
+              </Typography>
+            </Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              href=""
-              sx={{
-                mr: 2,
-                display: { xs: 'flex', md: 'none' },
-                flexGrow: 1,
-                fontWeight: 700,
-                color: '#036635',
-                textDecoration: 'none',
-              }}
-            >
-              GAGA
-            </Typography>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              <MenuItem>
-                <Typography textAlign="center">example</Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Button
-              // onClick={}
-              sx={{ my: 2, color: 'white', display: 'block' }}
-            >
-              example
-            </Button>
-          </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Typography
-              component={Link}
-              color={'gray'}
-              to="/"
-              sx={{ marginRight: '10px' }}
-            >
-              <NotificationsNoneIcon />
-            </Typography>
-
-            <Typography
-              component={Link}
-              color={'gray'}
-              to="/"
-              sx={{ marginRight: '10px' }}
-            >
-              <TuneIcon />
-            </Typography>
-
-            <Typography component={Link} color={'gray'} to="/">
-              <Search />
-            </Typography>
-
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem>
-                <Typography textAlign="center">example</Typography>
-              </MenuItem>
-
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography
-                  textAlign="center"
-                  to="/user/signin"
-                  component={Link}
-                  sx={{ color: 'inherit', textDecoration: 'none' }}
+            <Stack direction={'row'}>
+              <IconButton onClick={onClickAlram}>
+                <Badge
+                  badgeContent={unreadsData?.countAlramUnreads}
+                  color="error"
+                  variant="dot"
                 >
-                  Sign In
-                </Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+                  <NotificationsNoneIcon />
+                </Badge>
+              </IconButton>
+
+              <IconButton>
+                <TuneIcon />
+              </IconButton>
+
+              <IconButton>
+                <Search />
+              </IconButton>
+            </Stack>
+          </Toolbar>
+        </Container>
+      </AppBar>
+      {/*---------------------------------- 알림 조회 모달 -------------------------------------*/}
+      <ListAlarmDialog
+        anchorEl={anchorAlarmEl}
+        setAnchorEl={setAnchorAlarmEl}
+        alarmData={alarmData}
+      />
+    </>
   );
 };
 

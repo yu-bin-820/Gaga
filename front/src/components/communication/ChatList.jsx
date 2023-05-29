@@ -29,7 +29,7 @@ const ChatList = ({ chatData }) => {
         marginTop: '64px',
         marginBottom: '64px',
         height: '50%',
-        maxHeight: 'calc(100vh - 200px)', // 채팅 입력바와 네비게이션바의 높이를 고려하여 설정
+        maxHeight: 'calc(100vh - 100px)', // 채팅 입력바와 네비게이션바의 높이를 고려하여 설정
         overflow: 'auto', // 콘텐츠가 넘치는 경우 스크롤링 가능
       }}
     >
