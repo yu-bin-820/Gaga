@@ -92,7 +92,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
               >
                 <ArrowBackIosNewIcon />
               </IconButton>
-              <Typography>설정</Typography>
+              <Typography>채팅 메뉴</Typography>
             </ListItem>
             <Divider />
             <ListItem

@@ -22,14 +22,29 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import SettingsMenuTop from './SettingsMenuTop';
 import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
 import SendIcon from '@mui/icons-material/Send';
-const ProfileTop = () => {
+import PropTypes from 'prop-types';
+
+const ProfileTop = ({ userNo }) => {
   const navigate = useNavigate();
-  const { userNo } = useParams();
+
   const { data: myData, mutate: mutateMe } = useSWR(
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+  const { data: reportData, mutate: mutateReport } = useSWR(
+    `http://${
+      import.meta.env.VITE_SPRING_HOST
+    }/rest/community/report/reportingno/${myData?.userNo}/reportedno/${userNo}`,
+    fetcher
+  );
 
+  const onClickReport = useCallback(() => {
+    if (reportData) {
+      alert('이미 신고한 회원입니다!');
+    } else {
+      navigate(`/community/report/add/category/reportedno/${userNo}`);
+    }
+  }, [navigate, reportData, userNo]);
   if (!myData) {
     return <Navigate replace to="/" />;
   }
@@ -59,7 +74,10 @@ const ProfileTop = () => {
                   <SendIcon />
                 </IconButton>
 
-                <IconButton sx={{ marginRight: '-10px' }}>
+                <IconButton
+                  onClick={onClickReport}
+                  sx={{ marginRight: '-10px' }}
+                >
                   <PrivacyTipIcon />
                 </IconButton>
               </>
@@ -70,5 +88,7 @@ const ProfileTop = () => {
     </Box>
   );
 };
-
+ProfileTop.propTypes = {
+  userNo: PropTypes.number,
+};
 export default ProfileTop;

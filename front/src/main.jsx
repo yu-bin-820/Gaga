@@ -34,6 +34,11 @@ import Test from '@pages/communication/Test.jsx';
 import GetReport from '@pages/communication/GetReport.jsx';
 import AddReport from '@pages/communication/AddReport.jsx';
 import GetProfile from '@pages/communication/GetProfile.jsx';
+import CommonTop from '@layouts/common/CommonTop.jsx';
+import ListReportCategory from '@pages/communication/ListReportCategory.jsx';
+import ListGroupMemberList from '@components/user/ListGroupMember.jsx';
+import AddClub from '@pages/club/AddClub.jsx';
+import GetClub from '@pages/club/GetClub.jsx';
 
 const router = createBrowserRouter([
   {
@@ -63,6 +68,19 @@ const router = createBrowserRouter([
           {
             path: 'updateuser',
             element: <UpdateUser />,
+          },
+        ],
+      },
+      {
+        path: 'meeting',
+        children: [
+          {
+            path: 'login',
+            element: <Login />,
+          },
+          {
+            path: 'memberlist',
+            element: <ListGroupMemberList />,
           },
         ],
       },
@@ -132,8 +150,18 @@ const router = createBrowserRouter([
             element: <GetReport />,
           },
           {
-            path: 'report/add/',
-            element: <AddReport />,
+            path: 'report/add',
+            element: <CommonTop pageName="회원 신고하기" />,
+            children: [
+              {
+                path: 'category/reportedno/:reportedNo',
+                element: <ListReportCategory />,
+              },
+              {
+                path: 'categoryno/:categoryNo/reportedno/:reportedNo',
+                element: <AddReport />,
+              },
+            ],
           },
         ],
       },
@@ -155,6 +183,19 @@ const router = createBrowserRouter([
           {
             path: 'direct/message/list',
             element: <GetDirectChat />,
+          },
+        ],
+      },
+      {
+        path: 'club',
+        children: [
+          {
+            path: 'addclub',
+            element: <AddClub />,
+          },
+          {
+            path: 'no/:clubno',
+            element: <GetClub />,
           },
         ],
       },

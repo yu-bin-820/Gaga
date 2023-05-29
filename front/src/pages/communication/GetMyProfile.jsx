@@ -165,7 +165,7 @@ const GetMyProfile = () => {
             }}
           >
             <ImageList
-              sx={{ width: 350, height: 100 }}
+              sx={{ width: 350, height: 100, overflow: 'hidden' }}
               cols={3}
               rowHeight={100}
             >

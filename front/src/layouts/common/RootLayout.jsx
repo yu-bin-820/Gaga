@@ -46,12 +46,21 @@ const RootLayout = () => {
   }, [myData, clubSocket, meetingSocket, directSocket, groupsData]);
 
   useEffect(() => {
-    return () => {
-      clubDisconnect();
-      meetingDisconnect();
-      directDisconnect();
-    };
-  }, [clubDisconnect, meetingDisconnect, directDisconnect]);
+    if (clubSocket && meetingSocket && directSocket) {
+      return () => {
+        clubDisconnect();
+        meetingDisconnect();
+        directDisconnect();
+      };
+    }
+  }, [
+    clubDisconnect,
+    meetingDisconnect,
+    directDisconnect,
+    clubSocket,
+    meetingSocket,
+    directSocket,
+  ]);
 
   return (
     <div>
