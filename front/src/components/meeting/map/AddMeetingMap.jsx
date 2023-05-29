@@ -150,22 +150,20 @@ const AddMeetingMap = () => {
             required
             value={meetingDetailAddr}
           />
-        <TextField
-            fullWidth
-            label="meetingLat"
-            name="meetingLat"
-            onChange={(e)=>onChangeField('meetingLat',e)}
-            required
-            value={meetingLat}
-          />
-        <TextField
-            fullWidth
-            label="meetingLng"
-            name="meetingLng"
-            onChange={(e)=>onChangeField('meetingLng',e)}
-            required
-            value={meetingLng}
-          />
+        <input
+          hidden
+          name="meetingLat"
+          onChange={(e)=>onChangeField('meetingLat',e)}
+          required
+          value={meetingLat}
+        />
+        <input
+          hidden
+          name="meetingLng"
+          onChange={(e)=>onChangeField('meetingLng',e)}
+          required
+          value={meetingLng}
+        />
         </>
     );
 };

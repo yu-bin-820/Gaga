@@ -1,7 +1,7 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, Collapse, Divider, List, ListItemButton, ListItemIcon, ListItemText, Paper, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import { styled } from '@mui/material/styles';
@@ -30,7 +30,8 @@ const ListCategory = () => {
     const {
         mainCategoryNo,
         filterTag,
-        onChangeField
+        onChangeField,
+        setField
       } = useMeetingFormStore();
 
     const [alignment, setAlignment] = React.useState('left');
@@ -70,11 +71,17 @@ const ListCategory = () => {
     const handleClick = () => {
         setOpen(!open);
     };
+    
+    const onClickSubCategory = useCallback((e)=>{
+      console.log('서브카테고리',e.currentTarget.value);
+      setField('filterTag',e.currentTarget.value)
+    },[setField]);
 
     const [expanded, setExpanded] = React.useState(false);
 
     const handleChange = (panel) => (event, isExpanded) => {
       setExpanded(isExpanded ? panel : false);
+      setField('mainCategoryNo',event.currentTarget.id)
     };
 
     return (
@@ -83,6 +90,7 @@ const ListCategory = () => {
             {mainCategoryList?.map((mainCategory, i) => (
               <Accordion 
               key={i} 
+              id={mainCategory.mainCategoryNo}
               expanded={expanded === i} 
               onChange={handleChange(i)}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id={mainCategory.mainCategoryNo}>
@@ -93,7 +101,7 @@ const ListCategory = () => {
                     {subCategoryList?.map((subCategory, k) => {
                       if (subCategory.mainCategoryNo === mainCategory.mainCategoryNo) {
                         return (
-                          <ToggleButton key={k} value={subCategory.tag} aria-label={subCategory.tag} onClick={handleClick}>
+                          <ToggleButton key={k} value={subCategory.tag} aria-label={subCategory.tag} onClick={onClickSubCategory}>
                             {subCategory.tag}
                           </ToggleButton>
                         );
