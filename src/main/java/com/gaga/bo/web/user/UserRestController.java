@@ -81,10 +81,7 @@ public class UserRestController {
 				session.setAttribute("user", dbUser);
 			}
 		}
-		
-		if( user.getPassword().equals(dbUser.getPassword())){
-			session.setAttribute("user", dbUser);
-		}
+
 		System.out.println("::"+user);
 		System.out.println("::"+dbUser);		
 		return dbUser;
