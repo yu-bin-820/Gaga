@@ -50,7 +50,13 @@ public class CommunityServiceImpl implements CommunityService {
 	public List<Report> getReportList(User user) throws Exception {
 		return communityDao.getReportList(user);
 	}
-
+	
+	@Override
+	public Report getReportByUserNo(Report report) throws Exception {
+		return communityDao.getReportByUserNo(report);
+	}
+	
+	
 	@Override
 	public void updateReport(Report report) throws Exception {
 		communityDao.updateReport(report);
@@ -103,6 +109,7 @@ public class CommunityServiceImpl implements CommunityService {
 	public List<Title> getUserEarnedTitleList(int userNo) throws Exception {
 		return communityDao.getUserEarnedTitleList(userNo);
 	}
-	
+
+
 
 }

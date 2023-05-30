@@ -16,7 +16,7 @@ public interface CommunityService {
 	
 	public Report getReport(int reportNo) throws Exception;
 	
-	//public Report getReportByUserNo(Map<String,Integer> reportingNoReportedNo);
+	public Report getReportByUserNo(Report report) throws Exception;
 	
 	public List<Report> getReportList(User user) throws Exception;
 	

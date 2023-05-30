@@ -27,7 +27,7 @@ public class User {
     private String activityImg3;
     private String userIntro;
     private String mainTitleName;
-//    private int mainTitleNo;
+    private int mainTitleNo;
     private String bankCode;
     private String bankName;
     private String accountNo;
@@ -221,6 +221,12 @@ public class User {
 	public void setState(int state) {
 		this.state = state;
 	}
+	public int getMainTitleNo() {
+		return mainTitleNo;
+	}
+	public void setMainTitleNo(int mainTitleNo) {
+		this.mainTitleNo = mainTitleNo;
+	}
 	@Override
 	public String toString() {
 		return "User [userNo=" + userNo + ", userId=" + userId + ", password=" + password + ", userName=" + userName
@@ -228,11 +234,12 @@ public class User {
 				+ ", role=" + role + ", joinDay=" + joinDay + ", temperature=" + temperature + ", outDay=" + outDay
 				+ ", outReason=" + outReason + ", profileImg=" + profileImg + ", activityImg=" + activityImg
 				+ ", activityImg2=" + activityImg2 + ", activityImg3=" + activityImg3 + ", userIntro=" + userIntro
-				+ ", mainTitleName=" + mainTitleName + ", bankCode=" + bankCode + ", bankName=" + bankName + ", accountNo="
-				+ accountNo + ", blacklist=" + blacklist + ", filterGender=" + filterGender + ", filterMaxAge="
-				+ filterMaxAge + ", filterMinAge=" + filterMinAge + ", filterTag=" + filterTag + ", filterTag2="
-				+ filterTag2 + ", filterTag3=" + filterTag3 + ", state=" + state + "]";
+				+ ", mainTitleName=" + mainTitleName + ", mainTitleNo=" + mainTitleNo + ", bankCode=" + bankCode
+				+ ", bankName=" + bankName + ", accountNo=" + accountNo + ", blacklist=" + blacklist + ", filterGender="
+				+ filterGender + ", filterMaxAge=" + filterMaxAge + ", filterMinAge=" + filterMinAge + ", filterTag="
+				+ filterTag + ", filterTag2=" + filterTag2 + ", filterTag3=" + filterTag3 + ", state=" + state + "]";
 	}
+	
 	
 	   
 	

@@ -241,11 +241,12 @@ public class UserRestController {
 										@PathVariable("groupNo") int groupNo,
 										@PathVariable("state") int state) throws Exception{
 		
-		Map<String, Integer> map = new HashMap<>();
+		Map<String, Integer> map = new HashMap<String,Integer>();
 		map.put("groupType", groupType);
 	    map.put("groupNo", groupNo);
 	    map.put("state", state);
 	    
+	    System.out.println(":: 멤버 검색조건 map :: "+map);
 	    
 		return userService.getGroupMemberList(map);
 	} 
