@@ -41,13 +41,13 @@ public interface UserService {
 	
 	public List<User> getGroupMemberList(Map<String, Integer> map) throws Exception;
 
-	public String sendRandomSmsMessage(String tel);
+	public String sendRandomSmsMessage(String userPhoneNo);
 	
-	public MimeMessage creatMessage(String to) throws MessagingException, UnsupportedEncodingException;
+	public MimeMessage creatEmailContent(String userEmail) throws MessagingException, UnsupportedEncodingException;
     // 랜덤 인증코드 생성
-    public String createKey();
+    public String createEmailKey() throws Exception;
     // 메일 발송
-    public String sendSimpleMessage(String to) throws Exception;
+    public String sendEmailContent(String userEmail) throws Exception;
 
 
 }
