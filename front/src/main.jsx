@@ -22,7 +22,6 @@ import UpdateMeetingSuccess from '@pages/meeting/UpdateMeetingSuccess.jsx';
 import AddMeetingReveiw from '@pages/meeting/AddMeetingReveiw.jsx';
 import UpdateMeetingReview from '@pages/meeting/UpdateMeetingReview.jsx';
 import ListChatRoom from '@pages/communication/ListChatRoom.jsx';
-import GetClubChat from '@pages/communication/GetClubChat.jsx';
 import GetDirectChat from '@pages/communication/GetDirectChat.jsx';
 import GetGroupChat from '@pages/communication/GetGroupChat.jsx';
 import UnauthenticatedMain from '@pages/common/UnauthenticatedMain';
