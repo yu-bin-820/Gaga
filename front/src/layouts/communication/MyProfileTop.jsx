@@ -20,6 +20,7 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SettingsMenuTop from './SettingsMenuTop';
+import UpdateUser from '@pages/user/UpdateUser';
 
 const MyProfileTop = () => {
   const navigate = useNavigate();
@@ -95,9 +96,9 @@ const MyProfileTop = () => {
               <Typography>설정</Typography>
             </ListItem>
             <Divider />
-            <ListItem>
-              <ListItemText primary="개인 정보 수정" />
-            </ListItem>
+            <Button component={Link} to="/user/updateuser">
+                개인 정보 수정
+              </Button><br/>
             <Divider />
           </List>
         </Box>
