@@ -9,24 +9,19 @@ import java.util.Date;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 @RestController
 @RequestMapping("/rest")
@@ -39,7 +34,10 @@ public class ChatbotController {
 
     @Autowired
     private SignatureGenerator signatureGenerator;
-
+    
+    @Autowired
+    private GptService gptService;
+    
 //    @CrossOrigin
     @RequestMapping("/chatbot")
     public ResponseEntity<String> chat(@org.springframework.web.bind.annotation.RequestBody String requestBody) {
