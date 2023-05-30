@@ -194,23 +194,24 @@
 	    FROM users u
 	    JOIN members m ON u.user_no = m.user_no
 	    WHERE u.user_no IN (
-	        SELECT mm.user_no
-	        FROM members mm
+	        SELECT m.user_no
+	        FROM members m
 	        <where>
 	            <choose>
 	                <when test="groupType == 1">
-	                    mm.club_no = #{groupNo}
+	                    m.club_no = #{groupNo}
 	                </when>
 	                <when test="groupType == 2">
-	                    mm.meeting_no = #{groupNo}
+	                    m.meeting_no = #{groupNo}
 	                </when>
 	            </choose>
 	            <if test="state != 0">
-	                AND mm.state = #{state}
+	                AND m.state = #{state}
 	            </if>
 	        </where>
 	    )
 	</select>
+
 
 
 
