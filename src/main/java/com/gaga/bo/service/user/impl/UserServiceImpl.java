@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
@@ -14,10 +15,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage.RecipientType;
+
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -34,6 +41,11 @@ public class UserServiceImpl implements UserService {
 	@Qualifier("userDao")
 	UserDao userDao;
 	
+	 @Autowired
+	 JavaMailSender emailSender; // MailConfig에서 등록해둔 Bean을 autowired하여 사용하기
+	
+	 private String emailVerificationCode; // 사용자가 메일로 받을 인증번호
+	 
 	public UserServiceImpl() {
 		System.out.println(this.getClass());
 	}
@@ -329,7 +341,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override			//네이버 핸드폰 인증을 위한 랜덤 난수 생성+문자 보내기 메소드
-	public String sendRandomSmsMessage(String tel) {
+	public String sendRandomSmsMessage(String userPhoneNo) {
 		NaverSens message = new NaverSens();
 	    Random rand = new Random();
 	    String numStr = "";
@@ -339,11 +351,82 @@ public class UserServiceImpl implements UserService {
 	    }
 	    System.out.println("회원가입 문자 인증 => " + numStr);
 
-	    message.send_msg(tel, numStr);
+	    message.send_msg(userPhoneNo, numStr);
 
 	    return numStr;
 
 	}
 
 
+	public MimeMessage creatEmailContent(String userEmail) throws MessagingException, UnsupportedEncodingException {
+		System.out.println("메일받을 사용자" + userEmail);
+        System.out.println("인증번호" + emailVerificationCode);
+
+        MimeMessage message = emailSender.createMimeMessage();
+
+        message.addRecipients(RecipientType.TO, userEmail); // 메일 받을 사용자
+        message.setSubject("GaGa 서비스 이메일 인증을 위한 이메일 인증코드 입니다"); // 이메일 제목
+
+        String msgg = "";
+        // msgg += "<img src=../resources/static/image/emailheader.jpg />"; // header image
+        msgg += "<h1>안녕하세요</h1>";
+        msgg += "<h1>Gaga 서비스 입니다.</h1>";
+        msgg += "<br>";
+        msgg += "<p>아래 인증코드를 이메일 인증에 입력해주세요</p>";
+        msgg += "<br>";
+        msgg += "<br>";
+        msgg += "<div align='left' style='border:1px solid black'>";
+        msgg += "<h3 style='color:blue'>  이메일 인증코드 입니다</h3>";
+        msgg += "<div style='font-size:130%'>";
+        msgg += "<strong>     " +"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+ emailVerificationCode + "</strong></div><br/>" ; // 메일에 인증번호 ePw 넣기
+        msgg += "</div>";
+        // msgg += "<img src=../resources/static/image/emailfooter.jpg />"; // footer image
+
+        message.setText(msgg, "utf-8", "html"); // 메일 내용, charset타입, subtype
+        // 보내는 사람의 이메일 주소, 보내는 사람 이름
+        message.setFrom(new InternetAddress("deilord@naver.com", "Gaga_Admin"));
+        System.out.println("********creatMessage 함수에서 생성된 msgg 메시지********" + msgg);
+        
+        System.out.println("********creatMessage 함수에서 생성된 리턴 메시지********" + message);
+
+
+        return message;
+    }
+
+
+	public String createEmailKey(){
+		int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+        String key = random.ints(leftLimit, rightLimit + 1)
+                                       .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                                       .limit(targetStringLength)
+                                       .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                                       .toString();
+        System.out.println("생성된 랜덤 인증코드"+ key);
+        return key;
+	}
+
+
+	public String sendEmailContent(String userEmail) throws Exception {
+		emailVerificationCode = createEmailKey(); // 랜덤 인증코드 생성
+        System.out.println("********생성된 랜덤 인증코드******** => " + emailVerificationCode);
+
+        MimeMessage message = creatEmailContent(userEmail); // "to" 로 메일 발송
+
+        System.out.println("********생성된 메시지******** => " + message);
+
+
+        try { // 예외처리
+            emailSender.send(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException();
+        }
+
+        return emailVerificationCode; // 메일로 사용자에게 보낸 인증코드를 서버로 반환! 인증코드 일치여부를 확인하기 위함 
+    }
+    
 }
+

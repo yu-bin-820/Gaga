@@ -43,6 +43,8 @@ public interface CommunityDao {
 	
 	public Report getReport(int reportNo) throws Exception;
 	
+	public Report getReportByUserNo(Report report) throws Exception;
+	
 	public List<Report> getReportList(User user) throws Exception;
 	
 	public void updateReport(Report report) throws Exception;

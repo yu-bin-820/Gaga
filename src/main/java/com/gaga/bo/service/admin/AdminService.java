@@ -3,6 +3,7 @@ package com.gaga.bo.service.admin;
 import java.util.List;
 
 import com.gaga.bo.service.domain.NoticePost;
+import com.gaga.bo.service.domain.Report;
 import com.gaga.bo.service.domain.User;
 
 public interface AdminService {
@@ -19,10 +20,16 @@ public interface AdminService {
 	
 	//List<NoticePost> searchNoticePost(String keyword);
 	
+	//블랙리스트 게시판
 	void addBlackList(int userNo) throws Exception;
 	
 	User getBlackList(int userNo) throws Exception;
 	
 	List<User> listBlackList() throws Exception;
 	
+	//신고게시판
+	List<Report> getReportAdmin(int reportedNo);
+    
+	List<Report> listReportAdmin();
+    
 }

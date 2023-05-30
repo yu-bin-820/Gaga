@@ -18,7 +18,7 @@ import org.json.simple.JSONObject;
 
 public class NaverSens {
 	@SuppressWarnings("unchecked")
-	public void send_msg(String tel, String rand) {
+	public void send_msg(String userPhoneNo, String rand) {
 
         String hostNameUrl = "https://sens.apigw.ntruss.com";		// 호스트 URL
         String requestUrl= "/sms/v2/services/";						// 요청 URL
@@ -37,7 +37,7 @@ public class NaverSens {
 
         // 난수와 함께 전송
         toJson.put("content","Gaga 서비스 핸드폰 인증 [ "+rand+" ]를 입력해주세요");
-        toJson.put("to", tel.replaceAll("\"", ""));
+        toJson.put("to", userPhoneNo.replaceAll("[^\\d]", ""));
         toArr.add(toJson);
         // 메시지 Type (sms | lms)
         bodyJson.put("type","SMS");
@@ -53,7 +53,7 @@ public class NaverSens {
 	    
         System.out.println(body);
         
-        System.out.println("tel: " + tel);
+        System.out.println("phoneNo: " + userPhoneNo);
         System.out.println("rand: " + rand);
 	    
         try {
@@ -89,8 +89,7 @@ public class NaverSens {
             while ((inputLine = br.readLine()) != null) {
                 response.append(inputLine);
             }
-            br.close();
-            
+            br.close();           
             System.out.println(response.toString());
 
         } catch (Exception e) {
@@ -116,7 +115,6 @@ public class NaverSens {
 	    System.out.println("makeSignature : "+message);
 	    SecretKeySpec signingKey;
 	    String encodeBase64String;
-	    System.out.println("여까지오냐? makeSignature");
 		try {
 			signingKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
 			Mac mac = Mac.getInstance("HmacSHA256");

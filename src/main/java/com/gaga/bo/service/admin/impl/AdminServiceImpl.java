@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.gaga.bo.service.admin.AdminDao;
 import com.gaga.bo.service.admin.AdminService;
 import com.gaga.bo.service.domain.NoticePost;
+import com.gaga.bo.service.domain.Report;
 import com.gaga.bo.service.domain.User;
 
 @Service
@@ -17,7 +18,7 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	@Qualifier("adminDao")
 	AdminDao adminDao;
- 
+
 	/// Constructor()
 	public AdminServiceImpl() {
 		System.out.println(this.getClass());
@@ -49,14 +50,15 @@ public class AdminServiceImpl implements AdminService {
 	public void deleteNoticePost(int noticePostNo) throws Exception {
 		adminDao.deleteNoticePost(noticePostNo);
 	}
-	//@Override 리액트로 구현
-		//public List<NoticePost> searchNoticePost(String keyword) {
-		//	return adminDao.searchNoticePost(keyword);
-		//}
+
+	// @Override 리액트로 구현
+	// public List<NoticePost> searchNoticePost(String keyword) {
+	// return adminDao.searchNoticePost(keyword);
+	// }
 	@Override
 	public void addBlackList(int userNo) throws Exception {
 		adminDao.addBlackList(userNo);
-		
+
 	}
 
 	@Override
@@ -65,8 +67,17 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-    public List<User> listBlackList() throws Exception {
-        return adminDao.listBlackList();
-    }
-	
+	public List<User> listBlackList() throws Exception {
+		return adminDao.listBlackList();
+	}
+
+	@Override
+	public List<Report> getReportAdmin(int reportedNo) {
+		return adminDao.getReportAdmin(reportedNo);
+	}
+
+	@Override
+	public List<Report> listReportAdmin() {
+		return adminDao.listReportAdmin();
+	} 
 }
