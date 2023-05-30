@@ -1,11 +1,13 @@
 import useInput from '@hooks/common/useInput';
-import { Button, Rating, TextField } from '@mui/material';
+import CommonTop from '@layouts/common/CommonTop';
+import { Avatar, Button, ImageListItem, Rating, TextField, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import useSWR from 'swr';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 const AddMeetingReveiw = () => {
 
@@ -15,6 +17,16 @@ const AddMeetingReveiw = () => {
         meetingReviewImg: '',
         meetingReviewContent: ''
       });
+    
+      const [selectedImage, setSelectedImage] = useState(null);
+      const [selectedFile, setSelectedFile] = useState(null);
+
+      const onChangeActivityImg = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+        setSelectedImage(URL.createObjectURL(file));
+      };
+
     
       const { data: myData, mutate: mutateMe } = useSWR(
         `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -26,18 +38,18 @@ const AddMeetingReveiw = () => {
         event.preventDefault();
     
         try {
-          const data = {
-            meetingScore: meetingReview.meetingScore,
-            meetingReviewImg: meetingReview.meetingReviewImg,
-            meetingReviewContent: meetingReview.meetingReviewContent,
-            meetingReviewerNo: myData.userNo,
-            meetingNo: meetingno
+          const formData = new FormData();
 
-          };
-          console.log(data);
+          formData.append('file', selectedFile);
+          formData.append('meetingScore',meetingReview.meetingScore);
+          formData.append('meetingReviewContent',meetingReview.meetingReviewContent);
+          formData.append('meetingReviewerNo',myData.userNo);
+          formData.append('meetingNo',meetingno);
+
+          console.log(formData);
           const response = await axios.post(
             `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`,
-            data
+            formData
     
           );
 
@@ -47,9 +59,64 @@ const AddMeetingReveiw = () => {
         } catch (error) {
           console.error(error);
         }
-      }, [meetingReview]);
+      }, [meetingReview, selectedFile]);
       return (
+        <>
+        <CommonTop/>
         <Box sx={{ marginTop: '64px' }}>
+          <Button
+              variant="outlined"
+              startIcon={<Avatar><AddPhotoAlternateIcon /></Avatar>}
+              color="primary"
+              aria-label="upload picture"
+              component="label"
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderColor: 'grey',
+                width: '150px',
+                height: '150px',
+              }}
+              size="large"
+            >
+              <input
+                hidden
+                accept="image/*"
+                type="file"
+                id="file"
+                name="meetingReviewImg"
+                onChange={onChangeActivityImg}
+              />
+            </Button>
+            <ImageListItem>
+                  {selectedImage ? (
+                    <img src={selectedImage} />
+                  ) : (
+                    <Box
+                      sx={{
+                        width: '150px',
+                        height: '150px',
+                        backgroundColor: 'grey',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: '1.2rem',
+                          color: 'white',
+                          fontWeight: 'bold',
+                          width: '150px',
+                          height: '150px',
+                        }}
+                      >
+                        No Img
+                      </Typography>
+                    </Box>
+                  )}
+                </ImageListItem>
           <Stack spacing={1}>
             <Rating 
             name="meetingScore" 
@@ -60,27 +127,14 @@ const AddMeetingReveiw = () => {
             value={meetingReview.meetingScore}
             size="large" />
           </Stack>
-          <TextField
-            fulWidth
-            label="meetingScore"
-            name="meetingScore"
-            onChange={onChangeMeetingReview}
-            required
-            value={meetingReview.meetingScore}
-          />
-          <TextField
-            fulWidth
-            label="meetingReviewImg"
-            name="meetingReviewImg"
-            onChange={onChangeMeetingReview}
-            required
-            value={meetingReview.meetingReviewImg}
-          />
+          <h3>{meetingReview.meetingScore}/5</h3>
           <TextField
             fulWidth
             label="meetingReviewContent"
             name="meetingReviewContent"
             onChange={onChangeMeetingReview}
+            multiline
+            rows={4}
             required
             value={meetingReview.meetingReviewContent}
           />
@@ -88,6 +142,7 @@ const AddMeetingReveiw = () => {
     
           <Button onClick={handleSubmit}>작성하기</Button>
         </Box>
+        </>
     );
 };
 

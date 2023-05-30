@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router';
 import useCommunityStore from '@stores/communication/useCommunityStore';
 import MainBottomNav from '@layouts/common/MainBottomNav';
 import ListChatRoomTop from '@layouts/communication/ListChatRoomTop.jsx';
+import { Badge } from '@mui/material';
 
 export default function ListChatRoom() {
   const navigate = useNavigate();
@@ -37,12 +38,19 @@ export default function ListChatRoom() {
     fetcher
   );
 
-  console.log(
+  const { data: unreadsData, mutate: mutateUnreads } = useSWR(
     `http://${
       import.meta.env.VITE_EXPRESS_HOST
-    }/rest/chat/direct/list/senderno/${myData?.userNo}`,
-    directListData
+    }/rest/chat/group/message/unreads/userno/${myData?.userNo}`,
+    fetcher
   );
+
+  // console.log(
+  //   `http://${
+  //     import.meta.env.VITE_EXPRESS_HOST
+  //   }/rest/chat/direct/list/senderno/${myData?.userNo}`,
+  //   directListData
+  // );
 
   const [value, setValue] = React.useState('group');
 
@@ -58,11 +66,9 @@ export default function ListChatRoom() {
       setField('chatRoomEntryNo', selectedData.chatRoomEntryNo);
       setField('chatType', selectedData.chatType);
       setField('chatRoomLeader', selectedData.chatRoomLeader);
-      if (selectedData.chatType === 'club') {
-        navigate(`/chat/club/message/list`);
-      } else if (selectedData.chatType === 'meeting') {
-        navigate(`/chat/meeting/message/list`);
-      } else if (selectedData.chatType === 'direct') {
+      if (selectedData.chatType !== 3) {
+        navigate(`/chat/group/message/list`);
+      } else {
         navigate(`/chat/direct/message/list`);
       }
     },
@@ -84,8 +90,32 @@ export default function ListChatRoom() {
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab label="Group" value="group" sx={{ minWidth: '50%' }} />
-              <Tab label="DM" value="direct" sx={{ minWidth: '50%' }} />
+              <Tab
+                label={
+                  <Badge
+                    color="error"
+                    variant="dot"
+                    badgeContent={unreadsData?.countGroupUnreads}
+                  >
+                    Group
+                  </Badge>
+                }
+                value="group"
+                sx={{ minWidth: '50%' }}
+              />
+              <Tab
+                label={
+                  <Badge
+                    color="error"
+                    variant="dot"
+                    badgeContent={unreadsData?.countDirectUnreads}
+                  >
+                    DM
+                  </Badge>
+                }
+                value="direct"
+                sx={{ minWidth: '50%' }}
+              />
             </TabList>
           </Box>
           <Box
@@ -94,7 +124,7 @@ export default function ListChatRoom() {
               marginLeft: '0px',
               marginRight: '0px',
               overflowY: 'auto',
-              maxHeight: 'calc(100vh - 200px)',
+              maxHeight: 'calc(100vh - 70px)',
               marginBottom: '64px',
             }}
           >
@@ -111,12 +141,12 @@ export default function ListChatRoom() {
                     group.meeting_no
                       ? {
                           chatRoomEntryNo: group.meeting_no,
-                          chatType: 'meeting',
+                          chatType: 2,
                           chatRoomLeader: group.MeetingLeader,
                         }
                       : {
                           chatRoomEntryNo: group.club_no,
-                          chatType: 'club',
+                          chatType: 1,
                           chatRoomLeader: group.ClubLeader,
                         }
                   )}

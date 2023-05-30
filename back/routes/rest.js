@@ -13,6 +13,25 @@ const DirectMessage = require("../models/directMessage");
 const Reader = require("../models/reader");
 const Member = require("../models/member");
 const router = express.Router();
+
+//-------------------file upload ------------------------------------------
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../uploads"));
+  },
+  filename: function (req, file, cb) {
+    // 현재 시간을 밀리초 단위로 가져와 파일명에 추가
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const storageFileName =
+      file.fieldname + "_" + uniqueSuffix + "_" + file.originalname;
+
+    req.body.content = storageFileName;
+    cb(null, storageFileName);
+  },
+});
+
+const upload = multer({ storage: storage });
+
 //-----------------Club,Meeting Totalunread GET-----------------------------------------
 router.get(
   "/chat/group/message/unreads/userno/:userNo",
@@ -380,15 +399,15 @@ module.exports = router;
 router.post("/chat/club/message", async (req, res, next) => {
   try {
     const club = await Club.findOne({
-      where: { club_no: req.body.clubNo },
+      where: { club_no: req.body.groupNo },
     });
     const roomMessage = await RoomMessage.create({
       sender_no: req.body.senderNo,
-      club_no: req.body.clubNo,
+      club_no: req.body.groupNo,
       content: req.body.content,
       content_type_no: req.body.contentTypeNo,
     });
-
+    //1: text, 2: imgFile, 3:location
     const roomMessageWithUser = await RoomMessage.findOne({
       where: {
         message_no: roomMessage.message_no,
@@ -434,11 +453,11 @@ router.post("/chat/club/message", async (req, res, next) => {
 router.post("/chat/meeting/message", async (req, res, next) => {
   try {
     const meeting = await Meeting.findOne({
-      where: { meeting_no: req.body.meetingNo },
+      where: { meeting_no: req.body.groupNo },
     });
     const roomMessage = await RoomMessage.create({
       sender_no: req.body.senderNo,
-      meeting_no: req.body.meetingNo,
+      meeting_no: req.body.groupNo,
       content: req.body.content,
       content_type_no: req.body.contentTypeNo,
     });
@@ -484,6 +503,105 @@ router.post("/chat/meeting/message", async (req, res, next) => {
     next(error);
   }
 });
+
+//-----------------------------Room Image POST----------------------------------------------
+
+router.post(
+  "/chat/club/image",
+  upload.single("file"),
+  async (req, res, next) => {
+    try {
+      const club = await Club.findOne({
+        where: { club_no: req.body.groupNo },
+      });
+      const roomMessage = await RoomMessage.create({
+        sender_no: req.body.senderNo,
+        club_no: req.body.groupNo,
+        content: req.body.content,
+        content_type_no: 2,
+      });
+
+      const roomMessageWithUser = await RoomMessage.findOne({
+        where: {
+          message_no: roomMessage.message_no,
+        },
+        include: [
+          {
+            model: User,
+            as: "Sender",
+          },
+          {
+            model: Club,
+            as: "Club",
+          },
+        ],
+      });
+      const io = req.app.get("io");
+      io.of(`/ct-club`)
+        .to(`/ct-club-${req.body.groupNo}`)
+        .emit("message", roomMessageWithUser);
+      const lastMessage = "(사진)";
+
+      await club.update({
+        last_message_time: literal("NOW()"),
+        last_message: lastMessage,
+      });
+
+      res.send("club ok");
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.post(
+  "/chat/meeting/image",
+  upload.single("file"),
+  async (req, res, next) => {
+    try {
+      const meeting = await Meeting.findOne({
+        where: { meeting_no: req.body.groupNo },
+      });
+      const roomMessage = await RoomMessage.create({
+        sender_no: req.body.senderNo,
+        meeting_no: req.body.groupNo,
+        content: req.body.content,
+        content_type_no: 2,
+      });
+
+      const roomMessageWithUser = await RoomMessage.findOne({
+        where: {
+          message_no: roomMessage.message_no,
+        },
+        include: [
+          {
+            model: User,
+            as: "Sender",
+          },
+          {
+            model: Meeting,
+            as: "Meeting",
+          },
+        ],
+      });
+      const io = req.app.get("io");
+      io.of(`/ct-meeting`)
+        .to(`/ct-meeting-${req.body.groupNo}`)
+        .emit("message", roomMessageWithUser);
+      const lastMessage = "(사진)";
+
+      await meeting.update({
+        last_message_time: literal("NOW()"),
+        last_message: lastMessage,
+      });
+
+      res.send("meeting ok");
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 //------------------DM List Get-----------------------------------------------------
 router.get("/chat/direct/list/senderno/:senderNo", async (req, res, next) => {
   try {
@@ -577,7 +695,8 @@ router.get("/chat/alarm/receiverno/:receiverNo", async (req, res, next) => {
       { read_state: 0 },
       {
         where: {
-          receiver_no: req.params.senderNo,
+          sender_no: null,
+          receiver_no: req.params.receiverNo,
         },
       }
     );

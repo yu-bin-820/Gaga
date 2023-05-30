@@ -25,9 +25,9 @@ const AddMeeting = () => {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <ListCategory />;
-      case 1:
         return <SelectMeetingType />;
+      case 1:
+        return <ListCategory />;
       case 2:
         return <AddMeetingName />;
       case 3:
