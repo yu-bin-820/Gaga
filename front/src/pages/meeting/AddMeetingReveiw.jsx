@@ -38,17 +38,18 @@ const AddMeetingReveiw = () => {
         event.preventDefault();
     
         try {
-          const data = {
-            meetingScore: meetingReview.meetingScore,
-            meetingReviewContent: meetingReview.meetingReviewContent,
-            meetingReviewerNo: myData.userNo,
-            meetingNo: meetingno
-          };
-          data.append('file', selectedFile);
-          console.log(data);
+          const formData = new FormData();
+
+          formData.append('file', selectedFile);
+          formData.append('meetingScore',meetingReview.meetingScore);
+          formData.append('meetingReviewContent',meetingReview.meetingReviewContent);
+          formData.append('meetingReviewerNo',myData.userNo);
+          formData.append('meetingNo',meetingno);
+
+          console.log(formData);
           const response = await axios.post(
             `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`,
-            data
+            formData
     
           );
 
@@ -58,7 +59,7 @@ const AddMeetingReveiw = () => {
         } catch (error) {
           console.error(error);
         }
-      }, [meetingReview]);
+      }, [meetingReview, selectedFile]);
       return (
         <>
         <CommonTop/>
@@ -74,6 +75,8 @@ const AddMeetingReveiw = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderColor: 'grey',
+                width: '150px',
+                height: '150px',
               }}
               size="large"
             >
@@ -92,8 +95,8 @@ const AddMeetingReveiw = () => {
                   ) : (
                     <Box
                       sx={{
-                        width: '100%',
-                        height: '100%',
+                        width: '150px',
+                        height: '150px',
                         backgroundColor: 'grey',
                         display: 'flex',
                         alignItems: 'center',
@@ -105,6 +108,8 @@ const AddMeetingReveiw = () => {
                           fontSize: '1.2rem',
                           color: 'white',
                           fontWeight: 'bold',
+                          width: '150px',
+                          height: '150px',
                         }}
                       >
                         No Img
@@ -122,19 +127,14 @@ const AddMeetingReveiw = () => {
             value={meetingReview.meetingScore}
             size="large" />
           </Stack>
-          <TextField
-            fulWidth
-            label="meetingScore"
-            name="meetingScore"
-            onChange={onChangeMeetingReview}
-            required
-            value={meetingReview.meetingScore}
-          />
+          <h3>{meetingReview.meetingScore}/5</h3>
           <TextField
             fulWidth
             label="meetingReviewContent"
             name="meetingReviewContent"
             onChange={onChangeMeetingReview}
+            multiline
+            rows={4}
             required
             value={meetingReview.meetingReviewContent}
           />
