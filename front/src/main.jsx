@@ -37,6 +37,7 @@ import GetProfile from "@pages/communication/GetProfile.jsx";
 import ListGroupMemberList from "@components/user/ListGroupMember.jsx";
 import AddClub from "@pages/club/AddClub.jsx";
 import GetClub from "@pages/club/GetClub.jsx";
+import ListGroupMember from "@components/user/ListGroupMember.jsx";
 
 const router = createBrowserRouter([
   {
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
             path: "updateuser",
             element: <UpdateUser />,
           },
+          {
+            path: "memberlist",
+            element: <ListGroupMember />,
+          },
         ],
       },
       {
@@ -77,7 +82,7 @@ const router = createBrowserRouter([
             element: <Login />,
           },
           {
-            path: "memberlist",
+            path: "memberlist/",
             element: <ListGroupMemberList />,
           },
         ],

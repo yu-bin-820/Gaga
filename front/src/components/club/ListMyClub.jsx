@@ -6,9 +6,10 @@ import axios from "axios";
 import { Box } from "@mui/system";
 import { Button } from "@mui/material";
 import ListGroupMember from "@components/user/ListGroupMember";
+import ClubThumbnail from "./ClubThumbnail";
 
 const ListMyClub = () => {
-  const { userno } = useParams();
+  const { userNo } = useParams();
   const [clubList, setClubList] = useState();
   const navigate = useNavigate();
 
@@ -48,6 +49,7 @@ const ListMyClub = () => {
       <Box>
         {clubList?.map((club, i) => (
           <Box key={i}>
+            <ClubThumbnail club={club} />
             <h5>{club.clubName}</h5>
             <h5>{club.state}</h5>
             <Button id={club.clubNo} onClick={onClickClub}>
@@ -56,7 +58,6 @@ const ListMyClub = () => {
             <Button id={club.clubNo} onClick={onClickListClubMember}>
               클럽멤버
             </Button>
-            <ListGroupMember />
           </Box>
         ))}
       </Box>

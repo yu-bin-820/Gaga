@@ -1,21 +1,21 @@
-const { Op, literal } = require('sequelize');
-const express = require('express');
-const multer = require('multer');
-const fs = require('fs');
-const path = require('path');
+const { Op, literal } = require("sequelize");
+const express = require("express");
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 
-const { sequelize } = require('../models');
-const User = require('../models/user');
-const Club = require('../models/club');
-const Meeting = require('../models/meeting');
-const RoomMessage = require('../models/roomMessage');
-const DirectMessage = require('../models/directMessage');
-const Reader = require('../models/reader');
-const Member = require('../models/member');
+const { sequelize } = require("../models");
+const User = require("../models/user");
+const Club = require("../models/club");
+const Meeting = require("../models/meeting");
+const RoomMessage = require("../models/roomMessage");
+const DirectMessage = require("../models/directMessage");
+const Reader = require("../models/reader");
+const Member = require("../models/member");
 const router = express.Router();
 //-----------------Club,Meeting Totalunread GET-----------------------------------------
 router.get(
-  '/chat/group/message/unreads/userno/:userNo',
+  "/chat/group/message/unreads/userno/:userNo",
   async (req, res, next) => {
     try {
       const user = await User.findOne({
@@ -85,9 +85,9 @@ router.get(
   }
 );
 //-------------------Club, Meeting list GET---------------------------------------------
-router.get('/chat/club/list/userno/:userNo', async (req, res, next) => {
+router.get("/chat/club/list/userno/:userNo", async (req, res, next) => {
   try {
-    console.log('여기는');
+    console.log("여기는");
     const user = await User.findOne({
       where: { user_no: req.params.userNo },
     });
@@ -101,9 +101,9 @@ router.get('/chat/club/list/userno/:userNo', async (req, res, next) => {
   }
 });
 
-router.get('/chat/meeting/list/userno/:userNo', async (req, res, next) => {
+router.get("/chat/meeting/list/userno/:userNo", async (req, res, next) => {
   try {
-    console.log('여기는');
+    console.log("여기는");
     const user = await User.findOne({
       where: { user_no: req.params.userNo },
     });
@@ -117,9 +117,9 @@ router.get('/chat/meeting/list/userno/:userNo', async (req, res, next) => {
   }
 });
 
-router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
+router.get("/chat/group/list/userno/:userNo", async (req, res, next) => {
   try {
-    console.log('여기는');
+    console.log("여기는");
     const user = await User.findOne({
       where: { user_no: req.params.userNo },
     });
@@ -128,8 +128,8 @@ router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
       include: [
         {
           model: User,
-          attributes: ['user_no', 'nick_name', 'profile_img'],
-          as: 'ClubLeader',
+          attributes: ["user_no", "nick_name", "profile_img"],
+          as: "ClubLeader",
         },
       ],
     }); // getOwnedClub 호출
@@ -138,8 +138,8 @@ router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
       include: [
         {
           model: User,
-          attributes: ['user_no', 'nick_name', 'profile_img'],
-          as: 'ClubLeader',
+          attributes: ["user_no", "nick_name", "profile_img"],
+          as: "ClubLeader",
         },
       ],
     });
@@ -147,8 +147,8 @@ router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
       include: [
         {
           model: User,
-          attributes: ['user_no', 'nick_name', 'profile_img'],
-          as: 'MeetingLeader',
+          attributes: ["user_no", "nick_name", "profile_img"],
+          as: "MeetingLeader",
         },
       ],
     }); // getOwnedClub 호출
@@ -157,8 +157,8 @@ router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
       include: [
         {
           model: User,
-          attributes: ['user_no', 'nick_name', 'profile_img'],
-          as: 'MeetingLeader',
+          attributes: ["user_no", "nick_name", "profile_img"],
+          as: "MeetingLeader",
         },
       ],
     });
@@ -169,9 +169,9 @@ router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
       ...joinedMeetings,
     ];
     // get all read messages by the user
-    console.log('userno', user.user_no);
+    console.log("userno", user.user_no);
     const readMessages = await user.getReadedMessages();
-    console.log('readMessages', readMessages.length);
+    console.log("readMessages", readMessages.length);
     for (const group of unsortedGroups) {
       const countGroupMessage =
         group instanceof Club
@@ -181,13 +181,13 @@ router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
       // filter the read messages where club_no or meeting_no matches with the group
       const countReadedMessages = await readMessages.filter(
         (message) =>
-          message[group instanceof Club ? 'club_no' : 'meeting_no'] ===
-          group[group instanceof Club ? 'club_no' : 'meeting_no']
+          message[group instanceof Club ? "club_no" : "meeting_no"] ===
+          group[group instanceof Club ? "club_no" : "meeting_no"]
       ).length;
 
       console.log(
-        group instanceof Club ? 'club_no' : 'meeting_no',
-        group[group instanceof Club ? 'club_no' : 'meeting_no'],
+        group instanceof Club ? "club_no" : "meeting_no",
+        group[group instanceof Club ? "club_no" : "meeting_no"],
         countReadedMessages
       );
       console.log(countGroupMessage);
@@ -208,7 +208,7 @@ router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
 });
 //--------------------------Room Message GET------------------------------------
 router.get(
-  '/chat/clubno/:clubNo/message/list/userno/:userNo',
+  "/chat/clubno/:clubNo/message/list/userno/:userNo",
   async (req, res, next) => {
     try {
       const club = await Club.findOne({
@@ -219,15 +219,15 @@ router.get(
         include: [
           {
             model: User,
-            attributes: ['user_no', 'nick_name', 'profile_img'],
-            as: 'Sender',
+            attributes: ["user_no", "nick_name", "profile_img"],
+            as: "Sender",
           },
           {
             model: Club,
-            as: 'Club',
+            as: "Club",
           },
         ],
-        order: [['created_at', 'ASC']],
+        order: [["created_at", "ASC"]],
       });
       // );
 
@@ -293,7 +293,7 @@ router.get(
 module.exports = router;
 
 router.get(
-  '/chat/meetingno/:meetingNo/message/list/userno/:userNo',
+  "/chat/meetingno/:meetingNo/message/list/userno/:userNo",
   async (req, res, next) => {
     try {
       const meeting = await Meeting.findOne({
@@ -304,15 +304,15 @@ router.get(
         include: [
           {
             model: User,
-            attributes: ['user_no', 'nick_name', 'profile_img'],
-            as: 'Sender',
+            attributes: ["user_no", "nick_name", "profile_img"],
+            as: "Sender",
           },
           {
             model: Meeting,
-            as: 'Meeting',
+            as: "Meeting",
           },
         ],
-        order: [['created_at', 'ASC']],
+        order: [["created_at", "ASC"]],
       });
       // );
 
@@ -377,7 +377,7 @@ router.get(
 module.exports = router;
 
 //-----------------------------Room Message POST-----------------------
-router.post('/chat/club/message', async (req, res, next) => {
+router.post("/chat/club/message", async (req, res, next) => {
   try {
     const club = await Club.findOne({
       where: { club_no: req.body.clubNo },
@@ -396,42 +396,42 @@ router.post('/chat/club/message', async (req, res, next) => {
       include: [
         {
           model: User,
-          as: 'Sender',
+          as: "Sender",
         },
         {
           model: Club,
-          as: 'Club',
+          as: "Club",
         },
       ],
     });
 
-    const io = req.app.get('io');
+    const io = req.app.get("io");
     io.of(`/ct-club`)
       .to(`/ct-club-${req.body.clubNo}`)
-      .emit('message', roomMessageWithUser);
+      .emit("message", roomMessageWithUser);
 
     let lastMessage = req.body.content;
     if (lastMessage.length > 15) {
-      lastMessage = lastMessage.slice(0, 15) + '...'; // 15글자까지 자르기
+      lastMessage = lastMessage.slice(0, 15) + "..."; // 15글자까지 자르기
     }
 
     if (req.body.contentTypeNo === 2) {
-      lastMessage = '(사진)';
+      lastMessage = "(사진)";
     } else if (req.body.contentTypeNo === 3) {
-      lastMessage = '(위치 공유)';
+      lastMessage = "(위치 공유)";
     }
     await club.update({
-      last_message_time: literal('NOW()'),
+      last_message_time: literal("NOW()"),
       last_message: lastMessage,
     });
 
-    res.send('club ok');
+    res.send("club ok");
   } catch (error) {
     next(error);
   }
 });
 
-router.post('/chat/meeting/message', async (req, res, next) => {
+router.post("/chat/meeting/message", async (req, res, next) => {
   try {
     const meeting = await Meeting.findOne({
       where: { meeting_no: req.body.meetingNo },
@@ -450,58 +450,58 @@ router.post('/chat/meeting/message', async (req, res, next) => {
       include: [
         {
           model: User,
-          as: 'Sender',
+          as: "Sender",
         },
         {
           model: Meeting,
-          as: 'Meeting',
+          as: "Meeting",
         },
       ],
     });
-    const io = req.app.get('io');
+    const io = req.app.get("io");
     io.of(`/ct-meeting`)
       .to(`/ct-meeting-${req.body.meetingNo}`)
-      .emit('message', roomMessageWithUser);
+      .emit("message", roomMessageWithUser);
 
     let lastMessage = req.body.content;
     if (lastMessage.length > 15) {
-      lastMessage = lastMessage.slice(0, 15) + '...'; // 15글자까지 자르기
+      lastMessage = lastMessage.slice(0, 15) + "..."; // 15글자까지 자르기
     }
 
     if (req.body.contentTypeNo === 2) {
-      lastMessage = '(사진)';
+      lastMessage = "(사진)";
     } else if (req.body.contentTypeNo === 3) {
-      lastMessage = '(위치 공유)';
+      lastMessage = "(위치 공유)";
     }
 
     await meeting.update({
-      last_message_time: literal('NOW()'),
+      last_message_time: literal("NOW()"),
       last_message: lastMessage,
     });
 
-    res.send('meeting ok');
+    res.send("meeting ok");
   } catch (error) {
     next(error);
   }
 });
 //------------------DM List Get-----------------------------------------------------
-router.get('/chat/direct/list/senderno/:senderNo', async (req, res, next) => {
+router.get("/chat/direct/list/senderno/:senderNo", async (req, res, next) => {
   try {
     const directMessageList = await DirectMessage.findAll({
-      attributes: ['receiver_no', 'content', 'content_type_no', 'created_at'],
+      attributes: ["receiver_no", "content", "content_type_no", "created_at"],
       where: {
         sender_no: req.params.senderNo,
       },
       include: [
         {
           model: User,
-          as: 'Receiver',
-          attributes: ['user_no', 'user_id', 'nick_name', 'profile_img'],
+          as: "Receiver",
+          attributes: ["user_no", "user_id", "nick_name", "profile_img"],
         },
       ],
-      group: ['receiver_no', 'content', 'content_type_no', 'created_at'],
+      group: ["receiver_no", "content", "content_type_no", "created_at"],
       having: literal(
-        'created_at = (SELECT MAX(created_at) FROM direct_messages WHERE sender_no = 1 AND receiver_no = `DirectMessage`.`receiver_no` LIMIT 1)'
+        "created_at = (SELECT MAX(created_at) FROM direct_messages WHERE sender_no = 1 AND receiver_no = `DirectMessage`.`receiver_no` LIMIT 1)"
       ),
     });
 
@@ -526,7 +526,7 @@ router.get('/chat/direct/list/senderno/:senderNo', async (req, res, next) => {
 //---------------------------Direct Message Get--------------------------------------
 
 router.get(
-  '/chat/direct/senderno/:senderNo/receiverno/:receiverNo',
+  "/chat/direct/senderno/:senderNo/receiverno/:receiverNo",
   async (req, res, next) => {
     try {
       await DirectMessage.update(
@@ -554,13 +554,13 @@ router.get(
           include: [
             {
               model: User,
-              as: 'Sender',
-              attributes: ['nick_name', 'user_no', 'profile_img'],
+              as: "Sender",
+              attributes: ["nick_name", "user_no", "profile_img"],
             },
             {
               model: User,
-              as: 'Receiver',
-              attributes: ['nick_name', 'user_no', 'profile_img'],
+              as: "Receiver",
+              attributes: ["nick_name", "user_no", "profile_img"],
             },
           ],
         })
@@ -571,7 +571,7 @@ router.get(
   }
 );
 //-------------------------Alarm Get----------------------------------------------
-router.get('/chat/alarm/receiverno/:receiverNo', async (req, res, next) => {
+router.get("/chat/alarm/receiverno/:receiverNo", async (req, res, next) => {
   try {
     await DirectMessage.update(
       { read_state: 0 },
@@ -590,8 +590,8 @@ router.get('/chat/alarm/receiverno/:receiverNo', async (req, res, next) => {
         include: [
           {
             model: User,
-            as: 'Receiver',
-            attributes: ['nick_name', 'user_no', 'profile_img'],
+            as: "Receiver",
+            attributes: ["nick_name", "user_no", "profile_img"],
           },
         ],
       })
@@ -606,7 +606,7 @@ function getKeyByValue(object, value) {
   return Object.keys(object).find((key) => object[key] === value);
 }
 
-router.post('/chat/direct', async (req, res, next) => {
+router.post("/chat/direct", async (req, res, next) => {
   try {
     const directMessage = await DirectMessage.create({
       sender_no: req.body.senderNo,
@@ -619,12 +619,12 @@ router.post('/chat/direct', async (req, res, next) => {
       include: [
         {
           model: User,
-          as: 'Sender',
+          as: "Sender",
         },
       ],
     });
-    const io = req.app.get('io');
-    const onlineMap = req.app.get('onlineMap');
+    const io = req.app.get("io");
+    const onlineMap = req.app.get("onlineMap");
     // const receiverSocketId = getKeyByValue(
     //   onlineMap['/ct-direct'],
     //   Number(req.body.receiverNo)
@@ -632,7 +632,7 @@ router.post('/chat/direct', async (req, res, next) => {
     // io.of('/ct-direct')
     //   .to(receiverSocketId)
     //   .emit('directMessage', directMessageWithSender);
-    res.send('direct ok');
+    res.send("direct ok");
   } catch (error) {
     next(error);
   }
@@ -640,7 +640,7 @@ router.post('/chat/direct', async (req, res, next) => {
 
 //---------------------------Alarm Post-----------------------------------------
 
-router.post('/chat/alarm', async (req, res, next) => {
+router.post("/chat/alarm", async (req, res, next) => {
   try {
     const directMessage = await DirectMessage.create({
       receiver_no: req.body.receiverNo,
@@ -652,12 +652,12 @@ router.post('/chat/alarm', async (req, res, next) => {
       include: [
         {
           model: User,
-          as: 'Sender',
+          as: "Sender",
         },
       ],
     });
-    const io = req.app.get('io');
-    const onlineMap = req.app.get('onlineMap');
+    const io = req.app.get("io");
+    const onlineMap = req.app.get("onlineMap");
     // const receiverSocketId = getKeyByValue(
     //   onlineMap['/ct-direct'],
     //   Number(req.body.receiverNo)
@@ -665,7 +665,7 @@ router.post('/chat/alarm', async (req, res, next) => {
     // io.of('/ct-direct')
     //   .to(receiverSocketId)
     //   .emit('directMessage', directMessageWithSender);
-    res.send('alarm ok');
+    res.send("alarm ok");
   } catch (error) {
     next(error);
   }
