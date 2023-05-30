@@ -26,10 +26,32 @@ const CommonTop = ({ pageName }) => {
             >
               <ArrowBackIosNewIcon />
             </IconButton>
-            {pageName}
+            <Box
+              sx={{
+                minWidth: 'calc(100vw - 108px)',
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: 20,
+                  fontWeight: 700,
+                }}
+              >
+                {pageName}
+              </Typography>
+            </Box>
           </Toolbar>
         </Container>
       </AppBar>
+      <Box
+        sx={{
+          borderBottom: '1px solid #ccc',
+          marginTop: '57px',
+          height: '1px',
+        }}
+      />
       <Outlet />
     </>
   );

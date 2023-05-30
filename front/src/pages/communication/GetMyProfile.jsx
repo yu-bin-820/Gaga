@@ -4,11 +4,9 @@ import MainBottomNav from '@layouts/common/MainBottomNav';
 import MyProfileTop from '@layouts/communication/MyProfileTop';
 import {
   Avatar,
-  BottomNavigation,
   Chip,
   IconButton,
   ImageList,
-  ImageListItem,
   LinearProgress,
   Typography,
 } from '@mui/material';
@@ -21,6 +19,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import UploadProfileImgDialog from '@components/communication/UploadProfileImgDialog';
 import UploadActivityImgDialog from '@components/communication/UploadActivityImgDialog';
+import CustomedImageListItem from '@components/common/CustomedImageListItem';
 
 const TeperatureLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -59,11 +58,6 @@ const GetMyProfile = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
-  const [imageLoadingError, setImageLoadingError] = useState(false);
-
-  const handleImageError = useCallback(() => {
-    setImageLoadingError(true);
   }, []);
 
   const onClickProfileImg = useCallback(() => {
@@ -169,105 +163,21 @@ const GetMyProfile = () => {
               cols={3}
               rowHeight={100}
             >
-              <ImageListItem>
-                {!imageLoadingError ? (
-                  <img
-                    src={`http://${
-                      import.meta.env.VITE_SPRING_HOST
-                    }/upload_images/user/${myData?.activityImg}`}
-                    alt="noImg"
-                    loading="lazy"
-                    onError={handleImageError}
-                  />
-                ) : (
-                  <Box
-                    sx={{
-                      width: '100%',
-                      height: '100%',
-                      backgroundColor: 'grey',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: '1.2rem',
-                        color: 'white',
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      No Img
-                    </Typography>
-                  </Box>
-                )}
-              </ImageListItem>
-              <ImageListItem>
-                {!imageLoadingError ? (
-                  <img
-                    src={`http://${
-                      import.meta.env.VITE_SPRING_HOST
-                    }/upload_images/user/${myData?.activityImg2}`}
-                    alt="noImg"
-                    loading="lazy"
-                    onError={handleImageError}
-                  />
-                ) : (
-                  <Box
-                    sx={{
-                      width: '100%',
-                      height: '100%',
-                      backgroundColor: 'grey',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: '1.2rem',
-                        color: 'white',
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      No Img
-                    </Typography>
-                  </Box>
-                )}
-              </ImageListItem>
-              <ImageListItem>
-                {!imageLoadingError ? (
-                  <img
-                    src={`http://${
-                      import.meta.env.VITE_SPRING_HOST
-                    }/upload_images/user/${myData?.activityImg3}`}
-                    alt="noImg"
-                    loading="lazy"
-                    onError={handleImageError}
-                  />
-                ) : (
-                  <Box
-                    sx={{
-                      width: '100%',
-                      height: '100%',
-                      backgroundColor: 'grey',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: '1.2rem',
-                        color: 'white',
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      No Img
-                    </Typography>
-                  </Box>
-                )}
-              </ImageListItem>
+              <CustomedImageListItem
+                src={`http://${
+                  import.meta.env.VITE_SPRING_HOST
+                }/upload_images/user/${myData?.activityImg}`}
+              />
+              <CustomedImageListItem
+                src={`http://${
+                  import.meta.env.VITE_SPRING_HOST
+                }/upload_images/user/${myData?.activityImg2}`}
+              />
+              <CustomedImageListItem
+                src={`http://${
+                  import.meta.env.VITE_SPRING_HOST
+                }/upload_images/user/${myData?.activityImg3}`}
+              />
             </ImageList>
           </Box>
         </div>

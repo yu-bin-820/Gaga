@@ -38,6 +38,7 @@ import ListReportCategory from '@pages/communication/ListReportCategory.jsx';
 import ListGroupMemberList from '@components/user/ListGroupMember.jsx';
 import AddClub from '@pages/club/AddClub.jsx';
 import GetClub from '@pages/club/GetClub.jsx';
+import ListReport from '@pages/communication/ListReport.jsx';
 
 const router = createBrowserRouter([
   {
@@ -145,20 +146,26 @@ const router = createBrowserRouter([
             element: <Test />,
           },
           {
-            path: 'report/reportno/:reportNo',
-            element: <GetReport />,
-          },
-          {
-            path: 'report/add',
-            element: <CommonTop pageName="회원 신고하기" />,
+            path: 'report',
             children: [
+              { path: 'list', element: <ListReport /> },
               {
-                path: 'category/reportedno/:reportedNo',
-                element: <ListReportCategory />,
+                path: 'reportno/:reportNo',
+                element: <GetReport />,
               },
               {
-                path: 'categoryno/:categoryNo/reportedno/:reportedNo',
-                element: <AddReport />,
+                path: 'add',
+                element: <CommonTop pageName="회원 신고하기" />,
+                children: [
+                  {
+                    path: 'category/reportedno/:reportedNo',
+                    element: <ListReportCategory />,
+                  },
+                  {
+                    path: 'categoryno/:categoryNo/reportedno/:reportedNo',
+                    element: <AddReport />,
+                  },
+                ],
               },
             ],
           },
