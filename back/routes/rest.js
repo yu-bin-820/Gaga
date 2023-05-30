@@ -426,7 +426,7 @@ router.post("/chat/club/message", async (req, res, next) => {
 
     const io = req.app.get("io");
     io.of(`/ct-club`)
-      .to(`/ct-club-${req.body.clubNo}`)
+      .to(`/ct-club-${req.body.groupNo}`)
       .emit("message", roomMessageWithUser);
 
     let lastMessage = req.body.content;
@@ -479,7 +479,7 @@ router.post("/chat/meeting/message", async (req, res, next) => {
     });
     const io = req.app.get("io");
     io.of(`/ct-meeting`)
-      .to(`/ct-meeting-${req.body.meetingNo}`)
+      .to(`/ct-meeting-${req.body.groupNo}`)
       .emit("message", roomMessageWithUser);
 
     let lastMessage = req.body.content;

@@ -39,7 +39,6 @@ import ListGroupMemberList from "@components/user/ListGroupMember.jsx";
 import AddClub from "@pages/club/AddClub.jsx";
 import GetClub from "@pages/club/GetClub.jsx";
 import ListReport from "@pages/communication/ListReport.jsx";
-import ListGroupMember from "@components/user/ListGroupMember.jsx";
 
 const router = createBrowserRouter([
   {
