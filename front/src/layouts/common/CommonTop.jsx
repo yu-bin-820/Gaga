@@ -7,7 +7,7 @@ import { Button, IconButton, Typography } from '@mui/material';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/system';
 import PropTypes from 'prop-types';
-const CommonTop = ({ pageName }) => {
+const CommonTop = ({ pageName, prevPath }) => {
   const navigate = useNavigate();
   return (
     <>
@@ -15,13 +15,13 @@ const CommonTop = ({ pageName }) => {
         position="fixed"
         color="secondary"
         elevation={0}
-        sx={{ height: '50px' }}
+        sx={{ height: '58px', borderBottom: '1px solid #ccc' }}
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <IconButton
               onClick={() => {
-                navigate(-1);
+                navigate(prevPath || -1);
               }}
             >
               <ArrowBackIosNewIcon />
@@ -45,18 +45,12 @@ const CommonTop = ({ pageName }) => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Box
-        sx={{
-          borderBottom: '1px solid #ccc',
-          marginTop: '57px',
-          height: '1px',
-        }}
-      />
       <Outlet />
     </>
   );
 };
 CommonTop.propTypes = {
   pageName: PropTypes.string,
+  prevPath: PropTypes.string,
 };
 export default CommonTop;

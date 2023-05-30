@@ -10,6 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Box, Stack } from '@mui/system';
+import useCommunityStore from '@stores/communication/useCommunityStore';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import React, { useCallback, useState } from 'react';
@@ -29,16 +30,7 @@ const AddReport = () => {
   const [reportContent, onChangeReportContent, setReportContent] =
     useInputOrigin('');
 
-  const [reportCategry, setReportCategory] = useState([
-    '개인 연락처 또는 1:1 만남요구',
-    'GAGA 취지에 반하는 모임 운영',
-    'GAGA채팅이 아닌 외부 채팅방으로 유도',
-    '비매너, 비협조적인 태도 등으로 모임 진행 방해',
-    '비방, 폭언, 협박, 위협 등으로 불안감 조성',
-    '성적 수치심, 불쾌감을 유발하는 발언',
-    '특정 종교의 권유, 포교, 전도 목적 의심',
-    '기타',
-  ]);
+  const { reportCategory } = useCommunityStore();
 
   const { data: myData, mutate: mutateMe } = useSWR(
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -94,17 +86,18 @@ const AddReport = () => {
     myData,
     reportedNo,
     reportContent,
+    navigate,
   ]);
 
   return (
-    <Box sx={{ marginTop: '64px', marginLeft: '10px', marginRight: '10px' }}>
+    <Box sx={{ marginTop: '10px', marginLeft: '10px', marginRight: '10px' }}>
       <Stack spacing={2.5}>
         <Stack spacing={1}>
           <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
             신고 항목
           </Typography>
           <Typography sx={{ fontSize: 13 }}>
-            {reportCategry[categoryNo - 1]}
+            {reportCategory[categoryNo - 1]}
           </Typography>
         </Stack>
 
@@ -135,9 +128,9 @@ const AddReport = () => {
             }}
           >
             <ImageList
-              sx={{ width: 320, height: 140 }}
+              sx={{ width: 320, height: 145 }}
               cols={3}
-              rowHeight={140}
+              rowHeight={145}
             >
               <ImageListItem>
                 <Stack spacing={0.5}>

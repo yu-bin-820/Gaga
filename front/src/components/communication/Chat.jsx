@@ -17,8 +17,8 @@ const Chat = ({ data }) => {
   // console.log('!!!', data.data);
 
   const isMe = myData?.userNo === data.sender_no;
-  const messageColor = isMe ? 'white' : 'gray';
-  const messageBackColor = isMe ? '#036645' : 'lightgray';
+  const messageColor = isMe ? 'black' : 'gray';
+  const messageBackColor = isMe ? 'rgba(3, 102, 69, 0.15)' : '#ededed';
   const sendTime = DateTime.fromISO(data.created_at).toLocaleString(
     DateTime.TIME_SIMPLE
   );
