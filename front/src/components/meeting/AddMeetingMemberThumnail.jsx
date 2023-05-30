@@ -3,7 +3,7 @@ import { Box, Stack } from '@mui/system';
 import React from 'react';
 import { styled } from '@mui/system';
 import PropTypes from 'prop-types';
-import PeopleIcon from '@mui/icons-material/People';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
@@ -35,10 +35,10 @@ const AddMeetingMemberThumnail = ({ meeting }) => {
       <Stack direction="row" spacing={2}>
         <ImageListItem
           sx={{
-            maxWidth: '110px',
-            maxHeight: '110px',
-            minWidth: '110px',
-            minHeight: '110px',
+            maxWidth: '95px',
+            maxHeight: '95px',
+            minWidth: '95px',
+            minHeight: '95px',
           }}
         >
           <img
@@ -52,11 +52,6 @@ const AddMeetingMemberThumnail = ({ meeting }) => {
           >
             {meetingName}
           </Box>
-          <Chip
-            label={meeting.filterTag}
-            size="small"
-            sx={{ fontSize: 10 }}
-          />
 
           <Box
             sx={{ color: 'text.secondary', display: 'inline', fontSize: 12 }}
@@ -65,9 +60,9 @@ const AddMeetingMemberThumnail = ({ meeting }) => {
           <Stack spacing={0.5}>
 
             <Stack direction={'row'} spacing={1} alignItems={'center'}>
-              <PeopleIcon sx={{ fontSize: 14 }} />
+              <LocationOnIcon sx={{ fontSize: 14 }} />
               <Typography sx={{ fontSize: 12 }}>
-                /{meeting?.meetingMaxMemberNo}
+                {meeting?.meetingAddr}
               </Typography>
             </Stack>
 

@@ -78,22 +78,7 @@ const AddMeeting1 = () => {
     }
   }, [useMeetingFormStore]);
   return (
-    <Box sx={{ marginTop: '64px' }}>
-      <TextField
-        fulWidth
-        label="mainCategoryNo"
-        name="mainCategoryNo"
-        onChange={(e)=>onChangeField('mainCategoryNo',e)}
-        value={mainCategoryNo}
-      />
-      <TextField
-        fulWidth
-        label="filterTag"
-        name="filterTag"
-        onChange={(e)=>onChangeField('filterTag',e)}
-        required
-        value={filterTag}
-      />
+    <Box>
       <TextField
         fulWidth
         label="meetingIntro"
@@ -133,38 +118,6 @@ const AddMeeting1 = () => {
         onChange={(e)=>onChangeField('meetingEndTime',e)}
         required
         value={meetingEndTime}
-      />
-      <TextField
-        fulWidth
-        label="meetingAddr"
-        name="meetingAddr"
-        onChange={(e)=>onChangeField('meetingAddr',e)}
-        required
-        value={meetingAddr}
-      />
-      <TextField
-        fulWidth
-        label="meetingDetailAddr"
-        name="meetingDetailAddr"
-        onChange={(e)=>onChangeField('meetingDetailAddr',e)}
-        required
-        value={meetingDetailAddr}
-      />
-      <TextField
-        fulWidth
-        label="meetingLat"
-        name="meetingLat"
-        onChange={(e)=>onChangeField('meetingLat',e)}
-        required
-        value={meetingLat}
-      />
-      <TextField
-        fulWidth
-        label="meetingLng"
-        name="meetingLng"
-        onChange={(e)=>onChangeField('meetingLng',e)}
-        required
-        value={meetingLng}
       />
       <TextField
         fulWidth
