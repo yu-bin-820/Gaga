@@ -22,9 +22,8 @@ import UpdateMeetingSuccess from '@pages/meeting/UpdateMeetingSuccess.jsx';
 import AddMeetingReveiw from '@pages/meeting/AddMeetingReveiw.jsx';
 import UpdateMeetingReview from '@pages/meeting/UpdateMeetingReview.jsx';
 import ListChatRoom from '@pages/communication/ListChatRoom.jsx';
-import GetClubChat from '@pages/communication/GetClubChat.jsx';
 import GetDirectChat from '@pages/communication/GetDirectChat.jsx';
-import GetMeetingChat from '@pages/communication/GetMeetingChat.jsx';
+import GetGroupChat from '@pages/communication/GetGroupChat.jsx';
 import UnauthenticatedMain from '@pages/common/UnauthenticatedMain';
 import RootLayout from '@layouts/common/RootLayout.jsx';
 import AddUser from '@pages/user/AddUser.jsx';
@@ -39,6 +38,7 @@ import ListReportCategory from '@pages/communication/ListReportCategory.jsx';
 import ListGroupMemberList from '@components/user/ListGroupMember.jsx';
 import AddClub from '@pages/club/AddClub.jsx';
 import GetClub from '@pages/club/GetClub.jsx';
+import ListReport from '@pages/communication/ListReport.jsx';
 
 const router = createBrowserRouter([
   {
@@ -146,20 +146,26 @@ const router = createBrowserRouter([
             element: <Test />,
           },
           {
-            path: 'report/reportno/:reportNo',
-            element: <GetReport />,
-          },
-          {
-            path: 'report/add',
-            element: <CommonTop pageName="회원 신고하기" />,
+            path: 'report',
             children: [
+              { path: 'list', element: <ListReport /> },
               {
-                path: 'category/reportedno/:reportedNo',
-                element: <ListReportCategory />,
+                path: 'reportno/:reportNo',
+                element: <GetReport />,
               },
               {
-                path: 'categoryno/:categoryNo/reportedno/:reportedNo',
-                element: <AddReport />,
+                path: 'add',
+                element: <CommonTop pageName="회원 신고하기" />,
+                children: [
+                  {
+                    path: 'category/reportedno/:reportedNo',
+                    element: <ListReportCategory />,
+                  },
+                  {
+                    path: 'categoryno/:categoryNo/reportedno/:reportedNo',
+                    element: <AddReport />,
+                  },
+                ],
               },
             ],
           },
@@ -173,12 +179,8 @@ const router = createBrowserRouter([
             element: <ListChatRoom />,
           },
           {
-            path: 'club/message/list',
-            element: <GetClubChat />,
-          },
-          {
-            path: 'meeting/message/list',
-            element: <GetMeetingChat />,
+            path: 'group/message/list',
+            element: <GetGroupChat />,
           },
           {
             path: 'direct/message/list',

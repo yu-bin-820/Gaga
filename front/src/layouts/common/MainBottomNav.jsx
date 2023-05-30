@@ -15,6 +15,7 @@ import useSWR from 'swr';
 import useSocket from '@hooks/common/useSocket';
 import { useEffect } from 'react';
 import { PropTypes } from 'prop-types';
+import { Badge } from '@mui/material';
 export default function MainBottomNav({ pageName }) {
   const navigate = useNavigate();
 
@@ -28,8 +29,13 @@ export default function MainBottomNav({ pageName }) {
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
-
-  //-------------------------채팅 ------------------------------------------
+  const { data: unreadsData, mutate: mutateUnreads } = useSWR(
+    `http://${
+      import.meta.env.VITE_EXPRESS_HOST
+    }/rest/chat/group/message/unreads/userno/${myData?.userNo}`,
+    fetcher
+  );
+  //-------------------------채팅 (상황봐서 지울예정)------------------------------------------
 
   // const { data: groupsData, mutate: mutateGroups } = useSWR(
   //   `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/group/list/userno/${
@@ -74,6 +80,15 @@ export default function MainBottomNav({ pageName }) {
   // }, [clubDisconnect, meetingDisconnect, directDisconnect]);
 
   //-------------------------onClickNavigating ------------------------------------------
+
+  const [totalUnreads, setTotalUnreads] = React.useState(0);
+
+  useEffect(() => {
+    setTotalUnreads(
+      unreadsData?.countDirectUnreads + unreadsData?.countGroupUnreads
+    );
+  }, [unreadsData]);
+
   const onClickHome = React.useCallback((MouseEvent) => {
     navigate(`/`);
   }, []);
@@ -114,7 +129,11 @@ export default function MainBottomNav({ pageName }) {
       <BottomNavigationAction
         label="Chat"
         value="chat"
-        icon={<QuestionAnswerIcon />}
+        icon={
+          <Badge badgeContent={totalUnreads} color="error">
+            <QuestionAnswerIcon />
+          </Badge>
+        }
         onClick={onClickChat}
       />
       <BottomNavigationAction
