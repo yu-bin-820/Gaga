@@ -1,18 +1,19 @@
-import CommonTop from '@layouts/common/CommonTop';
-import { ButtonBase, Divider, Typography } from '@mui/material';
-import { Box, Stack } from '@mui/system';
-import fetcher from '@utils/fetcher';
-import React, { useCallback } from 'react';
-import useSWR from 'swr';
+import CommonTop from "@layouts/common/CommonTop";
+import { ButtonBase, Divider, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/system";
+import fetcher from "@utils/fetcher";
+import React, { useCallback } from "react";
+import useSWR from "swr";
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { DateTime } from 'luxon';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { DateTime } from "luxon";
+
 const ListReport = () => {
   const { data: myData, mutate: mutateMe } = useSWR(
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -35,10 +36,10 @@ const ListReport = () => {
       <TableContainer>
         <Table
           sx={{
-            minWidth: '70vw',
-            maxWidth: '90vw',
-            marginLeft: '10px',
-            marginRight: '5px',
+            minWidth: "70vw",
+            maxWidth: "90vw",
+            marginLeft: "10px",
+            marginRight: "5px",
           }}
           aria-label="simple table"
         >
@@ -56,12 +57,12 @@ const ListReport = () => {
             {reportListData?.map((report, i) => {
               const formattedDate = DateTime.fromISO(
                 report.reportDate
-              ).toFormat('yyyy년 MM월 dd일');
+              ).toFormat("yyyy년 MM월 dd일");
 
               return (
                 <TableRow
                   key={i}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   onClick={onClickReport}
                   data-value={report.reportNo}
                 >
