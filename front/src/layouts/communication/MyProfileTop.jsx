@@ -117,9 +117,9 @@ const MyProfileTop = () => {
             </ListItem>
             <Divider />
 
-            <Button component={Link} to="/user/updateuser">
+            {/* <Button component={Link} to="/user/updateuser">
                 개인 정보 수정
-              </Button><br/>
+              </Button><br/> */}
             <ListItem
               sx={{
                 marginTop: '10px',
