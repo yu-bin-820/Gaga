@@ -1,6 +1,7 @@
 package com.gaga.bo.web.community;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -111,7 +113,31 @@ public class CommunityRestController {
 	
 	
 	//------------------------Report Request Mapping----------------------------------------------------------
-
+	
+	@GetMapping("report/list/userno/{userNo}/role/{role}")
+	public List<Report> getReportList(
+									  @PathVariable("userNo") int userNo,
+									  @PathVariable("role") int role
+																		) throws Exception{
+		
+		User user = new User();
+		user.setUserNo(userNo);
+		user.setRole(role);
+		
+		return communityService.getReportList(user);
+	} 
+	
+	@GetMapping("report/reportno/{reportNo}")
+	public Report getReport(
+							@PathVariable("reportNo") int reportNo
+																	) throws Exception {
+		
+		Report report = communityService.getReport(reportNo);
+		System.out.println(":: getReport :: " + report);
+		
+		return report;
+	}
+	
 	@GetMapping("report/reportingno/{reportingNo}/reportedno/{reportedNo}")
 	public Report getReportByUserNo(
 									@PathVariable("reportingNo") int reportingNo,
@@ -135,7 +161,6 @@ public class CommunityRestController {
 						  HttpSession session
 								  											       				) throws Exception {
 		
-		System.out.println(file.getOriginalFilename());
 
 		if (file != null) {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
@@ -165,8 +190,31 @@ public class CommunityRestController {
 		}
 		
 		communityService.addReport(report);
+		
 	}
 	
+	@PatchMapping("report")
+	public void updateReport(
+							 @ModelAttribute Report report
+														  ) throws Exception {
+		
+		System.out.println(":: updateReport() :: "+ report);
+		
+		communityService.updateReport(report);
+		
+	}
+	
+	@DeleteMapping("report/reportno/{reportNo}")
+	public void deleteReport(
+							 @PathVariable int reportNo
+							 						   ) throws Exception {
+		
+		System.out.println(":: deleteReport - reportNo :: "+reportNo);
+		
+		communityService.deleteReport(reportNo);
+		 
+	}
+		
 	//------------------------UserReview Request Mapping----------------------------------------------------------
 	@GetMapping("userreview/reviewerno/{reviewerNo}/reviewedno/{reviewedNo}")
 	public UserReview getUserReview(
