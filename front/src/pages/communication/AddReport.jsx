@@ -74,7 +74,7 @@ const AddReport = () => {
         formData,
         { withCredentials: true }
       )
-      .then(navigate('/'))
+      .then(navigate(`/community/profile/userno/${reportedNo}`))
       .catch((error) => {
         console.dir(error);
       });

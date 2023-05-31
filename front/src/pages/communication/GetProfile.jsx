@@ -5,7 +5,13 @@ import ProfileTop from '@layouts/communication/ProfileTop';
 import {
   Avatar,
   BottomNavigation,
+  Button,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   IconButton,
   ImageList,
   ImageListItem,
@@ -19,9 +25,11 @@ import useSWR from 'swr';
 import ProfileMeetingClubTabs from '@components/communication/ProfileMeetingClubTabs';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import AddUserReviewDialog from '@components/communication/AddUserReviewDialog';
 import CustomedImageListItem from '@components/common/CustomedImageListItem';
+import axios from 'axios';
+import useCommunityStore from '@stores/communication/useCommunityStore';
 
 const TemperatureLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -38,13 +46,13 @@ const TemperatureLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
 const GetProfile = () => {
   const navigate = useNavigate();
+  const { setField } = useCommunityStore();
 
-  const [imageLoadingError, setImageLoadingError] = useState(false);
   const [addUserReviewDialogOpen, setAddUserReviewDialogOpen] = useState(false);
+  const [duplicateUserReviewDialogOpen, setDuplicateUserReviewDialogOpen] =
+    useState(false);
 
-  const handleImageError = useCallback(() => {
-    setImageLoadingError(true);
-  }, []);
+  const [isUpdate, setIsUpdate] = useState(false);
 
   const { userNo } = useParams();
 
@@ -85,15 +93,54 @@ const GetProfile = () => {
 
   const onClickTemperature = useCallback(() => {
     if (userNo === myData?.userNo) {
-      () => {};
+      // () => {};
+      alert('자신을 평가할 수 없습니다!');
     } else {
       if (userReviewData) {
-        alert('이미 평가한 회원입니다!');
+        setDuplicateUserReviewDialogOpen(true);
       } else {
+        setIsUpdate(false);
+
         setAddUserReviewDialogOpen(true);
       }
     }
   }, [userReviewData, myData, userNo]);
+
+  const onCloseDuplicateUserReviewDialog = useCallback(() => {
+    setDuplicateUserReviewDialogOpen(false);
+  }, []);
+
+  const onClickDeleteUserReview = useCallback(() => {
+    console.log('deleteUserReview', myData?.userNo, userData?.userNo);
+    axios
+      .delete(
+        `http://${
+          import.meta.env.VITE_SPRING_HOST
+        }/rest/community/userreview/reviewerno/${myData?.userNo}/reviewedno/${
+          userData?.userNo
+        }`
+      )
+      .then(() => {
+        mutateUserReview();
+        mutateUser();
+
+        onCloseDuplicateUserReviewDialog();
+      })
+      .catch((error) => {
+        console.dir(error);
+      });
+  }, [
+    myData,
+    userData,
+    mutateUserReview,
+    onCloseDuplicateUserReviewDialog,
+    mutateUser,
+  ]);
+
+  const onClickUpdateUserReview = useCallback(() => {
+    setIsUpdate(true);
+    setAddUserReviewDialogOpen(true);
+  }, []);
 
   if (!userData || !myData) {
     <>로딩중..</>;
@@ -218,7 +265,41 @@ const GetProfile = () => {
         setOpen={setAddUserReviewDialogOpen}
         reviewerNo={myData?.userNo}
         reviewedNo={userNo}
+        isUpdate={isUpdate}
+        mutateUser={mutateUser}
+        onCloseDuplicateUserReviewDialog={onCloseDuplicateUserReviewDialog}
       />
+
+      <Dialog
+        open={duplicateUserReviewDialogOpen}
+        onClose={onCloseDuplicateUserReviewDialog}
+      >
+        <DialogTitle>{'회원 리뷰'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            이미 평가한 회원입니다.
+            <br />
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={onCloseDuplicateUserReviewDialog}
+            sx={{ color: 'gray' }}
+          >
+            취소
+          </Button>
+          <Button
+            autoFocus
+            onClick={onClickDeleteUserReview}
+            sx={{ color: 'orange' }}
+          >
+            평가 삭제
+          </Button>
+          <Button autoFocus onClick={onClickUpdateUserReview}>
+            평가 수정
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

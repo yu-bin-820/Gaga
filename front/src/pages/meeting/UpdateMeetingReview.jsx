@@ -1,9 +1,12 @@
 import useInput from '@hooks/common/useInput';
-import { Button, TextField } from '@mui/material';
-import { Box } from '@mui/system';
+import CommonTop from '@layouts/common/CommonTop';
+import { Avatar, Button, ImageListItem, Rating, TextField } from '@mui/material';
+import { Box, Stack } from '@mui/system';
 import axios from 'axios';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+
 
 const UpdateMeetingReview = () => {
 
@@ -13,6 +16,21 @@ const UpdateMeetingReview = () => {
         meetingReviewImg: '',
         meetingReviewContent: ''
       });
+
+      const [selectedImage, setSelectedImage] = useState(
+        meetingReview?.meetingReviewImg?
+        `http://${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
+          meetingReview?.meetingReviewImg
+          }`
+          : null
+        );
+      const [selectedFile, setSelectedFile] = useState( null );
+
+      const onChangeImg = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+        setSelectedImage(URL.createObjectURL(file));
+      };
 
       useEffect(() => {
         axios
@@ -57,28 +75,55 @@ const UpdateMeetingReview = () => {
       }, [meetingReview]);
 
     return (
+      <>
+        <CommonTop/>
         <Box sx={{ marginTop: '64px' }}>
-          <TextField
-            fulWidth
-            label="meetingScore"
-            name="meetingScore"
+          <Button
+              variant="outlined"
+              startIcon={<Avatar><AddPhotoAlternateIcon /></Avatar>}
+              color="primary"
+              aria-label="upload picture"
+              component="label"
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderColor: 'grey',
+                width: '150px',
+                height: '150px',
+              }}
+              size="large"
+            >
+              <input
+                hidden
+                accept="image/*"
+                type="file"
+                id="file"
+                name="file"
+                onChange={onChangeImg}
+              />
+            </Button>
+            <ImageListItem>
+            {selectedImage && <img src={selectedImage} /> }
+            </ImageListItem>
+          <Stack spacing={1}>
+            <Rating
+            name="meetingScore" 
+            defaultValue={5} 
+            precision={0.5}
             onChange={onChangeMeetingReview}
             required
             value={meetingReview.meetingScore}
-          />
-          <TextField
-            fulWidth
-            label="meetingReviewImg"
-            name="meetingReviewImg"
-            onChange={onChangeMeetingReview}
-            required
-            value={meetingReview.meetingReviewImg}
-          />
+            size="large" />
+          </Stack>
+          <h3>{meetingReview.meetingScore}/5</h3>
           <TextField
             fulWidth
             label="meetingReviewContent"
             name="meetingReviewContent"
             onChange={onChangeMeetingReview}
+            multiline
+            rows={4}
             required
             value={meetingReview.meetingReviewContent}
           />
@@ -86,6 +131,7 @@ const UpdateMeetingReview = () => {
     
           <Button onClick={handleSubmit}>수정하기</Button>
         </Box>
+      </>
     );
 };
 

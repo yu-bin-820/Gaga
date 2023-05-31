@@ -93,17 +93,18 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
     [chat, setChat, mutateGroupMessages, senderNo, groupNo, groupType]
   );
 
-  const onKeydownChat = useCallback(
-    (e) => {
-      if (e.key === 'Enter') {
-        if (!e.shiftKey) {
-          e.preventDefault();
-          onSubmitForm(e);
-        }
-      }
-    },
-    [onSubmitForm]
-  );
+  // const onKeydownChat = useCallback(
+  //   (e) => {
+  //     if (e.key === 'Enter') {
+  //       if (!e.shiftKey) {
+  //         e.preventDefault();
+  //         onSubmitForm(e);
+  //       }
+  //     }
+  //   },
+  //   [onSubmitForm]
+  // );
+
   const onClickChat = useCallback(
     (e) => {
       console.log(e);
@@ -168,7 +169,7 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
           variant="filled"
           value={chat}
           onChange={onChangeChat}
-          onKeyDown={onKeydownChat}
+          // onKeyDown={onKeydownChat}
           sx={{ borderRadius: 0 }}
         />
 

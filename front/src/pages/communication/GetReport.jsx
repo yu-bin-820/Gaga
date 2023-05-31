@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router';
 import useSWR from 'swr';
 const GetReport = () => {
   const navigate = useNavigate();
-  const { reportNo, reportCategory } = useCommunityStore();
+  const { reportNo, reportCategory, prevPath } = useCommunityStore();
   const [deleteReportDialogOpen, setDeleteReportDialogOpen] = useState(false);
 
   const { data: myData, mutate: mutateMe } = useSWR(
@@ -77,9 +77,25 @@ const GetReport = () => {
 
   return (
     <>
-      <CommonTop />
+      <CommonTop prevPath={prevPath} />
       <Box sx={{ marginTop: '73px', marginLeft: '15px', marginRight: '15px' }}>
         <Stack spacing={2.5}>
+          <Stack spacing={1}>
+            <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
+              신고자 ID
+            </Typography>
+            <Typography sx={{ fontSize: 13 }}>
+              {reportData?.reportingId}
+            </Typography>
+          </Stack>
+          <Stack spacing={1}>
+            <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
+              피신고자 ID
+            </Typography>
+            <Typography sx={{ fontSize: 13 }}>
+              {reportData?.reportedId}
+            </Typography>
+          </Stack>
           <Stack spacing={1}>
             <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
               신고 항목

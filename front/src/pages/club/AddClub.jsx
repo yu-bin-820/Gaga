@@ -1,4 +1,4 @@
-import ListCategory from "@components/meeting/ListCategory";
+import ListCategory from "@components/meeting/AddMeetingListCategory";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { Button, MobileStepper } from "@mui/material";
 import { Box, useTheme } from "@mui/system";

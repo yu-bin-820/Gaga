@@ -14,12 +14,13 @@ import {
   SwipeableDrawer,
   Typography,
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Box, Stack } from '@mui/system';
 import { Menu } from '@mui/icons-material';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import PropTypes from 'prop-types';
+import useCommunityStore from '@stores/communication/useCommunityStore';
 
 const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
   const { data: memberData, mutate: mutateMember } = useSWR(
@@ -28,6 +29,8 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
     }/rest/user/list/grouptype/${groupType}/no/${groupNo}/state/2`,
     fetcher
   );
+  const { setField } = useCommunityStore();
+  const location = useLocation();
   const navigate = useNavigate();
   const [chatMenuOpen, setChatMenuOpen] = useState(false);
 
@@ -37,9 +40,10 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
   }, []);
   const onClickChatMember = useCallback(
     (e) => {
+      setField('prevProfilePath', location.pathname);
       navigate(`/community/profile/userno/${e.currentTarget.dataset.value}`);
     },
-    [navigate]
+    [navigate, setField, location]
   );
 
   const toggleChatMenuOpen = useCallback(
@@ -64,7 +68,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
           >
             <IconButton
               onClick={() => {
-                navigate(-1);
+                navigate('/chat/list');
               }}
             >
               <ArrowBackIosNewIcon />
