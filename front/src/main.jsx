@@ -8,7 +8,6 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme.js";
-import MainLayout from "@layouts/common/MainLayout.jsx";
 import ErrorPage from "@pages/common/ErrorPage.jsx";
 import Main from "@pages/common/Main.jsx";
 import GetMeeting from "@pages/meeting/GetMeeting.jsx";
@@ -35,11 +34,13 @@ import AddReport from "@pages/communication/AddReport.jsx";
 import GetProfile from "@pages/communication/GetProfile.jsx";
 import CommonTop from "@layouts/common/CommonTop.jsx";
 import ListReportCategory from "@pages/communication/ListReportCategory.jsx";
-import ListGroupMemberList from "@components/user/ListGroupMember.jsx";
 import AddClub from "@pages/club/AddClub.jsx";
 import GetClub from "@pages/club/GetClub.jsx";
 import ListReport from "@pages/communication/ListReport.jsx";
+import UpdateReport from "@pages/communication/UpdateReport.jsx";
 import ListGroupMember from "@components/user/ListGroupMember.jsx";
+import { element } from "prop-types";
+import SearchMeeting from "@pages/meeting/SearchMeeting";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,7 @@ const router = createBrowserRouter([
         path: "/unauthenticatedmain",
         element: <UnauthenticatedMain />,
       },
+      //------------------------------------------------User--------------------------------------------------
       {
         path: "user",
         children: [
@@ -76,19 +78,7 @@ const router = createBrowserRouter([
           },
         ],
       },
-      {
-        path: "meeting",
-        children: [
-          {
-            path: "login",
-            element: <Login />,
-          },
-          {
-            path: "memberlist",
-            element: <ListGroupMemberList />,
-          },
-        ],
-      },
+      //------------------------------------------------Meeting------------------------------------------------
       {
         path: "meeting",
         children: [
@@ -134,8 +124,13 @@ const router = createBrowserRouter([
               },
             ],
           },
+          {
+            path: "searchmeeting",
+            element: <SearchMeeting />,
+          },
         ],
       },
+      //------------------------------------------------Community------------------------------------------------
       {
         path: "community",
         children: [
@@ -153,11 +148,11 @@ const router = createBrowserRouter([
           {
             path: "report",
             children: [
-              { path: "list", element: <ListReport /> },
               {
-                path: "reportno/:reportNo",
+                path: "",
                 element: <GetReport />,
               },
+              { path: "list", element: <ListReport /> },
               {
                 path: "add",
                 element: <CommonTop pageName="회원 신고하기" />,
@@ -172,10 +167,12 @@ const router = createBrowserRouter([
                   },
                 ],
               },
+              { path: "update", element: <UpdateReport /> },
             ],
           },
         ],
       },
+      //------------------------------------------------Chat------------------------------------------------
       {
         path: "chat",
         children: [
@@ -193,6 +190,7 @@ const router = createBrowserRouter([
           },
         ],
       },
+      //------------------------------------------------Club------------------------------------------------
       {
         path: "club",
         children: [

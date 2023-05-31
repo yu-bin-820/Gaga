@@ -13,15 +13,14 @@ const AddMeetingReveiw = () => {
 
     const { meetingno } = useParams();
     const [meetingReview, onChangeMeetingReview, setMeetingReview] = useInput({
-        meetingScore: '',
-        meetingReviewImg: '',
+        meetingScore: 5,
         meetingReviewContent: ''
       });
     
       const [selectedImage, setSelectedImage] = useState(null);
       const [selectedFile, setSelectedFile] = useState(null);
 
-      const onChangeActivityImg = (event) => {
+      const onChangeImg = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
         setSelectedImage(URL.createObjectURL(file));
@@ -63,7 +62,7 @@ const AddMeetingReveiw = () => {
       return (
         <>
         <CommonTop/>
-        <Box sx={{ marginTop: '64px' }}>
+        <Box sx={{ marginTop: '4px' }}>
           <Button
               variant="outlined"
               startIcon={<Avatar><AddPhotoAlternateIcon /></Avatar>}
@@ -85,38 +84,13 @@ const AddMeetingReveiw = () => {
                 accept="image/*"
                 type="file"
                 id="file"
-                name="meetingReviewImg"
-                onChange={onChangeActivityImg}
+                name="file"
+                onChange={onChangeImg}
               />
             </Button>
             <ImageListItem>
-                  {selectedImage ? (
-                    <img src={selectedImage} />
-                  ) : (
-                    <Box
-                      sx={{
-                        width: '150px',
-                        height: '150px',
-                        backgroundColor: 'grey',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          fontSize: '1.2rem',
-                          color: 'white',
-                          fontWeight: 'bold',
-                          width: '150px',
-                          height: '150px',
-                        }}
-                      >
-                        No Img
-                      </Typography>
-                    </Box>
-                  )}
-                </ImageListItem>
+            {selectedImage && <img src={selectedImage} /> }
+            </ImageListItem>
           <Stack spacing={1}>
             <Rating 
             name="meetingScore" 
@@ -138,7 +112,6 @@ const AddMeetingReveiw = () => {
             required
             value={meetingReview.meetingReviewContent}
           />
-
     
           <Button onClick={handleSubmit}>작성하기</Button>
         </Box>

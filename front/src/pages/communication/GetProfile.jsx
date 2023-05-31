@@ -21,6 +21,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { useNavigate, useParams } from 'react-router';
 import AddUserReviewDialog from '@components/communication/AddUserReviewDialog';
+import CustomedImageListItem from '@components/common/CustomedImageListItem';
 
 const TemperatureLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -192,105 +193,21 @@ const GetProfile = () => {
             cols={3}
             rowHeight={100}
           >
-            <ImageListItem>
-              {!imageLoadingError ? (
-                <img
-                  src={`http://${
-                    import.meta.env.VITE_SPRING_HOST
-                  }/upload_images/user/${userData?.activityImg}`}
-                  alt="noImg"
-                  loading="lazy"
-                  onError={handleImageError}
-                />
-              ) : (
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: 'grey',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: '1.2rem',
-                      color: 'white',
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    No Img
-                  </Typography>
-                </Box>
-              )}
-            </ImageListItem>
-            <ImageListItem>
-              {!imageLoadingError ? (
-                <img
-                  src={`http://${
-                    import.meta.env.VITE_SPRING_HOST
-                  }/upload_images/user/${userData?.activityImg2}`}
-                  alt="noImg"
-                  loading="lazy"
-                  onError={handleImageError}
-                />
-              ) : (
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: 'grey',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: '1.2rem',
-                      color: 'white',
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    No Img
-                  </Typography>
-                </Box>
-              )}
-            </ImageListItem>
-            <ImageListItem>
-              {!imageLoadingError ? (
-                <img
-                  src={`http://${
-                    import.meta.env.VITE_SPRING_HOST
-                  }/upload_images/user/${userData?.activityImg3}`}
-                  alt="noImg"
-                  loading="lazy"
-                  onError={handleImageError}
-                />
-              ) : (
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: 'grey',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: '1.2rem',
-                      color: 'white',
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    No Img
-                  </Typography>
-                </Box>
-              )}
-            </ImageListItem>
+            <CustomedImageListItem
+              src={`http://${
+                import.meta.env.VITE_SPRING_HOST
+              }/upload_images/user/${userData?.activityImg}`}
+            />
+            <CustomedImageListItem
+              src={`http://${
+                import.meta.env.VITE_SPRING_HOST
+              }/upload_images/user/${userData?.activityImg2}`}
+            />
+            <CustomedImageListItem
+              src={`http://${
+                import.meta.env.VITE_SPRING_HOST
+              }/upload_images/user/${userData?.activityImg3}`}
+            />
           </ImageList>
         </Box>
         <ProfileMeetingClubTabs />

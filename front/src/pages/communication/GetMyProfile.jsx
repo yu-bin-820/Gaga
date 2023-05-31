@@ -72,7 +72,7 @@ const GetMyProfile = () => {
       <MyProfileTop />
       <Box
         sx={{
-          marginTop: '64px',
+          marginTop: '74px',
           marginBottom: '64px',
           overflowY: 'auto',
           maxHeight: '100%',
