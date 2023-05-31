@@ -19,7 +19,7 @@ import {
   Typography,
 } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Box, Stack } from '@mui/system';
 import axios from 'axios';
 import useSWR from 'swr';
@@ -55,6 +55,9 @@ export default function AddUserReviewDialog({
   setOpen,
   reviewerNo,
   reviewedNo,
+  isUpdate,
+  mutateUser,
+  onCloseDuplicateUserReviewDialog,
 }) {
   const handleClose = () => {
     setOpen(false);
@@ -82,20 +85,53 @@ export default function AddUserReviewDialog({
       userScore: userScore,
     };
 
-    axios
-      .post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/community/userreview`,
-        data,
-        { withCredentials: true }
-      )
-      .then(() => {
-        setOpen(false);
-        mutateUserReview();
-      })
-      .catch((error) => {
-        console.dir(error);
-      });
-  }, [reviewerNo, reviewedNo, setOpen, userScore, mutateUserReview]);
+    console.log(isUpdate);
+
+    isUpdate
+      ? axios
+          .patch(
+            `http://${
+              import.meta.env.VITE_SPRING_HOST
+            }/rest/community/userreview`,
+            data,
+            { withCredentials: true }
+          )
+          .then(() => {
+            setOpen(false);
+            onCloseDuplicateUserReviewDialog();
+            mutateUserReview();
+            mutateUser();
+          })
+          .catch((error) => {
+            console.dir(error);
+          })
+      : axios
+          .post(
+            `http://${
+              import.meta.env.VITE_SPRING_HOST
+            }/rest/community/userreview`,
+            data,
+            { withCredentials: true }
+          )
+          .then(() => {
+            setOpen(false);
+            mutateUserReview();
+            mutateUser();
+          })
+          .catch((error) => {
+            console.dir(error);
+          });
+  }, [
+    reviewerNo,
+    reviewedNo,
+    setOpen,
+    userScore,
+    mutateUserReview,
+    isUpdate,
+    mutateUser,
+    onCloseDuplicateUserReviewDialog,
+  ]);
+
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
@@ -185,4 +221,8 @@ AddUserReviewDialog.propTypes = {
   setOpen: PropTypes.func,
   reviewerNo: PropTypes.number,
   reviewedNo: PropTypes.string,
+
+  isUpdate: PropTypes.bool,
+  mutateUser: PropTypes.func,
+  onCloseDuplicateUserReviewDialog: PropTypes.func,
 };

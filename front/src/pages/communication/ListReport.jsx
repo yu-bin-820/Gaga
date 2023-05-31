@@ -14,11 +14,11 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { DateTime } from 'luxon';
 import useCommunityStore from '@stores/communication/useCommunityStore';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 const ListReport = () => {
   const navigate = useNavigate();
-
+  const location = useLocation();
   const { data: myData, mutate: mutateMe } = useSWR(
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
@@ -37,9 +37,10 @@ const ListReport = () => {
     (e) => {
       console.log(e.currentTarget.dataset.value);
       setField('reportNo', e.currentTarget.dataset.value);
+      setField('prevPath', location.pathname);
       navigate('/community/report');
     },
-    [navigate, setField]
+    [navigate, setField, location]
   );
   return (
     <div>

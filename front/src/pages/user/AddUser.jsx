@@ -69,11 +69,15 @@ const AddUser = () => {
   const [userPhoneAuthCode, setUserPhoneAuthCode] = useState(''); // 사용자가 입력한 핸드폰 인증 코드 
   const [phoneAuthVerified, setPhoneAuthVerified] = useState(false); // 핸드폰 인증이 완료되었는지 확인하는 상태
 
+  const [autocompleteResults, setAutocompleteResults] = useState([]);//오토컴플릿 회원아이디 검색 결과
+  const [searchValue, setSearchValue] = useState("");//오토컴플릿 회원아이디 검색 값
+
   const [registerSuccess, setRegisterSuccess] = useState(false);  // 회원가입 성공 여부 상태
   
   const handleChangeUser = (event) => {
     if(event.target.name === 'userId') {
       checkEmailRegex(event.target.value); // 아이디(이메일) 값이 변경되었을 때, 이메일 형식 검증
+      handleSearchChange(event);  // handleSearchChange 호출 추가
     }
     else if(event.target.name === 'password') {
       checkPassword(event.target.value); // 비밀번호 값이 변경되었을 때, 비밀번호 형식 검증
@@ -224,6 +228,25 @@ const AddUser = () => {
     }
   };
 
+  const handleSearchChange = async (event) => {
+    const newValue = event.target.value;
+    setSearchValue(newValue);
+  
+    if (newValue !== "") {
+      try {
+        const response = await axios.get(
+          `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${newValue}`,
+          { withCredentials: true }
+        );
+        setAutocompleteResults([response.data]);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      setAutocompleteResults([]);
+    }
+  };
+
   const requestPhoneAuth = useCallback(async () => {
     const numberRegex = /^[0-9]*$/; // 숫자만 허용하는 정규식
     const phoneNoLength = user.phoneNo.length;
@@ -260,17 +283,15 @@ const AddUser = () => {
       <MainTop />
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
-        {/* 본문내용 생략 */}
         <Box
           component="form"
           noValidate
           onSubmit={handleSubmit}
           sx={{ width: '50%', mt: 8, ml: 10 }}
         >
-          {/* 폼 내용 생략 */}
           <TextField
             variant="outlined"
-            margin="normal"
+            margin="none"
             required
             fullWidth
             id="userId"
@@ -283,6 +304,9 @@ const AddUser = () => {
             error={emailError} // 이메일 형식 오류 시 오류 표시
             disabled={isEmailAuthSent} // 인증 요청이 전송되면 이메일 입력란 비활성화
           />
+          {autocompleteResults.map((result, index) => (
+            <p key={index}>{result.userId}</p> // or whatever property of the user you want to display
+          ))}
           {emailError && <FormHelperText error>이메일 형식이 아닙니다.</FormHelperText>}
           {!emailError && (
             <>
@@ -296,7 +320,7 @@ const AddUser = () => {
                   </Button>
                   <TextField
                     variant="outlined"
-                    margin="normal"
+                    margin="none"
                     fullWidth
                     id="authCode"
                     label="인증 코드"
@@ -314,7 +338,7 @@ const AddUser = () => {
           )}
           <TextField
             variant="outlined"
-            margin="normal"
+            margin="none"
             required
             fullWidth
             id="password"
@@ -331,7 +355,7 @@ const AddUser = () => {
           {!passwordMatch && (
             <TextField
               variant="outlined"
-              margin="normal"
+              margin="none"
               required
               fullWidth
               id="passwordConfirm"
@@ -347,7 +371,7 @@ const AddUser = () => {
           {!passwordMatch && passwordConfirm !== '' && <FormHelperText error>비밀번호가 일치하지 않습니다.</FormHelperText>}
         <TextField
           variant="outlined"
-          margin="normal"
+          margin="none"
           required
           fullWidth
           id="userName"
@@ -359,7 +383,7 @@ const AddUser = () => {
         />
         <TextField
           variant="outlined"
-          margin="normal"
+          margin="none"
           required
           fullWidth
           id="nickName"
@@ -371,7 +395,7 @@ const AddUser = () => {
         />
           <TextField
             variant="outlined"
-            margin="normal"
+            margin="none"
             required
             fullWidth
             id="birthday"
@@ -387,7 +411,7 @@ const AddUser = () => {
           />
         <TextField
           variant="outlined"
-          margin="normal"
+          margin="none"
           required
           fullWidth
           id="gender"
@@ -403,7 +427,7 @@ const AddUser = () => {
         </TextField>
         <TextField
             variant="outlined"
-            margin="normal"
+            margin="none"
             required
             fullWidth
             id="phoneNo"
@@ -425,7 +449,7 @@ const AddUser = () => {
           </Button>
           <TextField
             variant="outlined"
-            margin="normal"
+            margin="none"
             fullWidth
             id="phoneAuthCode"
             label="핸드폰 인증 코드"

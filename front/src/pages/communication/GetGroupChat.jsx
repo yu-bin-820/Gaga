@@ -15,6 +15,7 @@ import useInput from '@hooks/common/useInput';
 import useInputOrigin from '@hooks/common/useInputOrigin';
 import CommonTop from '@layouts/common/CommonTop';
 import GetChatTop from '@layouts/communication/GetChatTop';
+import { useLocation } from 'react-router';
 
 const GetGroupChat = () => {
   const { chatRoomEntryNo, chatRoomLeader, chatType } = useCommunityStore();
