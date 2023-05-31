@@ -30,7 +30,7 @@ public class UserRestController {
 		System.out.println(this.getClass());
 	}
 	
-	@GetMapping("/userno/{userNo}")		//회원번호로 유저
+	@GetMapping("/userno/{userNo}")		//회원번호로 유저정보 얻기
 	public User getUser( @PathVariable int userNo ) throws Exception{
 		
 		System.out.println("/rest/user/getUser : GET");
@@ -39,7 +39,7 @@ public class UserRestController {
 		return userService.getUser(userNo);
 	}
 	
-	@GetMapping("/userid/{userId}")
+	@GetMapping("/userid/{userId}")	//아이디로 유저정보 얻기
 	public User getUserById( @PathVariable String userId ) throws Exception{
 		
 		System.out.println("/rest/user/getUserId : GET");
@@ -48,7 +48,7 @@ public class UserRestController {
 		return userService.getUserById(userId);
 	}
 	
-	@GetMapping("/phoneno/{phoneNo}")
+	@GetMapping("/phoneno/{phoneNo}") //아이디찾기, 비밀번호찾기용
 	public User getUserByPhoneNo( @PathVariable String phoneNo ) throws Exception{
 		
 		System.out.println("/rest/user/getUserPhoneNo : GET");
@@ -68,7 +68,6 @@ public class UserRestController {
 	@PostMapping("/login")
 	public User login(	@RequestBody User user,
 									HttpSession session ) throws Exception{
-	
 		System.out.println("/rest/user/login : POST");
 		
 		//Business Logic
@@ -79,10 +78,6 @@ public class UserRestController {
 				session.setAttribute("user", dbUser);
 			}
 		}
-//		if( user.getPassword().equals(dbUser.getPassword())){
-//			session.setAttribute("user", dbUser);
-//		}
-
 		System.out.println("::"+user);
 		System.out.println("::"+dbUser);		
 		return dbUser;
@@ -128,14 +123,14 @@ public class UserRestController {
 		return new ResponseEntity<>("로그아웃 완료!", HttpStatus.OK);
 	}
 	
-	@GetMapping("/addUser")
-	public ResponseEntity<String> addUser() throws Exception{
-		System.out.println("/rest/user/addUser : GET");
-
-		// "redirect:/main.jsx"는 RESTful API에서 일반적으로 사용되지 않습니다. 
-		// 일반적으로 해당 API가 수행하는 작업을 설명하는 메시지를 반환합니다.
-		return new ResponseEntity<>("User add API is ready for POST request.", HttpStatus.OK);
-	}
+//	@GetMapping("/addUser")
+//	public ResponseEntity<String> addUser() throws Exception{
+//		System.out.println("/rest/user/addUser : GET");
+//
+//		// "redirect:/main.jsx"는 RESTful API에서 일반적으로 사용되지 않습니다. 
+//		// 일반적으로 해당 API가 수행하는 작업을 설명하는 메시지를 반환합니다.
+//		return new ResponseEntity<>("User add API is ready for POST request.", HttpStatus.OK);
+//	}
 	
 	@PostMapping("/addUser")
 	public ResponseEntity<User> addUser(@RequestBody User user, HttpSession session) throws Exception {
@@ -162,7 +157,6 @@ public class UserRestController {
 	public ResponseEntity<User> updateUser(@RequestBody User user) throws Exception {
 		System.out.println("/rest/user/updateUser : POST");
 //		String userId = user.getUserId();
-//		
 //		// 아이디 중복 확인
 //	    boolean isDuplicate = userService.checkDuplication(userId);
 //	    if (isDuplicate) {
@@ -171,7 +165,6 @@ public class UserRestController {
 		// Business Logic
 		userService.updateUser(user);
 
-		// 일반적으로 새로 생성된 리소스를 반환합니다.
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
 	
@@ -188,74 +181,75 @@ public class UserRestController {
         }
         
     }
-	
-//	@GetMapping("/naverLogin")
-//	public ResponseEntity<User> naverLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
-//	    String access_Token = userService.getAccessNaverToken(code);
-//	    Map<String, Object> userInfoMap = userService.getNaverUserInfo(access_Token);
-//	    System.out.println("usercontroller nlogin= "+userInfoMap);
-//
-//	    User user = new User();
-//
-//	    session.setAttribute("user", user);
-//	    return new ResponseEntity<>(user, HttpStatus.OK);
-//	}
-	
+
 	@GetMapping("/naverLogin")
 	public void naverLogin(@RequestParam(value = "code", required = false) String code, HttpSession session, HttpServletResponse response) throws Exception {
 	    String access_Token = userService.getAccessNaverToken(code);
 	    Map<String, Object> userInfoMap = userService.getNaverUserInfo(access_Token);
-	    System.out.println("usercontroller nlogin= "+userInfoMap);
+	    System.out.println("usercontroller nlogin= " + userInfoMap);
 
-	    User user = new User();
+	    String userId = (String) userInfoMap.get("id");
+	    // 아이디가 데이터베이스에 존재하는지 확인
+	    boolean isExistingUser = userService.checkDuplication(userId);
 
-	    user.setUserId((String) userInfoMap.get("id"));
-	    user.setUserName((String) userInfoMap.get("name"));
-	    user.setNickName((String) userInfoMap.get("nickname"));
-	    user.setPhoneNo((String) userInfoMap.get("mobile"));
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	    LocalDate birthday = LocalDate.parse((String) userInfoMap.get("birthday"), formatter);
-	    user.setBirthday(birthday);
-//	    user.setGender(Integer.parseInt((String) userInfoMap.get("gender")));
-	    user.setGender((Integer) userInfoMap.get("gender"));
-	    
-	    session.setAttribute("user", user);
-	    System.out.println("네이버로그인 유저정보"+user);
-	    response.sendRedirect("http://192.168.0.159:5173");
+	    if (isExistingUser) {
+	        // 기존에 가입된 아이디인 경우, 로그인 처리
+	        User user = userService.getUserById(userId);
+	        session.setAttribute("user", user);
+	        System.out.println("네이버 로그인 유저 정보: " + user);
+	        response.sendRedirect("http://192.168.0.159:5173/"); 
+	    } else {
+	        // 존재하지 않는 아이디인 경우, 유저 객체에 정보 담기
+	        User user = new User();
+	        user.setUserId(userId);
+	        user.setUserName((String) userInfoMap.get("name"));
+	        user.setNickName((String) userInfoMap.get("nickname"));
+	        user.setPhoneNo((String) userInfoMap.get("mobile"));
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	        LocalDate birthday = LocalDate.parse((String) userInfoMap.get("birthday"), formatter);
+	        user.setBirthday(birthday);
+	        user.setGender((Integer) userInfoMap.get("gender"));
+
+	        session.setAttribute("user", user);
+	        System.out.println("네이버 로그인 유저 정보: " + user);
+	        response.sendRedirect("http://192.168.0.159:5173/user/addnaveruser"); // AddNaverUser 페이지 URL로 변경해주세요.
+	    }
 	}
 	
 	@GetMapping("/kakaoLogin")
 	public void kakaoLogin(@RequestParam(value = "code", required = false) String code, HttpSession session, HttpServletResponse response) throws Exception {
 	    String access_Token = userService.getAccessKakaoToken(code);
 	    Map<String, Object> userInfoMap = userService.getKakaoUserInfo(access_Token);
-	    System.out.println("usercontroller klogin= "+userInfoMap);
+	    System.out.println("usercontroller klogin= " + userInfoMap);
 
-	    User user = new User();
-	    
-	    user.setUserId((String) userInfoMap.get("email"));
-	    user.setUserName((String) userInfoMap.get("nickname"));
-	    user.setNickName((String) userInfoMap.get("nickname"));
-	    user.setPassword( (String) userInfoMap.get("email"));
-	    user.setPhoneNo("01051884079");
-	    user.setBirthday(LocalDate.now());
-	    user.setGender(1);
+	    String userId = (String) userInfoMap.get("email");
 
-	    session.setAttribute("user", user);
-	    response.sendRedirect("http://192.168.0.159:5173");
+	    // 아이디가 데이터베이스에 존재하는지 확인
+	    boolean isExistingUser = userService.checkDuplication(userId);
+
+	    if (isExistingUser) {
+	        // 기존에 가입된 아이디인 경우, 로그인 처리
+	        User user = userService.getUserById(userId);
+	        session.setAttribute("user", user);
+	        System.out.println("카카오 로그인 유저 정보: " + user);
+	        response.sendRedirect("http://192.168.0.159:5173/"); // 로그인 후 이동할 페이지 URL로 변경해주세요.
+	    } else {
+	        // 존재하지 않는 아이디인 경우, 유저 객체에 정보 담기, 카카오는 id 닉네임 2개만 우리가 사용함
+	        User user = new User();
+	        user.setUserId(userId);
+//	        user.setUserName((String) userInfoMap.get("nickname"));
+	        user.setNickName((String) userInfoMap.get("nickname"));
+//	        user.setPassword(userId);
+//	        user.setPhoneNo("01051884079");
+//	        user.setBirthday(LocalDate.now());
+//	        user.setGender(1);
+
+	        session.setAttribute("user", user);
+	        System.out.println("카카오 로그인 유저 정보: " + user);
+	        response.sendRedirect("http://192.168.0.159:5173/user/addkakaouser"); // AddKakaoUser 페이지 URL로 변경해주세요.
+	    }
 	}
-//	
-//	@GetMapping("/kakaoLogin")
-//	public ResponseEntity<User> kakaoLogin(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
-//	    String access_Token = userService.getAccessKakaoToken(code);
-//	    Map<String, Object> userInfoMap = userService.getKakaoUserInfo(access_Token);
-//	    System.out.println("usercontroller klogin= "+userInfoMap);
-//
-//	    User user = new User();
-//
-//	    session.setAttribute("user", user);
-//	    return new ResponseEntity<>(user, HttpStatus.OK);
-//	}
-	
+
 	@GetMapping("/list/grouptype/{groupType}/no/{groupNo}/state/{state}")
 	public List<User> getGroupMemberList(@PathVariable("groupType") int groupType,
 										@PathVariable("groupNo") int groupNo,
@@ -271,6 +265,7 @@ public class UserRestController {
 		return userService.getGroupMemberList(map);
 	} 
 
+	//회원,비회원이 핸드폰 인증을 요청하면 회원핸드폰번호에 인증코드 발송하여 요청 처리
 	@PostMapping("/phoneAuth")
 	public Boolean phoneAuth(@RequestBody String userPhoneNo, HttpSession session) {
 		System.out.println("핸드폰 인증 요청 옴");
@@ -290,7 +285,7 @@ public class UserRestController {
 	    
 	    return false;
 	}
-	
+	//서버의 핸드폰 인증코드와, 회원이 입력한 코드를 비교
 	@PostMapping("/phoneAuthOk")
 	public Boolean phoneAuthOk(@RequestBody String phoneAuthCode, HttpSession session) {
 	    String rand = (String) session.getAttribute("rand");
