@@ -1,10 +1,16 @@
 package com.gaga.bo.web.club;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,6 +34,9 @@ public class ClubRestController {
 	@Qualifier("clubServiceImpl")
 	private ClubService clubService;
 	
+	@Value("${fileUploadPath}")
+	String fileUploadPath;
+	
 	
 
 	//Constructor
@@ -44,6 +53,79 @@ public class ClubRestController {
 		
 		clubService.addClub(club);
 	}
+	
+	@GetMapping("/region/sigu")
+    public ResponseEntity<String> getSiGu() {
+	    String key = "CEB52025-E065-364C-9DBA-44880E3B02B8";
+	    //String ip = "192.168.0.4"; 
+	    String url = "https://api.vworld.kr/req/data?key="+key+"&domain=http://localhost:8080&service=data&version=2.0&request=getfeature&format=json&size=1000&page=1&geometry=false&attribute=true&crs=EPSG:3857&geomfilter=BOX(13663271.680031825,3894007.9689600193,14817776.555251127,4688953.0631258525)&data=LT_C_ADSIDO_INFO";
+	    
+	    	
+	    System.out.println("시구정보 받아오기 잘됨?" + url);
+	    try {
+	        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+	        connection.setRequestMethod("GET");
+	        int responseCode = connection.getResponseCode();
+
+	        if (responseCode == HttpURLConnection.HTTP_OK) {
+	            try (InputStream responseStream = connection.getInputStream()) {
+	                byte[] buffer = new byte[1024];
+	                StringBuilder responseBuilder = new StringBuilder();
+	                int bytesRead;
+	                while ((bytesRead = responseStream.read(buffer)) != -1) {
+	                    responseBuilder.append(new String(buffer, 0, bytesRead));
+	                }
+	                System.out.println("성공했을때는 여기야");
+	                return ResponseEntity.ok(responseBuilder.toString());
+	            }
+	        } else {
+	            System.out.println("Error: " + responseCode);
+	            return ResponseEntity.status(responseCode).body("Failed to retrieve region information.");
+	        }
+	    } catch (Exception e) {
+	        System.out.println("Exception: " + e.getMessage());
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while retrieving region information.");
+	    }
+	}
+	
+	@GetMapping("/region/sigungu/{sigu}")
+    public ResponseEntity<String> getSiGunGu(@PathVariable int sigu) {
+	    String key = "CEB52025-E065-364C-9DBA-44880E3B02B8";
+	    //String ip = "192.168.0.4"; 
+	    String url = "https://api.vworld.kr/req/data?key="+key+"&domain=http://localhost:8080&service=data"
+	    		+ "&version=2.0&request=getfeature&format=json"
+	    		+ "&size=1000&page=1&geometry=false&attribute=true&crs=EPSG:3857"
+	    		+ "&geomfilter=BOX(13663271.680031825,3894007.9689600193,14817776.555251127,4688953.0631258525)"
+	    		+ "&data=LT_C_ADSIGG_INFO&attrfilter=sig_cd:like:"+sigu;
+	    
+	    	
+	    System.out.println("시군구 정보 받아오기 잘됨?" + url);
+	    try {
+	        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+	        connection.setRequestMethod("GET");
+	        int responseCode = connection.getResponseCode();
+
+	        if (responseCode == HttpURLConnection.HTTP_OK) {
+	            try (InputStream responseStream = connection.getInputStream()) {
+	                byte[] buffer = new byte[1024];
+	                StringBuilder responseBuilder = new StringBuilder();
+	                int bytesRead;
+	                while ((bytesRead = responseStream.read(buffer)) != -1) {
+	                    responseBuilder.append(new String(buffer, 0, bytesRead));
+	                }
+	                System.out.println("성공했을때는 여기야");
+	                return ResponseEntity.ok(responseBuilder.toString());
+	            }
+	        } else {
+	            System.out.println("Error: " + responseCode);
+	            return ResponseEntity.status(responseCode).body("Failed to retrieve region information.");
+	        }
+	    } catch (Exception e) {
+	        System.out.println("Exception: " + e.getMessage());
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while retrieving region information.");
+	    }
+	}
+
 	
 	@GetMapping("no/{ClubNo}")
 	public Club getClub(@PathVariable int ClubNo) throws Exception{
