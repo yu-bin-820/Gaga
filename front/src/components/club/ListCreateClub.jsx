@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Box } from "@mui/system";
 import { Button } from "@mui/material";
+import ClubThumbnail from "./ClubThumbnail";
 
 const ListCreateClub = () => {
   const { userno } = useParams();
@@ -19,9 +20,9 @@ const ListCreateClub = () => {
   useEffect(() => {
     axios
       .get(
-        `http://${
-          import.meta.env.VITE_SPRING_HOST
-        }/rest/club/list/create/${userno}`
+        `http://${import.meta.env.VITE_SPRING_HOST}/rest/club/list/create/${
+          myData?.userNo
+        }`
       )
       .then((response) => {
         console.log(response.data);
@@ -39,7 +40,8 @@ const ListCreateClub = () => {
 
   const onClickListClubMember = useCallback((event) => {
     const { id } = event.target;
-    navigate("/user");
+    const { groupType } = event.target;
+    navigate(`/user/memberlist/grouptype/${groupType}/groupno/${id}`);
   }, []);
 
   return (
@@ -47,12 +49,15 @@ const ListCreateClub = () => {
       <Box>
         {clubList?.map((club, i) => (
           <Box key={i}>
-            <h5>{club.clubName}</h5>
-            <h5>{club.state}</h5>
+            <ClubThumbnail club={club} />
             <Button id={club.clubNo} onClick={onClickClub}>
               클럽정보
             </Button>
-            <Button id={club.clubNo} onClick={onClickListClubMember}>
+            <Button
+              id={club.clubNo}
+              groupType={1}
+              onClick={onClickListClubMember}
+            >
               클럽멤버
             </Button>
           </Box>

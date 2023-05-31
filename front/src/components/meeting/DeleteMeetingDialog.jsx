@@ -21,12 +21,12 @@ const DeleteMeetingDialog = ({ open, setOpen }) => {
 
             try {
             const data = {
-                meetingNo: meetingno
+              meetingNo: meetingno
             };
 
             console.log(data);
 
-            const response = await axios.delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting`, {
+            const response = await axios.patch(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/delete`, {
                 data: data,
             });
 

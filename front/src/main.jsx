@@ -1,196 +1,205 @@
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
-import ReactDOM from 'react-dom/client';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from '@emotion/react';
-import CssBaseline from '@mui/material/CssBaseline';
-import theme from './theme.js';
-import MainLayout from '@layouts/common/MainLayout.jsx';
-import ErrorPage from '@pages/common/ErrorPage.jsx';
-import Main from '@pages/common/Main.jsx';
-import GetMeeting from '@pages/meeting/GetMeeting.jsx';
-import UpdateMeeting from '@pages/meeting/UpdateMeeting.jsx';
-import AddMeeting from '@pages/meeting/AddMeeting.jsx';
-import AddMeetingMember from '@pages/meeting/AddMeetingMember.jsx';
-import Login from '@pages/user/Login.jsx';
-import GetMyProfile from '@pages/communication/GetMyProfile.jsx';
-import ListMeetingMember from '@pages/meeting/ListMeetingMember.jsx';
-import UpdateMeetingSuccess from '@pages/meeting/UpdateMeetingSuccess.jsx';
-import AddMeetingReveiw from '@pages/meeting/AddMeetingReveiw.jsx';
-import UpdateMeetingReview from '@pages/meeting/UpdateMeetingReview.jsx';
-import ListChatRoom from '@pages/communication/ListChatRoom.jsx';
-import GetClubChat from '@pages/communication/GetClubChat.jsx';
-import GetDirectChat from '@pages/communication/GetDirectChat.jsx';
-import GetGroupChat from '@pages/communication/GetGroupChat.jsx';
-import UnauthenticatedMain from '@pages/common/UnauthenticatedMain';
-import RootLayout from '@layouts/common/RootLayout.jsx';
-import AddUser from '@pages/user/AddUser.jsx';
-import UpdateUser from '@pages/user/UpdateUser.jsx';
+import ReactDOM from "react-dom/client";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "@emotion/react";
+import CssBaseline from "@mui/material/CssBaseline";
+import theme from "./theme.js";
+import ErrorPage from "@pages/common/ErrorPage.jsx";
+import Main from "@pages/common/Main.jsx";
+import GetMeeting from "@pages/meeting/GetMeeting.jsx";
+import UpdateMeeting from "@pages/meeting/UpdateMeeting.jsx";
+import AddMeeting from "@pages/meeting/AddMeeting.jsx";
+import AddMeetingMember from "@pages/meeting/AddMeetingMember.jsx";
+import Login from "@pages/user/Login.jsx";
+import GetMyProfile from "@pages/communication/GetMyProfile.jsx";
+import ListMeetingMember from "@pages/meeting/ListMeetingMember.jsx";
+import UpdateMeetingSuccess from "@pages/meeting/UpdateMeetingSuccess.jsx";
+import AddMeetingReveiw from "@pages/meeting/AddMeetingReveiw.jsx";
+import UpdateMeetingReview from "@pages/meeting/UpdateMeetingReview.jsx";
+import ListChatRoom from "@pages/communication/ListChatRoom.jsx";
+import GetDirectChat from "@pages/communication/GetDirectChat.jsx";
+import GetGroupChat from "@pages/communication/GetGroupChat.jsx";
+import UnauthenticatedMain from "@pages/common/UnauthenticatedMain";
+import RootLayout from "@layouts/common/RootLayout.jsx";
+import AddUser from "@pages/user/AddUser.jsx";
+import UpdateUser from "@pages/user/UpdateUser.jsx";
 
-import Test from '@pages/communication/Test.jsx';
-import GetReport from '@pages/communication/GetReport.jsx';
-import AddReport from '@pages/communication/AddReport.jsx';
-import GetProfile from '@pages/communication/GetProfile.jsx';
-import CommonTop from '@layouts/common/CommonTop.jsx';
-import ListReportCategory from '@pages/communication/ListReportCategory.jsx';
-import ListGroupMemberList from '@components/user/ListGroupMember.jsx';
-import AddClub from '@pages/club/AddClub.jsx';
-import GetClub from '@pages/club/GetClub.jsx';
+import Test from "@pages/communication/Test.jsx";
+import GetReport from "@pages/communication/GetReport.jsx";
+import AddReport from "@pages/communication/AddReport.jsx";
+import GetProfile from "@pages/communication/GetProfile.jsx";
+import CommonTop from "@layouts/common/CommonTop.jsx";
+import ListReportCategory from "@pages/communication/ListReportCategory.jsx";
+import AddClub from "@pages/club/AddClub.jsx";
+import GetClub from "@pages/club/GetClub.jsx";
+import ListReport from "@pages/communication/ListReport.jsx";
+import UpdateReport from "@pages/communication/UpdateReport.jsx";
+import ListGroupMember from "@components/user/ListGroupMember.jsx";
+import { element } from "prop-types";
+import SearchMeeting from "@pages/meeting/SearchMeeting";
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: '/',
+        path: "/",
         element: <Main />,
       },
       {
-        path: '/unauthenticatedmain',
+        path: "/unauthenticatedmain",
         element: <UnauthenticatedMain />,
       },
+      //------------------------------------------------User--------------------------------------------------
       {
-        path: 'user',
+        path: "user",
         children: [
           {
-            path: 'login',
+            path: "login",
             element: <Login />,
           },
           {
-            path: 'adduser',
+            path: "adduser",
             element: <AddUser />,
           },
           {
-            path: 'updateuser',
+            path: "updateuser",
             element: <UpdateUser />,
           },
-        ],
-      },
-      {
-        path: 'meeting',
-        children: [
           {
-            path: 'login',
-            element: <Login />,
-          },
-          {
-            path: 'memberlist',
-            element: <ListGroupMemberList />,
+            path: "memberlist",
+            element: <ListGroupMember />,
           },
         ],
       },
+      //------------------------------------------------Meeting------------------------------------------------
       {
-        path: 'meeting',
+        path: "meeting",
         children: [
           {
-            path: 'addmeeting',
+            path: "addmeeting",
             element: <AddMeeting />,
           },
           {
-            path: 'meetingno/:meetingno',
+            path: "meetingno/:meetingno",
             element: <GetMeeting />,
           },
           {
-            path: 'updatemeeting/:meetingno',
+            path: "updatemeeting/:meetingno",
             element: <UpdateMeeting />,
           },
           {
-            path: 'updatemeetingsuccess/meetingno/:meetingno',
+            path: "updatemeetingsuccess/meetingno/:meetingno",
             element: <UpdateMeetingSuccess />,
           },
           {
-            path: 'member',
+            path: "member",
             children: [
               {
-                path: 'addmember/:meetingno',
+                path: "addmember/:meetingno",
                 element: <AddMeetingMember />,
               },
               {
-                path: 'listmember/meetingno/:meetingno',
+                path: "listmember/meetingno/:meetingno",
                 element: <ListMeetingMember />,
               },
             ],
           },
           {
-            path: 'review',
+            path: "review",
             children: [
               {
-                path: 'addreview/meetingno/:meetingno',
+                path: "addreview/meetingno/:meetingno",
                 element: <AddMeetingReveiw />,
               },
               {
-                path: 'updatereview/reviewno/:reviewno',
+                path: "updatereview/reviewno/:reviewno",
                 element: <UpdateMeetingReview />,
               },
             ],
           },
+          {
+            path: "searchmeeting",
+            element: <SearchMeeting />,
+          },
         ],
       },
+      //------------------------------------------------Community------------------------------------------------
       {
-        path: 'community',
+        path: "community",
         children: [
           {
-            path: 'profile',
+            path: "profile",
             children: [
-              { path: 'mine', element: <GetMyProfile /> },
-              { path: 'userno/:userNo', element: <GetProfile /> },
+              { path: "mine", element: <GetMyProfile /> },
+              { path: "userno/:userNo", element: <GetProfile /> },
             ],
           },
           {
-            path: 'test',
+            path: "test",
             element: <Test />,
           },
           {
-            path: 'report/reportno/:reportNo',
-            element: <GetReport />,
-          },
-          {
-            path: 'report/add',
-            element: <CommonTop pageName="회원 신고하기" />,
+            path: "report",
             children: [
               {
-                path: 'category/reportedno/:reportedNo',
-                element: <ListReportCategory />,
+                path: "",
+                element: <GetReport />,
               },
+              { path: "list", element: <ListReport /> },
               {
-                path: 'categoryno/:categoryNo/reportedno/:reportedNo',
-                element: <AddReport />,
+                path: "add",
+                element: <CommonTop pageName="회원 신고하기" />,
+                children: [
+                  {
+                    path: "category/reportedno/:reportedNo",
+                    element: <ListReportCategory />,
+                  },
+                  {
+                    path: "categoryno/:categoryNo/reportedno/:reportedNo",
+                    element: <AddReport />,
+                  },
+                ],
               },
+              { path: "update", element: <UpdateReport /> },
             ],
           },
         ],
       },
+      //------------------------------------------------Chat------------------------------------------------
       {
-        path: 'chat',
+        path: "chat",
         children: [
           {
-            path: 'list',
+            path: "list",
             element: <ListChatRoom />,
           },
           {
-            path: 'group/message/list',
+            path: "group/message/list",
             element: <GetGroupChat />,
           },
           {
-            path: 'direct/message/list',
+            path: "direct/message/list",
             element: <GetDirectChat />,
           },
         ],
       },
+      //------------------------------------------------Club------------------------------------------------
       {
-        path: 'club',
+        path: "club",
         children: [
           {
-            path: 'addclub',
+            path: "addclub",
             element: <AddClub />,
           },
           {
-            path: 'no/:clubno',
+            path: "no/:clubno",
             element: <GetClub />,
           },
         ],
@@ -199,7 +208,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <ThemeProvider theme={theme}>
     <CssBaseline>
       <RouterProvider router={router} />

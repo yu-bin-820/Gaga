@@ -1,4 +1,5 @@
 import AddMeeting1 from '@components/meeting/AddMeeting1';
+import AddMeetingImg from '@components/meeting/AddMeetingImg';
 import AddMeetingName from '@components/meeting/AddMeetingName';
 import ListCategory from '@components/meeting/ListCategory';
 import SelectMeetingType from '@components/meeting/SelectMeetingType';
@@ -31,8 +32,10 @@ const AddMeeting = () => {
       case 2:
         return <AddMeetingName />;
       case 3:
-        return <AddMeetingMap />;
+        return <AddMeetingImg />;
       case 4:
+        return <AddMeetingMap />;
+      case 5:
         return <AddMeeting1 />;
       default:
         throw new Error('Unknown step');
@@ -42,13 +45,13 @@ const AddMeeting = () => {
   return (
     <>
       <CommonTop />
-      <Box sx={{ marginTop: '64px' }}>
+      <Box >
         <MobileStepper
           variant="progress"
-          steps={6}
+          steps={7}
           position="static"
           activeStep={activeStep}
-          sx={{ maxWidth: 400, flexGrow: 1 }}
+          sx={{ maxWidth: 500, flexGrow: 1 }}
           nextButton={
             <Button
               size="small"

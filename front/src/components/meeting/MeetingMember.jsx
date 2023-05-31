@@ -31,7 +31,9 @@ const MeetingMember = ({ member }) => {
             <div>
               <Avatar
                 alt={nickName}
-                src={`/static/images/avatar/2.jpg`}
+                src={`http://${
+                  import.meta.env.VITE_SPRING_HOST
+                }/upload_images/user/${profileImg}`}
                 sx={{ width: 40, height: 40 }}
               />
             </div>

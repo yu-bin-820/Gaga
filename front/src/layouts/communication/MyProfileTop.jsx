@@ -20,6 +20,7 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SettingsMenuTop from './SettingsMenuTop';
+import UpdateUser from '@pages/user/UpdateUser';
 
 const MyProfileTop = () => {
   const navigate = useNavigate();
@@ -51,6 +52,11 @@ const MyProfileTop = () => {
     },
     []
   );
+
+  const onClickReportList = useCallback(() => {
+    navigate('/community/report/list');
+  }, [navigate]);
+
   if (!myData) {
     return <Navigate replace to="/" />;
   }
@@ -60,7 +66,7 @@ const MyProfileTop = () => {
         position="fixed"
         color="secondary"
         elevation={0}
-        sx={{ height: '50px' }}
+        sx={{ height: '58px', borderBottom: '1px solid #ccc' }}
       >
         <Container maxWidth="xl">
           <Toolbar
@@ -82,7 +88,7 @@ const MyProfileTop = () => {
         onClose={toggleSettingsMenu(false)}
         onOpen={toggleSettingsMenu(true)}
       >
-        <Box sx={{ minWidth: '300px' }}>
+        <Box sx={{ minWidth: '100vw' }}>
           <List>
             <ListItem>
               <IconButton
@@ -92,11 +98,89 @@ const MyProfileTop = () => {
               >
                 <ArrowBackIosNewIcon />
               </IconButton>
-              <Typography>설정</Typography>
+              <Box
+                sx={{
+                  minWidth: 'calc(100vw - 108px)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                  }}
+                >
+                  설정
+                </Typography>
+              </Box>
             </ListItem>
             <Divider />
-            <ListItem>
-              <ListItemText primary="개인 정보 수정" />
+
+            {/* <Button component={Link} to="/user/updateuser">
+                개인 정보 수정
+              </Button><br/> */}
+            <ListItem
+              sx={{
+                marginTop: '10px',
+                marginBottom: '10px',
+              }}
+            >
+              <ListItemText
+                sx={{ display: 'flex', justifyContent: 'center' }}
+                primary="개인 정보 수정"
+              />
+            </ListItem>
+            <Divider />
+
+            <ListItem
+              sx={{ marginTop: '10px', marginBottom: '10px' }}
+              onClick={onClickReportList}
+            >
+              <ListItemText
+                sx={{ display: 'flex', justifyContent: 'center' }}
+                primary="신고 내역 조회"
+              />
+            </ListItem>
+            <Divider />
+
+            <ListItem sx={{ marginTop: '10px', marginBottom: '10px' }}>
+              <ListItemText
+                sx={{ display: 'flex', justifyContent: 'center' }}
+                primary="회원 탈퇴"
+              />
+            </ListItem>
+            <Divider />
+
+            <ListItem sx={{ marginTop: '10px', marginBottom: '10px' }}>
+              <ListItemText
+                sx={{ display: 'flex', justifyContent: 'center' }}
+                primary="계좌 관리"
+              />
+            </ListItem>
+            <Divider />
+
+            <ListItem sx={{ marginTop: '10px', marginBottom: '10px' }}>
+              <ListItemText
+                sx={{ display: 'flex', justifyContent: 'center' }}
+                primary="결제 정보 조회"
+              />
+            </ListItem>
+            <Divider />
+
+            <ListItem sx={{ marginTop: '10px', marginBottom: '10px' }}>
+              <ListItemText
+                sx={{ display: 'flex', justifyContent: 'center' }}
+                primary="공지사항"
+              />
+            </ListItem>
+            <Divider />
+
+            <ListItem sx={{ marginTop: '10px', marginBottom: '10px' }}>
+              <ListItemText
+                sx={{ display: 'flex', justifyContent: 'center' }}
+                primary="블랙리스트"
+              />
             </ListItem>
             <Divider />
           </List>

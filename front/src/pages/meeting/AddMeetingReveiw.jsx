@@ -13,15 +13,14 @@ const AddMeetingReveiw = () => {
 
     const { meetingno } = useParams();
     const [meetingReview, onChangeMeetingReview, setMeetingReview] = useInput({
-        meetingScore: '',
-        meetingReviewImg: '',
+        meetingScore: 5,
         meetingReviewContent: ''
       });
     
       const [selectedImage, setSelectedImage] = useState(null);
       const [selectedFile, setSelectedFile] = useState(null);
 
-      const onChangeActivityImg = (event) => {
+      const onChangeImg = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
         setSelectedImage(URL.createObjectURL(file));
@@ -38,17 +37,18 @@ const AddMeetingReveiw = () => {
         event.preventDefault();
     
         try {
-          const data = {
-            meetingScore: meetingReview.meetingScore,
-            meetingReviewContent: meetingReview.meetingReviewContent,
-            meetingReviewerNo: myData.userNo,
-            meetingNo: meetingno
-          };
-          data.append('file', selectedFile);
-          console.log(data);
+          const formData = new FormData();
+
+          formData.append('file', selectedFile);
+          formData.append('meetingScore',meetingReview.meetingScore);
+          formData.append('meetingReviewContent',meetingReview.meetingReviewContent);
+          formData.append('meetingReviewerNo',myData.userNo);
+          formData.append('meetingNo',meetingno);
+
+          console.log(formData);
           const response = await axios.post(
             `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`,
-            data
+            formData
     
           );
 
@@ -58,11 +58,11 @@ const AddMeetingReveiw = () => {
         } catch (error) {
           console.error(error);
         }
-      }, [meetingReview]);
+      }, [meetingReview, selectedFile]);
       return (
         <>
         <CommonTop/>
-        <Box sx={{ marginTop: '64px' }}>
+        <Box sx={{ marginTop: '4px' }}>
           <Button
               variant="outlined"
               startIcon={<Avatar><AddPhotoAlternateIcon /></Avatar>}
@@ -74,6 +74,8 @@ const AddMeetingReveiw = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderColor: 'grey',
+                width: '150px',
+                height: '150px',
               }}
               size="large"
             >
@@ -82,36 +84,13 @@ const AddMeetingReveiw = () => {
                 accept="image/*"
                 type="file"
                 id="file"
-                name="meetingReviewImg"
-                onChange={onChangeActivityImg}
+                name="file"
+                onChange={onChangeImg}
               />
             </Button>
             <ImageListItem>
-                  {selectedImage ? (
-                    <img src={selectedImage} />
-                  ) : (
-                    <Box
-                      sx={{
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'grey',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          fontSize: '1.2rem',
-                          color: 'white',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        No Img
-                      </Typography>
-                    </Box>
-                  )}
-                </ImageListItem>
+            {selectedImage && <img src={selectedImage} /> }
+            </ImageListItem>
           <Stack spacing={1}>
             <Rating 
             name="meetingScore" 
@@ -122,23 +101,17 @@ const AddMeetingReveiw = () => {
             value={meetingReview.meetingScore}
             size="large" />
           </Stack>
-          <TextField
-            fulWidth
-            label="meetingScore"
-            name="meetingScore"
-            onChange={onChangeMeetingReview}
-            required
-            value={meetingReview.meetingScore}
-          />
+          <h3>{meetingReview.meetingScore}/5</h3>
           <TextField
             fulWidth
             label="meetingReviewContent"
             name="meetingReviewContent"
             onChange={onChangeMeetingReview}
+            multiline
+            rows={4}
             required
             value={meetingReview.meetingReviewContent}
           />
-
     
           <Button onClick={handleSubmit}>작성하기</Button>
         </Box>

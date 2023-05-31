@@ -71,6 +71,12 @@ const GetMeeting = () => {
 
     const [value, setValue] = React.useState(0);
 
+    const [imageLoadingError, setImageLoadingError] = useState(false);
+
+    const handleImageError = useCallback(() => {
+      setImageLoadingError(true);
+    }, []);
+
 
     return (
         <>
@@ -79,25 +85,32 @@ const GetMeeting = () => {
         <div style={{ position: 'relative', marginBottom: '10px' }}>
         <ImageListItem
             sx={{
-            maxWidth: '450px',
+            maxWidth: '100%',
             maxHeight: '100px',
-            minWidth: '450px',
+            minWidth: '100%',
             minHeight: '100px',
             }}
         >
+            {!imageLoadingError ? (
+                  <img
+                    src={`http://${
+                      import.meta.env.VITE_SPRING_HOST
+                    }/upload_images/meeting/${meeting?.meetingImg}`}
+                    alt="noImg"
+                    loading="lazy"
+                    onError={handleImageError}
+                  />
+                ) : (
             <img
                 src={`https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c`}
             />
-            
+            )}
         </ImageListItem>
+        </div>
         <div style={{ position: 'absolute', bottom: 0, left: 0, background: 'rgba(0, 0, 0, 0.7)', padding: '10px' }}>
     
-    </div>
-    </div>
 
-    <br/>
-    <br/>
-    <br/>
+    </div>
     <br/>
     <br/>
     <br/>
@@ -105,7 +118,7 @@ const GetMeeting = () => {
     <br/>
     <h4>{meeting?.meetingName}</h4>
 
-    <Stack spacing={2}>
+    <Stack spacing={1}>
 
         <Stack direction={'row'} spacing={1} alignItems={'center'}>
         <PeopleIcon/>
@@ -121,13 +134,13 @@ const GetMeeting = () => {
         <CenteredText>
             <QueryBuilderIcon/> {meeting?.meetingStartTime} ~ {meeting?.meetingEndTime}
         </CenteredText>
-    </Stack>
     <CenteredText>
         <LocationOnIcon/> {meeting?.meetingAddr}
     </CenteredText>
     <h5>
     &nbsp; &nbsp; &nbsp;{meeting?.meetingDetailAddr}
     </h5>
+    </Stack>
     <br/>
     {meeting && (
     <Box>
@@ -146,7 +159,7 @@ const GetMeeting = () => {
     <MeetingMember key={i} member={pendingMember} />
 
     ))}
-
+    <h5>리뷰</h5>
     <ListMeetingReview/>
     <BottomNavigation
         showLabels

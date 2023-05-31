@@ -70,7 +70,7 @@ const MainTop = () => {
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
               <Typography
                 variant="h5"
                 noWrap
@@ -78,7 +78,7 @@ const MainTop = () => {
                 href=""
                 sx={{
                   mr: 2,
-                  display: { xs: 'flex', md: 'none' },
+                  display: { xs: 'flex', md: 'flex' },
                   flexGrow: 1,
                   fontWeight: 700,
                   color: '#036635',

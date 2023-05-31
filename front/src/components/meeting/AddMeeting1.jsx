@@ -15,7 +15,6 @@ const AddMeeting1 = () => {
     filterTag,
     meetingName,
     meetingIntro,
-    meetingImg,
     meetingDate,
     meetingStartTime,
     meetingEndTime,
@@ -28,6 +27,7 @@ const AddMeeting1 = () => {
     filterMaxAge,
     meetingMaxMemberNo,
     entryFee,
+    file,
     onChangeField,
     reset
   } = useMeetingFormStore();
@@ -42,32 +42,32 @@ const AddMeeting1 = () => {
     event.preventDefault();
 
     try {
+      const formData = new FormData();
+
+      formData.append('file', file);
+      formData.append('mainCategoryNo',mainCategoryNo);
+      formData.append('filterTag',filterTag);
+      formData.append('meetingName',meetingName);
+      formData.append('meetingIntro',meetingIntro);
+      formData.append('meetingDate',meetingDate);
+      formData.append('meetingStartTime',meetingStartTime);
+      formData.append('meetingEndTime',meetingEndTime);
+      formData.append('meetingAddr',meetingAddr);
+      formData.append('meetingDetailAddr',meetingDetailAddr);
+      formData.append('meetingLat',meetingLat);
+      formData.append('meetingLng',meetingLng);
+      formData.append('filterGender',filterGender);
+      formData.append('filterMinAge',filterMinAge);
+      formData.append('filterMaxAge',filterMaxAge);
+      formData.append('meetingMaxMemberNo',meetingMaxMemberNo);
+      formData.append('entryFee',entryFee);
+      formData.append('meetingLeaderNo',myData.userNo);
+
         console.log(useMeetingFormStore.meetingDate)
-      const data = {
-        mainCategoryNo,
-        filterTag,
-        meetingName,
-        meetingIntro,
-        meetingImg,
-        meetingDate,
-        meetingStartTime,
-        meetingEndTime,
-        meetingAddr,
-        meetingDetailAddr,
-        meetingLat,
-        meetingLng,
-        filterGender,
-        filterMinAge,
-        filterMaxAge,
-        meetingMaxMemberNo,
-        entryFee,
-        meetingLeaderNo: myData.userNo,
-      };
 
       const response = await axios.post(
         `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting`,
-        data
-
+        formData
       );
 
       reset()
@@ -78,38 +78,7 @@ const AddMeeting1 = () => {
     }
   }, [useMeetingFormStore]);
   return (
-    <Box sx={{ marginTop: '64px' }}>
-      <TextField
-        fulWidth
-        label="mainCategoryNo"
-        name="mainCategoryNo"
-        onChange={(e)=>onChangeField('mainCategoryNo',e)}
-        value={mainCategoryNo}
-      />
-      <TextField
-        fulWidth
-        label="filterTag"
-        name="filterTag"
-        onChange={(e)=>onChangeField('filterTag',e)}
-        required
-        value={filterTag}
-      />
-      <TextField
-        fulWidth
-        label="meetingIntro"
-        name="meetingIntro"
-        onChange={(e)=>onChangeField('meetingIntro',e)}
-        required
-        value={meetingIntro}
-      />
-      <TextField
-        fulWidth
-        label="meetingImg"
-        name="meetingImg"
-        onChange={(e)=>onChangeField('meetingImg',e)}
-        required
-        value={meetingImg}
-      />
+    <Box>
       <TextField
         fulWidth
         label="meetingDate"
@@ -133,38 +102,6 @@ const AddMeeting1 = () => {
         onChange={(e)=>onChangeField('meetingEndTime',e)}
         required
         value={meetingEndTime}
-      />
-      <TextField
-        fulWidth
-        label="meetingAddr"
-        name="meetingAddr"
-        onChange={(e)=>onChangeField('meetingAddr',e)}
-        required
-        value={meetingAddr}
-      />
-      <TextField
-        fulWidth
-        label="meetingDetailAddr"
-        name="meetingDetailAddr"
-        onChange={(e)=>onChangeField('meetingDetailAddr',e)}
-        required
-        value={meetingDetailAddr}
-      />
-      <TextField
-        fulWidth
-        label="meetingLat"
-        name="meetingLat"
-        onChange={(e)=>onChangeField('meetingLat',e)}
-        required
-        value={meetingLat}
-      />
-      <TextField
-        fulWidth
-        label="meetingLng"
-        name="meetingLng"
-        onChange={(e)=>onChangeField('meetingLng',e)}
-        required
-        value={meetingLng}
       />
       <TextField
         fulWidth

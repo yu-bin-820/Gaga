@@ -1,13 +1,22 @@
-import { Button } from '@mui/material';
+import { Button, ImageList, ImageListItem, Rating, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
+import StarIcon from '@mui/icons-material/Star';
+import CustomedImageListItem from '@components/common/CustomedImageListItem';
+
 
 const ListMeetingReview = () => {
     const { meetingno } = useParams();
     const [meetingReviewList, setMeetingReviewList] = useState();
     const navigate = useNavigate();
+
+    const [imageLoadingError, setImageLoadingError] = useState(false);
+
+    const handleImageError = useCallback(() => {
+      setImageLoadingError(true);
+    }, []);
 
 
     useEffect(()=>{
@@ -56,8 +65,29 @@ const ListMeetingReview = () => {
             <Box>
                 {meetingReviewList?.map((meetingReview,i)=>(
                     <Box key={i}>
-                    <h5>{meetingReview.meetingScore}</h5>
-                    <h5>{meetingReview.meetingReviewImg}</h5>
+                        <ImageList
+                            sx={{ width: 100, height: 100, overflow: 'hidden' }}
+                            cols={1}
+                            rowHeight={100}
+                            >
+                            <ImageListItem>
+                            <CustomedImageListItem
+                                src={`http://${
+                                import.meta.env.VITE_SPRING_HOST
+                                }/upload_images/meeting/${meetingReview?.meetingReviewImg}`}
+                            />
+                </ImageListItem>
+            </ImageList>
+            <Box
+                sx={{
+                    width: 200,
+                    display: 'flex',
+                    alignItems: 'center',
+                }}
+                >
+                <Rating name="read-only" value={meetingReview.meetingScore} readOnly />
+                <Box sx={{ ml: 2 }}>{meetingReview.meetingScore}</Box>
+                </Box>
                     <Button 
                     id={meetingReview.meetingReviewNo}
                     onClick={onClickUpdateMeetingReview}>수정하기</Button>

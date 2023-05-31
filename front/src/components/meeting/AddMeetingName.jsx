@@ -10,13 +10,14 @@ const AddMeetingName = () => {
       } = useMeetingFormStore();
 
     return (
-        <Box sx={{ marginTop: '64px' }}>
+        <Box>
             <h5>모임의 제목을 정해주세요!</h5>
             <TextField
             fulWidth
             label="meetingName"
             name="meetingName"
             onChange={(e)=>onChangeField('meetingName',e)}
+            placeholder="Please enter text"
             required
             value={meetingName}
             />

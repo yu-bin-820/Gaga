@@ -14,7 +14,7 @@ const theme = createTheme({
       main: red.A400,
     },
     info: {
-      main: '#d3d3d3',
+      main: '#c9c9c9',
     },
   },
 });
