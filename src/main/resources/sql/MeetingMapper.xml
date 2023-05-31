@@ -121,6 +121,8 @@
     meetings
   WHERE
     parent_club_no = #{clubNo}
+  AND
+  	meeting_state IN (1, 2, 3)
 </select>
  
   
@@ -156,11 +158,18 @@
     m.bank_name,
     mb.state
   FROM meetings m
-  LEFT JOIN members mb ON m.meeting_no = mb.meeting_no
+  LEFT JOIN 
+  	(SELECT meeting_no, user_no, state
+  		FROM members
+  		WHERE user_no = #{userNo}) mb 
+  ON 
+  	m.meeting_no = mb.meeting_no
   WHERE 
   	mb.user_no = #{userNo}
   OR 
   	m.meeting_leader_no = #{userNo}
+  AND
+  	m.meeting_state IN (1, 2, 3)
 </select>
 
   
@@ -343,10 +352,13 @@
 
   
   <!-- 미팅 삭제 -->
-  <delete id="deleteMeeting" parameterType="int">
-    DELETE FROM meetings
-    WHERE meeting_no = #{meetingNo}
-  </delete>
+  <update id="deleteMeeting" parameterType="int">
+  UPDATE meetings
+  SET
+    meeting_state = 4
+  WHERE
+    meeting_no = #{meetingNo}
+  </update>
   
   
   

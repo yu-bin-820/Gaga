@@ -61,7 +61,7 @@ public class MeetingServiceTest {
         meeting.setMeetingLng(127.123456);
         meeting.setMeetingName("Sample Meeting");
         meeting.setMeetingIntro("Sample Introduction");
-        meeting.setMeetingLeaderNo(1);
+        //meeting.setMeetingLeaderNo(1);
         meeting.setMeetingMaxMemberNo(20);
         meeting.setMeetingRegDate(new java.sql.Date(new Date().getTime()));
         meeting.setMeetingImg("sample.jpg");
