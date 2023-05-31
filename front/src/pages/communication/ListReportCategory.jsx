@@ -26,7 +26,7 @@ const ListReportCategory = () => {
     [navigate, reportedNo]
   );
   return (
-    <Box sx={{ marginTop: '64px' }}>
+    <Box sx={{ marginTop: '55px' }}>
       <Divider />
       <List>
         <ListItem>

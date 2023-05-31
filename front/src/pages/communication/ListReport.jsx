@@ -13,11 +13,18 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { DateTime } from 'luxon';
+import useCommunityStore from '@stores/communication/useCommunityStore';
+import { useNavigate } from 'react-router';
+
 const ListReport = () => {
+  const navigate = useNavigate();
+
   const { data: myData, mutate: mutateMe } = useSWR(
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+
+  const { setField } = useCommunityStore();
 
   const { data: reportListData, mutate: mutateReportList } = useSWR(
     `http://${
@@ -26,21 +33,27 @@ const ListReport = () => {
     fetcher
   );
 
-  const onClickReport = useCallback((e) => {
-    console.log(e.currentTarget.dataset.value);
-  }, []);
+  const onClickReport = useCallback(
+    (e) => {
+      console.log(e.currentTarget.dataset.value);
+      setField('reportNo', e.currentTarget.dataset.value);
+      navigate('/community/report');
+    },
+    [navigate, setField]
+  );
   return (
     <div>
-      <CommonTop pageName="신고 목록 조회" />
+      <CommonTop pageName="신고 목록 조회" prevPath="/community/profile/mine" />
+
       <TableContainer>
         <Table
           sx={{
             minWidth: '70vw',
             maxWidth: '90vw',
+            marginTop: '64px',
             marginLeft: '10px',
             marginRight: '5px',
           }}
-          aria-label="simple table"
         >
           <TableHead>
             <TableRow>
