@@ -14,7 +14,10 @@ public class Report {
 	private String reportImg2;
 	private String reportImg3;
 	//신고게시판 화면용도
-	private String userId;
+	private String reportedId;
+	private String reportingId;
+	private String reportedNickName;
+	private String reportingNickName;
 	
 	///Constructor()
 	public Report() {
@@ -92,22 +95,51 @@ public class Report {
 	public void setReportImg3(String reportImg3) {
 		this.reportImg3 = reportImg3;
 	}
-	
-	//신고게시판용도
-	public String getUserId() {
-		return userId;
+
+	public String getReportedId() {
+		return reportedId;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+
+	public void setReportedId(String reportedId) {
+		this.reportedId = reportedId;
 	}
-	
+
+	public String getReportingId() {
+		return reportingId;
+	}
+
+	public void setReportingId(String reportingId) {
+		this.reportingId = reportingId;
+	}
+
+	public String getReportedNickName() {
+		return reportedNickName;
+	}
+
+	public void setReportedNickName(String reportedNickName) {
+		this.reportedNickName = reportedNickName;
+	}
+
+	public String getReportingNickName() {
+		return reportingNickName;
+	}
+
+	public void setReportingNickName(String reportingNickName) {
+		this.reportingNickName = reportingNickName;
+	}
+
 	///toString()
 	@Override
 	public String toString() {
 		return "Report [reportNo=" + reportNo + ", reportingNo=" + reportingNo + ", reportedNo=" + reportedNo
 				+ ", reportCategoryNo=" + reportCategoryNo + ", reportContent=" + reportContent + ", reportDate="
 				+ reportDate + ", reportImg=" + reportImg + ", reportImg2=" + reportImg2 + ", reportImg3=" + reportImg3
-				+ "]";
-	}	
+				+ ", reportedId=" + reportedId + ", reportingId=" + reportingId + ", reportedNickName="
+				+ reportedNickName + ", reportingNickName=" + reportingNickName + "]";
+	}
+	
+
+
+		
 
 }
