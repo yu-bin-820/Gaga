@@ -5,6 +5,12 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import useSWR from "swr";
+import ClubThumbnail from "./ClubThumbnail";
+import Payment from "@components/payment/Payment";
+import Refund from "@components/payment/Refund";
+import BankCode from "@components/payment/Banks";
+import Banks from "@components/payment/Banks";
+import Account from "@components/payment/Account";
 
 const ListClub = () => {
   const [clubList, setClubList] = useState();
@@ -47,17 +53,23 @@ const ListClub = () => {
     <>
       <Box sx={{ marginTop: "100px" }}>
         <Box>
-          {clubList?.map((club, i) => (
-            <Box key={i}>
-              <h5>{club.clubName}</h5>
-              <Button id={club.clubNo} onClick={onClickClub}>
-                <h5>{club.clubNo}</h5>
-                <br />
-                <br />
-                {i + 1}번 클럽정보
-              </Button>
-            </Box>
-          ))}
+          <Account />
+          <Payment />
+          <Refund />
+          <Box>
+            {clubList?.map((club, i) => (
+              <Box key={i}>
+                <ClubThumbnail club={club} />
+                <h5>{club.clubName}</h5>
+                <Button id={club.clubNo} onClick={onClickClub}>
+                  <h5>{club.clubNo}</h5>
+                  <br />
+                  <br />
+                  {i + 1}번 클럽정보
+                </Button>
+              </Box>
+            ))}
+          </Box>
         </Box>
       </Box>
     </>

@@ -66,6 +66,7 @@ const Login = () => {
           userId: user.userId,
           password: user.password,
         };
+        console.log(data);
 
         const response = await axios
           .post(

@@ -15,6 +15,7 @@ import Paper from '@mui/material/Paper';
 import { DateTime } from 'luxon';
 import useCommunityStore from '@stores/communication/useCommunityStore';
 import { useNavigate } from 'react-router';
+
 const ListReport = () => {
   const navigate = useNavigate();
 

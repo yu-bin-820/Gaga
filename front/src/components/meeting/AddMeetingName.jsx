@@ -10,7 +10,7 @@ const AddMeetingName = () => {
       } = useMeetingFormStore();
 
     return (
-        <Box sx={{ marginTop: '64px' }}>
+        <Box>
             <h5>모임의 제목을 정해주세요!</h5>
             <TextField
             fulWidth
