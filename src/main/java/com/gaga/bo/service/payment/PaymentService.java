@@ -23,7 +23,7 @@ public interface PaymentService {
 	public void updatePayment(String payNo) throws Exception;
 	
 	//모임, 유저번호로 결제번호 가져오기
-	public String getPayNoByUserMeeting(Map<String, Integer> refund) throws Exception;
+	public String getPayNoByUserMeeting(Map<String, Object> refund) throws Exception;
 	
 	//정산 목록 조회(운영자)
 	public List<Meeting> getAllAdjustmentList() throws Exception;
@@ -33,6 +33,8 @@ public interface PaymentService {
 
 	//정산상태 변경  state 정산대기0->정산성공1
 	public void updateAdjustmentState(Meeting meeting) throws Exception;
-
-
+	
+	//아임포트 토큰 발급
+	public String getAccessToken() throws Exception;
+	
 }
