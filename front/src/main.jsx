@@ -45,7 +45,6 @@ import FindId from "@pages/user/FindId.jsx";
 import FindPassword from "@pages/user/FindPassword.jsx";
 
 import UpdateReport from "@pages/communication/UpdateReport.jsx";
-import ListGroupMember from "@components/user/ListGroupMember.jsx";
 import { element } from "prop-types";
 import SearchMeeting from "@pages/meeting/SearchMeeting";
 
