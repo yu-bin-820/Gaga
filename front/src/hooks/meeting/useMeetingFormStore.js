@@ -19,6 +19,8 @@ const meetingField={
     filterMaxAge: '',
     meetingMaxMemberNo: '',
     entryFee: '',
+    file: null,
+    image: null,
 }
 const useMeetingFormStore=create((set=>({
     ...meetingField,
