@@ -22,7 +22,7 @@ const Chat = ({ data }) => {
   const sendTime = DateTime.fromISO(data.created_at).toLocaleString(
     DateTime.TIME_SIMPLE
   );
-  console.log(data);
+  // console.log(data);
 
   return (
     <Stack
@@ -43,7 +43,7 @@ const Chat = ({ data }) => {
       <Stack>
         {!isMe && data.Sender.nick_name}
 
-        <Stack direction={'row'} sx={{ maxWidth: '300px' }}>
+        <Stack direction={'row'} sx={{ maxWidth: '78vw' }}>
           {isMe && (
             <Stack marginTop="auto">
               <Typography
@@ -79,6 +79,7 @@ const Chat = ({ data }) => {
                 maxWidth: '100%',
                 marginRight: isMe ? '10px' : '3px',
                 marginLeft: isMe ? '3px' : '0px',
+                wordBreak: 'break-all',
               }}
             >
               {data.content.split('\n').map((line, index) => (

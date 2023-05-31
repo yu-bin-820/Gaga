@@ -15,6 +15,9 @@ const useCommunityStore = create((set) => ({
     '특정 종교의 권유, 포교, 전도 목적 의심',
     '기타',
   ],
+  profileUserNo: 0,
+  prevProfilePath: '',
+  prevPath: '',
 
   setChatRoomEntryNo: (chatRoomEntryNo) =>
     set(() => ({ chatRoomEntryNo: chatRoomEntryNo })),
