@@ -39,6 +39,11 @@ import ListGroupMemberList from "@components/user/ListGroupMember.jsx";
 import AddClub from "@pages/club/AddClub.jsx";
 import GetClub from "@pages/club/GetClub.jsx";
 import ListReport from "@pages/communication/ListReport.jsx";
+import ListGroupMember from "@components/user/ListGroupMember.jsx";
+import AddNaverUser from "@pages/user/AddNaverUser.jsx";
+import AddKakaoUser from "@pages/user/AddKakaoUser.jsx";
+import FindId from "@pages/user/FindId.jsx";
+import FindPassword from "@pages/user/FindPassword.jsx";
 
 const router = createBrowserRouter([
   {
@@ -64,6 +69,22 @@ const router = createBrowserRouter([
           {
             path: "adduser",
             element: <AddUser />,
+          },
+          {
+            path: "addnaveruser",
+            element: <AddNaverUser />,
+          },
+          {
+            path: "addkakaouser",
+            element: <AddKakaoUser />,
+          },
+          {
+            path: "findid",
+            element: <FindId />,
+          },
+          {
+            path: "findpassword",
+            element: <FindPassword />,
           },
           {
             path: "updateuser",

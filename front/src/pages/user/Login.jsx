@@ -95,45 +95,6 @@ const Login = () => {
       'https://kauth.kakao.com/oauth/authorize?client_id=5d88ee6131a76417bcf8e0d0dc852d91&scope=profile_nickname,profile_image,account_email&redirect_uri=http://192.168.0.159:8080/rest/user/kakaoLogin&response_type=code';
   };
 
-  const handlePhoneAuthRequest = async () => {
-    try {
-      const response = await axios.post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuth`,
-        tel,
-        { withCredentials: true }
-      );
-
-      if (response.data) {
-        // 이미 가입된 번호인 경우 처리
-        setPhoneAuthVerified(true);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handlePhoneAuthVerify = async () => {
-    try {
-      const data = {
-        code: phoneAuthCode,
-      };
-      console.log(phoneAuthCode);
-      const response = await axios.post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuthOk`,
-        phoneAuthCode,
-        { withCredentials: true }
-      );
-
-      if (response.data) {
-        // 인증 성공한 경우 처리
-        console.log(phoneAuthCode);
-        setPhoneAuthVerified(true);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   if (myData === undefined) {
     return <div>로딩중</div>;
   }
@@ -221,12 +182,42 @@ const Login = () => {
               >
                 Sign In
               </Button>
-              <Button component={Link} to="/user/adduser">
+              <Button
+                component={Link} 
+                to="/user/adduser"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2, backgroundColor: '#fbc02d' }}  // backgroundColor를 '#fbc02d'로 설정하여 노란색으로 만듦
+              >
                 회원가입
-              </Button><br/>
-              <Button component={Link} to="/user/updateuser">
+              </Button>
+              <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Button
+                  component={Link}
+                  to="/user/findid"
+                  fullWidth
+                  variant="contained"
+                  color="secondary"
+                >
+                  아이디 찾기
+                </Button>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Button
+                  component={Link}
+                  to="/user/findpassword"
+                  fullWidth
+                  variant="contained"
+                  color="secondary"
+                >
+                  비밀번호 찾기
+                </Button>
+              </Grid>
+            </Grid>
+              {/* <Button component={Link} to="/user/updateuser">
                 내정보보기/수정
-              </Button><br/>
+              </Button><br/> */}
               <a
                 href="https://nid.naver.com/oauth2.0/authorize?client_id=FzMGbETEgw2xNeSUlIIF&response_type=code&redirect_uri=http://192.168.0.159:8080/rest/user/naverLogin&state=test"
                 onClick={handleNaverLogin}
@@ -249,29 +240,7 @@ const Login = () => {
                   alt="카카오 로그인"
                 />
               </a>
-              <br />
-              <TextField
-                label="전화번호"
-                name="tel"
-                onChange={(e) => setTel(e.target.value)}
-                required
-                value={tel}
-              />
-              <Button onClick={handlePhoneAuthRequest}>인증 요청</Button>
-              <br />
-              <br />
-              {phoneAuthVerified ? (
-                <div>인증 완료</div>
-              ) : (
-                <>
-                  <TextField
-                    label="인증번호"
-                    value={phoneAuthCode}
-                    onChange={(e) => setPhoneAuthCode(e.target.value)}
-                  />
-                  <Button onClick={handlePhoneAuthVerify}>인증 확인</Button>
-                </>
-              )}
+
               <Grid container>
                 <Grid item>
                   <Typography
