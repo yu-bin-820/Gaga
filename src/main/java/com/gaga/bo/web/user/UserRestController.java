@@ -70,26 +70,42 @@ public class UserRestController {
 									HttpSession session ) throws Exception{
 	
 		System.out.println("/rest/user/login : POST");
-		System.out.println("::11"+user);
 		
 		//Business Logic
 		User dbUser=userService.getUserById(user.getUserId());
-		System.out.println("::22"+user);
 
 		if( dbUser!=null ) {
 			if( user.getPassword().equals(dbUser.getPassword())){
 				session.setAttribute("user", dbUser);
 			}
 		}
-		
-		if( user.getPassword().equals(dbUser.getPassword())){
-			session.setAttribute("user", dbUser);
-		}
+//		if( user.getPassword().equals(dbUser.getPassword())){
+//			session.setAttribute("user", dbUser);
+//		}
+
 		System.out.println("::"+user);
 		System.out.println("::"+dbUser);		
 		return dbUser;
 		
 	}
+	
+    @PostMapping("/checkDuplicateId")
+    public ResponseEntity<Map<String, Boolean>> checkDuplicateId(@RequestBody Map<String, String> request) {
+        String userId = request.get("userId");
+        boolean isDuplicate;
+        System.out.println("아이디중복체크 아이디는="+userId);
+        
+        try {
+            isDuplicate = userService.checkDuplication(userId);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("isDuplicate", isDuplicate);
+        
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 	
 	@DeleteMapping("/logout")
 	public ResponseEntity<String> logout(HttpSession session, HttpServletResponse response,
@@ -129,6 +145,7 @@ public class UserRestController {
 		// 아이디 중복 확인
 	    boolean isDuplicate = userService.checkDuplication(user.getUserId());
 	    if (isDuplicate) {
+	    	System.out.println("아이디 중복임");
 	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	    }
 		// Business Logic
@@ -244,22 +261,23 @@ public class UserRestController {
 										@PathVariable("groupNo") int groupNo,
 										@PathVariable("state") int state) throws Exception{
 		
-		Map<String, Integer> map = new HashMap<>();
+		Map<String, Integer> map = new HashMap<String,Integer>();
 		map.put("groupType", groupType);
 	    map.put("groupNo", groupNo);
 	    map.put("state", state);
 	    
+	    System.out.println(":: 멤버 검색조건 map :: "+map);
 	    
 		return userService.getGroupMemberList(map);
 	} 
 
 	@PostMapping("/phoneAuth")
-	public Boolean phoneAuth(@RequestBody String tel, HttpSession session) {
+	public Boolean phoneAuth(@RequestBody String userPhoneNo, HttpSession session) {
 		System.out.println("핸드폰 인증 요청 옴");
 	    try {
 	        // 이미 가입된 전화번호가 있는지 확인
-	        User user = userService.getUserByPhoneNo(tel);
-	        if(user != null && user.getPhoneNo().equals(tel)) {
+	        User user = userService.getUserByPhoneNo(userPhoneNo);
+	        if(user != null && user.getPhoneNo().equals(userPhoneNo)) {
 	            return true;
 	        }
 	    } catch (Exception e) {
@@ -267,7 +285,7 @@ public class UserRestController {
 	        e.printStackTrace();
 	    }
 	
-	    String code = userService.sendRandomSmsMessage(tel);
+	    String code = userService.sendRandomSmsMessage(userPhoneNo);
 	    session.setAttribute("rand", code);
 	    
 	    return false;
@@ -289,11 +307,11 @@ public class UserRestController {
 	
 	@PostMapping(value = "/mailAuth") 		//이메일 인증, 회원 아이디(이메일)에 대해 인증 코드 발송
 	public String mailConfirm(@RequestBody Map<String, String> body) throws Exception {
-	    String email = body.get("email");
-	    String code = userService.sendSimpleMessage(email);
-	    System.out.println("사용자에게 발송한 인증코드 ==> " + code);
+	    String userEmail = body.get("email");
+	    String emailAuthCode = userService.sendEmailContent(userEmail);
+	    System.out.println("사용자에게 발송한 인증코드 ==> " + emailAuthCode);
 
-	    return code;
+	    return emailAuthCode;
 	}
 
 }

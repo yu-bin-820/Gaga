@@ -187,7 +187,7 @@
 	</update>
 	
 	<select id="getGroupMemberList" parameterType="map" resultMap="userResultMap">
-	    SELECT DISTINCT u.user_no, u.user_id, u.password, u.user_name, u.birthday, 
+	    SELECT u.user_no, u.user_id, u.password, u.user_name, u.birthday, 
 	    	   u.gender, u.nick_name, u.phone_no, u.role, u.join_day,
 	           u.out_day, u.out_reason, u.profile_img, u.activity_img,
 	           u.activity_img2, u.activity_img3, u.user_intro, u.main_title_no,
@@ -196,24 +196,35 @@
 	           u.filter_tag2, u.filter_tag3, m.state
 	    FROM users u
 	    JOIN members m ON u.user_no = m.user_no
-	    WHERE u.user_no IN (
-	        SELECT mm.user_no
-	        FROM members mm
-	        <where>
-	            <choose>
-	                <when test="groupType == 1">
-	                    mm.club_no = #{groupNo}
-	                </when>
-	                <when test="groupType == 2">
-	                    mm.meeting_no = #{groupNo}
-	                </when>
-	            </choose>
-	            <if test="state != 0">
-	                AND mm.state = #{state}
-	            </if>
-	        </where>
-	    )
+	    WHERE    
+	    	<choose>
+				<when test="groupType == 1">
+					m.club_no = #{groupNo}
+				</when>
+				<when test="groupType == 2">
+					m.meeting_no = #{groupNo}
+				</when>
+			</choose>
+	    AND u.user_no IN (
+					        SELECT mm.user_no
+					        FROM members mm
+					        <where>
+					            <choose>
+					                <when test="groupType == 1">
+					                    mm.club_no = #{groupNo}
+					                </when>
+					                <when test="groupType == 2">
+					                    mm.meeting_no = #{groupNo}
+					                </when>
+					            </choose>
+					            <if test="state != 0">
+					                AND mm.state = #{state}
+					            </if>
+					        </where>
+					    )
+
 	</select>
+
 
 
 
