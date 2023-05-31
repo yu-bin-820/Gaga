@@ -62,7 +62,7 @@ const AddMeetingReveiw = () => {
       return (
         <>
         <CommonTop/>
-        <Box sx={{ marginTop: '4px' }}>
+        <Box sx={{ marginTop: '64px' }}>
           <Button
               variant="outlined"
               startIcon={<Avatar><AddPhotoAlternateIcon /></Avatar>}
