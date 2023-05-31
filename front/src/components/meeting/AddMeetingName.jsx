@@ -17,6 +17,7 @@ const AddMeetingName = () => {
             label="meetingName"
             name="meetingName"
             onChange={(e)=>onChangeField('meetingName',e)}
+            placeholder="Please enter text"
             required
             value={meetingName}
             />

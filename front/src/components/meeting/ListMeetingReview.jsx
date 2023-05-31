@@ -4,6 +4,7 @@ import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import StarIcon from '@mui/icons-material/Star';
+import CustomedImageListItem from '@components/common/CustomedImageListItem';
 
 
 const ListMeetingReview = () => {
@@ -65,42 +66,16 @@ const ListMeetingReview = () => {
                 {meetingReviewList?.map((meetingReview,i)=>(
                     <Box key={i}>
                         <ImageList
-                            sx={{ width: 350, height: 100, overflow: 'hidden' }}
-                            cols={3}
+                            sx={{ width: 100, height: 100, overflow: 'hidden' }}
+                            cols={1}
                             rowHeight={100}
                             >
                             <ImageListItem>
-                                {!imageLoadingError ? (
-                                <img
-                                    src={`http://${
-                                    import.meta.env.VITE_SPRING_HOST
-                                    }/upload_images/meeting/${meetingReview?.meetingReviewImg}`}
-                                    alt="noImg"
-                                    loading="lazy"
-                                    onError={handleImageError}
-                                />
-                                ) : (
-                                <Box
-                                    sx={{
-                                    width: '100%',
-                                    height: '100%',
-                                    backgroundColor: 'grey',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    }}
-                                >
-                            <Typography
-                            sx={{
-                                fontSize: '1.2rem',
-                                color: 'white',
-                                fontWeight: 'bold',
-                            }}
-                            >
-                            No Img
-                            </Typography>
-                    </Box>
-                )}
+                            <CustomedImageListItem
+                                src={`http://${
+                                import.meta.env.VITE_SPRING_HOST
+                                }/upload_images/meeting/${meetingReview?.meetingReviewImg}`}
+                            />
                 </ImageListItem>
             </ImageList>
             <Box
@@ -110,13 +85,7 @@ const ListMeetingReview = () => {
                     alignItems: 'center',
                 }}
                 >
-                <Rating
-                    name="meetingScore"
-                    value={meetingReview.meetingScore}
-                    readOnly
-                    precision={0.5}
-                    emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-                />
+                <Rating name="read-only" value={meetingReview.meetingScore} readOnly />
                 <Box sx={{ ml: 2 }}>{meetingReview.meetingScore}</Box>
                 </Box>
                     <Button 

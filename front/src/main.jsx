@@ -8,7 +8,6 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme.js";
-import MainLayout from "@layouts/common/MainLayout.jsx";
 import ErrorPage from "@pages/common/ErrorPage.jsx";
 import Main from "@pages/common/Main.jsx";
 import GetMeeting from "@pages/meeting/GetMeeting.jsx";
@@ -35,15 +34,32 @@ import AddReport from "@pages/communication/AddReport.jsx";
 import GetProfile from "@pages/communication/GetProfile.jsx";
 import CommonTop from "@layouts/common/CommonTop.jsx";
 import ListReportCategory from "@pages/communication/ListReportCategory.jsx";
-import ListGroupMemberList from "@components/user/ListGroupMember.jsx";
 import AddClub from "@pages/club/AddClub.jsx";
 import GetClub from "@pages/club/GetClub.jsx";
 import ListReport from "@pages/communication/ListReport.jsx";
+
 import ListGroupMember from "@components/user/ListGroupMember.jsx";
 import AddNaverUser from "@pages/user/AddNaverUser.jsx";
 import AddKakaoUser from "@pages/user/AddKakaoUser.jsx";
 import FindId from "@pages/user/FindId.jsx";
 import FindPassword from "@pages/user/FindPassword.jsx";
+
+import UpdateReport from "@pages/communication/UpdateReport.jsx";
+import ListGroupMember from "@components/user/ListGroupMember.jsx";
+import { element } from "prop-types";
+import SearchMeeting from "@pages/meeting/SearchMeeting";
+
+import AddNoticePost from "@pages/admin/NoticePost/AddNoticePost.jsx";
+import GetNoticePost from "@pages/admin/NoticePost/GetNoticePost.jsx";
+import ListNoticePost from "@pages/admin/NoticePost/ListNoticePost.jsx";
+import UpdateNoticePost from "@pages/admin/NoticePost/UpdateNoticePost.jsx";
+import ListEventPost from "@pages/admin/NoticePost/ListEventPost.jsx";
+import GetBlackList from "@pages/admin/BlackList/GetBlackList.jsx";
+import SearchUser from "@pages/admin/BlackList/SearchUser.jsx";
+import GetReportAdmin from "@pages/admin/Report/GetReportAdmin.jsx";
+import ListReportAdmin from "@pages/admin/Report/ListReportAdmin.jsx";
+import ListBlackList from "@pages/admin/BlackList/ListBlackList.jsx";
+
 
 const router = createBrowserRouter([
   {
@@ -59,6 +75,7 @@ const router = createBrowserRouter([
         path: "/unauthenticatedmain",
         element: <UnauthenticatedMain />,
       },
+      //------------------------------------------------User--------------------------------------------------
       {
         path: "user",
         children: [
@@ -96,19 +113,7 @@ const router = createBrowserRouter([
           },
         ],
       },
-      {
-        path: "meeting",
-        children: [
-          {
-            path: "login",
-            element: <Login />,
-          },
-          {
-            path: "memberlist",
-            element: <ListGroupMemberList />,
-          },
-        ],
-      },
+      //------------------------------------------------Meeting------------------------------------------------
       {
         path: "meeting",
         children: [
@@ -154,8 +159,13 @@ const router = createBrowserRouter([
               },
             ],
           },
+          {
+            path: "searchmeeting",
+            element: <SearchMeeting />,
+          },
         ],
       },
+      //------------------------------------------------Community------------------------------------------------
       {
         path: "community",
         children: [
@@ -173,11 +183,11 @@ const router = createBrowserRouter([
           {
             path: "report",
             children: [
-              { path: "list", element: <ListReport /> },
               {
-                path: "reportno/:reportNo",
+                path: "",
                 element: <GetReport />,
               },
+              { path: "list", element: <ListReport /> },
               {
                 path: "add",
                 element: <CommonTop pageName="회원 신고하기" />,
@@ -192,10 +202,12 @@ const router = createBrowserRouter([
                   },
                 ],
               },
+              { path: "update", element: <UpdateReport /> },
             ],
           },
         ],
       },
+      //------------------------------------------------Chat------------------------------------------------
       {
         path: "chat",
         children: [
@@ -213,6 +225,7 @@ const router = createBrowserRouter([
           },
         ],
       },
+      //------------------------------------------------Club------------------------------------------------
       {
         path: "club",
         children: [
@@ -226,6 +239,58 @@ const router = createBrowserRouter([
           },
         ],
       },
+      //------------------------------------------------Notice------------------------------------------------
+      {
+        path: "notice",
+        children: [
+          {
+            path: "addNoticePost",
+            element: <AddNoticePost />,
+          },
+          {
+            path: "getNoticePost/noticePostNo/:noticePostNo",
+            element: <GetNoticePost />,
+          },
+          {
+            path: "updateNoticePost/noticePostNo/:noticePostNo",
+            element: <UpdateNoticePost />,
+          },
+          {
+            path: "listNoticePost",
+            element: <ListNoticePost />,
+          }, 
+          {
+            path: "listEventPost",
+            element: <ListEventPost />,
+          },
+        ],
+        },
+        //------------------------------------------------BlackList------------------------------------------------
+      {
+        path: "blackList",
+        children: [
+          {
+            path: "getBlackList/blackListNo/:userNo",
+            element: <GetBlackList />,
+          },
+          {
+            path: "listBlackList",
+            element: <ListBlackList />,
+          },
+          {
+            path: "searchUser",
+            element: <SearchUser />,
+          },
+          {
+            path: "getReportAdmin",
+            element: <GetReportAdmin />,
+          },
+          {
+            path: "listReportAdmin",
+            element: <ListReportAdmin />,
+          },
+        ],
+        },
     ],
   },
 ]);
