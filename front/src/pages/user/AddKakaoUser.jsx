@@ -7,6 +7,7 @@ import Grid from "@mui/material/Grid";
 import MainTop from "@layouts/common/MainTop";
 import dayjs from 'dayjs';
 import MenuItem from '@mui/material/MenuItem';
+import CommonTop from "@layouts/common/CommonTop";
 
 function AddKakaoUser() {
   const [user, setUser] = useState({
@@ -14,7 +15,7 @@ function AddKakaoUser() {
     password: "",
     userName: "",
     birthday: "",
-    gender: 0,
+    gender: 1,
     nickName: "",
     phoneNo: "",
   });
@@ -24,7 +25,7 @@ function AddKakaoUser() {
     fetcher
   );
 
-  console.log("swr로 가져온 유저정보" + myData);
+  console.log("로그인된 사용자냐?" + myData);
 
   useEffect(() => {
     if (myData) {
@@ -88,13 +89,14 @@ function AddKakaoUser() {
 
   return (
     <>
-      <MainTop />
+      <CommonTop />
       <Grid
         container
         component="main"
         sx={{ height: "100vh", marginTop: "63px" }}
       >
         <div>
+          카카오 회원가입<br/>
         <TextField label="아이디" value={user.userId} disabled />
           <TextField
             label="비밀번호"

@@ -77,6 +77,17 @@ const FindPassword = () => {
         alert("휴대폰 번호는 010으로 시작해야 합니다.");
         return;
       }
+      // 휴대폰 번호 확인
+      const checkResponse = await axios.get(
+        `http://${
+          import.meta.env.VITE_SPRING_HOST
+        }/rest/user/phoneno/${phoneNo}`
+      );
+      // 휴대폰 번호가 데이터베이스에 없으면
+      if (!checkResponse.data) {
+        alert("존재하지 않는 휴대폰 번호입니다.");
+        return;
+      }
       const response = await axios.post(
         `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuth`,
         phoneNo,
@@ -129,15 +140,37 @@ const FindPassword = () => {
         <TextField
           label="휴대폰 번호"
           value={phoneNo}
-          onChange={(e) => setPhoneNo(e.target.value)}
+          onChange={(e) => {
+            const input = e.target.value;
+            const regex = /^[0-9]{0,11}$/; // 숫자로 이루어진 정규식 패턴
+            if (regex.test(input)) {
+              setPhoneNo(input);
+            }
+          }}
         />
-        <Button onClick={handlePhoneAuthRequest}>인증번호 발송</Button>
+        <Button
+          onClick={handlePhoneAuthRequest}
+          disabled={phoneNo.length !== 11}
+        >
+          인증번호 발송
+        </Button>
         <TextField
           label="인증번호"
           value={phoneAuthCode}
-          onChange={(e) => setPhoneAuthCode(e.target.value)}
+          onChange={(e) => {
+            const input = e.target.value;
+            const regex = /^[0-9]{0,6}$/; // 0부터 9까지의 숫자로 이루어진 최대 6자리의 정규식 패턴
+            if (regex.test(input)) {
+              setPhoneAuthCode(input);
+            }
+          }}
         />
-        <Button onClick={handlePhoneAuthVerify}>인증번호 확인</Button>
+        <Button
+          onClick={handlePhoneAuthVerify}
+          disabled={!/^\d{6}$/.test(phoneAuthCode)}
+        >
+          인증번호 확인
+        </Button>
         {phoneAuthVerified && (
           <>
             <TextField
