@@ -157,8 +157,7 @@ public class CommunityRestController {
 						  @ModelAttribute Report report, 
 						  @RequestParam(value = "file", required = false) MultipartFile file, 
 						  @RequestParam(value = "file2", required = false) MultipartFile file2, 
-						  @RequestParam(value = "file3", required = false) MultipartFile file3, 
-						  HttpSession session
+						  @RequestParam(value = "file3", required = false) MultipartFile file3
 								  											       				) throws Exception {
 		
 
@@ -195,10 +194,42 @@ public class CommunityRestController {
 	
 	@PatchMapping("report")
 	public void updateReport(
-							 @ModelAttribute Report report
-														  ) throws Exception {
+							 @ModelAttribute Report report,
+							 @RequestParam(value = "file", required = false) MultipartFile file, 
+							 @RequestParam(value = "file2", required = false) MultipartFile file2, 
+							 @RequestParam(value = "file3", required = false) MultipartFile file3
+														  										  ) throws Exception {
 		
-		System.out.println(":: updateReport() :: "+ report);
+		System.out.println(":: updateReport() - Before Set Files :: "+ report);
+		
+		if (file != null) {
+			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+			String uuidFileName = UUID.randomUUID().toString()+ext;
+	
+			file.transferTo(new File(fileUploadPath+"\\community\\"+uuidFileName));
+			
+			report.setReportImg(uuidFileName);
+		}
+		
+		if (file2 != null) {
+			String ext = file2.getOriginalFilename().substring(file2.getOriginalFilename().lastIndexOf("."));
+			String uuidFileName = UUID.randomUUID().toString()+ext;
+	
+			file2.transferTo(new File(fileUploadPath+"\\community\\"+uuidFileName));
+			
+			report.setReportImg2(uuidFileName);
+		}
+		
+		if (file3 != null) {
+			String ext = file3.getOriginalFilename().substring(file3.getOriginalFilename().lastIndexOf("."));
+			String uuidFileName = UUID.randomUUID().toString()+ext;
+	
+			file3.transferTo(new File(fileUploadPath+"\\community\\"+uuidFileName));
+			
+			report.setReportImg3(uuidFileName);
+		}
+		
+		System.out.println(":: updateReport() - After Set Files :: "+ report);
 		
 		communityService.updateReport(report);
 		
@@ -234,8 +265,34 @@ public class CommunityRestController {
 							  @RequestBody UserReview userReview
 								  							    ) throws Exception {
 		
-		System.out.println(userReview);
+		System.out.println(" :: addUserReview :: " + userReview);
 		communityService.addUserReview(userReview);
 		
 	}
+	
+	@PatchMapping("userreview")
+	public void updateUserReview(
+								 @RequestBody UserReview userReview
+																   ) throws Exception {
+		System.out.println(" :: updateUserReview() :: " + userReview);
+		communityService.updateUserReview(userReview);
+		
+	}
+	
+	@DeleteMapping("userreview/reviewerno/{reviewerNo}/reviewedno/{reviewedNo}")
+	public void deleteUserReview(
+								 @PathVariable("reviewerNo") int reviewerNo,
+								 @PathVariable("reviewedNo") int reviewedNo
+																			) throws Exception {
+		UserReview userReview = new UserReview();
+		
+		userReview.setReviewerNo(reviewerNo);
+		userReview.setReviewedNo(reviewedNo);
+		
+		System.out.println(" :: deleteUserReview() :: " + userReview);
+		
+		communityService.deleteUserReview(userReview);
+		
+	}
+		
 }
