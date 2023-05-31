@@ -41,8 +41,8 @@ public class MeetingRestController {
 	@Qualifier("userServiceImpl")
 	private UserService userService;
 	
-	@Value("${meetingFileUploadPath}")
-	String meetingFileUploadPath;
+	@Value("${fileUploadPath}")
+	String fileUploadPath;
 	
 	public MeetingRestController() {
 		System.out.println(this.getClass());
@@ -99,7 +99,7 @@ public class MeetingRestController {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(meetingFileUploadPath+"/meeting/"+uuidFileName));
+			file.transferTo(new File(fileUploadPath+"/meeting/"+uuidFileName));
 			
 			meeting.setMeetingImg(uuidFileName);
 		}
@@ -159,7 +159,7 @@ public class MeetingRestController {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(meetingFileUploadPath+"/meeting/"+uuidFileName));
+			file.transferTo(new File(fileUploadPath+"/meeting/"+uuidFileName));
 			
 			meetingReview.setMeetingReviewImg(uuidFileName);
 		}
