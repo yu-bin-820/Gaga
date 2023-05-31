@@ -20,7 +20,7 @@ public interface PaymentDao {
 	public Payment getPayment(String payNo) throws Exception;
 	
 	//SELECT ONE
-	public String getPayNoByUserMeeting(Map<String, Integer> refund) throws Exception;
+	public String getPayNoByUserMeeting(Map<String, Object> refund) throws Exception;
 	
 	//SELECT LIST
 	public List<Payment> getPaymentList(int userNo) throws Exception;

@@ -68,6 +68,10 @@ public class ClubRestController {
 		
 		System.out.println("클럽 목록 검색 Ctrl");
 		
+		/*
+		 * { "gender" : 1, "maxAge" : 50, "minAge" : 20, "age" : 30 }
+		 */
+		
 		return clubService.getSearchClubList(filter);
 	}
 	

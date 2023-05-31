@@ -1,14 +1,17 @@
 package com.gaga.bo.web.meeting;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.gaga.bo.service.domain.Filter;
 import com.gaga.bo.service.domain.Meeting;
@@ -36,6 +40,9 @@ public class MeetingRestController {
 	@Autowired
 	@Qualifier("userServiceImpl")
 	private UserService userService;
+	
+	@Value("${meetingFileUploadPath}")
+	String meetingFileUploadPath;
 	
 	public MeetingRestController() {
 		System.out.println(this.getClass());
@@ -81,16 +88,32 @@ public class MeetingRestController {
 	}
 	
 	@PostMapping("")
-	public void addMeeting(@RequestBody Meeting meeting) throws Exception{
+	public void addMeeting(@ModelAttribute Meeting meeting,
+				 		   @RequestParam(value = "file", required = false) MultipartFile file
+						   ) throws Exception{
+		System.out.println(file.getOriginalFilename());
 		
-		System.out.println(meeting);
+		System.out.println("img변경 전 : "+meeting);
+		
+		if (file != null) {
+			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+			String uuidFileName = UUID.randomUUID().toString()+ext;
+	
+			file.transferTo(new File(meetingFileUploadPath+"/meeting/"+uuidFileName));
+			
+			meeting.setMeetingImg(uuidFileName);
+		}
+		
+		System.out.println("img변경 후 : "+meeting);
+		
 
 		meetingService.addMeeting(meeting);
 
 	}
 	
-	@DeleteMapping("")
+	@PatchMapping("delete")
 	public void deleteMeeting(@RequestBody Meeting meeting)throws Exception{
+		System.out.println("delete"+meeting);
 		meetingService.deleteMeeting(meeting.getMeetingNo());
 	}
 	
@@ -99,6 +122,7 @@ public class MeetingRestController {
 	@GetMapping("list/mymeeting/{userNo}")
 	public List<Meeting> getMyMeetingList(@PathVariable int userNo ) throws Exception{
 		
+		System.out.println("list/mymeeting");
 		return meetingService.getMyMeetingList(userNo);
 	}
 	
@@ -122,8 +146,28 @@ public class MeetingRestController {
 	
 	//미팅리뷰관련
 	@PostMapping("review")
-	public void addMeetingReview(@RequestBody MeetingReview meetingReview) throws Exception{
+	public void addMeetingReview(@ModelAttribute MeetingReview meetingReview,
+			  					 @RequestParam(value = "file", required = false) MultipartFile file
+								) throws Exception{
+		
+		System.out.println(file.getOriginalFilename());
+		
+		System.out.println("img변경 전 : "+meetingReview);
+
+
+		if (file != null) {
+			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+			String uuidFileName = UUID.randomUUID().toString()+ext;
+	
+			file.transferTo(new File(meetingFileUploadPath+"/meeting/"+uuidFileName));
+			
+			meetingReview.setMeetingReviewImg(uuidFileName);
+		}
+		
+		System.out.println("img변경 후 : "+meetingReview);
+
         meetingService.addMeetingReview(meetingReview);
+        
 
 	}
 	
