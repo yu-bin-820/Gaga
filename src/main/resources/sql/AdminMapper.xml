@@ -107,17 +107,29 @@
 		notice_post_reg_date,
 		user_no
 		)
-		VALUES (#{noticePostCategoryNo:INTEGER},
+		VALUES (
+		#{noticePostCategoryNo:INTEGER},
 		#{noticePostTitle:LONGVARCHAR},
 		#{noticePostText:LONGVARCHAR},
 		#{noticePostImg:LONGVARCHAR},
-		#{noticePostRegDate:LONGVARCHAR},
-		#{userNo:INTEGER})
+		now(),
+		#{userNo:INTEGER}
+		)
 	</insert>
 
 
-	<select id="listNoticePost" resultMap="noticePostResult">
-		SELECT * FROM notice_posts
+
+	<select id="getNoticePostList" resultMap="noticePostResult">
+		SELECT * FROM
+		notice_posts
+	</select>
+
+	<select id="getNoticePostListByCategoryNo"
+		resultMap="noticePostResult">
+		SELECT * FROM
+		notice_posts 
+		where notice_post_Category_no =
+		#{noticePostCategoryNo}
 	</select>
 
 	<select id="searchNoticePost" resultMap="noticePostResult">
@@ -165,7 +177,7 @@
 		blacklist != 0 AND user_no = #{userNo}
 	</select>
 
-	<select id="listBlackList" resultMap="userResultMap">
+	<select id="getBlackListList" resultMap="userResultMap">
 		SELECT *
 		FROM users
 		WHERE
@@ -193,7 +205,7 @@
 		r.reported_no = #{reportedNo}
 	</select>
 
-	<select id="listReportAdmin" resultMap="reportResultMap">
+	<select id="getReportAdminList" resultMap="reportResultMap">
 		SELECT
 		r.report_category_no, r.reported_no, r.report_date, u.user_id
 		FROM
