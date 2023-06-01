@@ -13,7 +13,9 @@ public interface AdminDao {
 
 	public void addNoticePost(NoticePost noticePost) throws Exception;
 
-	List<NoticePost> listNoticePost() throws Exception;
+	List<NoticePost> getNoticePostList() throws Exception;
+	
+	List<NoticePost> getNoticePostListByCategory(int noticePostCategoryNo) throws Exception;
 
 	NoticePost getNoticePost(int noticePostNo) throws Exception;
 
@@ -28,10 +30,12 @@ public interface AdminDao {
 
 	User getBlackList(int userNo) throws Exception;
 
-	List<User> listBlackList() throws Exception;
+	List<User> getBlackListList() throws Exception;
 	
 	//#신고게시판
 	List<Report> getReportAdmin(int reportingNo);
 	
-    List<Report> listReportAdmin();
+    List<Report> getReportAdminList();
+    
+    
 }

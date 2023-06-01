@@ -1,4 +1,4 @@
-package com.gaga.bo.common;
+package com.gaga.bo.service.domain;
 
 
 //==>리스트화면을 모델링(추상화/캡슐화)한 Bean 

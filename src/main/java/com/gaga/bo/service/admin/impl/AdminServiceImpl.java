@@ -32,9 +32,14 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<NoticePost> listNoticePost() throws Exception {
-		return adminDao.listNoticePost();
+	public List<NoticePost> getNoticePostList() throws Exception {
+		return adminDao.getNoticePostList();
 	}
+	
+	@Override
+    public List<NoticePost> getNoticePostListByCategory(int noticePostCategoryNo) throws Exception {
+        return adminDao.getNoticePostListByCategory(noticePostCategoryNo);
+    }
 
 	@Override
 	public NoticePost getNoticePost(int noticePostNo) throws Exception {
@@ -67,8 +72,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<User> listBlackList() throws Exception {
-		return adminDao.listBlackList();
+	public List<User> getBlackListList() throws Exception {
+		return adminDao.getBlackListList();
 	}
 
 	@Override
@@ -77,7 +82,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<Report> listReportAdmin() {
-		return adminDao.listReportAdmin();
+	public List<Report> getReportAdminList() {
+		return adminDao.getReportAdminList();
 	} 
 }

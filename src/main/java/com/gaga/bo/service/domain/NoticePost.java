@@ -12,13 +12,23 @@ public class NoticePost {
     private String noticePostImg;
     private LocalDateTime noticePostRegDate;
     private int userNo;
+    //0526 조회수추가
+    private int postCount;
 
     //constructor
     public NoticePost() {
     	
     }
 
-    // 
+    public int getPostCount() {
+		return postCount;
+	}
+
+	public void setPostCount(int postCount) {
+		this.postCount = postCount;
+	}
+
+	// 
     public NoticePost(int noticePostNo, int noticePostCategoryNo, String noticePostTitle, String noticePostText, 
                       String noticePostImg, LocalDateTime noticePostRegDate, int userNo) {
         this.noticePostNo = noticePostNo;
@@ -90,7 +100,8 @@ public class NoticePost {
 	public String toString() {
 		return "NoticePost [noticePostNo=" + noticePostNo + ", noticePostCategoryNo=" + noticePostCategoryNo
 				+ ", noticePostTitle=" + noticePostTitle + ", noticePostText=" + noticePostText + ", noticePostImg="
-				+ noticePostImg + ", noticePostRegDate=" + noticePostRegDate + ", userNo=" + userNo + "]";
+				+ noticePostImg + ", noticePostRegDate=" + noticePostRegDate + ", userNo=" + userNo + ", postCount="
+				+ postCount + "]";
 	}
 
 

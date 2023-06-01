@@ -44,7 +44,7 @@ class AdminTest {
 	
 	//@Test
 	public void testListNoticePost() throws Exception {
-		List<NoticePost> noticePost = adminService.listNoticePost();
+		List<NoticePost> noticePost = adminService.getNoticePostList();
 		// Verify if the list is not empty
 		assertTrue(noticePost.size() > 0);
 	}
@@ -98,7 +98,7 @@ class AdminTest {
 //    @Test
     public void testListBlackList() throws Exception {
         // Retrieve the list of blacklisted users
-        List<User> blacklistedUsers = adminService.listBlackList();
+        List<User> blacklistedUsers = adminService.getBlackListList();
 
         // Verify if the list is not empty
         assertTrue(blacklistedUsers.size() > 0);
@@ -123,7 +123,7 @@ class AdminTest {
     
     //@Test
     public void testListReportListAdmin() {
-        List<Report> report = adminService.listReportAdmin();
+        List<Report> report = adminService.getReportAdminList();
         // report의 데이터를 확인하는 로직
         assertTrue(report.size() > 0);
     }

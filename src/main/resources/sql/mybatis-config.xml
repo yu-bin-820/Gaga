@@ -20,6 +20,7 @@
 		<typeAlias alias="meeting" type="com.gaga.bo.service.domain.Meeting"/>
 		<typeAlias alias="meetingReview" type="com.gaga.bo.service.domain.MeetingReview"/>
 		<typeAlias alias="filter" type="com.gaga.bo.service.domain.Filter"/>
+		<typeAlias alias="search" type="com.gaga.bo.service.domain.Search"/>
 		
 
 		<typeAlias alias="club" type="com.gaga.bo.service.domain.Club" />
