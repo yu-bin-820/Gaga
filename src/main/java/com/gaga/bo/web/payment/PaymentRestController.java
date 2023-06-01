@@ -120,7 +120,7 @@ public class PaymentRestController {
 		paymentService.updateAdjustmentState(meeting);
 	}
 	
-	@PostMapping("refund/test")
+	@PostMapping("refund")
 	public ResponseEntity<String> refundTest(@RequestBody Map<String, String> requestData) throws Exception {
 
 	    String merchantUid = requestData.get("merchant_uid");
@@ -149,6 +149,11 @@ public class PaymentRestController {
 	                        String.class);
 
 	        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+	        	
+	        	paymentService.updatePayment(merchantUid);
+         	
+	        	System.out.println("환불처리가 성공적으로 진행되었습니다.");
+	        	
 	            return ResponseEntity.ok("Refund successful");
 	        } else {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Refund failed");

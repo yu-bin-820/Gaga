@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.gaga.bo.service.club.ClubService;
 import com.gaga.bo.service.domain.Club;
 import com.gaga.bo.service.domain.Filter;
+import com.gaga.bo.service.domain.Meeting;
 
 @RestController
 @RequestMapping("rest/club")
@@ -206,10 +207,36 @@ public class ClubRestController {
 		return clubService.getMainClubList(mainCategoryNo);
 	}
 	
+	/* 파일업로드가 포함 안된 클럽수정
+	 * @PatchMapping("") public void updateClub(@RequestBody Club club) throws
+	 * Exception{
+	 * 
+	 * System.out.println("클럽 정보 수정 Ctrl");
+	 * 
+	 * clubService.updateClub(club); }
+	 */
+	
 	@PatchMapping("")
-	public void updateClub(@RequestBody Club club) throws Exception{
+	public void updateClub(@ModelAttribute Club club,
+	 		   				  @RequestParam(value = "file", required = false) MultipartFile file
+							  ) throws Exception{
 		
 		System.out.println("클럽 정보 수정 Ctrl");
+		
+		System.out.println(file.getOriginalFilename());
+		
+		System.out.println("img변경 전 : "+club);
+		
+		if (file != null) {
+			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+			String uuidFileName = UUID.randomUUID().toString()+ext;
+	
+			file.transferTo(new File(fileUploadPath+"/club/"+uuidFileName));
+			
+			club.setClubImg(uuidFileName);
+		}
+		
+		System.out.println("img변경 후 : "+club);
 		
 		clubService.updateClub(club);
 	}
