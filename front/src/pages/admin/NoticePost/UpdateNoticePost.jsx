@@ -54,7 +54,7 @@ function UpdateNoticePost() {
       })
       .then((response) => {
         console.log(response.data);
-        navigate(`/getNoticePost/${noticePostNo}`);
+        navigate(`/notice/getNoticePost/noticePostNo/${noticePostNo}`);
       })
       .catch((error) => {
         console.error(error);

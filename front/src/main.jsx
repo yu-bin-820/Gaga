@@ -45,20 +45,25 @@ import FindId from "@pages/user/FindId.jsx";
 import FindPassword from "@pages/user/FindPassword.jsx";
 
 import UpdateReport from "@pages/communication/UpdateReport.jsx";
-import ListGroupMember from "@components/user/ListGroupMember.jsx";
+
 import { element } from "prop-types";
 import SearchMeeting from "@pages/meeting/SearchMeeting";
 
 import AddNoticePost from "@pages/admin/NoticePost/AddNoticePost.jsx";
 import GetNoticePost from "@pages/admin/NoticePost/GetNoticePost.jsx";
 import ListNoticePost from "@pages/admin/NoticePost/ListNoticePost.jsx";
-import UpdateNoticePost from "@pages/admin/NoticePost/UpdateNoticePost.jsx";
+import ListQnaPost from "@pages/admin/NoticePost/ListQnaPost.jsx";
 import ListEventPost from "@pages/admin/NoticePost/ListEventPost.jsx";
+import UpdateNoticePost from "@pages/admin/NoticePost/UpdateNoticePost.jsx";
+
 import GetBlackList from "@pages/admin/BlackList/GetBlackList.jsx";
-import SearchUser from "@pages/admin/BlackList/SearchUser.jsx";
+import SearchUser from "@pages/admin/BlackList/ListUser.jsx";
 import GetReportAdmin from "@pages/admin/Report/GetReportAdmin.jsx";
 import ListReportAdmin from "@pages/admin/Report/ListReportAdmin.jsx";
 import ListBlackList from "@pages/admin/BlackList/ListBlackList.jsx";
+import ListUser from "@pages/admin/BlackList/ListUser.jsx";
+import GetUser from "@pages/admin/BlackList/GetUser.jsx";
+
 
 
 const router = createBrowserRouter([
@@ -262,6 +267,10 @@ const router = createBrowserRouter([
           {
             path: "listEventPost",
             element: <ListEventPost />,
+          }, 
+          {
+            path: "listQnaPost",
+            element: <ListQnaPost />,
           },
         ],
         },
@@ -278,11 +287,15 @@ const router = createBrowserRouter([
             element: <ListBlackList />,
           },
           {
-            path: "searchUser",
-            element: <SearchUser />,
+            path: "listUser",
+            element: <ListUser />,
           },
           {
-            path: "getReportAdmin",
+            path: "getUser/userNo/:userNo",
+            element: <GetUser />,
+          },
+          {
+            path: "getReportAdmin/reportNo/:reportNo",
             element: <GetReportAdmin />,
           },
           {

@@ -57,6 +57,14 @@ const MyProfileTop = () => {
     navigate('/community/report/list');
   }, [navigate]);
 
+  const onClickNoticePostList = useCallback(() => {
+    navigate('/notice/listNoticePost');
+  }, [navigate]);
+  
+  const onClickListBlackList = useCallback(() => {
+    navigate('/blackList/listBlackList');
+  }, [navigate]);
+
   if (!myData) {
     return <Navigate replace to="/" />;
   }
@@ -168,7 +176,7 @@ const MyProfileTop = () => {
             </ListItem>
             <Divider />
 
-            <ListItem sx={{ marginTop: '10px', marginBottom: '10px' }}>
+            <ListItem sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={onClickNoticePostList}>
               <ListItemText
                 sx={{ display: 'flex', justifyContent: 'center' }}
                 primary="공지사항"
@@ -176,7 +184,7 @@ const MyProfileTop = () => {
             </ListItem>
             <Divider />
 
-            <ListItem sx={{ marginTop: '10px', marginBottom: '10px' }}>
+            <ListItem sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={onClickListBlackList}>
               <ListItemText
                 sx={{ display: 'flex', justifyContent: 'center' }}
                 primary="블랙리스트"
