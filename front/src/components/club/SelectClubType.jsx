@@ -1,9 +1,11 @@
-import { Button } from "@mui/material";
+import { Button, List } from "@mui/material";
 import { Box } from "@mui/system";
 import fetcher from "@utils/fetcher";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
+import ListMyClub from "@components/club/ListMyClub";
+import ListMyMeeting from "@components/meeting/ListMyMeeting";
 
 const SelectClubType = () => {
   const [clubList, setClubList] = useState();
@@ -13,31 +15,13 @@ const SelectClubType = () => {
     fetcher
   );
 
-  useEffect(() => {
-    axios
-      .get(
-        `http://${
-          import.meta.env.VITE_SPRING_HOST
-        }/rest/meeting/list/inchat/no/${myData.userNo}`
-      )
-      .then((response) => {
-        console.log(response.data);
-        setMeetingList(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [myData]);
-
   return (
     <Box>
       <Box>
-        {meetingList?.map((meeting, i) => (
-          <Box key={i}>
-            <h5>{meeting.meetingName}</h5>
-            <h5>{meeting.state}</h5>
-          </Box>
-        ))}
+        <h3>모임 기반 클럽</h3>
+        <ListMyMeeting />
+        <h3>기존 클럽 기반 새 클럽</h3>
+        <ListMyClub />
       </Box>
     </Box>
   );

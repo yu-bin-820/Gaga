@@ -38,7 +38,6 @@ import AddClub from "@pages/club/AddClub.jsx";
 import GetClub from "@pages/club/GetClub.jsx";
 import ListReport from "@pages/communication/ListReport.jsx";
 
-import ListGroupMember from "@components/user/ListGroupMember.jsx";
 import AddNaverUser from "@pages/user/AddNaverUser.jsx";
 import AddKakaoUser from "@pages/user/AddKakaoUser.jsx";
 import FindId from "@pages/user/FindId.jsx";
@@ -61,6 +60,9 @@ import GetReportAdmin from "@pages/admin/Report/GetReportAdmin.jsx";
 import ListReportAdmin from "@pages/admin/Report/ListReportAdmin.jsx";
 import ListBlackList from "@pages/admin/BlackList/ListBlackList.jsx";
 import TermsOfGaga from "@pages/user/TermsOfGaga.jsx";
+import UpdateClub from "@pages/club/UpdateClub.jsx";
+import UpdateAccount from "@pages/payment/UpdateAccount.jsx";
+import ListPayment from "@pages/payment/ListPayment.jsx";
 
 const router = createBrowserRouter([
   {
@@ -235,18 +237,22 @@ const router = createBrowserRouter([
             element: <AddClub />,
           },
           {
-            path: "no/:clubno",
+            path: "no/:clubNo",
             element: <GetClub />,
+          },
+          {
+            path: "updateclub/:clubNo",
+            element: <UpdateClub />,
           },
           {
             path: "member",
             children: [
               {
-                path: "listmember/clubno/:clubno",
+                path: "listmember/clubno/:clubNo",
                 element: <ListClubMember />,
               },
               {
-                path: "addmember/:clubno",
+                path: "addmember/:clubNo",
                 element: <AddClubMember />,
               },
             ],
@@ -302,6 +308,25 @@ const router = createBrowserRouter([
           {
             path: "listReportAdmin",
             element: <ListReportAdmin />,
+          },
+        ],
+      },
+      //------------------------------------------------Payment------------------------------------------------
+      {
+        path: "payment",
+        children: [
+          {
+            path: "adjustment",
+            children: [
+              {
+                path: "account/:userNo",
+                element: <UpdateAccount />,
+              },
+            ],
+          },
+          {
+            path: "listpayment/:userNo",
+            element: <ListPayment />,
           },
         ],
       },

@@ -9,7 +9,7 @@ import { useNavigate, useParams } from "react-router";
 import useSWR from "swr";
 
 const AddClubMember = () => {
-  const { clubno } = useParams();
+  const { clubNo } = useParams();
   const [club, setClub] = useState();
   const navigate = useNavigate();
   const { data: myData, mutate: mutateMe } = useSWR(
@@ -19,7 +19,7 @@ const AddClubMember = () => {
 
   useEffect(() => {
     axios
-      .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/club/no/${clubno}`)
+      .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/club/no/${clubNo}`)
       .then((response) => {
         console.log(response.data);
         setClub(response.data);
@@ -27,7 +27,7 @@ const AddClubMember = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, [clubno]);
+  }, [clubNo]);
 
   const onClickAddMember = useCallback(
     async (event) => {

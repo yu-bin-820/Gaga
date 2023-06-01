@@ -1,12 +1,19 @@
 import { Box, MenuItem, Select, TextField, Button, Grid } from "@mui/material";
+import fetcher from "@utils/fetcher";
 import axios from "axios";
 import { useCallback, useState, useEffect } from "react";
+import useSWR from "swr";
 
 const Account = () => {
   const [bankCode, setBankCode] = useState("");
   const [bankNum, setBankNum] = useState("");
   const [bankHolder, setBankHolder] = useState("");
   const [bankList, setBankList] = useState([]);
+
+  const { data: myData, mutate: mutateMe } = useSWR(
+    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+  );
 
   useEffect(() => {
     const fetchBanks = async () => {
@@ -51,8 +58,10 @@ const Account = () => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Box>은행 선택:</Box>
-          <Select
+          <TextField
+            select
             fullWidth
+            label="bankName"
             value={bankCode}
             onChange={(e) => setBankCode(e.target.value)}
           >
@@ -61,12 +70,13 @@ const Account = () => {
                 {bank.name}
               </MenuItem>
             ))}
-          </Select>
+          </TextField>
         </Grid>
         <Grid item xs={12}>
           <Box>계좌 번호:</Box>
           <TextField
             fullWidth
+            label="accountNo"
             type="text"
             value={bankNum}
             onChange={(e) => setBankNum(e.target.value)}

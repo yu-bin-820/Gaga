@@ -9,20 +9,20 @@ import { useNavigate, useParams } from "react-router";
 import useSWR from "swr";
 
 const ListClubMember = () => {
-  const { clubno } = useParams();
+  const { clubNo } = useParams();
   const navigate = useNavigate();
 
   const { data: pendingMemberList, mutate: mutatePendingMemberList } = useSWR(
     `http://${
       import.meta.env.VITE_SPRING_HOST
-    }/rest/user/list/grouptype/1/no/${clubno}/state/1`,
+    }/rest/user/list/grouptype/1/no/${clubNo}/state/1`,
     fetcher
   );
   const { data: confirmedMemberList, mutate: mutateConfirmedMemberList } =
     useSWR(
       `http://${
         import.meta.env.VITE_SPRING_HOST
-      }/rest/user/list/grouptype/1/no/${clubno}/state/2`,
+      }/rest/user/list/grouptype/1/no/${clubNo}/state/2`,
       fetcher
     );
 
@@ -32,7 +32,7 @@ const ListClubMember = () => {
 
     try {
       const data = {
-        clubNo: clubno,
+        clubNo: clubNo,
         userNo: id,
         state: 2,
       };
@@ -59,7 +59,7 @@ const ListClubMember = () => {
 
     try {
       const data = {
-        clubNo: clubno,
+        clubNo: clubNo,
         userNo: id,
       };
 
