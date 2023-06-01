@@ -65,6 +65,14 @@ const MyProfileTop = () => {
     navigate("/user/deleteuser");
   }, [navigate]);
 
+  const onClickNoticePostList = useCallback(() => {
+    navigate('/notice/listNoticePost');
+  }, [navigate]);
+  
+  const onClickListBlackList = useCallback(() => {
+    navigate('/blackList/listBlackList');
+  }, [navigate]);
+
   const onClickUpdateAccount = useCallback(() => {
     navigate(`/payment/adjustment/account/${myData?.userNo}`);
   }, [myData, navigate]);
@@ -183,7 +191,9 @@ const MyProfileTop = () => {
             </ListItem>
             <Divider />
 
-            <ListItem sx={{ marginTop: "10px", marginBottom: "10px" }}>
+            <ListItem 
+                sx={{ marginTop: '10px', marginBottom: '10px' }} 
+                onClick={onClickNoticePostList}>
               <ListItemText
                 sx={{ display: "flex", justifyContent: "center" }}
                 primary="공지사항"
@@ -191,9 +201,9 @@ const MyProfileTop = () => {
             </ListItem>
             <Divider />
 
-            <ListItem sx={{ marginTop: "10px", marginBottom: "10px" }}>
+            <ListItem sx={{ marginTop: "10px", marginBottom: "10px" }} onClick={onClickListBlackList}>
               <ListItemText
-                sx={{ display: "flex", justifyContent: "center" }}
+                sx={{ display: 'flex', justifyContent: 'center' }}
                 primary="블랙리스트"
               />
             </ListItem>
