@@ -31,8 +31,10 @@ public class ClubServiceImpl implements ClubService {
 	public void addClub(Club club) throws Exception {
 
 		System.out.println("클럽 생성 서비스");
+		
 		clubDao.addClub(club);
 
+		System.out.println("생성은 잘 됐는지?");
 		// TODO Auto-generated method stub
 
 	}

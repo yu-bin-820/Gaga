@@ -1,10 +1,12 @@
 package com.gaga.bo.web.club;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.gaga.bo.service.club.ClubService;
 import com.gaga.bo.service.domain.Club;
@@ -46,13 +50,42 @@ public class ClubRestController {
 	}
 	
 	//클럽관리
+	
 	@PostMapping("")
-	public void addClub(@RequestBody Club club) throws Exception{
+	public void addClub(@ModelAttribute Club club,
+				 		   @RequestParam(value = "file", required = false) MultipartFile file
+						   ) throws Exception{
 		
 		System.out.println("클럽 생성 Ctrl");
 		
+		System.out.println(file.getOriginalFilename());
+		
+		System.out.println("img변경 전 : "+club);
+		
+		if (file != null) {
+			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+			String uuidFileName = UUID.randomUUID().toString()+ext;
+	
+			file.transferTo(new File(fileUploadPath+"/club/"+uuidFileName));
+			
+			club.setClubImg(uuidFileName);
+		}
+		
+		System.out.println("img변경 후 : "+club);
+		
+
 		clubService.addClub(club);
+
 	}
+	
+	/* 파일업로드가 포함 안된 클럽생성
+	 * @PostMapping("") public void addClub(@RequestBody Club club) throws
+	 * Exception{
+	 * 
+	 * System.out.println("클럽 생성 Ctrl");
+	 * 
+	 * clubService.addClub(club); }
+	 */
 	
 	@GetMapping("/region/sigu")
     public ResponseEntity<String> getSiGu() {
