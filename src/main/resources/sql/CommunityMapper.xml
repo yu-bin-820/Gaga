@@ -66,6 +66,15 @@
 		  INNER JOIN users AS reported ON r.reported_no = reported.user_no
 		  WHERE r.report_no = #{reportNo}
   	</select>
+  	
+  	<select id="getTitleName" parameterType = "int" resultType="string">
+  		SELECT
+  			title_name
+  		FROM
+  			titles
+  		WHERE
+  			title_no = #{titleNo}
+  	</select>
   	<!-- SelectOneQuery -->
   	<select id="getReportByUserNo" parameterType="report" resultMap="reportResultMap">
   	  	SELECT 

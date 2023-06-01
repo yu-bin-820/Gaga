@@ -63,5 +63,7 @@ public interface CommunityDao {
 	///Title Method
 	public void addUserEarnedTitle(Map<String,Integer> userNoMainCategoryNoLeaderState) throws Exception;
 	
+	public String getTitleName(int titleNo) throws Exception;
+	
 	public List<Title> getUserEarnedTitleList(int userNo) throws Exception;
 }
