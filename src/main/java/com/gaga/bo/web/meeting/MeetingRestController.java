@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.gaga.bo.service.domain.Filter;
 import com.gaga.bo.service.domain.Meeting;
 import com.gaga.bo.service.domain.MeetingReview;
+import com.gaga.bo.service.domain.Search;
 import com.gaga.bo.service.meeting.MeetingService;
 import com.gaga.bo.service.user.UserService;
 
@@ -41,8 +42,11 @@ public class MeetingRestController {
 	@Qualifier("userServiceImpl")
 	private UserService userService;
 	
-	@Value("${meetingFileUploadPath}")
-	String meetingFileUploadPath;
+	@Value("${fileUploadPath}")
+	String fileUploadPath;
+	
+	@Value("${pageSize}")
+	int pageSize;
 	
 	public MeetingRestController() {
 		System.out.println(this.getClass());
@@ -77,8 +81,42 @@ public class MeetingRestController {
 		return list;
 	}
 	
+	@PostMapping("search")
+	public List<Meeting> getMeetingListByKeyword(@RequestBody Search search) throws Exception{
+		
+		if(search.getCurrentPage() ==0 ){
+			search.setCurrentPage(1);
+		}
+		
+		System.out.println("searchmeeting : " + search);
+		
+		search.setPageSize(pageSize);
+		
+		System.out.println(search.getStartRowNum());
+		
+		List<Meeting> list = meetingService.getMeetingListByKeyword(search);
+		System.out.println(list);
+		return list;
+	}
+	
 	@PatchMapping("")
-	public void updateMeeting(@RequestBody Meeting meeting) throws Exception{
+	public void updateMeeting(@ModelAttribute Meeting meeting,
+	 		   				  @RequestParam(value = "file", required = false) MultipartFile file
+							  ) throws Exception{
+		
+		System.out.println("img변경 전 : "+meeting);
+		
+		if (file != null) {
+			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+			String uuidFileName = UUID.randomUUID().toString()+ext;
+	
+			file.transferTo(new File(fileUploadPath+"/meeting/"+uuidFileName));
+			
+			meeting.setMeetingImg(uuidFileName);
+		}
+		
+		System.out.println("img변경 후 : "+meeting);
+		
 		meetingService.updateMeeting(meeting);
 	}
 	
@@ -99,7 +137,7 @@ public class MeetingRestController {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(meetingFileUploadPath+"/meeting/"+uuidFileName));
+			file.transferTo(new File(fileUploadPath+"/meeting/"+uuidFileName));
 			
 			meeting.setMeetingImg(uuidFileName);
 		}
@@ -159,7 +197,7 @@ public class MeetingRestController {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(meetingFileUploadPath+"/meeting/"+uuidFileName));
+			file.transferTo(new File(fileUploadPath+"/meeting/"+uuidFileName));
 			
 			meetingReview.setMeetingReviewImg(uuidFileName);
 		}
@@ -185,7 +223,22 @@ public class MeetingRestController {
 	}
 	
 	@PatchMapping("review")
-	public void updateMeetingReview(@RequestBody MeetingReview meetingReview) throws Exception {
+	public void updateMeetingReview(@ModelAttribute MeetingReview meetingReview,
+				 					@RequestParam(value = "file", required = false) MultipartFile file
+				 					) throws Exception {
+		
+		System.out.println("img변경 전 : "+meetingReview);
+
+		if (file != null) {
+			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+			String uuidFileName = UUID.randomUUID().toString()+ext;
+	
+			file.transferTo(new File(fileUploadPath+"/meeting/"+uuidFileName));
+			
+			meetingReview.setMeetingReviewImg(uuidFileName);
+		}
+		
+		System.out.println("img변경 후 : "+meetingReview);
 		
 		meetingService.updateMeetingReview(meetingReview);
 	}
