@@ -60,6 +60,13 @@ const MainTop = () => {
     },
     [myData]
   );
+
+  const navigate = useNavigate();
+
+  const onClickSearch = React.useCallback((MouseEvent) => {
+    navigate(`/meeting/searchmeeting`);
+  }, []);
+
   return (
     <>
       <AppBar
@@ -104,7 +111,7 @@ const MainTop = () => {
                 <TuneIcon />
               </IconButton>
 
-              <IconButton>
+              <IconButton onClick={onClickSearch}>
                 <Search />
               </IconButton>
             </Stack>

@@ -58,6 +58,7 @@ import SearchUser from "@pages/admin/BlackList/SearchUser.jsx";
 import GetReportAdmin from "@pages/admin/Report/GetReportAdmin.jsx";
 import ListReportAdmin from "@pages/admin/Report/ListReportAdmin.jsx";
 import ListBlackList from "@pages/admin/BlackList/ListBlackList.jsx";
+import TermsOfGaga from "@pages/user/TermsOfGaga.jsx";
 
 
 const router = createBrowserRouter([
@@ -105,6 +106,10 @@ const router = createBrowserRouter([
           {
             path: "updateuser",
             element: <UpdateUser />,
+          },
+          {
+            path: "termsofgaga",
+            element: <TermsOfGaga />,
           },
           {
             path: "memberlist",

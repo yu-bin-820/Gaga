@@ -161,16 +161,20 @@ const GetMeeting = () => {
     ))}
     <h5>리뷰</h5>
     <ListMeetingReview/>
-    <BottomNavigation
-        showLabels
-        sx={{ width: '100%', position: 'fixed', bottom: '0rem' }}
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
+    <Stack
+        spacing={0}
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ position: 'fixed', bottom: 5, left: 0, right: 0 }}
       >
-        <BottomNavigationAction label="참여하기" onClick={onClickAddMember}/>
-      </BottomNavigation>
+    <Button
+    variant="contained"
+    sx={{width: '85vw',  borderRadius: '50px' }}
+    >
+        참여하기
+      </Button>
+      </Stack>
     </Box>
 
     </>

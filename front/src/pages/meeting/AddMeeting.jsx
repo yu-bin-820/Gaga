@@ -1,7 +1,6 @@
 import AddMeeting1 from '@components/meeting/AddMeeting1';
 import AddMeetingImg from '@components/meeting/AddMeetingImg';
 import AddMeetingName from '@components/meeting/AddMeetingName';
-import ListCategory from '@components/meeting/ListCategory';
 import SelectMeetingType from '@components/meeting/SelectMeetingType';
 import AddMeetingMap from '@components/meeting/map/AddMeetingMap';
 import { useTheme } from '@emotion/react';
@@ -10,6 +9,7 @@ import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import { Button, MobileStepper } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useState } from 'react';
+import AddMeetingListCategory from '@components/meeting/AddMeetingListCategory';
 
 const AddMeeting = () => {
   const theme = useTheme();
@@ -28,7 +28,7 @@ const AddMeeting = () => {
       case 0:
         return <SelectMeetingType />;
       case 1:
-        return <ListCategory />;
+        return <AddMeetingListCategory />;
       case 2:
         return <AddMeetingName />;
       case 3:
@@ -45,7 +45,7 @@ const AddMeeting = () => {
   return (
     <>
       <CommonTop />
-      <Box >
+      <Box sx={{ marginTop: '64px'}}>
         <MobileStepper
           variant="progress"
           steps={7}

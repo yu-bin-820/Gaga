@@ -1,38 +1,13 @@
-import { Accordion, AccordionDetails, AccordionSummary, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, ToggleButton, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import StyledToggleButtonGroup from './StyledToggleButtonGroup';
 
-import { styled } from '@mui/material/styles';
-import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
 
-const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
-    '& .MuiToggleButtonGroup-grouped': {
-      margin: theme.spacing(0.5),
-      border: 0,
-      '&.Mui-disabled': {
-        border: 0,
-      },
-      '&:not(:first-of-type)': {
-        borderRadius: theme.shape.borderRadius,
-      },
-      '&:first-of-type': {
-        borderRadius: theme.shape.borderRadius,
-      },
-    },
-    display: 'flex',
-    flexWrap: 'wrap',
-  }));
 
-const ListCategory = () => {
-
-    const {
-        mainCategoryNo,
-        filterTag,
-        onChangeField,
-        setField
-      } = useMeetingFormStore();
+const ListCategory = ({ onMainCategoryChange, onSubCategoryClick }) => {
 
     const [alignment, setAlignment] = React.useState('left');
   
@@ -72,18 +47,17 @@ const ListCategory = () => {
         setOpen(!open);
     };
     
-    const onClickSubCategory = useCallback((e)=>{
-      console.log('서브카테고리',e.currentTarget.value);
-      setField('filterTag',e.currentTarget.value)
-    },[setField]);
+    const onClickSubCategory = (subCategoryTag) => {
+      console.log('서브카테고리', subCategoryTag);
+      onSubCategoryClick(subCategoryTag); // 부모 컴포넌트로 subCategoryTag 전달
+    };
 
     const [expanded, setExpanded] = React.useState(false);
 
-    const handleChange = (panel) => (event, isExpanded) => {
-      setExpanded(isExpanded ? panel : false);
-      setField('mainCategoryNo',event.currentTarget.id)
+    const handleChange = (mainCategoryNo) => (event, isExpanded) => {
+      setExpanded(isExpanded ? mainCategoryNo : false);
+      onMainCategoryChange(mainCategoryNo); // 부모 컴포넌트로 mainCategoryNo 전달
     };
-
     return (
         <Box>
           <Box>
@@ -91,17 +65,29 @@ const ListCategory = () => {
               <Accordion 
               key={i} 
               id={mainCategory.mainCategoryNo}
-              expanded={expanded === i} 
-              onChange={handleChange(i)}>
+              expanded={expanded === mainCategory.mainCategoryNo} 
+              onChange={handleChange(mainCategory.mainCategoryNo)}
+              >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id={mainCategory.mainCategoryNo}>
                   <Typography sx={{ width: '33%', flexShrink: 0 }}>{mainCategory.mainCategoryName}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <StyledToggleButtonGroup size="small" value={alignment} exclusive onChange={handleAlignment} aria-label="text alignment">
+                  <StyledToggleButtonGroup 
+                    size="small" 
+                    value={alignment} 
+                    exclusive 
+                    onChange={handleAlignment} 
+                    aria-label="text alignment"
+                  >
                     {subCategoryList?.map((subCategory, k) => {
                       if (subCategory.mainCategoryNo === mainCategory.mainCategoryNo) {
                         return (
-                          <ToggleButton key={k} value={subCategory.tag} aria-label={subCategory.tag} onClick={onClickSubCategory}>
+                          <ToggleButton 
+                            key={k} 
+                            value={subCategory.tag} 
+                            aria-label={subCategory.tag} 
+                            onClick={() => onClickSubCategory(subCategory.tag)}
+                            >
                             {subCategory.tag}
                           </ToggleButton>
                         );

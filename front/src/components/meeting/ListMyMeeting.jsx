@@ -52,7 +52,7 @@ const ListMyMeeting = () => {
 
     return (
         <Box>
-            <Box>
+            <Box sx={{ marginBottom: '136px'}}>
                 meeting.state 0 : leader / 1 : 신청중 / 2: 확정
                 {meetingList?.map((meeting,i)=>(
                     
