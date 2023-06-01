@@ -47,6 +47,8 @@ import FindPassword from "@pages/user/FindPassword.jsx";
 import UpdateReport from "@pages/communication/UpdateReport.jsx";
 import { element } from "prop-types";
 import SearchMeeting from "@pages/meeting/SearchMeeting";
+import ListClubMember from "@pages/club/ListClubMember.jsx";
+import AddClubMember from "@pages/club/AddClubMember.jsx";
 
 import AddNoticePost from "@pages/admin/NoticePost/AddNoticePost.jsx";
 import GetNoticePost from "@pages/admin/NoticePost/GetNoticePost.jsx";
@@ -60,6 +62,7 @@ import ListReportAdmin from "@pages/admin/Report/ListReportAdmin.jsx";
 import ListBlackList from "@pages/admin/BlackList/ListBlackList.jsx";
 import TermsOfGaga from "@pages/user/TermsOfGaga.jsx";
 import DeleteUser from "@pages/user/DeleteUser.jsx";
+import ListSearchMeeting from "@pages/meeting/ListSearchMeeting.jsx";
 
 
 const router = createBrowserRouter([
@@ -172,6 +175,10 @@ const router = createBrowserRouter([
             path: "searchmeeting",
             element: <SearchMeeting />,
           },
+          {
+            path: "meetinglist",
+            element: <ListSearchMeeting />,
+          },
         ],
       },
       //------------------------------------------------Community------------------------------------------------
@@ -246,6 +253,19 @@ const router = createBrowserRouter([
             path: "no/:clubno",
             element: <GetClub />,
           },
+          {
+            path: "member",
+            children: [
+              {
+                path: "listmember/clubno/:clubno",
+                element: <ListClubMember />,
+              },
+              {
+                path: "addmember/:clubno",
+                element: <AddClubMember />,
+              },
+            ],
+          },
         ],
       },
       //------------------------------------------------Notice------------------------------------------------
@@ -267,14 +287,14 @@ const router = createBrowserRouter([
           {
             path: "listNoticePost",
             element: <ListNoticePost />,
-          }, 
+          },
           {
             path: "listEventPost",
             element: <ListEventPost />,
           },
         ],
-        },
-        //------------------------------------------------BlackList------------------------------------------------
+      },
+      //------------------------------------------------BlackList------------------------------------------------
       {
         path: "blackList",
         children: [
@@ -299,7 +319,7 @@ const router = createBrowserRouter([
             element: <ListReportAdmin />,
           },
         ],
-        },
+      },
     ],
   },
 ]);

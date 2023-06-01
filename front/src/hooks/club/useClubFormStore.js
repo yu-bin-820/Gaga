@@ -5,16 +5,20 @@ const clubField = {
   clubIntro: "",
   clubMaxMemberNo: "",
   clubImg: "",
-  clubRegionL: "",
+  clubRegion: "",
   filterGender: "",
   filterMinAge: "",
   filterMaxAge: "",
   filterTag: "",
   mainCategoryNo: "",
+  file: null,
+  image: null,
 };
 
 const useClubFormStore = create((set) => ({
   ...clubField,
+
+  setClubRegion: (value) => set({ clubRegion: value }),
 
   setField: (field, value) => set((state) => ({ [field]: value })),
   onChangeField: (field, event) =>

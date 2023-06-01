@@ -16,19 +16,18 @@ const DeleteMeetingDialog = ({ open, setOpen }) => {
 
 
       const onClickDelete = useCallback(
-        async (event) => {
+        (event) => {
             event.preventDefault();
 
             try {
             const data = {
-              meetingNo: meetingno
+              meetingNo: parseInt(meetingno)
             };
 
             console.log(data);
 
-            const response = await axios.patch(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/delete`, {
-                data: data,
-            });
+            const response = axios.patch(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/delete`, 
+                data);
 
             navigate(`/`);
                 
@@ -36,7 +35,7 @@ const DeleteMeetingDialog = ({ open, setOpen }) => {
                 console.error(error);
             }
         },
-        []
+        [meetingno]
     );
 
     return (

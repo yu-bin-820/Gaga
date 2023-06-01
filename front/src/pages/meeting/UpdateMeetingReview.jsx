@@ -40,29 +40,34 @@ const UpdateMeetingReview = () => {
           .then((response) => {
             console.log(response.data);
             setMeetingReview(response.data);
+            setSelectedImage(   meetingReview?.meetingReviewImg?
+              `http://${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
+                meetingReview?.meetingReviewImg
+                }`
+                : null)
           })
           .catch((error) => {
             console.log(error);
           });
-      }, [reviewno]);
+      }, [reviewno,setMeetingReview]);
 
       const navigate = useNavigate();
 
-      const handleSubmit = useCallback(async () => {
+      const handleSubmit = useCallback(() => {
         event.preventDefault();
     
         try {
-          const data = {
-            meetingScore: meetingReview.meetingScore,
-            meetingReviewImg: meetingReview.meetingReviewImg,
-            meetingReviewContent: meetingReview.meetingReviewContent,
-            meetingReviewNo: reviewno
+          const formData = new FormData();
 
-          };
-          console.log(data);
-          const response = await axios.patch(
+          formData.append('file', selectedFile);
+          formData.append('meetingScore',meetingReview.meetingScore);
+          formData.append('meetingReviewContent',meetingReview.meetingReviewContent);
+          formData.append('meetingReviewNo',reviewno);
+
+          console.log(formData);
+          const response = axios.patch(
             `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`,
-            data
+            formData
     
           );
 
@@ -72,7 +77,7 @@ const UpdateMeetingReview = () => {
         } catch (error) {
           console.error(error);
         }
-      }, [meetingReview]);
+      }, [meetingReview, selectedFile, navigate]);
 
     return (
       <>

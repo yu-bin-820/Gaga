@@ -1,8 +1,11 @@
-import * as React from 'react';
 import { Box, Stack, ThemeProvider, createTheme } from '@mui/system';
-import { Avatar, AvatarGroup, Chip, ImageListItem, Paper } from '@mui/material';
+import { Avatar, AvatarGroup, Chip, ImageListItem, Paper, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
+import PeopleIcon from '@mui/icons-material/People';
+import { useNavigate } from 'react-router';
+
 
 const StyledAvatarGroup = styled(AvatarGroup)({
   '& .MuiAvatar-root': {
@@ -19,20 +22,19 @@ const SmallChip = styled(Chip)({
   padding: '0 6px',
 });
 
+
+
 const MeetingThumbnail = ({ meeting }) => {
-  const { meetingName, meetingAddr, meetingMaxMemberNo } = meeting;
+  const navigate = useNavigate();
+
+  const onClickMeeting=useCallback((event)=>{
+    navigate(`/meeting/meetingno/${meetingNo}`);
+  },[]);
+
+
+  const { meetingName, meetingAddr, meetingMaxMemberNo, count, meetingNo } = meeting;
 
   return (
-    <Box
-      sx={{
-        margin: 0.3,
-        boxShadow: 1,
-        borderRadius: 1,
-        p: 2,
-        minWidth: 300,
-        padding: 1,
-      }}
-    >
       <Stack direction="row" spacing={2}>
         <ImageListItem
           sx={{
@@ -42,10 +44,23 @@ const MeetingThumbnail = ({ meeting }) => {
             minHeight: '100px',
           }}
         >
-          <img
-            src={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=164&h=164&fit=crop&auto=format`}
-            style={{ borderRadius: '7px' }}
-          />
+          {meeting?.meetingImg ? (
+            <img
+              src={`http://${
+                    import.meta.env.VITE_SPRING_HOST
+                    }/upload_images/meeting/${meeting?.meetingImg}`}
+              alt="noImg"
+              loading="lazy"
+              style={{ borderRadius: '7px' }}
+              onClick={onClickMeeting}
+              />
+                ) : (
+            <img
+                src={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=164&h=164&fit=crop&auto=format`}
+                style={{ borderRadius: '7px' }}
+                onClick={onClickMeeting}
+            />
+            )}
         </ImageListItem>
         <Box>
           <SmallChip label={meeting.filterTag} />
@@ -60,45 +75,15 @@ const MeetingThumbnail = ({ meeting }) => {
             {meetingAddr}
           </Box>
           <Stack direction="row" spacing={1}>
-            <StyledAvatarGroup max={5}>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-              <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-              <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-              <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
-              <Avatar
-                alt="Trevor Henderson"
-                src="/static/images/avatar/5.jpg"
-                sx={{ width: 5, height: 5 }}
-              />
-              <Avatar
-                alt="Trevor Henderson"
-                src="/static/images/avatar/5.jpg"
-                sx={{ width: 5, height: 5 }}
-              />
-              <Avatar
-                alt="Trevor Henderson"
-                src="/static/images/avatar/5.jpg"
-                sx={{ width: 5, height: 5 }}
-              />
-              <Avatar
-                alt="Trevor Henderson"
-                src="/static/images/avatar/5.jpg"
-                sx={{ width: 5, height: 5 }}
-              />
-            </StyledAvatarGroup>
-            <Box
-              sx={{
-                color: 'text.secondary',
-                display: 'inline',
-                fontSize: 14,
-              }}
-            >
-              17/{meetingMaxMemberNo}
-            </Box>
+          <Stack direction={'row'} spacing={1} alignItems={'center'}>
+            <PeopleIcon/>
+            <Typography sx={{fontSize : 13 }}>
+            {count}/{meetingMaxMemberNo}
+            </Typography>
+          </Stack>
           </Stack>
         </Box>
       </Stack>
-    </Box>
   );
 };
 
@@ -107,7 +92,10 @@ MeetingThumbnail.propTypes = {
     filterTag: PropTypes.string.isRequired,
     meetingName: PropTypes.string.isRequired,
     meetingAddr: PropTypes.string.isRequired,
+    meetingImg: PropTypes.string.isRequired,
     meetingMaxMemberNo: PropTypes.number.isRequired,
+    count: PropTypes.number.isRequired,
+    meetingNo: PropTypes.number.isRequired,
   }).isRequired,
 };
 

@@ -1,4 +1,8 @@
-import ListCategory from "@components/meeting/AddMeetingListCategory";
+import AddClub1 from "@components/club/AddClub1";
+import AddClubName from "@components/club/AddClubName";
+import AddClubRegion from "@components/club/AddClubRegion";
+import AddClubImg from "@components/club/AddClubImg";
+import ListCategory from "@components/meeting/ListCategory";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { Button, MobileStepper } from "@mui/material";
 import { Box, useTheme } from "@mui/system";
@@ -19,7 +23,16 @@ const AddClub = () => {
   function getStepContent(step) {
     switch (step) {
       case 0:
+        //return <SelectClubType />;
         return <ListCategory />;
+      case 1:
+        return <AddClubName />;
+      case 2:
+        return <AddClubImg />;
+      case 3:
+        return <AddClubRegion />;
+      case 4:
+        return <AddClub1 />;
       default:
         throw new Error("Unknown step");
     }

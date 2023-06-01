@@ -1,28 +1,27 @@
-import { Avatar, Button, ImageListItem, TextField, Typography } from '@mui/material';
-import { Box, Stack } from '@mui/system';
-import React, { useState } from 'react';
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
-
+import {
+  Avatar,
+  Button,
+  ImageListItem,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { Box, Stack } from "@mui/system";
+import React, { useState } from "react";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import useMeetingFormStore from "@hooks/meeting/useMeetingFormStore";
 
 const AddMeetingImg = () => {
+  const { file, image, setField, meetingIntro, onChangeField } =
+    useMeetingFormStore();
 
-    const {
-        file,
-        image,
-        setField,
-        meetingIntro,
-        onChangeField
-      } = useMeetingFormStore();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
-      const [selectedImage, setSelectedImage] = useState(null);
-      const [selectedFile, setSelectedFile] = useState(null);
-
-      const onChangeImg = (event) => {
-        const file = event.target.files[0];
-        setField('file', file);
-        setField('image', URL.createObjectURL(file));
-      };
+  const onChangeImg = (event) => {
+    const file = event.target.files[0];
+    setField("file", file);
+    setField("image", URL.createObjectURL(file));
+  };
 
     return (
         <div>
@@ -64,6 +63,7 @@ const AddMeetingImg = () => {
                 id="outlined-multiline-static"
                 label="meetingIntro"
                 name="meetingIntro"
+                placeholder="Search by email address, phone number, or user UID"
                 onChange={(e)=>onChangeField('meetingIntro',e)}
                 fullWidth
                 multiline

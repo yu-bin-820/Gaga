@@ -33,7 +33,7 @@ const AddMeetingReveiw = () => {
         );
     
       const navigate = useNavigate();
-      const handleSubmit = useCallback(async () => {
+      const handleSubmit = useCallback(() => {
         event.preventDefault();
     
         try {
@@ -46,7 +46,7 @@ const AddMeetingReveiw = () => {
           formData.append('meetingNo',meetingno);
 
           console.log(formData);
-          const response = await axios.post(
+          const response = axios.post(
             `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`,
             formData
     
