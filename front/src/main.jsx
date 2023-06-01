@@ -59,6 +59,7 @@ import GetReportAdmin from "@pages/admin/Report/GetReportAdmin.jsx";
 import ListReportAdmin from "@pages/admin/Report/ListReportAdmin.jsx";
 import ListBlackList from "@pages/admin/BlackList/ListBlackList.jsx";
 import TermsOfGaga from "@pages/user/TermsOfGaga.jsx";
+import DeleteUser from "@pages/user/DeleteUser.jsx";
 
 
 const router = createBrowserRouter([
@@ -110,6 +111,10 @@ const router = createBrowserRouter([
           {
             path: "termsofgaga",
             element: <TermsOfGaga />,
+          },
+          {
+            path: "deleteuser",
+            element: <DeleteUser />,
           },
           {
             path: "memberlist",
