@@ -7,6 +7,7 @@ import java.util.Map;
 import com.gaga.bo.service.domain.Filter;
 import com.gaga.bo.service.domain.Meeting;
 import com.gaga.bo.service.domain.MeetingReview;
+import com.gaga.bo.service.domain.Search;
 
 public interface MeetingService {
 	
@@ -20,7 +21,7 @@ public interface MeetingService {
 	
 	public List<Meeting> getMeetingList(Filter filter) throws Exception;
 	
-	public List<Meeting> getMeetingListByKeyword(Map<String, String> map) throws Exception;
+	public List<Meeting> getMeetingListByKeyword(Search search) throws Exception;
 
 	public void addMeeting(Meeting meeting) throws Exception;
 	
