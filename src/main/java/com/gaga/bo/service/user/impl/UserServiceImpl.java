@@ -59,7 +59,6 @@ public class UserServiceImpl implements UserService {
 		
 		return userDao.getUser(userNo);
 	}
-	
 
 	public User getUserById(String userId) throws Exception {
 	    return userDao.getUserById(userId);
@@ -76,10 +75,8 @@ public class UserServiceImpl implements UserService {
 		userDao.updateUser(user);
 	}
 
-
-	@Override
-	public void deleteUser(int userNo) throws Exception {
-		userDao.deleteUser(userNo);
+	public void deleteUser(User user) throws Exception {
+		userDao.deleteUser(user);
 		
 	}
 

@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.gaga.bo.service.domain.Filter;
 import com.gaga.bo.service.domain.Meeting;
 import com.gaga.bo.service.domain.MeetingReview;
+import com.gaga.bo.service.domain.Search;
 
 @Mapper
 public interface MeetingDao {
@@ -22,6 +23,8 @@ public interface MeetingDao {
 	public List<Meeting> getMeetingListInChat(int userNo) throws Exception;
 	
 	public List<Meeting> getMeetingList(Filter filter) throws Exception;
+	
+	public List<Meeting> getMeetingListByKeyword(Search search) throws Exception;
 	
 	public void addMeeting(Meeting meeting) throws Exception;
 	
