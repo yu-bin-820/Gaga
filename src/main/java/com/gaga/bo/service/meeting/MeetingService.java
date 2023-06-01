@@ -20,6 +20,8 @@ public interface MeetingService {
 	
 	public List<Meeting> getMeetingList(Filter filter) throws Exception;
 	
+	public List<Meeting> getMeetingListByKeyword(Map<String, String> map) throws Exception;
+
 	public void addMeeting(Meeting meeting) throws Exception;
 	
 	public void updateMeeting(Meeting meeting) throws Exception;

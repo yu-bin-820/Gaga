@@ -117,6 +117,13 @@ public class MeetingServiceImpl implements MeetingService {
 		// TODO Auto-generated method stub
 		return  meetingDao.getMeetingList(filter);
 	}
+	
+
+	@Override
+	public List<Meeting> getMeetingListByKeyword(Map<String, String> map) throws Exception {
+		// TODO Auto-generated method stub
+		return meetingDao.getMeetingListByKeyword(map);
+	}
 
 
 
@@ -172,6 +179,7 @@ public class MeetingServiceImpl implements MeetingService {
 		// TODO Auto-generated method stub
 		return meetingDao.getSubCategory();
 	}
+
 
 
 

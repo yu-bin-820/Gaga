@@ -258,6 +258,17 @@
   AND
    meeting_lng BETWEEN #{swLng:DOUBLE} AND #{neLng:DOUBLE};
    </select>
+   
+     <!-- 미팅 리스트 검색 구현 (getMeetingListByKeyword)-->
+   <select id="getMeetingListByKeyword" parameterType="Map" resultMap="meetingResultMap">
+	  SELECT *
+	  FROM meetings
+	  WHERE meetingAddr LIKE CONCAT('%', #{keyword}, '%')
+	     OR meetingDetailAddr LIKE CONCAT('%', #{keyword}, '%')
+	     OR meetingName LIKE CONCAT('%', #{keyword}, '%')
+	     OR meetingIntro LIKE CONCAT('%', #{keyword}, '%')
+	  LIMIT #{offset}, #{limit}
+	</select>
   
   <!-- 미팅 생성 -->
 <insert id="addMeeting" parameterType="Meeting">

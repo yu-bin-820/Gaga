@@ -1,6 +1,7 @@
 package com.gaga.bo.service.domain;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 public class Filter {
 	
@@ -98,7 +99,9 @@ public class Filter {
 		this.birthday = birthday;
 	}
 	public int getAge() {
-		return age;
+		LocalDate currentDate = LocalDate.now();
+
+		return Period.between(getBirthday(), currentDate).getYears();
 	}
 	public void setAge(int age) {
 		this.age = age;
