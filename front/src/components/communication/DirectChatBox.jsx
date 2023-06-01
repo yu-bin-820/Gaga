@@ -33,7 +33,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import axios from 'axios';
 import useInputOrigin from '@hooks/common/useInputOrigin';
 
-const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
+const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
   const [chat, onChangeChat, setChat] = useInputOrigin('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -70,19 +70,19 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
       if (chat?.trim()) {
         axios
           .post(
-            `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/${
-              groupType == 2 ? 'meeting' : 'club'
-            }/message`,
+            `http://${
+              import.meta.env.VITE_EXPRESS_HOST
+            }/rest/chat/direct/message`,
             {
               senderNo: senderNo,
-              groupNo: groupNo,
+              receiverNo: receiverNo,
               content: chat,
               contentTypeNo: 1,
             },
             { withCredentials: true }
           )
           .then(() => {
-            mutateGroupMessages();
+            mutateDirectMessages();
             setChat('');
           })
           .catch((error) => {
@@ -90,16 +90,16 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
           });
       }
     },
-    [chat, setChat, mutateGroupMessages, senderNo, groupNo, groupType]
+    [chat, setChat, mutateDirectMessages, senderNo, receiverNo]
   );
 
   // const onKeydownChat = useCallback(
   //   (e) => {
   //     if (e.key === 'Enter') {
-  //        if (!e.shiftKey) {
+  //       // if (!e.shiftKey) {
   //       e.preventDefault();
   //       onSubmitForm(e);
-  //        }
+  //       // }
   //     }
   //   },
   //   [onSubmitForm]
@@ -119,13 +119,12 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
     const formData = new FormData();
     formData.append('file', selectedFile);
     formData.append('senderNo', senderNo);
-    formData.append('groupNo', groupNo);
+    formData.append('receiverNo', receiverNo);
 
     axios
       .post(
-        `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/${
-          groupType == 2 ? 'meeting' : 'club'
-        }/image`,
+        `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/
+         direct/image`,
         formData,
         { withCredentials: true }
       )
@@ -140,7 +139,7 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
         setUploadChatImgDialogOpen(false);
         setAnchorEl(null);
       });
-  }, [selectedFile, setUploadChatImgDialogOpen, groupType, groupNo, senderNo]);
+  }, [selectedFile, setUploadChatImgDialogOpen, senderNo, receiverNo]);
 
   return (
     <Box>
@@ -285,11 +284,10 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
   );
 };
 
-ChatBox.propTypes = {
+DirectChatBox.propTypes = {
   senderNo: PropTypes.number,
-  groupNo: PropTypes.number,
-  groupType: PropTypes.number,
-  mutateGroupMessages: PropTypes.func,
+  receiverNo: PropTypes.number,
+  mutateDirectMessages: PropTypes.func,
 };
 
-export default ChatBox;
+export default DirectChatBox;

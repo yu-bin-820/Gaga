@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
@@ -13,6 +12,7 @@ import useCommunityStore from '@stores/communication/useCommunityStore';
 import MainBottomNav from '@layouts/common/MainBottomNav';
 import ListChatRoomTop from '@layouts/communication/ListChatRoomTop.jsx';
 import { Badge } from '@mui/material';
+import { useCallback, useState } from 'react';
 
 export default function ListChatRoom() {
   const navigate = useNavigate();
@@ -32,9 +32,9 @@ export default function ListChatRoom() {
   );
 
   const { data: directListData, mutate: mutateDirectMessages } = useSWR(
-    `http://${
-      import.meta.env.VITE_EXPRESS_HOST
-    }/rest/chat/direct/list/senderno/${myData?.userNo}`,
+    `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/direct/list/userno/${
+      myData?.userNo
+    }`,
     fetcher
   );
 
@@ -45,20 +45,20 @@ export default function ListChatRoom() {
     fetcher
   );
 
-  // console.log(
-  //   `http://${
-  //     import.meta.env.VITE_EXPRESS_HOST
-  //   }/rest/chat/direct/list/senderno/${myData?.userNo}`,
-  //   directListData
-  // );
+  console.log(
+    `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/direct/list/userno/${
+      myData?.userNo
+    }`,
+    directListData
+  );
 
-  const [value, setValue] = React.useState('group');
+  const [value, setValue] = useState('group');
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const onClickGroupChatOne = React.useCallback(
+  const onClickGroupChatOne = useCallback(
     (e) => {
       const selectedData = JSON.parse(e.currentTarget.dataset.value);
       console.log(selectedData.chatRoomEntryNo);
@@ -66,16 +66,24 @@ export default function ListChatRoom() {
       setField('chatRoomEntryNo', selectedData.chatRoomEntryNo);
       setField('chatType', selectedData.chatType);
       setField('chatRoomLeader', selectedData.chatRoomLeader);
-      if (selectedData.chatType !== 3) {
-        navigate(`/chat/group/message/list`);
-      } else {
-        navigate(`/chat/direct/message/list`);
-      }
+
+      navigate(`/chat/group/message/list`);
     },
     [setField, navigate]
   );
 
+  const onClickDirectChat = useCallback(
+    (e) => {
+      setField('chatRoomEntryNo', e.currentTarget.dataset.value);
+      navigate('/chat/direct/message/list');
+    },
+    [navigate, setField]
+  );
+
   console.log(groupsData);
+  if (!directListData) {
+    return <>로딩</>;
+  }
   return (
     <>
       <Box
@@ -171,7 +179,7 @@ export default function ListChatRoom() {
             </TabPanel>
 
             <TabPanel value="direct">
-              {directListData?.map((receiver, i) => (
+              {directListData?.map((direct, i) => (
                 <Box
                   key={i}
                   sx={{
@@ -179,16 +187,29 @@ export default function ListChatRoom() {
                     padding: '5px',
                     minWidth: '100%',
                   }}
+                  data-value={
+                    direct.receiver_no === myData?.userNo
+                      ? direct.sender_no
+                      : direct.receiver_no
+                  }
+                  onClick={onClickDirectChat}
                 >
+                  receiver{direct.receiver_no}
+                  <br />
+                  sender{direct.sender_no}
                   <ChatItem
                     avatar={'http://facebook.github.io/react/img/logo.svg'}
                     alt={`http://${
                       import.meta.env.VITE_EXPRESS_HOST
                     }/uploads/user_alt.jpg`}
-                    title={receiver.Receiver.nick_name}
-                    subtitle={receiver.content}
-                    date={new Date(receiver.created_at)}
-                    unread={receiver.unreadMessages}
+                    title={
+                      direct.receiver_no === myData?.userNo
+                        ? direct.Sender?.nick_name
+                        : direct.Receiver?.nick_name
+                    }
+                    subtitle={direct.content}
+                    date={new Date(direct.created_at)}
+                    unread={direct.unreadMessages}
                   />
                 </Box>
               ))}
