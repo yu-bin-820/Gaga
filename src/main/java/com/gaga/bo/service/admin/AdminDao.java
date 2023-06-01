@@ -14,6 +14,8 @@ public interface AdminDao {
 	public void addNoticePost(NoticePost noticePost) throws Exception;
 
 	List<NoticePost> getNoticePostList() throws Exception;
+	
+	List<NoticePost> getNoticePostListByCategory(int noticePostCategoryNo) throws Exception;
 
 	NoticePost getNoticePost(int noticePostNo) throws Exception;
 
@@ -34,4 +36,6 @@ public interface AdminDao {
 	List<Report> getReportAdmin(int reportingNo);
 	
     List<Report> getReportAdminList();
+    
+    
 }

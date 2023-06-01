@@ -12,6 +12,8 @@ public interface AdminService {
 	
 	List<NoticePost> getNoticePostList() throws Exception;
 	
+	List<NoticePost> getNoticePostListByCategory(int noticePostCategoryNo) throws Exception;
+	
 	NoticePost getNoticePost(int noticePostNo) throws Exception;
 
 	void updateNoticePost(NoticePost noticePost) throws Exception;

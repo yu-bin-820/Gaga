@@ -35,6 +35,11 @@ public class AdminServiceImpl implements AdminService {
 	public List<NoticePost> getNoticePostList() throws Exception {
 		return adminDao.getNoticePostList();
 	}
+	
+	@Override
+    public List<NoticePost> getNoticePostListByCategory(int noticePostCategoryNo) throws Exception {
+        return adminDao.getNoticePostListByCategory(noticePostCategoryNo);
+    }
 
 	@Override
 	public NoticePost getNoticePost(int noticePostNo) throws Exception {

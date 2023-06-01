@@ -45,7 +45,7 @@ public class AdminRestController {
 	String fileUploadPath;
 	
 	@PostMapping("/addNoticePost")
-	public void addNoticePost(
+	public ResponseEntity<Integer> addNoticePost(
 	        @RequestParam(value = "file", required = false) MultipartFile file,
 	        @RequestParam("noticePostTitle") String noticePostTitle,
 	        @RequestParam("noticePostText") String noticePostText,
@@ -74,6 +74,9 @@ public class AdminRestController {
 	    noticePost.setNoticePostCategoryNo(noticePostCategoryNo);
 	    noticePost.setUserNo(userNo);
 	    adminService.addNoticePost(noticePost);
+	    int noticePostNo = noticePost.getNoticePostNo();
+	    System.out.println(noticePostNo+"노티스포스트남바");
+	    return ResponseEntity.ok(noticePostNo);
 	}
 
 	@GetMapping("getNoticePostList")
@@ -82,7 +85,13 @@ public class AdminRestController {
 		return new ResponseEntity<>(noticePosts, HttpStatus.OK);
 	}
 
-	@GetMapping("getNoticePost/{noticePostNo}")
+	@GetMapping("getNoticePostListCategory")
+	public ResponseEntity<List<NoticePost>> getNoticePostList(@RequestParam("noticePostCategoryNo") int noticePostCategoryNo) throws Exception {
+	    List<NoticePost> noticePosts = adminService.getNoticePostListByCategory(noticePostCategoryNo); // 해당 카테고리 번호에 해당하는 게시물 가져오기
+	    return new ResponseEntity<>(noticePosts, HttpStatus.OK);
+	}
+	
+	@GetMapping("getNoticePost/noticePostNo/{noticePostNo}")
 	public ResponseEntity<NoticePost> getNoticePost(@PathVariable int noticePostNo) throws Exception {
 		System.out.println("im here Master" + noticePostNo);
 		NoticePost noticePost = adminService.getNoticePost(noticePostNo);
@@ -102,7 +111,7 @@ public class AdminRestController {
 	            .body(resource);
 	}
 	
-	@PutMapping(value = "/updateNoticePost/{noticePostNo}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PutMapping(value = "/updateNoticePost/noticePostNo/{noticePostNo}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<NoticePost> updateNoticePost(
 	        @PathVariable int noticePostNo,
 	        @RequestParam(value = "file", required = false) MultipartFile file,
@@ -138,7 +147,7 @@ public class AdminRestController {
 	    return new ResponseEntity<>(noticePost, HttpStatus.OK);
 	}
 
-	@DeleteMapping("deleteNoticePost/{noticePostNo}")
+	@DeleteMapping("deleteNoticePost/noticePostNo/{noticePostNo}")
 	public ResponseEntity<Void> deleteNoticePost(@PathVariable int noticePostNo) throws Exception {
 		NoticePost noticePost = adminService.getNoticePost(noticePostNo);
 		if (noticePost == null) {

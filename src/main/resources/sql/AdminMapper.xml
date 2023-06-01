@@ -124,6 +124,14 @@
 		notice_posts
 	</select>
 
+	<select id="getNoticePostListByCategoryNo"
+		resultMap="noticePostResult">
+		SELECT * FROM
+		notice_posts 
+		where notice_post_Category_no =
+		#{noticePostCategoryNo}
+	</select>
+
 	<select id="searchNoticePost" resultMap="noticePostResult">
 		SELECT * FROM
 		notice_posts
@@ -143,7 +151,8 @@
 		#{noticePostCategoryNo},
 		notice_post_title = #{noticePostTitle},
 		notice_post_text = #{noticePostText},
-		notice_post_img = #{noticePostImg}
+		notice_post_img =
+		#{noticePostImg}
 		WHERE notice_post_no = #{noticePostNo}
 	</update>
 
