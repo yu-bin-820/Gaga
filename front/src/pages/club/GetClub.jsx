@@ -1,29 +1,73 @@
+import styled from "@emotion/styled";
 import { Box, Button } from "@mui/material";
 import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+
+const CenteredText = styled("h5")({
+  display: "flex",
+  alignItems: "center",
+});
 
 const GetClub = () => {
   const { clubno } = useParams();
-  const [club, setclub] = useState();
+  const [club, setClub] = useState();
+  const [pendingMemberList, setPendingMemberList] = useState();
+  const [confirmedMemberList, setConfirMemberList] = useState();
 
   const navigate = useNavigate();
-  const onClickUpdate = useCallback((MouseEvent) => {
-    navigate(`/meeting/updatemeeting/${clubno}`);
-  }, []);
 
   useEffect(() => {
     axios
       .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/club/no/${clubno}`)
       .then((response) => {
         console.log(response.data);
-        setclub(response.data);
+        setClub(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
+  useEffect(() => {
+    axios
+      .get(
+        `http://${
+          import.meta.env.VITE_SPRING_HOST
+        }/rest/user/list/grouptype/1/no/${clubno}/state/2`
+      )
+      .then((response) => {
+        console.log(response.data);
+        setConfirMemberList(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://${
+          import.meta.env.VITE_SPRING_HOST
+        }/rest/user/list/grouptype/1/no/${clubno}/state/1`
+      )
+      .then((response) => {
+        console.log(response.data);
+        setPendingMemberList(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const onClickAddMember = useCallback((event) => {
+    navigate(`/club/member/addmember/${clubno}`);
+  }, []);
+
+  const onClickUpdate = useCallback((MouseEvent) => {
+    navigate(`/meeting/updatemeeting/${clubno}`);
+  }, []);
   const onClickDelete = useCallback(async (event) => {
     event.preventDefault();
 
@@ -45,10 +89,6 @@ const GetClub = () => {
     } catch (error) {
       console.error(error);
     }
-  }, []);
-
-  const onClickAddMember = useCallback((event) => {
-    navigate(`/meeting/member/addmember/${clubno}`);
   }, []);
 
   return (
