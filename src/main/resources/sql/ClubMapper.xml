@@ -21,7 +21,6 @@
 	  <result property="filterMaxAge" column="filter_max_age" jdbcType="INTEGER"/>
 	  <result property="filterTag" column="filter_tag" jdbcType="VARCHAR"/>
 	  <result property="mainCategoryNo" column="main_category_no" jdbcType="INTEGER"/>
-	  <result property="memberCount" column="member_count" jdbcType="INTEGER" />
 	</resultMap>
 	
 	<resultMap id="mainCategoryResultMap" type="java.util.HashMap">
@@ -88,11 +87,12 @@
 	  SELECT c.club_no, c.club_name, c.club_intro, c.club_leader_no, c.club_max_member_no,
 	         c.club_reg_date, c.club_state, c.club_img, c.club_region, c.filter_gender,
 	         c.filter_min_age, c.filter_max_age, c.filter_tag, c.main_category_no,
-	         COUNT(members.member_no) AS member_count
+	         (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND club_no = c.club_no) AS member_count
 	  FROM clubs c
 	  LEFT JOIN meetings m ON c.club_no = m.parent_club_no
 	  LEFT JOIN members ON c.club_no = members.club_no
 	  WHERE c.main_category_no = #{mainCategoryNo} AND (m.parent_club_no IS NULL OR m.parent_club_no = c.club_no)
+	  		AND c.club_state IN (1,2,3)
 	  GROUP BY c.club_no
 	  ORDER BY member_count DESC, c.club_reg_date DESC
 	</select>
@@ -103,10 +103,14 @@
 	  SELECT DISTINCT
 	    c.club_no, c.club_name, c.club_intro, c.club_leader_no, c.club_max_member_no,
 	    c.club_reg_date, c.club_state, c.club_img, c.club_region, c.filter_gender,
-	    c.filter_min_age, c.filter_max_age, c.filter_tag, c.main_category_no, cm.state
+	    c.filter_min_age, c.filter_max_age, c.filter_tag, c.main_category_no, 
+	    (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND club_no = c.club_no) AS member_count,
+	    cm.state
 	  FROM clubs c
-	  LEFT JOIN members cm ON c.club_no = cm.club_no
-	  WHERE cm.user_no = #{userNo:INTEGER} OR c.club_leader_no = #{userNo:INTEGER}
+	  LEFT JOIN (SELECT club_no, user_no, state
+  				FROM members
+  				WHERE user_no = #{userNo}) ) cm ON c.club_no = cm.club_no
+	  WHERE cm.user_no = #{userNo} OR c.club_leader_no = #{userNo} AND c.club_state IN (1,2,3)
 	</select>
 	
 	<!-- UPDATE -->
@@ -144,7 +148,7 @@
 	<!-- INSERT -->
 	<insert id="addClubMember" parameterType="Map">
 	  INSERT INTO members (user_no, club_no, state)
-	  VALUES (#{userNo:INTEGER}, #{clubNo:INTEGER}, 1)
+	  VALUES (#{userNo}, #{clubNo}, 1)
 	</insert>
 	
 	<!-- UPDATE -->
@@ -155,14 +159,14 @@
 	  	    confirmed_time = NOW()
 	  	</set>
 
-      WHERE club_no = #{clubNo:INTEGER} AND user_no = #{userNo:INTEGER}
+      WHERE club_no = #{clubNo} AND user_no = #{userNo}
 	</update>
 	
 	<!-- DELETE -->
 	<delete id="deleteClubMember" parameterType="Map">
 	  DELETE 
 	  FROM members
-      WHERE club_no = #{clubNo:INTEGER} AND user_no = #{userNo:INTEGER}
+      WHERE club_no = #{clubNo:INTEGER} AND user_no = #{userNo}
 	</delete>
 	
 	<!-- SQL : SELECT -->

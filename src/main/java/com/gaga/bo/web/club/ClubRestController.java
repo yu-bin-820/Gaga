@@ -241,12 +241,12 @@ public class ClubRestController {
 		clubService.updateClub(club);
 	}
 	
-	@DeleteMapping("{clubNo}") //==> 외래키 조건 다시 확인하기
+	@PatchMapping("{clubNo}") //==> 외래키 조건 다시 확인하기
 	public void deleteClub(@PathVariable int clubNo) throws Exception{
 		
 		System.out.println("클럽 삭제 Ctrl");
 		
-		clubService.updateParentClubNoToNull(clubNo);
+		//clubService.updateParentClubNoToNull(clubNo);
 		clubService.deleteClub(clubNo);
 	}
 
@@ -268,7 +268,7 @@ public class ClubRestController {
 	
 	}
 	
-	@PostMapping("member/delete")
+	@DeleteMapping("member")
 	public void deleteClubMember(@RequestBody Map<String, Integer> member) throws Exception{
 		
 		System.out.println("클럽 참여 멤버 제거 Ctrl");
