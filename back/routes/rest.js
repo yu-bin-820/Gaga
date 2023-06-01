@@ -1,29 +1,29 @@
-const { Op, literal } = require("sequelize");
-const express = require("express");
-const multer = require("multer");
-const fs = require("fs");
-const path = require("path");
+const { Op, literal } = require('sequelize');
+const express = require('express');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 
-const { sequelize } = require("../models");
-const User = require("../models/user");
-const Club = require("../models/club");
-const Meeting = require("../models/meeting");
-const RoomMessage = require("../models/roomMessage");
-const DirectMessage = require("../models/directMessage");
-const Reader = require("../models/reader");
-const Member = require("../models/member");
+const { sequelize } = require('../models');
+const User = require('../models/user');
+const Club = require('../models/club');
+const Meeting = require('../models/meeting');
+const RoomMessage = require('../models/roomMessage');
+const DirectMessage = require('../models/directMessage');
+const Reader = require('../models/reader');
+const Member = require('../models/member');
 const router = express.Router();
 
 //-------------------file upload ------------------------------------------
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../uploads"));
+    cb(null, path.join(__dirname, '../uploads'));
   },
   filename: function (req, file, cb) {
     // 현재 시간을 밀리초 단위로 가져와 파일명에 추가
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     const storageFileName =
-      file.fieldname + "_" + uniqueSuffix + "_" + file.originalname;
+      file.fieldname + '_' + uniqueSuffix + '_' + file.originalname;
 
     req.body.content = storageFileName;
     cb(null, storageFileName);
@@ -34,7 +34,7 @@ const upload = multer({ storage: storage });
 
 //-----------------Club,Meeting Totalunread GET-----------------------------------------
 router.get(
-  "/chat/group/message/unreads/userno/:userNo",
+  '/chat/group/message/unreads/userno/:userNo',
   async (req, res, next) => {
     try {
       const user = await User.findOne({
@@ -104,9 +104,9 @@ router.get(
   }
 );
 //-------------------Club, Meeting list GET---------------------------------------------
-router.get("/chat/club/list/userno/:userNo", async (req, res, next) => {
+router.get('/chat/club/list/userno/:userNo', async (req, res, next) => {
   try {
-    console.log("여기는");
+    console.log('여기는');
     const user = await User.findOne({
       where: { user_no: req.params.userNo },
     });
@@ -120,9 +120,9 @@ router.get("/chat/club/list/userno/:userNo", async (req, res, next) => {
   }
 });
 
-router.get("/chat/meeting/list/userno/:userNo", async (req, res, next) => {
+router.get('/chat/meeting/list/userno/:userNo', async (req, res, next) => {
   try {
-    console.log("여기는");
+    console.log('여기는');
     const user = await User.findOne({
       where: { user_no: req.params.userNo },
     });
@@ -136,9 +136,9 @@ router.get("/chat/meeting/list/userno/:userNo", async (req, res, next) => {
   }
 });
 
-router.get("/chat/group/list/userno/:userNo", async (req, res, next) => {
+router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
   try {
-    console.log("여기는");
+    console.log('여기는');
     const user = await User.findOne({
       where: { user_no: req.params.userNo },
     });
@@ -147,8 +147,8 @@ router.get("/chat/group/list/userno/:userNo", async (req, res, next) => {
       include: [
         {
           model: User,
-          attributes: ["user_no", "nick_name", "profile_img"],
-          as: "ClubLeader",
+          attributes: ['user_no', 'nick_name', 'profile_img'],
+          as: 'ClubLeader',
         },
       ],
     }); // getOwnedClub 호출
@@ -157,8 +157,8 @@ router.get("/chat/group/list/userno/:userNo", async (req, res, next) => {
       include: [
         {
           model: User,
-          attributes: ["user_no", "nick_name", "profile_img"],
-          as: "ClubLeader",
+          attributes: ['user_no', 'nick_name', 'profile_img'],
+          as: 'ClubLeader',
         },
       ],
     });
@@ -166,8 +166,8 @@ router.get("/chat/group/list/userno/:userNo", async (req, res, next) => {
       include: [
         {
           model: User,
-          attributes: ["user_no", "nick_name", "profile_img"],
-          as: "MeetingLeader",
+          attributes: ['user_no', 'nick_name', 'profile_img'],
+          as: 'MeetingLeader',
         },
       ],
     }); // getOwnedClub 호출
@@ -176,8 +176,8 @@ router.get("/chat/group/list/userno/:userNo", async (req, res, next) => {
       include: [
         {
           model: User,
-          attributes: ["user_no", "nick_name", "profile_img"],
-          as: "MeetingLeader",
+          attributes: ['user_no', 'nick_name', 'profile_img'],
+          as: 'MeetingLeader',
         },
       ],
     });
@@ -188,9 +188,9 @@ router.get("/chat/group/list/userno/:userNo", async (req, res, next) => {
       ...joinedMeetings,
     ];
     // get all read messages by the user
-    console.log("userno", user.user_no);
+    console.log('userno', user.user_no);
     const readMessages = await user.getReadedMessages();
-    console.log("readMessages", readMessages.length);
+    console.log('readMessages', readMessages.length);
     for (const group of unsortedGroups) {
       const countGroupMessage =
         group instanceof Club
@@ -200,13 +200,13 @@ router.get("/chat/group/list/userno/:userNo", async (req, res, next) => {
       // filter the read messages where club_no or meeting_no matches with the group
       const countReadedMessages = await readMessages.filter(
         (message) =>
-          message[group instanceof Club ? "club_no" : "meeting_no"] ===
-          group[group instanceof Club ? "club_no" : "meeting_no"]
+          message[group instanceof Club ? 'club_no' : 'meeting_no'] ===
+          group[group instanceof Club ? 'club_no' : 'meeting_no']
       ).length;
 
       console.log(
-        group instanceof Club ? "club_no" : "meeting_no",
-        group[group instanceof Club ? "club_no" : "meeting_no"],
+        group instanceof Club ? 'club_no' : 'meeting_no',
+        group[group instanceof Club ? 'club_no' : 'meeting_no'],
         countReadedMessages
       );
       console.log(countGroupMessage);
@@ -227,7 +227,7 @@ router.get("/chat/group/list/userno/:userNo", async (req, res, next) => {
 });
 //--------------------------Room Message GET------------------------------------
 router.get(
-  "/chat/clubno/:clubNo/message/list/userno/:userNo",
+  '/chat/clubno/:clubNo/message/list/userno/:userNo',
   async (req, res, next) => {
     try {
       const club = await Club.findOne({
@@ -238,15 +238,15 @@ router.get(
         include: [
           {
             model: User,
-            attributes: ["user_no", "nick_name", "profile_img"],
-            as: "Sender",
+            attributes: ['user_no', 'nick_name', 'profile_img'],
+            as: 'Sender',
           },
           {
             model: Club,
-            as: "Club",
+            as: 'Club',
           },
         ],
-        order: [["created_at", "ASC"]],
+        order: [['created_at', 'ASC']],
       });
       // );
 
@@ -312,7 +312,7 @@ router.get(
 module.exports = router;
 
 router.get(
-  "/chat/meetingno/:meetingNo/message/list/userno/:userNo",
+  '/chat/meetingno/:meetingNo/message/list/userno/:userNo',
   async (req, res, next) => {
     try {
       const meeting = await Meeting.findOne({
@@ -323,15 +323,15 @@ router.get(
         include: [
           {
             model: User,
-            attributes: ["user_no", "nick_name", "profile_img"],
-            as: "Sender",
+            attributes: ['user_no', 'nick_name', 'profile_img'],
+            as: 'Sender',
           },
           {
             model: Meeting,
-            as: "Meeting",
+            as: 'Meeting',
           },
         ],
-        order: [["created_at", "ASC"]],
+        order: [['created_at', 'ASC']],
       });
       // );
 
@@ -396,7 +396,7 @@ router.get(
 module.exports = router;
 
 //-----------------------------Room Message POST-----------------------
-router.post("/chat/club/message", async (req, res, next) => {
+router.post('/chat/club/message', async (req, res, next) => {
   try {
     const club = await Club.findOne({
       where: { club_no: req.body.groupNo },
@@ -415,42 +415,42 @@ router.post("/chat/club/message", async (req, res, next) => {
       include: [
         {
           model: User,
-          as: "Sender",
+          as: 'Sender',
         },
         {
           model: Club,
-          as: "Club",
+          as: 'Club',
         },
       ],
     });
 
-    const io = req.app.get("io");
+    const io = req.app.get('io');
     io.of(`/ct-club`)
       .to(`/ct-club-${req.body.groupNo}`)
-      .emit("message", roomMessageWithUser);
+      .emit('message', roomMessageWithUser);
 
     let lastMessage = req.body.content;
     if (lastMessage.length > 15) {
-      lastMessage = lastMessage.slice(0, 15) + "..."; // 15글자까지 자르기
+      lastMessage = lastMessage.slice(0, 15) + '...'; // 15글자까지 자르기
     }
 
     if (req.body.contentTypeNo === 2) {
-      lastMessage = "(사진)";
+      lastMessage = '(사진)';
     } else if (req.body.contentTypeNo === 3) {
-      lastMessage = "(위치 공유)";
+      lastMessage = '(위치 공유)';
     }
     await club.update({
-      last_message_time: literal("NOW()"),
+      last_message_time: literal('NOW()'),
       last_message: lastMessage,
     });
 
-    res.send("club ok");
+    res.send('club ok');
   } catch (error) {
     next(error);
   }
 });
 
-router.post("/chat/meeting/message", async (req, res, next) => {
+router.post('/chat/meeting/message', async (req, res, next) => {
   try {
     const meeting = await Meeting.findOne({
       where: { meeting_no: req.body.groupNo },
@@ -469,46 +469,46 @@ router.post("/chat/meeting/message", async (req, res, next) => {
       include: [
         {
           model: User,
-          as: "Sender",
+          as: 'Sender',
         },
         {
           model: Meeting,
-          as: "Meeting",
+          as: 'Meeting',
         },
       ],
     });
-    const io = req.app.get("io");
+    const io = req.app.get('io');
     io.of(`/ct-meeting`)
       .to(`/ct-meeting-${req.body.groupNo}`)
-      .emit("message", roomMessageWithUser);
+      .emit('message', roomMessageWithUser);
 
     let lastMessage = req.body.content;
     if (lastMessage.length > 15) {
-      lastMessage = lastMessage.slice(0, 15) + "..."; // 15글자까지 자르기
+      lastMessage = lastMessage.slice(0, 15) + '...'; // 15글자까지 자르기
     }
 
     if (req.body.contentTypeNo === 2) {
-      lastMessage = "(사진)";
+      lastMessage = '(사진)';
     } else if (req.body.contentTypeNo === 3) {
-      lastMessage = "(위치 공유)";
+      lastMessage = '(위치 공유)';
     }
 
     await meeting.update({
-      last_message_time: literal("NOW()"),
+      last_message_time: literal('NOW()'),
       last_message: lastMessage,
     });
 
-    res.send("meeting ok");
+    res.send('meeting ok');
   } catch (error) {
     next(error);
   }
 });
 
-//-----------------------------Room Image POST----------------------------------------------
+//-----------------------------GroupChat Image POST----------------------------------------------
 
 router.post(
-  "/chat/club/image",
-  upload.single("file"),
+  '/chat/club/image',
+  upload.single('file'),
   async (req, res, next) => {
     try {
       const club = await Club.findOne({
@@ -528,26 +528,26 @@ router.post(
         include: [
           {
             model: User,
-            as: "Sender",
+            as: 'Sender',
           },
           {
             model: Club,
-            as: "Club",
+            as: 'Club',
           },
         ],
       });
-      const io = req.app.get("io");
+      const io = req.app.get('io');
       io.of(`/ct-club`)
         .to(`/ct-club-${req.body.groupNo}`)
-        .emit("message", roomMessageWithUser);
-      const lastMessage = "(사진)";
+        .emit('message', roomMessageWithUser);
+      const lastMessage = '(사진)';
 
       await club.update({
-        last_message_time: literal("NOW()"),
+        last_message_time: literal('NOW()'),
         last_message: lastMessage,
       });
 
-      res.send("club ok");
+      res.send('club ok');
     } catch (error) {
       next(error);
     }
@@ -555,8 +555,8 @@ router.post(
 );
 
 router.post(
-  "/chat/meeting/image",
-  upload.single("file"),
+  '/chat/meeting/image',
+  upload.single('file'),
   async (req, res, next) => {
     try {
       const meeting = await Meeting.findOne({
@@ -576,26 +576,26 @@ router.post(
         include: [
           {
             model: User,
-            as: "Sender",
+            as: 'Sender',
           },
           {
             model: Meeting,
-            as: "Meeting",
+            as: 'Meeting',
           },
         ],
       });
-      const io = req.app.get("io");
+      const io = req.app.get('io');
       io.of(`/ct-meeting`)
         .to(`/ct-meeting-${req.body.groupNo}`)
-        .emit("message", roomMessageWithUser);
-      const lastMessage = "(사진)";
+        .emit('message', roomMessageWithUser);
+      const lastMessage = '(사진)';
 
       await meeting.update({
-        last_message_time: literal("NOW()"),
+        last_message_time: literal('NOW()'),
         last_message: lastMessage,
       });
 
-      res.send("meeting ok");
+      res.send('meeting ok');
     } catch (error) {
       next(error);
     }
@@ -603,32 +603,76 @@ router.post(
 );
 
 //------------------DM List Get-----------------------------------------------------
-router.get("/chat/direct/list/senderno/:senderNo", async (req, res, next) => {
+router.get('/chat/direct/list/userno/:userNo', async (req, res, next) => {
   try {
-    const directMessageList = await DirectMessage.findAll({
-      attributes: ["receiver_no", "content", "content_type_no", "created_at"],
+    const userNo = req.params.userNo;
+
+    const sendDirectMessageList = await DirectMessage.findAll({
+      attributes: [
+        'receiver_no',
+        'sender_no',
+        'content',
+        'content_type_no',
+        'created_at',
+      ],
       where: {
-        sender_no: req.params.senderNo,
+        sender_no: userNo,
       },
       include: [
         {
           model: User,
-          as: "Receiver",
-          attributes: ["user_no", "user_id", "nick_name", "profile_img"],
+          as: 'Receiver',
+          attributes: ['user_no', 'user_id', 'nick_name', 'profile_img'],
         },
       ],
-      group: ["receiver_no", "content", "content_type_no", "created_at"],
+      group: [
+        'receiver_no',
+        'sender_no',
+        'content',
+        'content_type_no',
+        'created_at',
+      ],
       having: literal(
-        "created_at = (SELECT MAX(created_at) FROM direct_messages WHERE sender_no = 1 AND receiver_no = `DirectMessage`.`receiver_no` LIMIT 1)"
+        'created_at = (SELECT MAX(created_at) FROM direct_messages WHERE sender_no = `DirectMessage`.`sender_no` AND receiver_no = `DirectMessage`.`receiver_no` LIMIT 1)'
       ),
     });
 
-    for (const directMessage of directMessageList) {
+    const receiveDirectMessageList = await DirectMessage.findAll({
+      attributes: [
+        'receiver_no',
+        'sender_no',
+        'content',
+        'content_type_no',
+        'created_at',
+      ],
+      where: {
+        receiver_no: userNo,
+      },
+      include: [
+        {
+          model: User,
+          as: 'Sender',
+          attributes: ['user_no', 'user_id', 'nick_name', 'profile_img'],
+        },
+      ],
+      group: [
+        'receiver_no',
+        'sender_no',
+        'content',
+        'content_type_no',
+        'created_at',
+      ],
+      having: literal(
+        'created_at = (SELECT MAX(created_at) FROM direct_messages WHERE sender_no = `DirectMessage`.`sender_no` AND receiver_no = `DirectMessage`.`receiver_no` LIMIT 1)'
+      ),
+    });
+
+    for (const directMessage of sendDirectMessageList) {
       const unreadMessages = await DirectMessage.count({
         where: {
           [Op.and]: [
             { sender_no: directMessage.receiver_no },
-            { receiver_no: req.params.senderNo },
+            { receiver_no: userNo },
             { read_state: 1 },
           ],
         },
@@ -636,7 +680,61 @@ router.get("/chat/direct/list/senderno/:senderNo", async (req, res, next) => {
       directMessage.dataValues.unreadMessages = unreadMessages;
     }
 
-    res.json(directMessageList);
+    for (const directMessage of receiveDirectMessageList) {
+      const unreadMessages = await DirectMessage.count({
+        where: {
+          [Op.and]: [
+            { sender_no: directMessage.sender_no },
+            { receiver_no: userNo },
+            { read_state: 1 },
+          ],
+        },
+      });
+      directMessage.dataValues.unreadMessages = unreadMessages;
+    }
+
+    const allDirectMessageList = [
+      ...sendDirectMessageList,
+      ...receiveDirectMessageList,
+    ];
+
+    // sender와 receiver의 조합을 정렬해서 동일한 조합을 만듭니다.
+    allDirectMessageList.forEach((msg) => {
+      if (msg.sender_no > msg.receiver_no) {
+        [msg.sender_no, msg.receiver_no] = [msg.receiver_no, msg.sender_no];
+      }
+    });
+
+    const sortedAndUniqueList = allDirectMessageList
+      .sort((a, b) => {
+        // 기준이 되는 sender_no와 receiver_no가 동일한 메시지 중에서,
+        // created_at 기준으로 정렬합니다.
+        if (a.sender_no === b.sender_no && a.receiver_no === b.receiver_no) {
+          return b.created_at - a.created_at;
+        }
+        // 그 외의 경우는 sender_no와 receiver_no 기준으로 정렬합니다.
+        return a.sender_no - b.sender_no || a.receiver_no - b.receiver_no;
+      })
+      .filter((item, index, self) => {
+        // sender_no와 receiver_no가 동일한 중복 메시지 중에서,
+        // 가장 먼저 나타나는 메시지 (즉, 가장 최근의 메시지)만 남깁니다.
+        const previousItem = self[index - 1];
+        if (
+          previousItem &&
+          item.sender_no === previousItem.sender_no &&
+          item.receiver_no === previousItem.receiver_no
+        ) {
+          return false;
+        }
+        return true;
+      });
+
+    const finalList = sortedAndUniqueList.sort((a, b) => {
+      // 최신 메시지가 먼저 오도록 created_at 기준으로 정렬합니다.
+      return b.created_at - a.created_at;
+    });
+    console.log(sendDirectMessageList);
+    res.json(finalList);
   } catch (error) {
     next(error);
   }
@@ -644,7 +742,7 @@ router.get("/chat/direct/list/senderno/:senderNo", async (req, res, next) => {
 //---------------------------Direct Message Get--------------------------------------
 
 router.get(
-  "/chat/direct/senderno/:senderNo/receiverno/:receiverNo",
+  '/chat/direct/senderno/:senderNo/receiverno/:receiverNo',
   async (req, res, next) => {
     try {
       await DirectMessage.update(
@@ -672,13 +770,13 @@ router.get(
           include: [
             {
               model: User,
-              as: "Sender",
-              attributes: ["nick_name", "user_no", "profile_img"],
+              as: 'Sender',
+              attributes: ['nick_name', 'user_no', 'profile_img'],
             },
             {
               model: User,
-              as: "Receiver",
-              attributes: ["nick_name", "user_no", "profile_img"],
+              as: 'Receiver',
+              attributes: ['nick_name', 'user_no', 'profile_img'],
             },
           ],
         })
@@ -689,7 +787,7 @@ router.get(
   }
 );
 //-------------------------Alarm Get----------------------------------------------
-router.get("/chat/alarm/receiverno/:receiverNo", async (req, res, next) => {
+router.get('/chat/alarm/receiverno/:receiverNo', async (req, res, next) => {
   try {
     await DirectMessage.update(
       { read_state: 0 },
@@ -709,8 +807,8 @@ router.get("/chat/alarm/receiverno/:receiverNo", async (req, res, next) => {
         include: [
           {
             model: User,
-            as: "Receiver",
-            attributes: ["nick_name", "user_no", "profile_img"],
+            as: 'Receiver',
+            attributes: ['nick_name', 'user_no', 'profile_img'],
           },
         ],
       })
@@ -725,7 +823,7 @@ function getKeyByValue(object, value) {
   return Object.keys(object).find((key) => object[key] === value);
 }
 
-router.post("/chat/direct", async (req, res, next) => {
+router.post('/chat/direct/message', async (req, res, next) => {
   try {
     const directMessage = await DirectMessage.create({
       sender_no: req.body.senderNo,
@@ -738,28 +836,67 @@ router.post("/chat/direct", async (req, res, next) => {
       include: [
         {
           model: User,
-          as: "Sender",
+          as: 'Sender',
         },
       ],
     });
-    const io = req.app.get("io");
-    const onlineMap = req.app.get("onlineMap");
-    // const receiverSocketId = getKeyByValue(
-    //   onlineMap['/ct-direct'],
-    //   Number(req.body.receiverNo)
-    // );
-    // io.of('/ct-direct')
-    //   .to(receiverSocketId)
-    //   .emit('directMessage', directMessageWithSender);
-    res.send("direct ok");
+    const io = req.app.get('io');
+    const onlineMap = req.app.get('onlineMap');
+    //--불안한 부분--
+    const receiverSocketId = getKeyByValue(
+      onlineMap['/ct-direct'],
+      Number(req.body.receiverNo)
+    );
+    io.of('/ct-direct')
+      .to(receiverSocketId)
+      .emit('directMessage', directMessageWithSender);
+    //--불안한부분끝--
+    res.send('direct ok');
   } catch (error) {
     next(error);
   }
 });
+//---------------------------Direct Chat Imgage Post ---------------------------------------------
+router.post(
+  '/chat/direct/image',
+  upload.single('file'),
+  async (req, res, next) => {
+    try {
+      const directMessage = await DirectMessage.create({
+        sender_no: req.body.senderNo,
+        receiver_no: req.body.receiverNo,
+        content: req.body.content,
+        content_type_no: 2,
+      });
 
+      const directMessageWithSender = await DirectMessage.findOne({
+        where: { message_no: directMessage.message_no },
+        include: [
+          {
+            model: User,
+            as: 'Sender',
+          },
+        ],
+      });
+
+      const io = req.app.get('io');
+      const onlineMap = req.app.get('onlineMap');
+      // const receiverSocketId = getKeyByValue(
+      //   onlineMap['/ct-direct'],
+      //   Number(req.body.receiverNo)
+      // );
+      // io.of('/ct-direct')
+      //   .to(receiverSocketId)
+      //   .emit('directMessage', directMessageWithSender);
+      res.send('direct ok');
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 //---------------------------Alarm Post-----------------------------------------
 
-router.post("/chat/alarm", async (req, res, next) => {
+router.post('/chat/alarm', async (req, res, next) => {
   try {
     const directMessage = await DirectMessage.create({
       receiver_no: req.body.receiverNo,
@@ -771,12 +908,12 @@ router.post("/chat/alarm", async (req, res, next) => {
       include: [
         {
           model: User,
-          as: "Sender",
+          as: 'Sender',
         },
       ],
     });
-    const io = req.app.get("io");
-    const onlineMap = req.app.get("onlineMap");
+    const io = req.app.get('io');
+    const onlineMap = req.app.get('onlineMap');
     // const receiverSocketId = getKeyByValue(
     //   onlineMap['/ct-direct'],
     //   Number(req.body.receiverNo)
@@ -784,7 +921,7 @@ router.post("/chat/alarm", async (req, res, next) => {
     // io.of('/ct-direct')
     //   .to(receiverSocketId)
     //   .emit('directMessage', directMessageWithSender);
-    res.send("alarm ok");
+    res.send('alarm ok');
   } catch (error) {
     next(error);
   }

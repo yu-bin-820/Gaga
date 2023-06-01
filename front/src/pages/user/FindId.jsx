@@ -16,6 +16,17 @@ const FindId = () => {
         alert("휴대폰 번호는 010으로 시작해야 합니다.");
         return;
       }
+      // 휴대폰 번호 확인
+      const checkResponse = await axios.get(
+        `http://${
+          import.meta.env.VITE_SPRING_HOST
+        }/rest/user/phoneno/${phoneNo}`
+      );
+      // 휴대폰 번호가 데이터베이스에 없으면
+      if (!checkResponse.data) {
+        alert("존재하지 않는 휴대폰 번호입니다.");
+        return;
+      }
       const response = await axios.post(
         `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuth`,
         phoneNo,
@@ -57,6 +68,8 @@ const FindId = () => {
 
       if (response.data) {
         setUserId(response.data.userId);
+      } else {
+        alert("해당하는 아이디가 없습니다.");
       }
     } catch (error) {
       console.error(error);
@@ -88,7 +101,12 @@ const FindId = () => {
             }
           }}
         />
-        <Button onClick={handlePhoneAuthRequest}>인증번호 발송</Button>
+        <Button
+          onClick={handlePhoneAuthRequest}
+          disabled={phoneNo.length !== 11}
+        >
+          인증번호 발송
+        </Button>
         <TextField
           label="인증번호"
           value={phoneAuthCode}
@@ -100,7 +118,12 @@ const FindId = () => {
             }
           }}
         />
-        <Button onClick={handlePhoneAuthVerify}>인증번호 확인</Button>
+        <Button
+          onClick={handlePhoneAuthVerify}
+          disabled={!/^\d{6}$/.test(phoneAuthCode)}
+        >
+          인증번호 확인
+        </Button>
         {phoneAuthVerified && (
           <Button onClick={handleFindId}>아이디 찾기</Button>
         )}

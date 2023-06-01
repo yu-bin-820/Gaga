@@ -6,12 +6,13 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import ListMeeting from "@components/meeting/ListMeeting";
 import ListClub from "@components/club/ListClub";
+import useCommonStore from "@stores/common/useCommonStore";
 
 export default function MeetingClubTabs() {
-  const [value, setValue] = React.useState("meeting");
+  const { groupType, setField } = useCommonStore();
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setField("groupType", newValue);
   };
 
   return (
@@ -23,7 +24,7 @@ export default function MeetingClubTabs() {
         typography: "body1",
       }}
     >
-      <TabContext value={value}>
+      <TabContext value={groupType}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
             <Tab label="모임" value="meeting" sx={{ minWidth: "50%" }} />
@@ -41,7 +42,6 @@ export default function MeetingClubTabs() {
           </TabPanel>
 
           <TabPanel value="club">
-            나오라고오오오
             <ListClub />
           </TabPanel>
         </Box>

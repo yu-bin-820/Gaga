@@ -41,7 +41,7 @@ const ListCreateClub = () => {
   const onClickListClubMember = useCallback((event) => {
     const { id } = event.target;
     const { groupType } = event.target;
-    navigate(`/user/memberlist/grouptype/${groupType}/groupno/${id}`);
+    navigate(`/club/member/listmember/clubno/${id}`);
   }, []);
 
   return (

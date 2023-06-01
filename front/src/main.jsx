@@ -38,7 +38,6 @@ import AddClub from "@pages/club/AddClub.jsx";
 import GetClub from "@pages/club/GetClub.jsx";
 import ListReport from "@pages/communication/ListReport.jsx";
 
-import ListGroupMember from "@components/user/ListGroupMember.jsx";
 import AddNaverUser from "@pages/user/AddNaverUser.jsx";
 import AddKakaoUser from "@pages/user/AddKakaoUser.jsx";
 import FindId from "@pages/user/FindId.jsx";
@@ -48,6 +47,8 @@ import UpdateReport from "@pages/communication/UpdateReport.jsx";
 
 import { element } from "prop-types";
 import SearchMeeting from "@pages/meeting/SearchMeeting";
+import ListClubMember from "@pages/club/ListClubMember.jsx";
+import AddClubMember from "@pages/club/AddClubMember.jsx";
 
 import AddNoticePost from "@pages/admin/NoticePost/AddNoticePost.jsx";
 import GetNoticePost from "@pages/admin/NoticePost/GetNoticePost.jsx";
@@ -61,6 +62,12 @@ import SearchUser from "@pages/admin/BlackList/ListUser.jsx";
 import GetReportAdmin from "@pages/admin/Report/GetReportAdmin.jsx";
 import ListReportAdmin from "@pages/admin/Report/ListReportAdmin.jsx";
 import ListBlackList from "@pages/admin/BlackList/ListBlackList.jsx";
+import TermsOfGaga from "@pages/user/TermsOfGaga.jsx";
+import UpdateClub from "@pages/club/UpdateClub.jsx";
+import UpdateAccount from "@pages/payment/UpdateAccount.jsx";
+import ListPayment from "@pages/payment/ListPayment.jsx";
+import DeleteUser from "@pages/user/DeleteUser.jsx";
+import ListSearchMeeting from "@pages/meeting/ListSearchMeeting.jsx";
 import ListUser from "@pages/admin/BlackList/ListUser.jsx";
 import GetUser from "@pages/admin/BlackList/GetUser.jsx";
 
@@ -113,8 +120,12 @@ const router = createBrowserRouter([
             element: <UpdateUser />,
           },
           {
-            path: "memberlist",
-            element: <ListGroupMember />,
+            path: "termsofgaga",
+            element: <TermsOfGaga />,
+          },
+          {
+            path: "deleteuser",
+            element: <DeleteUser />,
           },
         ],
       },
@@ -167,6 +178,10 @@ const router = createBrowserRouter([
           {
             path: "searchmeeting",
             element: <SearchMeeting />,
+          },
+          {
+            path: "meetinglist",
+            element: <ListSearchMeeting />,
           },
         ],
       },
@@ -239,8 +254,25 @@ const router = createBrowserRouter([
             element: <AddClub />,
           },
           {
-            path: "no/:clubno",
+            path: "no/:clubNo",
             element: <GetClub />,
+          },
+          {
+            path: "updateclub/:clubNo",
+            element: <UpdateClub />,
+          },
+          {
+            path: "member",
+            children: [
+              {
+                path: "listmember/clubno/:clubNo",
+                element: <ListClubMember />,
+              },
+              {
+                path: "addmember/:clubNo",
+                element: <AddClubMember />,
+              },
+            ],
           },
         ],
       },
@@ -263,7 +295,7 @@ const router = createBrowserRouter([
           {
             path: "listNoticePost",
             element: <ListNoticePost />,
-          }, 
+          },
           {
             path: "listEventPost",
             element: <ListEventPost />,
@@ -273,8 +305,8 @@ const router = createBrowserRouter([
             element: <ListQnaPost />,
           },
         ],
-        },
-        //------------------------------------------------BlackList------------------------------------------------
+      },
+      //------------------------------------------------BlackList------------------------------------------------
       {
         path: "blackList",
         children: [
@@ -303,7 +335,26 @@ const router = createBrowserRouter([
             element: <ListReportAdmin />,
           },
         ],
-        },
+      },
+      //------------------------------------------------Payment------------------------------------------------
+      {
+        path: "payment",
+        children: [
+          {
+            path: "adjustment",
+            children: [
+              {
+                path: "account/:userNo",
+                element: <UpdateAccount />,
+              },
+            ],
+          },
+          {
+            path: "listpayment/:userNo",
+            element: <ListPayment />,
+          },
+        ],
+      },
     ],
   },
 ]);

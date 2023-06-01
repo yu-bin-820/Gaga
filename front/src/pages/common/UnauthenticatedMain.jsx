@@ -5,6 +5,7 @@ import useSWR from "swr";
 import fetcher from "@utils/fetcher";
 import ListMainClub from "@components/club/ListMainClub";
 import MainTop from "@layouts/common/MainTop";
+import axios from 'axios';
 
 const UnauthenticatedMain = () => {
   const { data: myData, mutate: mutateMe } = useSWR(
@@ -13,6 +14,16 @@ const UnauthenticatedMain = () => {
   );
 
   const navigate = useNavigate();
+
+  const onClickLogOut = useCallback(async () => {
+    await axios
+      .delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/user/logout`, {
+        withCredentials: true,
+      })
+      .then(() => {
+        mutateMe();
+      });
+  }, [mutateMe]);
 
   const onClickLogin = useCallback(() => {
     navigate("/user/login");
@@ -38,6 +49,9 @@ const UnauthenticatedMain = () => {
       {myData && !myData?.profileImg && (
         <Button onClick={onClickRegistProfile}>profileImg등록</Button>
       )}
+      <Button sx={{ marginLeft: "auto" }} onClick={onClickLogOut}>
+        Logout
+      </Button>
     </>
   );
 };
