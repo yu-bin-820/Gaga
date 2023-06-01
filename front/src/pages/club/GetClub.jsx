@@ -1,5 +1,6 @@
 import ListMeetingParentClubNo from "@components/meeting/ListMeetingParentClubNo";
 import styled from "@emotion/styled";
+import CommonTop from "@layouts/common/CommonTop";
 import { Box, Button } from "@mui/material";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
@@ -94,6 +95,7 @@ const GetClub = () => {
 
   return (
     <>
+      <CommonTop />
       <Box sx={{ marginTop: "64px" }}>
         <h2>여기는 클럽 상세페이지입니다. </h2>
         <br />

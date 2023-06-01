@@ -15,7 +15,7 @@ const ListMeetingParentClubNo = () => {
       .get(
         `http://${
           import.meta.env.VITE_SPRING_HOST
-        }/rest/meeting/list/clubno/${clubNo}`
+        }/rest/meeting/list/clubno/${clubno}`
       )
       .then((response) => {
         console.log(response.data);
@@ -24,7 +24,7 @@ const ListMeetingParentClubNo = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, [clubNo]);
+  }, [clubno]);
 
   useEffect(() => {
     axios

@@ -87,10 +87,10 @@ const ListClubMember = () => {
           <Box key={i}>
             <MeetingMember member={pendingMember} />
             <Button id={pendingMember.userNo} onClick={onClickDeleteMember}>
-              거절{" "}
+              거절
             </Button>
             <Button id={pendingMember.userNo} onClick={onClickUpdateMember}>
-              수락{" "}
+              수락
             </Button>
           </Box>
         ))}
@@ -99,7 +99,7 @@ const ListClubMember = () => {
           <Box key={i}>
             <MeetingMember key={i} member={confirmedMember} />
             <Button id={confirmedMember.userNo} onClick={onClickDeleteMember}>
-              내보내기{" "}
+              내보내기
             </Button>
           </Box>
         ))}
