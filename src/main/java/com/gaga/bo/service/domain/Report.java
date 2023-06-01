@@ -2,6 +2,8 @@ package com.gaga.bo.service.domain;
 
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Report {
 	///field
 	private int reportNo;
@@ -9,6 +11,7 @@ public class Report {
 	private int reportedNo;
 	private int reportCategoryNo;
 	private String reportContent;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private LocalDateTime reportDate;
 	private String reportImg;
 	private String reportImg2;
