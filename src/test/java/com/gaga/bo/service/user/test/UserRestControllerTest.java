@@ -48,18 +48,18 @@ public class UserRestControllerTest {
     }
     
     //@Test
-    public void deleteUserTest() throws Exception {
-        // Mocking UserService
-        doNothing().when(userService).deleteUser(2);
-
-        int userNo = 2; // Change to your desired userNo
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .delete("/rest/user/deleteUser/{userNo}", userNo)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent())
-                .andDo(print());
-    }
+//    public void deleteUserTest() throws Exception {
+//        // Mocking UserService
+//        doNothing().when(userService).deleteUser(2);
+//
+//        int userNo = 2; // Change to your desired userNo
+//
+//        mockMvc.perform(MockMvcRequestBuilders
+//                .delete("/rest/user/deleteUser/{userNo}", userNo)
+//                .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isNoContent())
+//                .andDo(print());
+//    }
     
 //    @Test
     public void phoneAuthTest() throws Exception {

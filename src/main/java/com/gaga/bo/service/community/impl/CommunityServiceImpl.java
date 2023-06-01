@@ -105,10 +105,17 @@ public class CommunityServiceImpl implements CommunityService {
 		communityDao.addUserEarnedTitle(userNoMainCategoryNoLeaderState);
 	}
 
+
+	@Override
+	public String getTitleName(int titleNo) throws Exception {
+		return communityDao.getTitleName(titleNo);
+	}
+	
 	@Override
 	public List<Title> getUserEarnedTitleList(int userNo) throws Exception {
 		return communityDao.getUserEarnedTitleList(userNo);
 	}
+
 
 
 

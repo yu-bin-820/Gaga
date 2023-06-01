@@ -29,7 +29,7 @@ public interface UserService {
 	
 	public boolean checkDuplication(String userId) throws Exception;
 	
-	public void deleteUser(int userNo) throws Exception;
+	public void deleteUser(User user) throws Exception;
 	
 	public String getAccessNaverToken(String authorize_code) throws Exception;
 	
