@@ -159,7 +159,7 @@
 	    WHERE user_no = #{userNo}
 	</update>
 	
-	<update id="deleteUser" parameterType="int">
+	<update id="deleteUser" parameterType="user">
 	    UPDATE users SET
 	        user_id = CONCAT('out_', user_id),
 	        password = CONCAT('out_', password),
@@ -177,9 +177,9 @@
 	<!--     bank_code = CONCAT('out_', bank_code), -->
 	        bank_name = CONCAT('out_', bank_name),
 	        account_no = CONCAT('out_', account_no),
-	        filter_gender = 9,
-	        filter_max_age = 999,
-	        filter_min_age = 200,
+	        filter_gender = 0,
+	        filter_max_age = 0,
+	        filter_min_age = 0,
 	        filter_tag = CONCAT('out_', filter_tag),
 	        filter_tag2 = CONCAT('out_', filter_tag2),
 	        filter_tag3 = CONCAT('out_', filter_tag3)

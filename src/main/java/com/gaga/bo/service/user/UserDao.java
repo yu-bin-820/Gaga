@@ -20,7 +20,7 @@ public interface UserDao {
 	
 	public void updateUser(User user) throws Exception;
 		
-	public void deleteUser(int userNo) throws Exception;
+	public void deleteUser(User user) throws Exception;
 	
 	public List<User> getGroupMemberList(Map<String, Integer> map) throws Exception;
 	
