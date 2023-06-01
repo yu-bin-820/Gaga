@@ -267,7 +267,7 @@
    <select id="getMeetingListByKeyword" parameterType="search" resultMap="meetingResultMap">
 	  SELECT *,
 	  (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND meeting_no = m.meeting_no) AS count
-	  FROM meetings
+	  FROM meetings AS m
 	  WHERE meeting_addr LIKE CONCAT('%', #{searchKeyword}, '%')
 	     OR meeting_detail_addr LIKE CONCAT('%', #{searchKeyword}, '%')
 	     OR meeting_name LIKE CONCAT('%', #{searchKeyword}, '%')
