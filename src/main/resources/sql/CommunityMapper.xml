@@ -10,7 +10,11 @@
  <resultMap id="reportResultMap" type="report">
     <id column="report_no" property="reportNo" jdbcType="INTEGER"/>
     <result column="reporting_no" property="reportingNo" jdbcType="INTEGER"/>
+    <result column="reporting_id" property="reportingId" jdbcType="VARCHAR"/>
+    <result column="reporting_nick_name" property="reportingNickName" jdbcType="VARCHAR"/>
     <result column="reported_no" property="reportedNo" jdbcType="INTEGER"/>
+    <result column="reported_id" property="reportedId" jdbcType="VARCHAR"/>
+    <result column="reported_nick_name" property="reportedNickName" jdbcType="VARCHAR"/>
     <result column="report_category_no" property="reportCategoryNo" jdbcType="INTEGER"/>
     <result column="report_content" property="reportContent" jdbcType="VARCHAR"/>
     <result column="report_date" property="reportDate" jdbcType="TIMESTAMP"/>
@@ -43,18 +47,24 @@
 	  
   	<!-- SelectOneQuery -->
   	<select id="getReport" parameterType="int" resultMap="reportResultMap">
-  	  	SELECT 
-            report_no,
-            reporting_no,
-            reported_no,
-            report_category_no,
-            report_content,
-            report_date,
-            report_img,
-            report_img2,
-            report_img3
-        FROM reports
-        WHERE report_no = #{reportNo}
+		  SELECT
+		    r.report_no,
+		    r.reporting_no,
+		    r.reported_no,
+		    r.report_category_no,
+		    r.report_content,
+		    r.report_date,
+		    r.report_img,
+		    r.report_img2,
+		    r.report_img3,
+		    reporting.user_id AS reporting_id,
+		    reported.user_id AS reported_id,
+		    reporting.nick_name AS reporting_nick_name,
+		    reported.nick_name AS reported_nick_name
+		  FROM reports AS r
+		  INNER JOIN users AS reporting ON r.reporting_no = reporting.user_no
+		  INNER JOIN users AS reported ON r.reported_no = reported.user_no
+		  WHERE r.report_no = #{reportNo}
   	</select>
   	<!-- SelectOneQuery -->
   	<select id="getReportByUserNo" parameterType="report" resultMap="reportResultMap">
@@ -77,17 +87,23 @@
 	  <!-- SelectListQuery -->
 		<select id="getReportList" parameterType="user" resultMap="reportResultMap">
 		  SELECT 
-	        report_no,
-	        reporting_no,
-	        reported_no,
-	        report_category_no,
-	        report_date        
-	    FROM reports
-	    <where>
-	     <if test="role == 0">
-					reporting_no = #{userNo}
-	     </if>
-	    </where>
+		    r.report_no,
+		    r.reporting_no,
+		    r.reported_no,
+		    r.report_category_no,
+		    r.report_date,
+		    reporting.user_id AS reporting_id,
+		    reported.user_id AS reported_id,
+		    reporting.nick_name AS reporting_nick_name,
+		    reported.nick_name AS reported_nick_name
+		  FROM reports AS r
+		  INNER JOIN users AS reporting ON r.reporting_no = reporting.user_no
+		  INNER JOIN users AS reported ON r.reported_no = reported.user_no
+		  <where>
+		    <if test="role == 0">
+		      reporting.user_no = #{userNo}
+		    </if>
+		  </where>
 		</select>
 		
 		<!-- UpdateQuery -->

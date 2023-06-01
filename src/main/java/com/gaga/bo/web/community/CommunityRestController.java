@@ -1,6 +1,7 @@
 package com.gaga.bo.web.community;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -111,7 +113,31 @@ public class CommunityRestController {
 	
 	
 	//------------------------Report Request Mapping----------------------------------------------------------
-
+	
+	@GetMapping("report/list/userno/{userNo}/role/{role}")
+	public List<Report> getReportList(
+									  @PathVariable("userNo") int userNo,
+									  @PathVariable("role") int role
+																		) throws Exception{
+		
+		User user = new User();
+		user.setUserNo(userNo);
+		user.setRole(role);
+		
+		return communityService.getReportList(user);
+	} 
+	
+	@GetMapping("report/reportno/{reportNo}")
+	public Report getReport(
+							@PathVariable("reportNo") int reportNo
+																	) throws Exception {
+		
+		Report report = communityService.getReport(reportNo);
+		System.out.println(":: getReport :: " + report);
+		
+		return report;
+	}
+	
 	@GetMapping("report/reportingno/{reportingNo}/reportedno/{reportedNo}")
 	public Report getReportByUserNo(
 									@PathVariable("reportingNo") int reportingNo,
@@ -131,11 +157,9 @@ public class CommunityRestController {
 						  @ModelAttribute Report report, 
 						  @RequestParam(value = "file", required = false) MultipartFile file, 
 						  @RequestParam(value = "file2", required = false) MultipartFile file2, 
-						  @RequestParam(value = "file3", required = false) MultipartFile file3, 
-						  HttpSession session
+						  @RequestParam(value = "file3", required = false) MultipartFile file3
 								  											       				) throws Exception {
 		
-		System.out.println(file.getOriginalFilename());
 
 		if (file != null) {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
@@ -165,8 +189,63 @@ public class CommunityRestController {
 		}
 		
 		communityService.addReport(report);
+		
 	}
 	
+	@PatchMapping("report")
+	public void updateReport(
+							 @ModelAttribute Report report,
+							 @RequestParam(value = "file", required = false) MultipartFile file, 
+							 @RequestParam(value = "file2", required = false) MultipartFile file2, 
+							 @RequestParam(value = "file3", required = false) MultipartFile file3
+														  										  ) throws Exception {
+		
+		System.out.println(":: updateReport() - Before Set Files :: "+ report);
+		
+		if (file != null) {
+			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+			String uuidFileName = UUID.randomUUID().toString()+ext;
+	
+			file.transferTo(new File(fileUploadPath+"\\community\\"+uuidFileName));
+			
+			report.setReportImg(uuidFileName);
+		}
+		
+		if (file2 != null) {
+			String ext = file2.getOriginalFilename().substring(file2.getOriginalFilename().lastIndexOf("."));
+			String uuidFileName = UUID.randomUUID().toString()+ext;
+	
+			file2.transferTo(new File(fileUploadPath+"\\community\\"+uuidFileName));
+			
+			report.setReportImg2(uuidFileName);
+		}
+		
+		if (file3 != null) {
+			String ext = file3.getOriginalFilename().substring(file3.getOriginalFilename().lastIndexOf("."));
+			String uuidFileName = UUID.randomUUID().toString()+ext;
+	
+			file3.transferTo(new File(fileUploadPath+"\\community\\"+uuidFileName));
+			
+			report.setReportImg3(uuidFileName);
+		}
+		
+		System.out.println(":: updateReport() - After Set Files :: "+ report);
+		
+		communityService.updateReport(report);
+		
+	}
+	
+	@DeleteMapping("report/reportno/{reportNo}")
+	public void deleteReport(
+							 @PathVariable int reportNo
+							 						   ) throws Exception {
+		
+		System.out.println(":: deleteReport - reportNo :: "+reportNo);
+		
+		communityService.deleteReport(reportNo);
+		 
+	}
+		
 	//------------------------UserReview Request Mapping----------------------------------------------------------
 	@GetMapping("userreview/reviewerno/{reviewerNo}/reviewedno/{reviewedNo}")
 	public UserReview getUserReview(
@@ -186,8 +265,34 @@ public class CommunityRestController {
 							  @RequestBody UserReview userReview
 								  							    ) throws Exception {
 		
-		System.out.println(userReview);
+		System.out.println(" :: addUserReview :: " + userReview);
 		communityService.addUserReview(userReview);
 		
 	}
+	
+	@PatchMapping("userreview")
+	public void updateUserReview(
+								 @RequestBody UserReview userReview
+																   ) throws Exception {
+		System.out.println(" :: updateUserReview() :: " + userReview);
+		communityService.updateUserReview(userReview);
+		
+	}
+	
+	@DeleteMapping("userreview/reviewerno/{reviewerNo}/reviewedno/{reviewedNo}")
+	public void deleteUserReview(
+								 @PathVariable("reviewerNo") int reviewerNo,
+								 @PathVariable("reviewedNo") int reviewedNo
+																			) throws Exception {
+		UserReview userReview = new UserReview();
+		
+		userReview.setReviewerNo(reviewerNo);
+		userReview.setReviewedNo(reviewedNo);
+		
+		System.out.println(" :: deleteUserReview() :: " + userReview);
+		
+		communityService.deleteUserReview(userReview);
+		
+	}
+		
 }

@@ -191,21 +191,7 @@ public class UserServiceImpl implements UserService {
 	        userInfo.put("birthday", birthday);
 	        
 	        System.out.println(userInfo);
-	        
-	    if(!this.checkDuplication(id)) {
-	    
-	    	User user = new User();
-            user.setUserId(id);
-            user.setPassword(id);
-            user.setUserName(name);
-            user.setNickName(nickname);
-            user.setBirthday(LocalDate.parse(birthday, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            user.setPhoneNo(mobile);
-            user.setGender(gender);
 
-	    	userDao.addUser(user);
-	    }
-	        
 		}catch (IOException exception) {
 			exception.printStackTrace();
 		}
@@ -309,24 +295,8 @@ public class UserServiceImpl implements UserService {
 			userInfo.put("nickname", nickname);
 			userInfo.put("email", email);
 			userInfo.put("id", userId);
-			
 			System.out.println("카카오 아이디 잘오냐?"+userInfo.get("id"));
-			System.out.println("카카오 닉네임 잘오냐?"+userInfo.get("nickname"));
-			System.out.println("카카오 이메일 잘오냐?"+userInfo.get("email"));
-			
-			if(!this.checkDuplication(userId)) {
-				User user = new User();
-				user.setUserId(email);
-				user.setPassword(email);
-				user.setUserName(nickname);
-				user.setNickName(nickname);
-				user.setPhoneNo("01051884079");
-				user.setBirthday(LocalDate.of(1980, 1, 8));
-				
-				userDao.addUser(user);
-			}
-				
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -357,7 +327,7 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-
+	//이메일인증시 이메일 내용을 만드는 메소드
 	public MimeMessage creatEmailContent(String userEmail) throws MessagingException, UnsupportedEncodingException {
 		System.out.println("메일받을 사용자" + userEmail);
         System.out.println("인증번호" + emailVerificationCode);
@@ -393,7 +363,7 @@ public class UserServiceImpl implements UserService {
         return message;
     }
 
-
+	//이메일인증 코드 생성 메소드
 	public String createEmailKey(){
 		int leftLimit = 48; // numeral '0'
         int rightLimit = 122; // letter 'z'
