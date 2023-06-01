@@ -57,6 +57,10 @@ const MyProfileTop = () => {
     navigate('/community/report/list');
   }, [navigate]);
 
+  const onClickUpdateUser = useCallback(() => {
+    navigate('/user/updateuser');
+  }, [navigate]);
+
   if (!myData) {
     return <Navigate replace to="/" />;
   }
@@ -115,16 +119,11 @@ const MyProfileTop = () => {
                 </Typography>
               </Box>
             </ListItem>
+            
             <Divider />
-
-            {/* <Button component={Link} to="/user/updateuser">
-                개인 정보 수정
-              </Button><br/> */}
             <ListItem
-              sx={{
-                marginTop: '10px',
-                marginBottom: '10px',
-              }}
+              sx={{ marginTop: '10px', marginBottom: '10px' }}
+              onClick={onClickUpdateUser}
             >
               <ListItemText
                 sx={{ display: 'flex', justifyContent: 'center' }}

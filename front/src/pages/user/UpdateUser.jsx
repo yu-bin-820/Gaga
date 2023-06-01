@@ -3,6 +3,7 @@ import { Button, TextField } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import useSWR, { mutate } from 'swr';
 import fetcher from '@utils/fetcher';
+import CommonTop from '@layouts/common/CommonTop';
 
 function UpdateUser() {
   const [user, setUser] = useState({
@@ -64,6 +65,8 @@ function UpdateUser() {
 
   return (
     <div>
+      {/* <CommonTop /> */}
+
       <TextField
         label="아이디"
         value={user.userId}
