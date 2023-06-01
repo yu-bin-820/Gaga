@@ -18,7 +18,7 @@ const meetingField={
     filterMinAge: '',
     filterMaxAge: '',
     meetingMaxMemberNo: '',
-    entryFee: '',
+    entryFee: null,
     file: null,
     image: null,
 }

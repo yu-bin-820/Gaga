@@ -64,6 +64,8 @@ const GetMeeting = () => {
             });
         },[]);
 
+        const confirmedMemberCount = confirmedMemberList ? confirmedMemberList.length : 0;
+
 
     const onClickAddMember=useCallback((event)=>{
         navigate(`/meeting/member/addmember/${meetingno}`);
@@ -91,7 +93,7 @@ const GetMeeting = () => {
             minHeight: '100px',
             }}
         >
-            {!imageLoadingError ? (
+            {meeting?.meetingImg ? (
                   <img
                     src={`http://${
                       import.meta.env.VITE_SPRING_HOST
@@ -123,7 +125,7 @@ const GetMeeting = () => {
         <Stack direction={'row'} spacing={1} alignItems={'center'}>
         <PeopleIcon/>
         <Typography sx={{fontSize : 13 }}>
-        {meeting?.memberCount}/{meeting?.meetingMaxMemberNo}
+        {confirmedMemberCount}/{meeting?.meetingMaxMemberNo}
         </Typography>
         </Stack>
 

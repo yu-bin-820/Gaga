@@ -59,6 +59,7 @@ import GetReportAdmin from "@pages/admin/Report/GetReportAdmin.jsx";
 import ListReportAdmin from "@pages/admin/Report/ListReportAdmin.jsx";
 import ListBlackList from "@pages/admin/BlackList/ListBlackList.jsx";
 import TermsOfGaga from "@pages/user/TermsOfGaga.jsx";
+import ListSearchMeeting from "@pages/meeting/ListSearchMeeting.jsx";
 
 
 const router = createBrowserRouter([
@@ -166,6 +167,10 @@ const router = createBrowserRouter([
           {
             path: "searchmeeting",
             element: <SearchMeeting />,
+          },
+          {
+            path: "meetinglist",
+            element: <ListSearchMeeting />,
           },
         ],
       },

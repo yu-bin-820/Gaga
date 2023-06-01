@@ -64,6 +64,7 @@ const AddMeetingImg = () => {
                 id="outlined-multiline-static"
                 label="meetingIntro"
                 name="meetingIntro"
+                placeholder="Search by email address, phone number, or user UID"
                 onChange={(e)=>onChangeField('meetingIntro',e)}
                 fullWidth
                 multiline
