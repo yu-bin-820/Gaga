@@ -14,7 +14,8 @@ import { Box, Stack } from '@mui/system';
 import useCommunityStore from '@stores/communication/useCommunityStore';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import React, { useCallback, useState } from 'react';
+import { DateTime } from 'luxon';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import useSWR from 'swr';
 
@@ -42,18 +43,19 @@ const UpdateReport = () => {
   );
   const [selectedImage2, setSelectedImage2] = useState(
     reportData?.reportImg2
-      ? `http:${import.meta.env.VITE_SPRING_HOST}/upload_images/community/${
+      ? `http://${import.meta.env.VITE_SPRING_HOST}/upload_images/community/${
           reportData?.reportImg2
         }`
       : null
   );
   const [selectedImage3, setSelectedImage3] = useState(
     reportData?.reportImg3
-      ? `http:${import.meta.env.VITE_SPRING_HOST}/upload_images/community/${
+      ? `http://${import.meta.env.VITE_SPRING_HOST}/upload_images/community/${
           reportData?.reportImg3
         }`
       : null
   );
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFile2, setSelectedFile2] = useState(null);
   const [selectedFile3, setSelectedFile3] = useState(null);
@@ -90,6 +92,19 @@ const UpdateReport = () => {
     formData.append('reportContent', reportContent);
     formData.append('reportNo', reportData?.reportNo);
     formData.append('reportDate', reportData?.reportDate);
+
+    if (!selectedFile && reportData?.reportImg) {
+      formData.append('reportImg', reportData?.reportImg);
+    }
+
+    if (!selectedFile2 && reportData?.reportImg2) {
+      formData.append('reportImg2', reportData?.reportImg2);
+    }
+
+    if (!selectedFile3 && reportData?.reportImg3) {
+      formData.append('reportImg3', reportData?.reportImg3);
+    }
+
     axios
       .patch(
         `http://${import.meta.env.VITE_SPRING_HOST}/rest/community/report`,
@@ -101,15 +116,16 @@ const UpdateReport = () => {
         navigate('/community/report');
       })
       .catch((error) => {
+        console.log('error', reportData);
         console.dir(error);
       });
   }, [
     selectedFile,
     selectedFile2,
     selectedFile3,
-    navigate,
     reportContent,
     reportData,
+    navigate,
     mutateReport,
   ]);
 

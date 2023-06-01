@@ -37,11 +37,30 @@ import ListReportCategory from "@pages/communication/ListReportCategory.jsx";
 import AddClub from "@pages/club/AddClub.jsx";
 import GetClub from "@pages/club/GetClub.jsx";
 import ListReport from "@pages/communication/ListReport.jsx";
+
+import ListGroupMember from "@components/user/ListGroupMember.jsx";
+import AddNaverUser from "@pages/user/AddNaverUser.jsx";
+import AddKakaoUser from "@pages/user/AddKakaoUser.jsx";
+import FindId from "@pages/user/FindId.jsx";
+import FindPassword from "@pages/user/FindPassword.jsx";
+
 import UpdateReport from "@pages/communication/UpdateReport.jsx";
 import { element } from "prop-types";
 import SearchMeeting from "@pages/meeting/SearchMeeting";
 import ListClubMember from "@pages/club/ListClubMember.jsx";
 import AddClubMember from "@pages/club/AddClubMember.jsx";
+
+import AddNoticePost from "@pages/admin/NoticePost/AddNoticePost.jsx";
+import GetNoticePost from "@pages/admin/NoticePost/GetNoticePost.jsx";
+import ListNoticePost from "@pages/admin/NoticePost/ListNoticePost.jsx";
+import UpdateNoticePost from "@pages/admin/NoticePost/UpdateNoticePost.jsx";
+import ListEventPost from "@pages/admin/NoticePost/ListEventPost.jsx";
+import GetBlackList from "@pages/admin/BlackList/GetBlackList.jsx";
+import SearchUser from "@pages/admin/BlackList/SearchUser.jsx";
+import GetReportAdmin from "@pages/admin/Report/GetReportAdmin.jsx";
+import ListReportAdmin from "@pages/admin/Report/ListReportAdmin.jsx";
+import ListBlackList from "@pages/admin/BlackList/ListBlackList.jsx";
+import TermsOfGaga from "@pages/user/TermsOfGaga.jsx";
 
 const router = createBrowserRouter([
   {
@@ -70,8 +89,28 @@ const router = createBrowserRouter([
             element: <AddUser />,
           },
           {
+            path: "addnaveruser",
+            element: <AddNaverUser />,
+          },
+          {
+            path: "addkakaouser",
+            element: <AddKakaoUser />,
+          },
+          {
+            path: "findid",
+            element: <FindId />,
+          },
+          {
+            path: "findpassword",
+            element: <FindPassword />,
+          },
+          {
             path: "updateuser",
             element: <UpdateUser />,
+          },
+          {
+            path: "termsofgaga",
+            element: <TermsOfGaga />,
           },
         ],
       },
@@ -211,6 +250,58 @@ const router = createBrowserRouter([
                 element: <AddClubMember />,
               },
             ],
+          },
+        ],
+      },
+      //------------------------------------------------Notice------------------------------------------------
+      {
+        path: "notice",
+        children: [
+          {
+            path: "addNoticePost",
+            element: <AddNoticePost />,
+          },
+          {
+            path: "getNoticePost/noticePostNo/:noticePostNo",
+            element: <GetNoticePost />,
+          },
+          {
+            path: "updateNoticePost/noticePostNo/:noticePostNo",
+            element: <UpdateNoticePost />,
+          },
+          {
+            path: "listNoticePost",
+            element: <ListNoticePost />,
+          },
+          {
+            path: "listEventPost",
+            element: <ListEventPost />,
+          },
+        ],
+      },
+      //------------------------------------------------BlackList------------------------------------------------
+      {
+        path: "blackList",
+        children: [
+          {
+            path: "getBlackList/blackListNo/:userNo",
+            element: <GetBlackList />,
+          },
+          {
+            path: "listBlackList",
+            element: <ListBlackList />,
+          },
+          {
+            path: "searchUser",
+            element: <SearchUser />,
+          },
+          {
+            path: "getReportAdmin",
+            element: <GetReportAdmin />,
+          },
+          {
+            path: "listReportAdmin",
+            element: <ListReportAdmin />,
           },
         ],
       },
