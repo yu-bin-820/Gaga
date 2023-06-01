@@ -1,5 +1,4 @@
 import useInput from "@hooks/common/useInput";
-import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import fetcher from "@utils/fetcher";
 import useSWR from "swr";
@@ -10,7 +9,17 @@ import MainTop from "@layouts/common/MainTop";
 import dayjs from "dayjs";
 import MenuItem from "@mui/material/MenuItem";
 import { FormHelperText } from "@mui/material";
-
+import {
+  Button,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  SwipeableDrawer,
+  Typography,
+  TextField
+} from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 
 import CssBaseline from "@mui/material/CssBaseline";
@@ -19,30 +28,14 @@ import Paper from "@mui/material/Paper";
 
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
+
 
 import { Link } from "react-router-dom";
 
 import { Backdrop } from "@mui/material";
 import { Checkbox, FormControlLabel } from "@mui/material";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Typography component={Link} to="/" color={"Green"}>
-        GAGA
-      </Typography>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import CommonTop from "@layouts/common/CommonTop";
+import TermsOfGaga from "./TermsOfGaga";
 
 const AddUser = () => {
   const [user, onChangeUser, setUser] = useInput({
@@ -62,8 +55,7 @@ const AddUser = () => {
   const [emailError, setEmailError] = useState(false); // 이메일 에러 상태
   const [isEmailAuthSent, setIsEmailAuthSent] = useState(false); // 이메일 인증 요청이 전송되었는지 상태
 
-  const passwordRegex =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,14}$/; //비밀번호 형식 검증 정규식
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,14}$/; //비밀번호 형식 검증 정규식
   const [passwordError, setPasswordError] = useState(false); // 비밀번호 에러 상태
   const [passwordConfirm, setPasswordConfirm] = useState(""); //  비밀번호 확인 값
   const [passwordMatch, setPasswordMatch] = useState(false); // 비밀번호 일치 여부 상태
@@ -72,6 +64,10 @@ const AddUser = () => {
   const [phoneAuthVerified, setPhoneAuthVerified] = useState(false); // 핸드폰 인증이 완료되었는지 확인하는 상태
 
   const [termsAgreed, setTermsAgreed] = useState(false); // 약관 동의 여부 상태
+  const [isTermsDrawerOpen, setIsTermsDrawerOpen] = useState(false); // 약관 드로어 오픈 여부 상태
+  const toggleTermsDrawer = () => {
+    setIsTermsDrawerOpen(!isTermsDrawerOpen);
+  };  // 약관 드로어 오픈 여부 상태 변경 함수
 
   // const [autocompleteResults, setAutocompleteResults] = useState([]);//오토컴플릿 회원아이디 검색 결과
   // const [searchValue, setSearchValue] = useState("");//오토컴플릿 회원아이디 검색 값
@@ -116,6 +112,9 @@ const AddUser = () => {
   const handleSubmit = useCallback(
     async (event) => {
       event.preventDefault();
+      if (!user.userId && !user.password && !user.userName && !user.birthday && !user.gender && !user.nickName && !user.phoneNo) {
+        return;
+      }
       console.log("User data:", user);
       console.log("Email verification status:", isEmailVerified);
       if (!isEmailVerified) {
@@ -169,6 +168,7 @@ const AddUser = () => {
             console.log(response);
             mutateMe();
             setRegisterSuccess(true); // 회원가입 성공 표시
+            alert("회원가입이 완료되었습니다.");
           });
       } catch (error) {
         console.error(error);
@@ -232,30 +232,6 @@ const AddUser = () => {
     }
   };
 
-  // const handleSearchChange = async (event) => {
-  //   const newValue = event.target.value;
-  //   setSearchValue(newValue);
-
-  //   if (newValue !== "") {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${newValue}`,
-  //         { withCredentials: true }
-  //       );
-  //       setAutocompleteResults([response.data]);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   } else {
-  //     setAutocompleteResults([]);
-  //   }
-  // };
-
-  // 상세 이용약관 페이지로 이동
-  const goToTermsDetail = () => {
-    // 상세 이용약관 페이지로 이동하는 코드 작성
-  };
-
   const requestPhoneAuth = useCallback(async () => {
     const numberRegex = /^[0-9]*$/; // 숫자만 허용하는 정규식
     const phoneNoLength = user.phoneNo.length;
@@ -288,9 +264,10 @@ const AddUser = () => {
     setUserPhoneAuthCode(event.target.value);
   }, []);
 
+
   return (
     <>
-      <MainTop />
+      <CommonTop />
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
         <Box
@@ -306,8 +283,16 @@ const AddUser = () => {
                 onChange={(event) => setTermsAgreed(event.target.checked)}
               />
             }
-            label={<Link to="/user/termsofgaga">이용약관</Link>}
+            label={<Button onClick={toggleTermsDrawer}>이용약관</Button>}
           />
+          <SwipeableDrawer
+            anchor="right"
+            open={isTermsDrawerOpen}
+            onClose={toggleTermsDrawer}
+            onOpen={() => {}}
+          > 이용약관 상세보기
+            <TermsOfGaga />
+          </SwipeableDrawer>
           <TextField
             variant="outlined"
             margin="none"

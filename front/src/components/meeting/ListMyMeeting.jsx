@@ -1,11 +1,10 @@
-import { Button } from '@mui/material';
 import { Box } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import useSWR from 'swr';
-import MeetingThumbnail from './MeetingThumnail';
+import ListMyMeetingThumnail from './ListMyMeetingThumnail';
 
 const ListMyMeeting = () => {
     
@@ -30,51 +29,17 @@ const ListMyMeeting = () => {
             });
     },[userNo]);
 
-    const onClickMeeting=useCallback((event)=>{
-        const { id } = event.target;
-        navigate(`/meeting/meetingno/${id}`);
-    },[]);
-
-    const onClickListMeetingMember=useCallback((event)=>{
-        const { id } = event.target;
-        navigate(`/meeting/member/listmember/meetingno/${id}`);
-    },[]);
-
-    const onClickMeetingSuccess = React.useCallback((MouseEvent)=>{
-        const { id } = event.target;
-        navigate(`/meeting/updatemeetingsuccess/meetingno/${id}`);
-        },[]);
-
-        const onClickAddMeetingReview=useCallback((event)=>{
-            const { id } = event.target;
-            navigate(`/meeting/review/addreview/meetingno/${id}`);
-        },[]);
-
     return (
-        <Box>
-            <Box sx={{ marginBottom: '136px'}}>
+        <Box sx={{ marginBottom: '136px', backgroundColor: '#ededed' }}>
                 meeting.state 0 : leader / 1 : 신청중 / 2: 확정
                 {meetingList?.map((meeting,i)=>(
                     
                     <Box key={i}>
-                    <MeetingThumbnail meeting={meeting}/>
+                    <ListMyMeetingThumnail meeting={meeting}/>
                     <h5>{meeting.state}</h5>
-                    <Button 
-                    id={meeting.meetingNo}
-                    onClick={onClickMeeting}>미팅정보</Button>
-                    <Button 
-                    id={meeting.meetingNo}
-                    onClick={onClickListMeetingMember}>멤버리스트</Button>
-                    <Button 
-                    id={meeting.meetingNo}
-                    onClick={onClickMeetingSuccess}>성사하기</Button>
-                    <Button 
-                    id={meeting.meetingNo}
-                    onClick={onClickAddMeetingReview}>후기작성</Button>
                     </Box>
                     
                 ))}
-            </Box>
         </Box>
     );
 };

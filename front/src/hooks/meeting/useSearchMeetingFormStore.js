@@ -1,22 +1,9 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 
-
-const filterField={
-    gender: '',
-    maxAge: '',
-    minAge: '',
-    mainCategoryNo: '',
-    tag: '',
-}
-const useSearchMeetingFormStore=create((set=>({
-    ...filterField,
-
-    setField: (field, value)=> set((state)=>({[field]: value})),
-    onChangeField: (field, event)=>set((state)=>({[field]:event.target.value})),
-    reset: () => {
-        set(filterField)
-      },
-})))
-
+const useSearchMeetingFormStore = create((set) => ({
+  searchKeyword: '',
+  setField: (field, value) => set({ [field]: value }),
+  reset: () => set({ searchKeyword: '' }),
+}));
 
 export default useSearchMeetingFormStore;

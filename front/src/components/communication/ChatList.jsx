@@ -33,8 +33,8 @@ const ChatList = ({ chatData }) => {
         overflow: 'auto', // 콘텐츠가 넘치는 경우 스크롤링 가능
       }}
     >
-      {chatData.map((meetingMessage, i) => (
-        <Chat key={i} data={meetingMessage} />
+      {chatData?.map((message, i) => (
+        <Chat key={i} data={message} />
       ))}
     </Box>
   );

@@ -84,7 +84,8 @@ const GetMeeting = () => {
     navigate(`/meeting/member/addmember/${meetingno}`);
   }, []);
 
-  const [value, setValue] = React.useState(0);
+        const confirmedMemberCount = confirmedMemberList ? confirmedMemberList.length : 0;
+
 
   const [imageLoadingError, setImageLoadingError] = useState(false);
 
@@ -104,18 +105,18 @@ const GetMeeting = () => {
               minWidth: "100%",
               minHeight: "100px",
             }}
-          >
-            {!imageLoadingError ? (
-              <img
-                src={`http://${
-                  import.meta.env.VITE_SPRING_HOST
-                }/upload_images/meeting/${meeting?.meetingImg}`}
-                alt="noImg"
-                loading="lazy"
-                onError={handleImageError}
-              />
-            ) : (
-              <img
+        >
+            {meeting?.meetingImg ? (
+                  <img
+                    src={`http://${
+                      import.meta.env.VITE_SPRING_HOST
+                    }/upload_images/meeting/${meeting?.meetingImg}`}
+                    alt="noImg"
+                    loading="lazy"
+                    onError={handleImageError}
+                  />
+                ) : (
+            <img
                 src={`https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c`}
               />
             )}

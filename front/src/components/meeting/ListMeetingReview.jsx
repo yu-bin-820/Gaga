@@ -76,18 +76,18 @@ const ListMeetingReview = () => {
                                 import.meta.env.VITE_SPRING_HOST
                                 }/upload_images/meeting/${meetingReview?.meetingReviewImg}`}
                             />
-                </ImageListItem>
-            </ImageList>
-            <Box
-                sx={{
-                    width: 200,
-                    display: 'flex',
-                    alignItems: 'center',
-                }}
-                >
-                <Rating name="read-only" value={meetingReview.meetingScore} readOnly />
-                <Box sx={{ ml: 2 }}>{meetingReview.meetingScore}</Box>
-                </Box>
+                            </ImageListItem>
+                        </ImageList>
+                        <Box
+                            sx={{
+                                width: 200,
+                                display: 'flex',
+                                alignItems: 'center',
+                            }}
+                            >
+                            <Rating name="read-only" value={meetingReview.meetingScore} readOnly />
+                            <Box sx={{ ml: 2 }}>{meetingReview.meetingScore}</Box>
+                        </Box>
                     <Button 
                     id={meetingReview.meetingReviewNo}
                     onClick={onClickUpdateMeetingReview}>수정하기</Button>

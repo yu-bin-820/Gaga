@@ -61,6 +61,10 @@ const MyProfileTop = () => {
     navigate("/user/updateuser");
   }, [navigate]);
 
+  const onClickDeleteUser = useCallback(() => {
+    navigate("/user/deleteuser");
+  }, [navigate]);
+
   const onClickUpdateAccount = useCallback(() => {
     navigate(`/payment/adjustment/account/${myData?.userNo}`);
   }, [myData, navigate]);
@@ -150,8 +154,10 @@ const MyProfileTop = () => {
               />
             </ListItem>
             <Divider />
-
-            <ListItem sx={{ marginTop: "10px", marginBottom: "10px" }}>
+            <ListItem
+              sx={{ marginTop: "10px", marginBottom: "10px" }}
+              onClick={onClickDeleteUser}
+            >
               <ListItemText
                 sx={{ display: "flex", justifyContent: "center" }}
                 primary="회원 탈퇴"

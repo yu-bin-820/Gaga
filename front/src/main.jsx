@@ -63,6 +63,8 @@ import TermsOfGaga from "@pages/user/TermsOfGaga.jsx";
 import UpdateClub from "@pages/club/UpdateClub.jsx";
 import UpdateAccount from "@pages/payment/UpdateAccount.jsx";
 import ListPayment from "@pages/payment/ListPayment.jsx";
+import DeleteUser from "@pages/user/DeleteUser.jsx";
+import ListSearchMeeting from "@pages/meeting/ListSearchMeeting.jsx";
 
 const router = createBrowserRouter([
   {
@@ -113,6 +115,10 @@ const router = createBrowserRouter([
           {
             path: "termsofgaga",
             element: <TermsOfGaga />,
+          },
+          {
+            path: "deleteuser",
+            element: <DeleteUser />,
           },
         ],
       },
@@ -165,6 +171,10 @@ const router = createBrowserRouter([
           {
             path: "searchmeeting",
             element: <SearchMeeting />,
+          },
+          {
+            path: "meetinglist",
+            element: <ListSearchMeeting />,
           },
         ],
       },
