@@ -7,14 +7,14 @@ import { useNavigate, useParams } from 'react-router';
 
 const ListMeetingParentClubNo = () => {
     
-  const { clubNo } = useParams();
+  const { clubno } = useParams();
   const [meetingList, setMeetingList] = useState();
   const navigate = useNavigate();
 
 
   useEffect(()=>{
       axios
-          .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/clubno/${clubNo}`)
+          .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/clubno/${clubno}`)
           .then((response)=>{
               console.log(response.data);
               setMeetingList(response.data);
@@ -22,7 +22,7 @@ const ListMeetingParentClubNo = () => {
           .catch((error)=>{
               console.log(error);
           });
-  },[clubNo]);
+  },[clubno]);
 
   const onClickMeeting=useCallback((event)=>{
       const { id } = event.target;

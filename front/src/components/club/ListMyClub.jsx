@@ -5,7 +5,6 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Box } from "@mui/system";
 import { Button } from "@mui/material";
-import ListGroupMember from "@components/user/ListGroupMember";
 import ClubThumbnail from "./ClubThumbnail";
 
 const ListMyClub = () => {
@@ -41,7 +40,7 @@ const ListMyClub = () => {
 
   const onClickListClubMember = useCallback((event) => {
     const { id } = event.target;
-    navigate(`/user/memberlist`);
+    navigate(`/club/member/listmember/clubno/${id}`);
   }, []);
 
   return (

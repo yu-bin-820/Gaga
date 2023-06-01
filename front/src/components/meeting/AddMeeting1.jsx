@@ -60,7 +60,7 @@ const AddMeeting1 = () => {
       formData.append('filterMinAge',filterMinAge);
       formData.append('filterMaxAge',filterMaxAge);
       formData.append('meetingMaxMemberNo',meetingMaxMemberNo);
-      formData.append('entryFee',entryFee);
+      formData.append('entryFee',parseInt(entryFee));
       formData.append('meetingLeaderNo',myData.userNo);
 
         console.log(useMeetingFormStore.meetingDate)
@@ -76,7 +76,7 @@ const AddMeeting1 = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [useMeetingFormStore]);
+  }, [meetingDate,meetingStartTime,meetingEndTime,filterGender,filterMinAge,filterMaxAge, entryFee]);
   return (
     <Box>
       <TextField

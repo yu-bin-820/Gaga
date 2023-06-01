@@ -48,10 +48,6 @@ const Login = () => {
     password: '',
   });
 
-  const [tel, setTel] = useState('');
-  const [phoneAuthCode, setPhoneAuthCode] = useState('');
-  const [phoneAuthVerified, setPhoneAuthVerified] = useState(false);
-
   const { data: myData, mutate: mutateMe } = useSWR(
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
@@ -76,7 +72,13 @@ const Login = () => {
           )
           .then((response) => {
             console.log(response);
-            mutateMe();
+            if (response.data === '') {
+              alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+            } else if(response.data != 0 ){
+              alert('서비스 이용이 제한된 회원입니다.');
+            } else {
+              mutateMe();
+            }
           });
       } catch (error) {
         console.error(error);

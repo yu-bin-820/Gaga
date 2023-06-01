@@ -1,16 +1,49 @@
-import { Button, CircularProgress } from "@mui/material";
-import { Box, Stack } from "@mui/system";
+import { CircularProgress, TextField } from "@mui/material";
+import { Stack } from "@mui/system";
 import fetcher from "@utils/fetcher";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { CustomOverlayMap, Map, MapMarker, useMap } from "react-kakao-maps-sdk";
 import { useNavigate } from "react-router";
 import useSWR from "swr";
+import EventMarkerContainer from "./map/EventMarkerContainer";
 
 const ListMeeting = () => {
   const [latitude, setLatitude] = useState();
   const [longtitude, setLongtitude] = useState();
   const [meetingList, setMeetingList] = useState();
+  const [mapInstance, setMapInstance] = useState(null);
+  const [state, setState] = useState({
+    swLat: "",
+    swLng: "",
+    neLat: "",
+    neLng: "",
+  });
+
+  useEffect(() => {
+    const handleBoundsChanged = () => {
+      if (mapInstance) {
+        const bounds = mapInstance.getBounds();
+        setState({
+          swLat: bounds.getSouthWest().getLat().toString(),
+          swLng: bounds.getSouthWest().getLng().toString(),
+          neLat: bounds.getNorthEast().getLat().toString(),
+          neLng: bounds.getNorthEast().getLng().toString(),
+        });
+      }
+    };
+
+    if (mapInstance) {
+      kakao.maps.event.addListener(mapInstance, "bounds_changed", handleBoundsChanged);
+    }
+
+    return () => {
+      if (mapInstance) {
+        kakao.maps.event.removeListener(mapInstance, "bounds_changed", handleBoundsChanged);
+      }
+    };
+  }, [mapInstance]);
+  
   const navigate = useNavigate();
 
   const { data: myData, mutate: mutateMe } = useSWR(
@@ -46,10 +79,10 @@ const ListMeeting = () => {
       tag3: myData?.filterTag3,
       birthday: myData?.birthday,
       age: 21,
-      swLat: 0,
-      swLng: 0,
-      neLat: 1000,
-      neLng: 1000,
+      swLat: state.swLat,
+      swLng: state.swLng,
+      neLat: state.neLat,
+      neLng: state.neLng,
     };
 
     axios
@@ -65,66 +98,7 @@ const ListMeeting = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, [myData]);
-
-  const onClickMeeting = useCallback(
-    (event) => {
-      const { id } = event.target;
-      navigate(`/meeting/meetingno/${id}`);
-    },
-    [navigate]
-  );
-
-  const EventMarkerContainer = ({
-    meetingLat,
-    meetingLng,
-    meetingName,
-    meetingNo,
-  }) => {
-    const map = useMap();
-
-    const [isOpen, setIsOpen] = useState(false);
-
-    const content = (
-      <CustomOverlayMap
-        position={{ lat: meetingLat, lng: meetingLng }}
-        zIndex={1000}
-        yAnchor={1.1}
-      >
-        <div className="info">
-          <div className="title">
-            <div
-              className="close"
-              onClick={() => setIsOpen(false)}
-              title="닫기"
-            ></div>
-          </div>
-          <Box sx={{ backgroundColor: "red", zIndex: "tooltip" }}>
-            <Stack direction="row" spacing={2}>
-              <Box>{meetingName}</Box>
-              <Stack>
-                <Box>sldf</Box>
-                <Box>sdf</Box>
-                <Button id={meetingNo} onClick={onClickMeeting}>
-                  상세조회
-                </Button>
-              </Stack>
-            </Stack>
-          </Box>
-        </div>
-        ;
-      </CustomOverlayMap>
-    );
-
-    return (
-      <MapMarker
-        position={{ lat: meetingLat, lng: meetingLng }}
-        onClick={() => setIsOpen(true)}
-      >
-        {isOpen && content}
-      </MapMarker>
-    );
-  };
+  }, [myData, state.swLat, state.swLng, state.neLat, state.neLng]);
 
   if (!latitude || !longtitude) {
     return (
@@ -133,6 +107,8 @@ const ListMeeting = () => {
       </Stack>
     );
   }
+
+  
   return (
     <>
       <Map
@@ -142,30 +118,34 @@ const ListMeeting = () => {
           height: "450px",
         }}
         level={3}
+        onBoundsChanged={map => {
+          setMapInstance(map);
+          setState({
+          swLat: ((map.getBounds().getSouthWest()).getLat()).toString(),
+          swLng: ((map.getBounds().getSouthWest()).getLng()).toString(),
+          neLat: ((map.getBounds().getNorthEast()).getLat()).toString(),
+          neLng: ((map.getBounds().getNorthEast()).getLng()).toString(),
+        });
+      }}
       >
         {meetingList?.map((meeting, index) => (
           <EventMarkerContainer
             key={`EventMarkerContainer-${meeting.meetingNo}`}
             meetingLat={meeting.meetingLat}
             meetingLng={meeting.meetingLng}
-            meetingName={meeting.meetingName}
-            meetingNo={meeting.meetingNo}
+            meeting={meeting}
           />
         ))}
       </Map>
 
-      <Box sx={{ marginTop: "100px" }}>
-        <Box>
-          {meetingList?.map((meeting, i) => (
-            <Box key={i}>
-              <h5>{meeting.meetingName}</h5>
-              <Button id={meeting.meetingNo} onClick={onClickMeeting}>
-                미팅정보
-              </Button>
-            </Box>
-          ))}
-        </Box>
-      </Box>
+      {!!state && (
+          <>
+            <p>
+              {'영역좌표는 남서쪽 위도, 경도는  ' + state.swLat +','+state.swLng+ ' 이고'}<br/>
+              {'북동쪽 위도, 경도는  ' + state.neLat+','+state.neLng + '입니다'}
+            </p>
+          </>
+        )}
     </>
   );
 };
