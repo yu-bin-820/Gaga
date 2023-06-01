@@ -16,6 +16,7 @@ import useSocket from '@hooks/common/useSocket';
 import { useEffect } from 'react';
 import { PropTypes } from 'prop-types';
 import { Badge } from '@mui/material';
+import useCommonStore from '@stores/common/useCommonStore';
 export default function MainBottomNav({ pageName }) {
   const navigate = useNavigate();
 
@@ -82,6 +83,7 @@ export default function MainBottomNav({ pageName }) {
   //-------------------------onClickNavigating ------------------------------------------
 
   const [totalUnreads, setTotalUnreads] = React.useState(0);
+  const { groupType } = useCommonStore();
 
   useEffect(() => {
     setTotalUnreads(
@@ -89,13 +91,17 @@ export default function MainBottomNav({ pageName }) {
     );
   }, [unreadsData]);
 
-  const onClickHome = React.useCallback((MouseEvent) => {
+  const onClickHome = React.useCallback(() => {
     navigate(`/`);
-  }, []);
+  }, [navigate]);
 
-  const onClickAddGrop = React.useCallback((MouseEvent) => {
-    navigate(`/meeting/addmeeting`);
-  }, []);
+  const onClickAddGroup = React.useCallback(() => {
+    if (groupType == 'meeting') {
+      navigate(`/meeting/addmeeting`);
+    } else {
+      navigate('/club/addclub');
+    }
+  }, [navigate, groupType]);
 
   const onClickProfile = React.useCallback(() => {
     navigate(`/community/profile/mine`);
@@ -124,7 +130,7 @@ export default function MainBottomNav({ pageName }) {
         label="Create"
         value="create"
         icon={<AddCircleOutlineIcon />}
-        onClick={onClickAddGrop}
+        onClick={onClickAddGroup}
       />
       <BottomNavigationAction
         label="Chat"
