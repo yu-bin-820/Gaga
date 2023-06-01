@@ -7,13 +7,14 @@ const AddClubName = () => {
   const { clubName, onChangeField } = useClubFormStore();
 
   return (
-    <Box sx={{ marginTop: "64px" }}>
+    <Box>
       <h5>클럽의 제목을 정해주세요!</h5>
       <TextField
-        fullWidth
+        fulWidth
         label="clubName"
         name="clubName"
         onChange={(e) => onChangeField("clubName", e)}
+        placeholder="Please enter text"
         required
         value={clubName}
       />

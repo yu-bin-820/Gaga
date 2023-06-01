@@ -38,9 +38,10 @@ import AddClub from "@pages/club/AddClub.jsx";
 import GetClub from "@pages/club/GetClub.jsx";
 import ListReport from "@pages/communication/ListReport.jsx";
 import UpdateReport from "@pages/communication/UpdateReport.jsx";
-import ListGroupMember from "@components/user/ListGroupMember.jsx";
 import { element } from "prop-types";
 import SearchMeeting from "@pages/meeting/SearchMeeting";
+import ListClubMember from "@pages/club/ListClubMember.jsx";
+import AddClubMember from "@pages/club/AddClubMember.jsx";
 
 const router = createBrowserRouter([
   {
@@ -71,10 +72,6 @@ const router = createBrowserRouter([
           {
             path: "updateuser",
             element: <UpdateUser />,
-          },
-          {
-            path: "memberlist",
-            element: <ListGroupMember />,
           },
         ],
       },
@@ -201,6 +198,19 @@ const router = createBrowserRouter([
           {
             path: "no/:clubno",
             element: <GetClub />,
+          },
+          {
+            path: "member",
+            children: [
+              {
+                path: "listmember/clubno/:clubno",
+                element: <ListClubMember />,
+              },
+              {
+                path: "addmember/:clubno",
+                element: <AddClubMember />,
+              },
+            ],
           },
         ],
       },

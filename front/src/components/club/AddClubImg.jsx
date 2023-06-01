@@ -9,10 +9,11 @@ import { Box, Stack } from "@mui/system";
 import React, { useState } from "react";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import useMeetingFormStore from "@hooks/meeting/useMeetingFormStore";
+import useClubFormStore from "@hooks/club/useClubFormStore";
 
-const AddMeetingImg = () => {
-  const { file, image, setField, meetingIntro, onChangeField } =
-    useMeetingFormStore();
+const AddClubImg = () => {
+  const { file, image, setField, clubIntro, onChangeField } =
+    useClubFormStore();
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -72,16 +73,16 @@ const AddMeetingImg = () => {
       <br />
       <TextField
         id="outlined-multiline-static"
-        label="meetingIntro"
-        name="meetingIntro"
-        onChange={(e) => onChangeField("meetingIntro", e)}
+        label="clubIntro"
+        name="clubIntro"
+        onChange={(e) => onChangeField("clubIntro", e)}
         fullWidth
         multiline
-        value={meetingIntro}
+        value={clubIntro}
         rows={4}
       />
     </div>
   );
 };
 
-export default AddMeetingImg;
+export default AddClubImg;
