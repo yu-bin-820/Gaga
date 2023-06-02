@@ -1,283 +1,287 @@
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
-import ReactDOM from "react-dom/client";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { ThemeProvider } from "@emotion/react";
-import CssBaseline from "@mui/material/CssBaseline";
-import theme from "./theme.js";
-import ErrorPage from "@pages/common/ErrorPage.jsx";
-import Main from "@pages/common/Main.jsx";
-import GetMeeting from "@pages/meeting/GetMeeting.jsx";
-import UpdateMeeting from "@pages/meeting/UpdateMeeting.jsx";
-import AddMeeting from "@pages/meeting/AddMeeting.jsx";
-import AddMeetingMember from "@pages/meeting/AddMeetingMember.jsx";
-import Login from "@pages/user/Login.jsx";
-import GetMyProfile from "@pages/communication/GetMyProfile.jsx";
-import ListMeetingMember from "@pages/meeting/ListMeetingMember.jsx";
-import UpdateMeetingSuccess from "@pages/meeting/UpdateMeetingSuccess.jsx";
-import AddMeetingReveiw from "@pages/meeting/AddMeetingReveiw.jsx";
-import UpdateMeetingReview from "@pages/meeting/UpdateMeetingReview.jsx";
-import ListChatRoom from "@pages/communication/ListChatRoom.jsx";
-import GetDirectChat from "@pages/communication/GetDirectChat.jsx";
-import GetGroupChat from "@pages/communication/GetGroupChat.jsx";
-import UnauthenticatedMain from "@pages/common/UnauthenticatedMain";
-import RootLayout from "@layouts/common/RootLayout.jsx";
-import AddUser from "@pages/user/AddUser.jsx";
-import UpdateUser from "@pages/user/UpdateUser.jsx";
+import ReactDOM from 'react-dom/client';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from '@emotion/react';
+import CssBaseline from '@mui/material/CssBaseline';
+import theme from './theme.js';
+import ErrorPage from '@pages/common/ErrorPage.jsx';
+import Main from '@pages/common/Main.jsx';
+import GetMeeting from '@pages/meeting/GetMeeting.jsx';
+import UpdateMeeting from '@pages/meeting/UpdateMeeting.jsx';
+import AddMeeting from '@pages/meeting/AddMeeting.jsx';
+import AddMeetingMember from '@pages/meeting/AddMeetingMember.jsx';
+import Login from '@pages/user/Login.jsx';
+import GetMyProfile from '@pages/communication/GetMyProfile.jsx';
+import ListMeetingMember from '@pages/meeting/ListMeetingMember.jsx';
+import UpdateMeetingSuccess from '@pages/meeting/UpdateMeetingSuccess.jsx';
+import AddMeetingReveiw from '@pages/meeting/AddMeetingReveiw.jsx';
+import UpdateMeetingReview from '@pages/meeting/UpdateMeetingReview.jsx';
+import ListChatRoom from '@pages/communication/ListChatRoom.jsx';
+import GetDirectChat from '@pages/communication/GetDirectChat.jsx';
+import GetGroupChat from '@pages/communication/GetGroupChat.jsx';
+import UnauthenticatedMain from '@pages/common/UnauthenticatedMain';
+import RootLayout from '@layouts/common/RootLayout.jsx';
+import AddUser from '@pages/user/AddUser.jsx';
+import UpdateUser from '@pages/user/UpdateUser.jsx';
 
-import Test from "@pages/communication/Test.jsx";
-import GetReport from "@pages/communication/GetReport.jsx";
-import AddReport from "@pages/communication/AddReport.jsx";
-import GetProfile from "@pages/communication/GetProfile.jsx";
-import CommonTop from "@layouts/common/CommonTop.jsx";
-import ListReportCategory from "@pages/communication/ListReportCategory.jsx";
-import AddClub from "@pages/club/AddClub.jsx";
-import GetClub from "@pages/club/GetClub.jsx";
-import ListReport from "@pages/communication/ListReport.jsx";
+import Test from '@pages/communication/Test.jsx';
+import GetReport from '@pages/communication/GetReport.jsx';
+import AddReport from '@pages/communication/AddReport.jsx';
+import GetProfile from '@pages/communication/GetProfile.jsx';
+import CommonTop from '@layouts/common/CommonTop.jsx';
+import ListReportCategory from '@pages/communication/ListReportCategory.jsx';
+import AddClub from '@pages/club/AddClub.jsx';
+import GetClub from '@pages/club/GetClub.jsx';
+import ListReport from '@pages/communication/ListReport.jsx';
 
-import AddNaverUser from "@pages/user/AddNaverUser.jsx";
-import AddKakaoUser from "@pages/user/AddKakaoUser.jsx";
-import FindId from "@pages/user/FindId.jsx";
-import FindPassword from "@pages/user/FindPassword.jsx";
+import AddNaverUser from '@pages/user/AddNaverUser.jsx';
+import AddKakaoUser from '@pages/user/AddKakaoUser.jsx';
+import FindId from '@pages/user/FindId.jsx';
+import FindPassword from '@pages/user/FindPassword.jsx';
 
-import UpdateReport from "@pages/communication/UpdateReport.jsx";
+import UpdateReport from '@pages/communication/UpdateReport.jsx';
 
-import { element } from "prop-types";
-import SearchMeeting from "@pages/meeting/SearchMeeting";
-import ListClubMember from "@pages/club/ListClubMember.jsx";
-import AddClubMember from "@pages/club/AddClubMember.jsx";
+import { element } from 'prop-types';
+import SearchMeeting from '@pages/meeting/SearchMeeting';
+import ListClubMember from '@pages/club/ListClubMember.jsx';
+import AddClubMember from '@pages/club/AddClubMember.jsx';
 
-import AddNoticePost from "@pages/admin/NoticePost/AddNoticePost.jsx";
-import GetNoticePost from "@pages/admin/NoticePost/GetNoticePost.jsx";
-import ListNoticePost from "@pages/admin/NoticePost/ListNoticePost.jsx";
-import ListQnaPost from "@pages/admin/NoticePost/ListQnaPost.jsx";
-import ListEventPost from "@pages/admin/NoticePost/ListEventPost.jsx";
-import UpdateNoticePost from "@pages/admin/NoticePost/UpdateNoticePost.jsx";
+import AddNoticePost from '@pages/admin/NoticePost/AddNoticePost.jsx';
+import GetNoticePost from '@pages/admin/NoticePost/GetNoticePost.jsx';
+import ListNoticePost from '@pages/admin/NoticePost/ListNoticePost.jsx';
+import ListQnaPost from '@pages/admin/NoticePost/ListQnaPost.jsx';
+import ListEventPost from '@pages/admin/NoticePost/ListEventPost.jsx';
+import UpdateNoticePost from '@pages/admin/NoticePost/UpdateNoticePost.jsx';
 
-import GetBlackList from "@pages/admin/BlackList/GetBlackList.jsx";
-import SearchUser from "@pages/admin/BlackList/ListUser.jsx";
-import GetReportAdmin from "@pages/admin/Report/GetReportAdmin.jsx";
-import ListReportAdmin from "@pages/admin/Report/ListReportAdmin.jsx";
-import ListBlackList from "@pages/admin/BlackList/ListBlackList.jsx";
-import TermsOfGaga from "@pages/user/TermsOfGaga.jsx";
-import UpdateClub from "@pages/club/UpdateClub.jsx";
-import UpdateAccount from "@pages/payment/UpdateAccount.jsx";
-import ListPayment from "@pages/payment/ListPayment.jsx";
-import DeleteUser from "@pages/user/DeleteUser.jsx";
-import ListSearchMeeting from "@pages/meeting/ListSearchMeeting.jsx";
-import ListUser from "@pages/admin/BlackList/ListUser.jsx";
-import GetUser from "@pages/admin/BlackList/GetUser.jsx";
-import ListSearchClub from "@pages/club/ListSearchClub.jsx";
-import SearchClub from "@pages/club/SearchClub.jsx";
+import GetBlackList from '@pages/admin/BlackList/GetBlackList.jsx';
+import SearchUser from '@pages/admin/BlackList/ListUser.jsx';
+import GetReportAdmin from '@pages/admin/Report/GetReportAdmin.jsx';
+import ListReportAdmin from '@pages/admin/Report/ListReportAdmin.jsx';
+import ListBlackList from '@pages/admin/BlackList/ListBlackList.jsx';
+import TermsOfGaga from '@pages/user/TermsOfGaga.jsx';
+import UpdateClub from '@pages/club/UpdateClub.jsx';
+import UpdateAccount from '@pages/payment/UpdateAccount.jsx';
+import ListPayment from '@pages/payment/ListPayment.jsx';
+import DeleteUser from '@pages/user/DeleteUser.jsx';
+import ListSearchMeeting from '@pages/meeting/ListSearchMeeting.jsx';
+import ListUser from '@pages/admin/BlackList/ListUser.jsx';
+import GetUser from '@pages/admin/BlackList/GetUser.jsx';
+import ListSearchClub from '@pages/club/ListSearchClub.jsx';
+import SearchClub from '@pages/club/SearchClub.jsx';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/",
+        path: '/',
         element: <Main />,
       },
       {
-        path: "/unauthenticatedmain",
+        path: '/unauthenticatedmain',
         element: <UnauthenticatedMain />,
       },
       //------------------------------------------------User--------------------------------------------------
       {
-        path: "user",
+        path: 'user',
         children: [
           {
-            path: "login",
+            path: 'login',
             element: <Login />,
           },
           {
-            path: "adduser",
+            path: 'adduser',
             element: <AddUser />,
           },
           {
-            path: "addnaveruser",
+            path: 'addnaveruser',
             element: <AddNaverUser />,
           },
           {
-            path: "addkakaouser",
+            path: 'addkakaouser',
             element: <AddKakaoUser />,
           },
           {
-            path: "findid",
+            path: 'findid',
             element: <FindId />,
           },
           {
-            path: "findpassword",
+            path: 'findpassword',
             element: <FindPassword />,
           },
           {
-            path: "updateuser",
+            path: 'updateuser',
             element: <UpdateUser />,
           },
           {
-            path: "termsofgaga",
+            path: 'termsofgaga',
             element: <TermsOfGaga />,
           },
           {
-            path: "deleteuser",
+            path: 'deleteuser',
             element: <DeleteUser />,
           },
         ],
       },
       //------------------------------------------------Meeting------------------------------------------------
       {
-        path: "meeting",
+        path: 'meeting',
         children: [
           {
-            path: "addmeeting",
+            path: 'addmeeting',
             element: <AddMeeting />,
           },
           {
-            path: "meetingno/:meetingno",
+            path: 'meetingno/:meetingno',
             element: <GetMeeting />,
           },
           {
-            path: "updatemeeting/:meetingno",
+            path: 'updatemeeting/:meetingno',
             element: <UpdateMeeting />,
           },
           {
-            path: "updatemeetingsuccess/meetingno/:meetingno",
+            path: 'updatemeetingsuccess/meetingno/:meetingno',
             element: <UpdateMeetingSuccess />,
           },
           {
-            path: "member",
+            path: 'member',
             children: [
               {
-                path: "addmember/:meetingno",
+                path: 'addmember/:meetingno',
                 element: <AddMeetingMember />,
               },
               {
-                path: "listmember/meetingno/:meetingno",
+                path: 'listmember/meetingno/:meetingno',
                 element: <ListMeetingMember />,
               },
             ],
           },
           {
-            path: "review",
+            path: 'review',
             children: [
               {
-                path: "addreview/meetingno/:meetingno",
+                path: 'addreview/meetingno/:meetingno',
                 element: <AddMeetingReveiw />,
               },
               {
-                path: "updatereview/reviewno/:reviewno",
+                path: 'updatereview/reviewno/:reviewno',
                 element: <UpdateMeetingReview />,
               },
             ],
           },
           {
-            path: "searchmeeting",
+            path: 'searchmeeting',
             element: <SearchMeeting />,
           },
           {
-            path: "meetinglist",
+            path: 'meetinglist',
             element: <ListSearchMeeting />,
           },
         ],
       },
       //------------------------------------------------Community------------------------------------------------
       {
-        path: "community",
+        path: 'community',
         children: [
           {
-            path: "profile",
-            children: [
-              { path: "mine", element: <GetMyProfile /> },
-              { path: "userno/:userNo", element: <GetProfile /> },
-            ],
-          },
-          {
-            path: "test",
+            path: 'test',
             element: <Test />,
           },
           {
-            path: "report",
+            path: 'profile',
+            children: [
+              { path: 'mine', element: <GetMyProfile /> },
+              { path: 'userno/:userNo', element: <GetProfile /> },
+            ],
+          },
+          {
+            path: 'test',
+            element: <Test />,
+          },
+          {
+            path: 'report',
             children: [
               {
-                path: "",
+                path: '',
                 element: <GetReport />,
               },
-              { path: "list", element: <ListReport /> },
+              { path: 'list', element: <ListReport /> },
               {
-                path: "add",
-                element: <CommonTop pageName="회원 신고하기" />,
+                path: 'add',
+                element: <CommonTop pageName='회원 신고하기' />,
                 children: [
                   {
-                    path: "category/reportedno/:reportedNo",
+                    path: 'category/reportedno/:reportedNo',
                     element: <ListReportCategory />,
                   },
                   {
-                    path: "categoryno/:categoryNo/reportedno/:reportedNo",
+                    path: 'categoryno/:categoryNo/reportedno/:reportedNo',
                     element: <AddReport />,
                   },
                 ],
               },
-              { path: "update", element: <UpdateReport /> },
+              { path: 'update', element: <UpdateReport /> },
             ],
           },
         ],
       },
       //------------------------------------------------Chat------------------------------------------------
       {
-        path: "chat",
+        path: 'chat',
         children: [
           {
-            path: "list",
+            path: 'list',
             element: <ListChatRoom />,
           },
           {
-            path: "group/message/list",
+            path: 'group/message/list',
             element: <GetGroupChat />,
           },
           {
-            path: "direct/message/list",
+            path: 'direct/message/list',
             element: <GetDirectChat />,
           },
         ],
       },
       //------------------------------------------------Club------------------------------------------------
       {
-        path: "club",
+        path: 'club',
         children: [
           {
-            path: "addclub",
+            path: 'addclub',
             element: <AddClub />,
           },
           {
-            path: "no/:clubNo",
+            path: 'no/:clubNo',
             element: <GetClub />,
           },
           {
-            path: "updateclub/:clubNo",
+            path: 'updateclub/:clubNo',
             element: <UpdateClub />,
           },
           {
-            path: "searchclub",
+            path: 'searchclub',
             element: <SearchClub />,
           },
           {
-            path: "clublist",
+            path: 'clublist',
             element: <ListSearchClub />,
           },
           {
-            path: "member",
+            path: 'member',
             children: [
               {
-                path: "listmember/clubno/:clubNo",
+                path: 'listmember/clubno/:clubNo',
                 element: <ListClubMember />,
               },
               {
-                path: "addmember/:clubNo",
+                path: 'addmember/:clubNo',
                 element: <AddClubMember />,
               },
             ],
@@ -286,79 +290,79 @@ const router = createBrowserRouter([
       },
       //------------------------------------------------Notice------------------------------------------------
       {
-        path: "notice",
+        path: 'notice',
         children: [
           {
-            path: "addNoticePost",
+            path: 'addNoticePost',
             element: <AddNoticePost />,
           },
           {
-            path: "getNoticePost/noticePostNo/:noticePostNo",
+            path: 'getNoticePost/noticePostNo/:noticePostNo',
             element: <GetNoticePost />,
           },
           {
-            path: "updateNoticePost/noticePostNo/:noticePostNo",
+            path: 'updateNoticePost/noticePostNo/:noticePostNo',
             element: <UpdateNoticePost />,
           },
           {
-            path: "listNoticePost",
+            path: 'listNoticePost',
             element: <ListNoticePost />,
           },
           {
-            path: "listEventPost",
+            path: 'listEventPost',
             element: <ListEventPost />,
           },
           {
-            path: "listQnaPost",
+            path: 'listQnaPost',
             element: <ListQnaPost />,
           },
         ],
       },
       //------------------------------------------------BlackList------------------------------------------------
       {
-        path: "blackList",
+        path: 'blackList',
         children: [
           {
-            path: "getBlackList/blackListNo/:userNo",
+            path: 'getBlackList/blackListNo/:userNo',
             element: <GetBlackList />,
           },
           {
-            path: "listBlackList",
+            path: 'listBlackList',
             element: <ListBlackList />,
           },
           {
-            path: "listUser",
+            path: 'listUser',
             element: <ListUser />,
           },
           {
-            path: "getUser/userNo/:userNo",
+            path: 'getUser/userNo/:userNo',
             element: <GetUser />,
           },
           {
-            path: "getReportAdmin/reportNo/:reportNo",
+            path: 'getReportAdmin/reportNo/:reportNo',
             element: <GetReportAdmin />,
           },
           {
-            path: "listReportAdmin",
+            path: 'listReportAdmin',
             element: <ListReportAdmin />,
           },
         ],
       },
       //------------------------------------------------Payment------------------------------------------------
       {
-        path: "payment",
+        path: 'payment',
         children: [
           {
-            path: "adjustment",
+            path: 'adjustment',
             children: [
               {
-                path: "account/:userNo",
+                path: 'account/:userNo',
                 element: <UpdateAccount />,
               },
             ],
           },
           {
-            path: "listpayment/:userNo",
+            path: 'listpayment/:userNo',
             element: <ListPayment />,
           },
         ],
@@ -367,7 +371,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <ThemeProvider theme={theme}>
     <CssBaseline>
       <RouterProvider router={router} />

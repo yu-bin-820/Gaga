@@ -180,7 +180,11 @@ const GetMyProfile = () => {
               alignItems: 'center',
             }}
           >
-            <Typography>{myData?.userIntro}</Typography>
+            <Typography>
+              {myData?.userIntro.split('\n').map((line, i) => (
+                <div key={i}>{line}</div>
+              ))}
+            </Typography>
             <IconButton
               sx={{ marginLeft: 'auto' }}
               onClick={onClickUpdateIntro}
