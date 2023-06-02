@@ -10,8 +10,9 @@ import { Box, Stack } from '@mui/system';
 import { MenuItem } from '@mui/material';
 
 import axios from 'axios';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import useLoginData from '@hooks/admin/useLoginData';
 
 
 const useInput = (initialValue) => {
@@ -35,11 +36,20 @@ const AddNoticePost = () => {
   const [noticePostTitle, onChangeNoticePostTitle, clearNoticePostTitle] = useInput('');
   const [noticePostText, onChangeNoticePostText, clearNoticePostText] = useInput('');
   const [noticePostCategory, setNoticePostCategoryNo] = useState(0); // 카테고리 선택 상태값
-  const [userNo, setUserNo] = useState(''); // 사용자 번호 상태값
 
-  const handleImageError = useCallback(() => {
-    // 이미지 로딩 오류 처리를 위한 함수
-  }, []);
+  const { data, mutate } = useLoginData();
+       
+  useEffect(() => {
+    if (data) {
+      const { userNo, role } = data;
+      mutate({ userNo, role });
+  
+      if (role !== 1) {
+        alert('권한이 없습니다.');
+        window.history.back();
+      }
+    }
+  }, [data, mutate]);
 
   const submitNoticePost = useCallback(() => {
     const formData = new FormData();
@@ -48,21 +58,22 @@ const AddNoticePost = () => {
     formData.append('noticePostCategory', noticePostCategory);
     formData.append('noticePostTitle', noticePostTitle);
     formData.append('noticePostText', noticePostText);
-    formData.append('userNo', userNo);
-    console.log(userNo, "this is formData mofucker")
+    formData.append('userNo', data?.userNo);
     axios.post(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/addNoticePost`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
       .then((response) => {
-        console.log(response.data);
-        navigate('/');
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [selectedFile, noticePostCategory, noticePostTitle, noticePostText, userNo, navigate]);
+        console.log(response.data, "캐리");
+        const noticePostNo = response.data; 
+      //navigate(`/notice/getNoticePost/noticePostNo/${noticePostNo}`);
+      navigate(`/notice/listNoticePost`);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}, [selectedFile, noticePostCategory, noticePostTitle, noticePostText, navigate]);
 
   return (
     <Box sx={{ marginTop: '64px', marginLeft: '10px', marginRight: '10px' }}>
@@ -88,12 +99,7 @@ const AddNoticePost = () => {
           <MenuItem value={0}>공지사항</MenuItem>
           <MenuItem value={1}>이벤트</MenuItem>
           <MenuItem value={2}>QnA</MenuItem>
-        </TextField>
-        <TextField
-          label="사용자 번호"
-          value={userNo}
-          onChange={(e) => setUserNo(e.target.value)}
-        />
+        </TextField>        
         <Box>
           <ImageList
             sx={{ width: 320, height: 140 }}
@@ -168,6 +174,6 @@ const AddNoticePost = () => {
       </Stack>
     </Box>
   );
-};
+}; 
 
 export default AddNoticePost;

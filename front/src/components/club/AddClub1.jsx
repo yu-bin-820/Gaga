@@ -60,12 +60,14 @@ const AddClub1 = () => {
 
         reset();
 
+        navigate("/");
+
         console.log(response.data);
       } catch (error) {
         console.error(error);
       }
     },
-    [useClubFormStore]
+    [filterGender, filterMinAge, filterMaxAge, clubMaxMemberNo]
   );
 
   return (
@@ -78,6 +80,7 @@ const AddClub1 = () => {
         required
         value={filterGender}
       />
+      <br />
       <TextField
         fulWidth
         label="filterMinAge"
@@ -86,6 +89,7 @@ const AddClub1 = () => {
         required
         value={filterMinAge}
       />
+      <br />
       <TextField
         fulWidth
         label="filterMaxAge"
@@ -94,6 +98,7 @@ const AddClub1 = () => {
         required
         value={filterMaxAge}
       />
+      <br />
       <TextField
         fulWidth
         label="clubMaxMemberNo"
@@ -102,44 +107,18 @@ const AddClub1 = () => {
         required
         value={clubMaxMemberNo}
       />
+      <br />
+      <br />
+      <br />
 
-      <TextField
-        fulWidth
-        label="mainCategoryNo"
-        name="mainCategoryNo"
-        onChange={(e) => onChangeField("mainCategoryNo", e)}
-        required
-        value={mainCategoryNo}
-      />
-
-      <TextField
-        fulWidth
-        label="clubName"
-        name="clubName"
-        onChange={(e) => onChangeField("clubName", e)}
-        required
-        value={clubName}
-      />
-
-      <TextField
-        fulWidth
-        label="clubIntro"
-        name="clubIntro"
-        onChange={(e) => onChangeField("clubIntro", e)}
-        required
-        value={clubIntro}
-      />
-
-      <TextField
-        fulWidth
-        label="clubRegion"
-        name="clubRegion"
-        onChange={(e) => onChangeField("clubRegion", e)}
-        required
-        value={clubRegion}
-      />
-
-      <Button onClick={handleSubmit}>생성하기</Button>
+      <Button
+        onClick={handleSubmit}
+        variant="contained"
+        color="primary"
+        size="large"
+      >
+        생성하기
+      </Button>
     </Box>
   );
 };

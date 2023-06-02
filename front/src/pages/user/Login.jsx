@@ -1,28 +1,27 @@
-import useInput from '@hooks/common/useInput';
-import { Button, TextField } from '@mui/material';
-import { Box } from '@mui/system';
-import fetcher from '@utils/fetcher';
-import useSWR from 'swr';
-import axios from 'axios';
-import React, { useCallback, useState } from 'react';
-import { Navigate } from 'react-router';
-import MainTop from '@layouts/common/MainTop';
-import UpdaeteUser  from '@pages/user/UpdateUser';
+import useInput from "@hooks/common/useInput";
+import { Button, TextField } from "@mui/material";
+import { Box } from "@mui/system";
+import fetcher from "@utils/fetcher";
+import useSWR from "swr";
+import axios from "axios";
+import React, { useCallback, useState } from "react";
+import { Navigate } from "react-router";
+import MainTop from "@layouts/common/MainTop";
+import UpdaeteUser from "@pages/user/UpdateUser";
 
+import Avatar from "@mui/material/Avatar";
 
-import Avatar from '@mui/material/Avatar';
+import CssBaseline from "@mui/material/CssBaseline";
 
-import CssBaseline from '@mui/material/CssBaseline';
+import Paper from "@mui/material/Paper";
 
-import Paper from '@mui/material/Paper';
+import Grid from "@mui/material/Grid";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
 
-import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
+import { Link } from "react-router-dom";
 
-import { Link } from 'react-router-dom';
-
-import { Backdrop } from '@mui/material';
+import { Backdrop } from "@mui/material";
 
 function Copyright(props) {
   return (
@@ -32,20 +31,20 @@ function Copyright(props) {
       align="center"
       {...props}
     >
-      {'Copyright © '}
-      <Typography component={Link} to="/" color={'Green'}>
+      {"Copyright © "}
+      <Typography component={Link} to="/" color={"Green"}>
         GAGA
-      </Typography>{' '}
+      </Typography>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
 
 const Login = () => {
   const [user, onChangeUser, setUser] = useInput({
-    userId: '',
-    password: '',
+    userId: "",
+    password: "",
   });
 
   const { data: myData, mutate: mutateMe } = useSWR(
@@ -72,10 +71,8 @@ const Login = () => {
           )
           .then((response) => {
             console.log(response);
-            if (response.data === '') {
-              alert('아이디 또는 비밀번호가 일치하지 않습니다.');
-            } else if(response.data != 0 ){
-              alert('서비스 이용이 제한된 회원입니다.');
+            if (response.data === "") {
+              alert("아이디 또는 비밀번호가 일치하지 않습니다.");
             } else {
               mutateMe();
             }
@@ -89,12 +86,12 @@ const Login = () => {
 
   const handleNaverLogin = () => {
     window.location.href =
-      'https://nid.naver.com/oauth2.0/authorize?client_id=FzMGbETEgw2xNeSUlIIF&response_type=code&redirect_uri=http://192.168.0.159:8080/rest/user/naverLogin&state=test';
+      "https://nid.naver.com/oauth2.0/authorize?client_id=FzMGbETEgw2xNeSUlIIF&response_type=code&redirect_uri=http://192.168.0.159:8080/rest/user/naverLogin&state=test";
   };
 
   const handleKakaoLogin = () => {
     window.location.href =
-      'https://kauth.kakao.com/oauth/authorize?client_id=5d88ee6131a76417bcf8e0d0dc852d91&scope=profile_nickname,profile_image,account_email&redirect_uri=http://192.168.0.159:8080/rest/user/kakaoLogin&response_type=code';
+      "https://kauth.kakao.com/oauth/authorize?client_id=5d88ee6131a76417bcf8e0d0dc852d91&scope=profile_nickname,profile_image,account_email&redirect_uri=http://192.168.0.159:8080/rest/user/kakaoLogin&response_type=code";
   };
 
   if (myData === undefined) {
@@ -107,7 +104,7 @@ const Login = () => {
   return (
     <>
       <MainTop />
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
         <Grid
           item
@@ -116,14 +113,14 @@ const Login = () => {
           md={7}
           sx={{
             backgroundImage:
-              'url(https://as1.ftcdn.net/v2/jpg/05/30/81/30/1000_F_530813029_XMXEvLZr5K4ntqqDgJzwxhbgO7W2ShiB.jpg)',
-            backgroundRepeat: 'no-repeat',
+              "url(https://as1.ftcdn.net/v2/jpg/05/30/81/30/1000_F_530813029_XMXEvLZr5K4ntqqDgJzwxhbgO7W2ShiB.jpg)",
+            backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
-              t.palette.mode === 'light'
+              t.palette.mode === "light"
                 ? t.palette.grey[50]
                 : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
         />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -131,15 +128,15 @@ const Login = () => {
             sx={{
               my: 8,
               mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5" color={'primary'}>
+            <Typography component="h1" variant="h5" color={"primary"}>
               Log In
             </Typography>
             <Box
@@ -185,38 +182,38 @@ const Login = () => {
                 Sign In
               </Button>
               <Button
-                component={Link} 
+                component={Link}
                 to="/user/adduser"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2, backgroundColor: '#fbc02d' }}  // backgroundColor를 '#fbc02d'로 설정하여 노란색으로 만듦
+                sx={{ mt: 3, mb: 2, backgroundColor: "#fbc02d" }} // backgroundColor를 '#fbc02d'로 설정하여 노란색으로 만듦
               >
                 회원가입
               </Button>
               <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Button
-                  component={Link}
-                  to="/user/findid"
-                  fullWidth
-                  variant="contained"
-                  color="secondary"
-                >
-                  아이디 찾기
-                </Button>
+                <Grid item xs={12} sm={6}>
+                  <Button
+                    component={Link}
+                    to="/user/findid"
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                  >
+                    아이디 찾기
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Button
+                    component={Link}
+                    to="/user/findpassword"
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                  >
+                    비밀번호 찾기
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <Button
-                  component={Link}
-                  to="/user/findpassword"
-                  fullWidth
-                  variant="contained"
-                  color="secondary"
-                >
-                  비밀번호 찾기
-                </Button>
-              </Grid>
-            </Grid>
               {/* <Button component={Link} to="/user/updateuser">
                 내정보보기/수정
               </Button><br/> */}
@@ -248,9 +245,9 @@ const Login = () => {
                   <Typography
                     component={Link}
                     to="/users/signup"
-                    color={'Green'}
+                    color={"Green"}
                   >
-                    {'회원이 아니신가요? '}
+                    {"회원이 아니신가요? "}
                   </Typography>
                 </Grid>
               </Grid>

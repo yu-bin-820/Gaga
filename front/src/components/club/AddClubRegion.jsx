@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Button,
   FormControl,
@@ -20,8 +20,20 @@ const AddClubRegionTest = () => {
   const [finalValue, setFinalValue] = useState("");
   const { clubRegion, onChangeField, setClubRegion } = useClubFormStore();
 
+  const hasValuesBeenSet = useRef(false);
+
   useEffect(() => {
-    if (finalValue !== clubRegion) {
+    if (
+      !hasValuesBeenSet.current ||
+      (typeof finalValue !== "undefined" && finalValue !== clubRegion)
+    ) {
+      setClubRegion(finalValue);
+      hasValuesBeenSet.current = true;
+    }
+  }, [finalValue, clubRegion, setClubRegion]);
+
+  useEffect(() => {
+    if (typeof finalValue !== "undefined" && finalValue !== clubRegion) {
       setClubRegion(finalValue);
     }
   }, [finalValue, clubRegion, setClubRegion]);

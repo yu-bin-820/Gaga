@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import CenteredTabsBlackList from '@components/admin/CenteredTabsBlackList';
+
 
 function ListBlackList() {
   const [blacklist, setBlacklist] = useState([]);
@@ -41,6 +43,7 @@ function ListBlackList() {
   return (
     <div style={{ textAlign: 'center' }}>
       <h2>블랙리스트 목록</h2>
+      <CenteredTabsBlackList />
       <input type="text" value={searchText} onChange={handleSearch} placeholder="검색" />
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         {filteredBlacklist.map((user) => (

@@ -60,9 +60,26 @@ const MyProfileTop = () => {
   const onClickUpdateUser = useCallback(() => {
     navigate("/user/updateuser");
   }, [navigate]);
+
   const onClickDeleteUser = useCallback(() => {
     navigate("/user/deleteuser");
   }, [navigate]);
+
+  const onClickNoticePostList = useCallback(() => {
+    navigate('/notice/listNoticePost');
+  }, [navigate]);
+  
+  const onClickListBlackList = useCallback(() => {
+    navigate('/blackList/listBlackList');
+  }, [navigate]);
+
+  const onClickUpdateAccount = useCallback(() => {
+    navigate(`/payment/adjustment/account/${myData?.userNo}`);
+  }, [myData, navigate]);
+
+  const onClickListPayment = useCallback(() => {
+    navigate(`/payment/listpayment/${myData?.userNo}`);
+  }, [myData, navigate]);
 
   if (!myData) {
     return <Navigate replace to="/" />;
@@ -159,6 +176,7 @@ const MyProfileTop = () => {
             <ListItem sx={{ marginTop: "10px", marginBottom: "10px" }}>
               <ListItemText
                 sx={{ display: "flex", justifyContent: "center" }}
+                onClick={onClickUpdateAccount}
                 primary="계좌 관리"
               />
             </ListItem>
@@ -167,12 +185,15 @@ const MyProfileTop = () => {
             <ListItem sx={{ marginTop: "10px", marginBottom: "10px" }}>
               <ListItemText
                 sx={{ display: "flex", justifyContent: "center" }}
+                onClick={onClickListPayment}
                 primary="결제 정보 조회"
               />
             </ListItem>
             <Divider />
 
-            <ListItem sx={{ marginTop: "10px", marginBottom: "10px" }}>
+            <ListItem 
+                sx={{ marginTop: '10px', marginBottom: '10px' }} 
+                onClick={onClickNoticePostList}>
               <ListItemText
                 sx={{ display: "flex", justifyContent: "center" }}
                 primary="공지사항"
@@ -180,9 +201,9 @@ const MyProfileTop = () => {
             </ListItem>
             <Divider />
 
-            <ListItem sx={{ marginTop: "10px", marginBottom: "10px" }}>
+            <ListItem sx={{ marginTop: "10px", marginBottom: "10px" }} onClick={onClickListBlackList}>
               <ListItemText
-                sx={{ display: "flex", justifyContent: "center" }}
+                sx={{ display: 'flex', justifyContent: 'center' }}
                 primary="블랙리스트"
               />
             </ListItem>

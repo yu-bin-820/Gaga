@@ -13,7 +13,7 @@ const StyledAvatarGroup = styled(AvatarGroup)({
 });
 
 const ClubThumbnail = ({ club }) => {
-  const { clubName, clubRegion, clubMaxMemberNo } = club;
+  const { clubName, clubRegion, clubMaxMemberNo, memberCount } = club;
   return (
     <Box
       sx={{
@@ -83,7 +83,7 @@ const ClubThumbnail = ({ club }) => {
                 fontSize: 14,
               }}
             >
-              17/{clubMaxMemberNo}
+              {memberCount}/{clubMaxMemberNo}
             </Box>
           </Stack>
         </Box>
