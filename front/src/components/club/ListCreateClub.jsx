@@ -8,7 +8,7 @@ import { Button } from "@mui/material";
 import ClubThumbnail from "./ClubThumbnail";
 
 const ListCreateClub = () => {
-  const { userno } = useParams();
+  const { userNo } = useParams();
   const [clubList, setClubList] = useState();
   const navigate = useNavigate();
 

@@ -17,12 +17,17 @@ const UpdateAccount = () => {
     fetcher
   );
 
+  const handleBankInfoChange = (bank, accountNumber) => {
+    setBankName(bank);
+    setAccountNo(accountNumber);
+  };
+
   const onButtonClick = () => {
     axios
       .post(`http://${import.meta.env.VITE_SPRING_HOST}/rest/user/updateUser`, {
         ...myData,
-        bankName: "우리은행",
-        accountNo: "123123123",
+        bankName,
+        accountNo,
       })
       .then((response) => {
         console.log(response.data);
@@ -38,7 +43,7 @@ const UpdateAccount = () => {
     <>
       <CommonTop />
       <Box sx={{ marginTop: "64px" }}>
-        <Account />
+        <Account onBankInfoChange={handleBankInfoChange} />
       </Box>
       <Button onClick={onButtonClick}>정보수정</Button>
     </>

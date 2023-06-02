@@ -4,7 +4,8 @@ import axios from "axios";
 import { useCallback, useState, useEffect } from "react";
 import useSWR from "swr";
 
-const Account = () => {
+const Account = (props) => {
+  const { onBankInfoChange } = props;
   const [bankCode, setBankCode] = useState("");
   const [bankNum, setBankNum] = useState("");
   const [bankHolder, setBankHolder] = useState("");
@@ -43,15 +44,25 @@ const Account = () => {
 
       const responseData = response.data;
       if (responseData && responseData.code === 0 && responseData.response) {
+        console.log(response.data);
         setBankHolder(responseData.response.bank_holder);
+
+        // BankName 및 AccountNo 상태 전달
+        onBankInfoChange(
+          bankList.find((bank) => bank.code === bankCode).name,
+          bankNum
+        );
       } else {
         console.log("bank_holder를 가져올 수 없습니다.", responseData);
         setBankHolder("");
+
+        // 에러 발생 시 상태 초기화
+        onBankInfoChange("", "");
       }
     } catch (err) {
       console.error(err);
     }
-  }, [bankCode, bankNum]);
+  }, [bankCode, bankNum, onBankInfoChange]);
 
   return (
     <>

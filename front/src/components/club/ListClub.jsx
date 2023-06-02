@@ -20,14 +20,19 @@ const ListClub = () => {
 
   useEffect(() => {
     const data = {
-      gender: 0,
-      maxAge: 50,
-      minAge: 20,
-      age: 25,
-      mainCategoryNo: 2,
+      gender: myData?.filterGender,
+      maxAge: myData?.filterMaxAge,
+      minAge: myData?.filterMinAge,
+      birthday: myData?.birthday,
+      tag: myData?.filterTag,
+      tag2: myData?.filterTag2,
+      tag3: myData?.filterTag3,
     };
     axios
-      .post(`http://${import.meta.env.VITE_SPRING_HOST}/rest/club/list`, data)
+      .post(
+        `http://${import.meta.env.VITE_SPRING_HOST}/rest/club/list/filter`,
+        data
+      )
       .then((response) => {
         console.log(data);
         console.log(response.data);
@@ -53,9 +58,7 @@ const ListClub = () => {
           <Box>
             {clubList?.map((club, i) => (
               <Box key={i}>
-                {i + 1}번 클럽정보
                 <ClubThumbnail club={club} />
-                <h5>{club.clubName}</h5>
                 <Button id={club.clubNo} onClick={onClickClub}></Button>
               </Box>
             ))}

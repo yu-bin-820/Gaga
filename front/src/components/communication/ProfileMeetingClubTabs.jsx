@@ -40,9 +40,6 @@ export default function ProfileMeetingClubTabs() {
             <ListMyMeeting />
           </TabPanel>
           <TabPanel value="club">
-            <h3>내가 만든 클럽 목록</h3>
-            <ListCreateClub />
-            <h3>내가 참여한 클럽 목록</h3>
             <ListMyClub />
           </TabPanel>
         </Box>

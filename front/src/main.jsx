@@ -70,8 +70,8 @@ import DeleteUser from "@pages/user/DeleteUser.jsx";
 import ListSearchMeeting from "@pages/meeting/ListSearchMeeting.jsx";
 import ListUser from "@pages/admin/BlackList/ListUser.jsx";
 import GetUser from "@pages/admin/BlackList/GetUser.jsx";
-
-
+import ListSearchClub from "@pages/club/ListSearchClub.jsx";
+import SearchClub from "@pages/club/SearchClub.jsx";
 
 const router = createBrowserRouter([
   {
@@ -262,6 +262,14 @@ const router = createBrowserRouter([
             element: <UpdateClub />,
           },
           {
+            path: "searchclub",
+            element: <SearchClub />,
+          },
+          {
+            path: "clublist",
+            element: <ListSearchClub />,
+          },
+          {
             path: "member",
             children: [
               {
@@ -299,7 +307,7 @@ const router = createBrowserRouter([
           {
             path: "listEventPost",
             element: <ListEventPost />,
-          }, 
+          },
           {
             path: "listQnaPost",
             element: <ListQnaPost />,
