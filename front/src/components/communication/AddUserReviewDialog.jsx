@@ -62,8 +62,6 @@ export default function AddUserReviewDialog({
   const handleClose = () => {
     setOpen(false);
   };
-  const [view, setView] = useState('list');
-  const [userScore, setUserScore] = useState(3);
 
   const { data: userReviewData, mutate: mutateUserReview } = useSWR(
     `http://${
@@ -71,11 +69,17 @@ export default function AddUserReviewDialog({
     }/rest/community/userreview/reviewerno/${reviewerNo}/reviewedno/${reviewedNo}`,
     fetcher
   );
+  const [view, setView] = useState(
+    userReviewData?.userScore?.toString() || 'list'
+  );
+  const [userScore, setUserScore] = useState(3);
 
   const handleChange = (event, nextView) => {
     setView(nextView);
+
     setUserScore(event.currentTarget.value);
     console.log('userScore', userScore);
+    console.log('nextView', nextView);
   };
 
   const submitUserReview = useCallback(() => {
