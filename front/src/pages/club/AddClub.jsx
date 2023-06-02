@@ -1,12 +1,12 @@
-import AddClub1 from "@components/club/AddClub1";
-import AddClubName from "@components/club/AddClubName";
-import AddClubRegion from "@components/club/AddClubRegion";
-import AddClubImg from "@components/club/AddClubImg";
-import ListCategory from "@components/meeting/ListCategory";
-import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
-import { Button, MobileStepper } from "@mui/material";
-import { Box, useTheme } from "@mui/system";
-import React, { useState } from "react";
+import AddClub1 from '@components/club/AddClub1';
+import AddClubName from '@components/club/AddClubName';
+import AddClubRegion from '@components/club/AddClubRegion';
+import AddClubImg from '@components/club/AddClubImg';
+import ListCategory from '@components/common/ListCategory';
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
+import { Button, MobileStepper } from '@mui/material';
+import { Box, useTheme } from '@mui/system';
+import React, { useState } from 'react';
 
 const AddClub = () => {
   const theme = useTheme();
@@ -34,12 +34,12 @@ const AddClub = () => {
       case 4:
         return <AddClub1 />;
       default:
-        throw new Error("Unknown step");
+        throw new Error('Unknown step');
     }
   }
 
   return (
-    <Box sx={{ marginTop: "64px" }}>
+    <Box sx={{ marginTop: '64px' }}>
       <MobileStepper
         variant="progress"
         steps={6}
@@ -49,7 +49,7 @@ const AddClub = () => {
         nextButton={
           <Button size="small" onClick={handleNext} disabled={activeStep === 5}>
             Next
-            {theme.direction === "rtl" ? (
+            {theme.direction === 'rtl' ? (
               <KeyboardArrowLeft />
             ) : (
               <KeyboardArrowRight />
@@ -58,7 +58,7 @@ const AddClub = () => {
         }
         backButton={
           <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-            {theme.direction === "rtl" ? (
+            {theme.direction === 'rtl' ? (
               <KeyboardArrowRight />
             ) : (
               <KeyboardArrowLeft />
@@ -69,7 +69,7 @@ const AddClub = () => {
       />
       <React.Fragment>
         {getStepContent(activeStep)}
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}></Box>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}></Box>
       </React.Fragment>
     </Box>
   );
