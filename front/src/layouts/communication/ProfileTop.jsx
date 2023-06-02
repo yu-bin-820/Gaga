@@ -78,7 +78,7 @@ const ProfileTop = ({ userNo }) => {
     setField('reportNo', reportData?.reportNo);
     setField('prevPath', location.pathname);
     navigate('/community/report');
-  }, [setField, reportData, navigate]);
+  }, [setField, reportData, navigate, location]);
 
   const onClickDeleteReportConfirm = useCallback(() => {
     axios
@@ -102,9 +102,15 @@ const ProfileTop = ({ userNo }) => {
     onCloseDuplicateReportDialog,
   ]);
 
+  const onClickDirectMessage = useCallback(() => {
+    setField('chatRoomEntryNo', userNo);
+    navigate('/chat/direct/message/list');
+  }, [userNo, setField, navigate]);
+
   if (!myData) {
     return <Navigate replace to={`/community/profile/userno/${userNo}`} />;
   }
+
   return (
     <>
       <Box>
@@ -128,7 +134,10 @@ const ProfileTop = ({ userNo }) => {
               </IconButton>
               {myData?.userNo != userNo && (
                 <>
-                  <IconButton sx={{ marginLeft: 'auto' }}>
+                  <IconButton
+                    sx={{ marginLeft: 'auto' }}
+                    onClick={onClickDirectMessage}
+                  >
                     <SendIcon />
                   </IconButton>
 

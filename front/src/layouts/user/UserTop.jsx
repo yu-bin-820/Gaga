@@ -7,8 +7,9 @@ import { Button, IconButton, Typography } from '@mui/material';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/system';
 import PropTypes from 'prop-types';
+import AddUser from '@pages/user/AddUser';
 
-const CommonTop = ({ pageName, prevPath }) => {
+const UserTop = ({ pageName, prevPath }) => {
   const navigate = useNavigate();
   return (
     <>
@@ -22,7 +23,7 @@ const CommonTop = ({ pageName, prevPath }) => {
           <Toolbar disableGutters>
             <IconButton
               onClick={() => {
-                navigate(prevPath || -1);
+                navigate(prevPath || '/user/adduser', { replace: true });
               }}
             >
               <ArrowBackIosNewIcon />
@@ -50,8 +51,8 @@ const CommonTop = ({ pageName, prevPath }) => {
     </>
   );
 };
-CommonTop.propTypes = {
+UserTop.propTypes = {
   pageName: PropTypes.string,
   prevPath: PropTypes.string,
 };
-export default CommonTop;
+export default UserTop;

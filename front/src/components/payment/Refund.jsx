@@ -14,9 +14,9 @@ const Refund = () => {
 
   const onClickRefund = useCallback(async () => {
     try {
-      const data = { merchant_uid: "mid_1685407688257" };
+      const data = { merchant_uid: "mid_1685663065951" };
       const response = await axios.post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/payment/refund/test`,
+        `http://${import.meta.env.VITE_SPRING_HOST}/rest/payment/refund`,
         data
       );
 

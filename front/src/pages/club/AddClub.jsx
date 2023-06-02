@@ -1,12 +1,14 @@
-import AddClub1 from "@components/club/AddClub1";
-import AddClubName from "@components/club/AddClubName";
-import AddClubRegion from "@components/club/AddClubRegion";
-import AddClubImg from "@components/club/AddClubImg";
-import ListCategory from "@components/common/ListCategory";
-import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
-import { Button, MobileStepper } from "@mui/material";
-import { Box, useTheme } from "@mui/system";
-import React, { useState } from "react";
+import AddClub1 from '@components/club/AddClub1';
+import AddClubName from '@components/club/AddClubName';
+import AddClubRegion from '@components/club/AddClubRegion';
+import AddClubImg from '@components/club/AddClubImg';
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
+import { Button, MobileStepper } from '@mui/material';
+import { Box, useTheme } from '@mui/system';
+import React, { useState } from 'react';
+import SelectClubType from '@components/club/SelectClubType';
+import AddClubListCategory from '@components/club/AddClubListCategory';
+import CommonTop from '@layouts/common/CommonTop';
 
 const AddClub = () => {
   const theme = useTheme();
@@ -23,55 +25,67 @@ const AddClub = () => {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        //return <SelectClubType />;
-        return <ListCategory />;
+        return <SelectClubType />;
       case 1:
-        return <AddClubName />;
+        return <AddClubListCategory />;
       case 2:
-        return <AddClubImg />;
-      case 3:
         return <AddClubRegion />;
+      case 3:
+        return <AddClubName />;
       case 4:
+        return <AddClubImg />;
+      case 5:
         return <AddClub1 />;
       default:
-        throw new Error("Unknown step");
+        throw new Error('Unknown step');
     }
   }
 
   return (
-    <Box sx={{ marginTop: "64px" }}>
-      <MobileStepper
-        variant="progress"
-        steps={6}
-        position="static"
-        activeStep={activeStep}
-        sx={{ maxWidth: 400, flexGrow: 1 }}
-        nextButton={
-          <Button size="small" onClick={handleNext} disabled={activeStep === 5}>
-            Next
-            {theme.direction === "rtl" ? (
-              <KeyboardArrowLeft />
-            ) : (
-              <KeyboardArrowRight />
-            )}
-          </Button>
-        }
-        backButton={
-          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-            {theme.direction === "rtl" ? (
-              <KeyboardArrowRight />
-            ) : (
-              <KeyboardArrowLeft />
-            )}
-            Back
-          </Button>
-        }
-      />
-      <React.Fragment>
-        {getStepContent(activeStep)}
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}></Box>
-      </React.Fragment>
-    </Box>
+    <>
+      <CommonTop />
+      <Box sx={{ marginTop: '64px' }}>
+        <MobileStepper
+          variant="progress"
+          steps={6}
+          position="static"
+          activeStep={activeStep}
+          sx={{ maxWidth: 400, flexGrow: 1 }}
+          nextButton={
+            <Button
+              size="small"
+              onClick={handleNext}
+              disabled={activeStep === 5}
+            >
+              Next
+              {theme.direction === 'rtl' ? (
+                <KeyboardArrowLeft />
+              ) : (
+                <KeyboardArrowRight />
+              )}
+            </Button>
+          }
+          backButton={
+            <Button
+              size="small"
+              onClick={handleBack}
+              disabled={activeStep === 0}
+            >
+              {theme.direction === 'rtl' ? (
+                <KeyboardArrowRight />
+              ) : (
+                <KeyboardArrowLeft />
+              )}
+              Back
+            </Button>
+          }
+        />
+        <React.Fragment>
+          {getStepContent(activeStep)}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}></Box>
+        </React.Fragment>
+      </Box>
+    </>
   );
 };
 

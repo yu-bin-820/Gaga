@@ -1,8 +1,10 @@
-import * as React from "react";
+import React from "react";
 import { Box, Stack, ThemeProvider, createTheme } from "@mui/system";
 import { Avatar, AvatarGroup, Chip, ImageListItem, Paper } from "@mui/material";
 import { styled } from "@mui/system";
 import { PropTypes } from "prop-types";
+import { useNavigate } from "react-router";
+import { useCallback } from "react";
 
 const StyledAvatarGroup = styled(AvatarGroup)({
   "& .MuiAvatar-root": {
@@ -13,7 +15,13 @@ const StyledAvatarGroup = styled(AvatarGroup)({
 });
 
 const ClubThumbnail = ({ club }) => {
-  const { clubName, clubRegion, clubMaxMemberNo } = club;
+  const navigate = useNavigate();
+
+  const onClickClub = useCallback((event) => {
+    navigate(`/club/no/${clubNo}`);
+  }, []);
+
+  const { clubName, clubRegion, clubMaxMemberNo, memberCount, clubNo } = club;
   return (
     <Box
       sx={{
@@ -83,7 +91,7 @@ const ClubThumbnail = ({ club }) => {
                 fontSize: 14,
               }}
             >
-              17/{clubMaxMemberNo}
+              {memberCount}/{clubMaxMemberNo}
             </Box>
           </Stack>
         </Box>
@@ -98,6 +106,7 @@ ClubThumbnail.PropTypes = {
     clubName: PropTypes.string.isRequired,
     clubRegion: PropTypes.string.isRequired,
     clubMaxMemberNo: PropTypes.number.isRequired,
+    memberCount: PropTypes.number.isRequired,
   }).isRequired,
 };
 

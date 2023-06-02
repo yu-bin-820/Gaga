@@ -6,11 +6,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import useSWR from "swr";
 import ClubThumbnail from "./ClubThumbnail";
-import Payment from "@components/payment/Payment";
 import Refund from "@components/payment/Refund";
-import BankCode from "@components/payment/Banks";
-import Banks from "@components/payment/Banks";
-import Account from "@components/payment/Account";
+import Payment from "@components/payment/Payment";
 
 const ListClub = () => {
   const [clubList, setClubList] = useState();
@@ -23,14 +20,19 @@ const ListClub = () => {
 
   useEffect(() => {
     const data = {
-      gender: 0,
-      maxAge: 50,
-      minAge: 20,
-      age: 25,
-      mainCategoryNo: 2,
+      gender: myData?.filterGender,
+      maxAge: myData?.filterMaxAge,
+      minAge: myData?.filterMinAge,
+      birthday: myData?.birthday,
+      tag: myData?.filterTag,
+      tag2: myData?.filterTag2,
+      tag3: myData?.filterTag3,
     };
     axios
-      .post(`http://${import.meta.env.VITE_SPRING_HOST}/rest/club/list`, data)
+      .post(
+        `http://${import.meta.env.VITE_SPRING_HOST}/rest/club/list/filter`,
+        data
+      )
       .then((response) => {
         console.log(data);
         console.log(response.data);
@@ -51,24 +53,17 @@ const ListClub = () => {
 
   return (
     <>
-      <Box sx={{ marginTop: "100px" }}>
+      <Box sx={{ marginTop: "10px" }}>
         <Box>
-          <Account />
-          <Payment />
-          <Refund />
           <Box>
             {clubList?.map((club, i) => (
               <Box key={i}>
                 <ClubThumbnail club={club} />
-                <h5>{club.clubName}</h5>
-                <Button id={club.clubNo} onClick={onClickClub}>
-                  <h5>{club.clubNo}</h5>
-                  <br />
-                  <br />
-                  {i + 1}번 클럽정보
-                </Button>
+                <Button id={club.clubNo} onClick={onClickClub}></Button>
               </Box>
             ))}
+            <Payment />
+            <Refund />
           </Box>
         </Box>
       </Box>

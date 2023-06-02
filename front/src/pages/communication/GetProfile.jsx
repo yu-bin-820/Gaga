@@ -210,7 +210,11 @@ const GetProfile = () => {
             alignItems: 'center',
           }}
         >
-          <Typography>{userData?.userIntro}</Typography>
+          <Typography>
+            {myData?.userIntro.split('\n').map((line, i) => (
+              <div key={i}>{line}</div>
+            ))}
+          </Typography>
         </Stack>
         <Stack
           direction={'row'}

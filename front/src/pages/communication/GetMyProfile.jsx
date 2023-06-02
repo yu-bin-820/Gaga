@@ -4,10 +4,12 @@ import MainBottomNav from '@layouts/common/MainBottomNav';
 import MyProfileTop from '@layouts/communication/MyProfileTop';
 import {
   Avatar,
+  Button,
   Chip,
   IconButton,
   ImageList,
   LinearProgress,
+  TextField,
   Typography,
 } from '@mui/material';
 import { linearProgressClasses } from '@mui/material/LinearProgress';
@@ -20,6 +22,12 @@ import styled from '@emotion/styled';
 import UploadProfileImgDialog from '@components/communication/UploadProfileImgDialog';
 import UploadActivityImgDialog from '@components/communication/UploadActivityImgDialog';
 import CustomedImageListItem from '@components/common/CustomedImageListItem';
+import useInputOrigin from '@hooks/common/useInputOrigin';
+import CheckIcon from '@mui/icons-material/Check';
+import axios from 'axios';
+import UpdateUserIntroTextField from '@components/communication/updateUserIntroTextField';
+import UpdateNickNameTextField from '@components/communication/UpdateNickNameTextField';
+import TitleListDialog from '@components/communication/TitleListDialog';
 
 const TeperatureLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -39,11 +47,14 @@ const GetMyProfile = () => {
     useState(false);
   const [uploadActivityImgDialogOpen, setUploadActivityImgDialogOpen] =
     useState(false);
-
+  const [isUpdateIntro, setIsUpdateIntro] = useState(false);
+  const [isUpdateNickName, setIsUpdateNickName] = useState(false);
+  const [updateMainTitleOpen, setUpdateMainTitleOpen] = useState(false);
   const { data: myData, mutate: mutateMe } = useSWR(
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+
   const boxRef = useRef();
 
   useEffect(() => {
@@ -67,6 +78,19 @@ const GetMyProfile = () => {
   const onClickActivityImg = useCallback(() => {
     setUploadActivityImgDialogOpen(true);
   }, []);
+
+  const onClickUpdateIntro = useCallback(() => {
+    setIsUpdateIntro(!isUpdateIntro);
+  }, [isUpdateIntro]);
+
+  const onClickUpdateNickName = useCallback(() => {
+    setIsUpdateNickName(!isUpdateNickName);
+  }, [isUpdateNickName]);
+
+  const onClickUpdateMainTitle = useCallback(() => {
+    setUpdateMainTitleOpen(true);
+  }, []);
+
   return (
     <>
       <MyProfileTop />
@@ -86,21 +110,46 @@ const GetMyProfile = () => {
             display: 'flex',
           }}
         >
-          <Stack direction={'row'} spacing={10} alignItems={'center'}>
+          <Stack
+            id={'profileTopContainer'}
+            direction={'row'}
+            spacing={0}
+            alignItems={'center'}
+            sx={{ maxWidth: '80vw' }}
+          >
             <div onClick={onClickProfileImg}>
               <Avatar
                 alt={myData?.nickName}
                 src={`http://${
                   import.meta.env.VITE_SPRING_HOST
                 }/upload_images/user/${myData?.profileImg}`}
-                sx={{ width: 76, height: 76 }}
+                sx={{ width: 76, height: 76, marginRight: '100px' }}
               />
             </div>
-            <Stack direction="column" spacing={0} alignItems="center">
+            <Stack
+              direction="column"
+              spacing={0}
+              alignItems="center"
+              sx={{ marginRight: 'auto' }}
+            >
+              <Button onClick={onClickUpdateMainTitle}>대표 타이틀 변경</Button>
               <Typography sx={{ fontSize: 15 }}>
                 {myData?.mainTitleName}
               </Typography>
-              <Typography sx={{ fontSize: 20 }}>{myData?.nickName}</Typography>
+              {!isUpdateNickName && (
+                <div onClick={onClickUpdateNickName}>
+                  <Typography sx={{ fontSize: 20 }}>
+                    {myData?.nickName}
+                  </Typography>
+                </div>
+              )}
+
+              {isUpdateNickName && (
+                <UpdateNickNameTextField
+                  isUpdateNickName={isUpdateNickName}
+                  setIsUpdateNickName={setIsUpdateNickName}
+                />
+              )}
             </Stack>
           </Stack>
         </Box>
@@ -119,22 +168,37 @@ const GetMyProfile = () => {
           />
           <Typography>{myData?.temperature}°C</Typography>
         </Box>
-        <Stack
-          direction={'row'}
-          sx={{
-            marginTop: '30px',
-            marginBottom: '30px',
-            marginLeft: '30px',
-            marginRight: '30px',
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <Typography>{myData?.userIntro}</Typography>
-          <IconButton sx={{ marginLeft: 'auto' }}>
-            <EditNoteIcon />
-          </IconButton>
-        </Stack>
+        {!isUpdateIntro && (
+          <Stack
+            direction={'row'}
+            sx={{
+              marginTop: '30px',
+              marginBottom: '30px',
+              marginLeft: '30px',
+              marginRight: '30px',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <Typography>
+              {myData?.userIntro.split('\n').map((line, i) => (
+                <div key={i}>{line}</div>
+              ))}
+            </Typography>
+            <IconButton
+              sx={{ marginLeft: 'auto' }}
+              onClick={onClickUpdateIntro}
+            >
+              <EditNoteIcon />
+            </IconButton>
+          </Stack>
+        )}
+        {isUpdateIntro && (
+          <UpdateUserIntroTextField
+            isUpdateIntro={isUpdateIntro}
+            setIsUpdateIntro={setIsUpdateIntro}
+          />
+        )}
         <Stack
           direction={'row'}
           spacing={2}
@@ -192,6 +256,12 @@ const GetMyProfile = () => {
       <UploadActivityImgDialog
         open={uploadActivityImgDialogOpen}
         setOpen={setUploadActivityImgDialogOpen}
+      />
+      <TitleListDialog
+        open={updateMainTitleOpen}
+        setOpen={setUpdateMainTitleOpen}
+        myData={myData}
+        mutateMe={mutateMe}
       />
     </>
   );
