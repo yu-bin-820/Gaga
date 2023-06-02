@@ -29,6 +29,7 @@ import com.gaga.bo.service.club.ClubService;
 import com.gaga.bo.service.domain.Club;
 import com.gaga.bo.service.domain.Filter;
 import com.gaga.bo.service.domain.Meeting;
+import com.gaga.bo.service.domain.Search;
 
 @RestController
 @RequestMapping("rest/club")
@@ -42,7 +43,8 @@ public class ClubRestController {
 	@Value("${fileUploadPath}")
 	String fileUploadPath;
 	
-	
+	@Value("${pageSize}")
+	int pageSize;	
 
 	//Constructor
 	public ClubRestController() {
@@ -170,6 +172,8 @@ public class ClubRestController {
 		
 	}
 	
+	
+	
 	@GetMapping("list/create/{clubLeaderNo}")
 	public List<Club> getCreateClubList(@PathVariable int clubLeaderNo) throws Exception{
 		
@@ -179,16 +183,36 @@ public class ClubRestController {
 		
 	}
 	
-	@PostMapping("list")
-	public List<Club> getSearchClubList(@RequestBody Filter filter) throws Exception{
+	@PostMapping("search")
+	public List<Club> getSearchClubList(@RequestBody Search search) throws Exception{
 		
 		System.out.println("클럽 목록 검색 Ctrl");
 		
-		/*
-		 * { "gender" : 1, "maxAge" : 50, "minAge" : 20, "age" : 30 }
-		 */
+		if(search.getCurrentPage() ==0 ){
+			search.setCurrentPage(1);
+		}
 		
-		return clubService.getSearchClubList(filter);
+		System.out.println("searchClub : " + search);
+		
+		search.setPageSize(pageSize);
+		
+		System.out.println(search.getStartRowNum());
+		
+		List<Club> list = clubService.getSearchClubList(search);
+		
+		System.out.println(list);
+		
+		return list;
+	}
+	
+	@PostMapping("list/filter")
+	public List<Club> getFilterClubList(@RequestBody Filter filter) throws Exception{
+		
+		System.out.println("클럽 목록 필터적용 Ctrl");
+		
+		//{ "gender" : 0, "maxAge" : 50, "minAge" : 20, "birthday" : "1994-09-01" }
+		
+		return clubService.getFilterClubList(filter);
 	}
 	
 	@GetMapping("list/join/{userNo}")
@@ -241,13 +265,12 @@ public class ClubRestController {
 		clubService.updateClub(club);
 	}
 	
-	@PatchMapping("{clubNo}") //==> 외래키 조건 다시 확인하기
-	public void deleteClub(@PathVariable int clubNo) throws Exception{
+	@PatchMapping("delete")
+	public void deleteClub(@RequestBody Club club) throws Exception{
 		
 		System.out.println("클럽 삭제 Ctrl");
 		
-		//clubService.updateParentClubNoToNull(clubNo);
-		clubService.deleteClub(clubNo);
+		clubService.deleteClub(club.getClubNo());
 	}
 
 	//멤버관리

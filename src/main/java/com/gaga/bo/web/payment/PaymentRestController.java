@@ -50,7 +50,7 @@ public class PaymentRestController {
 		// TODO Auto-generated constructor stub
 	}
 
-	@PostMapping("")
+	@PostMapping("") //결제완료 : 1 ,  결제취소 : 2
 	public void addPayment(@RequestBody Payment payment) throws Exception{
 		
 		System.out.println("결제 내역 추가 Ctrl" + payment);
@@ -73,7 +73,7 @@ public class PaymentRestController {
 		
 	}
 
-	@PatchMapping("refund")
+	@PatchMapping("refund") // 결제 취소 : 2
 	public void updatePayment(@RequestBody Map<String, Object> refund) throws Exception{
 		
 		System.out.println("환불시 결제번호 출력 Ctrl");
