@@ -34,9 +34,12 @@ export default function ProfileMeetingClubTabs() {
           sx={{
             overflowY: "auto",
             maxHeight: "calc(100vh)",
+            backgroundColor: '#ededed'
           }}
         >
-          <TabPanel value="meeting">
+          <TabPanel 
+          value="meeting"
+          sx={{padding:'10px'}}>
             <ListMyMeeting />
           </TabPanel>
           <TabPanel value="club">

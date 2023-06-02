@@ -1,7 +1,8 @@
-import { Button } from '@mui/material';
+import { Button, Chip } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { CustomOverlayMap, MapMarker } from 'react-kakao-maps-sdk';
+import CancelIcon from '@mui/icons-material/Cancel';
 import MeetingThumbnail from '../MeetingThumnail';
 
 const EventMarkerContainer= ({ meetingLat, meetingLng, meeting }) => {
@@ -13,13 +14,22 @@ const EventMarkerContainer= ({ meetingLat, meetingLng, meeting }) => {
         zIndex={1000}
         yAnchor={1.1}
       >
-        <Box sx={{ backgroundColor: "#ffffff" }}>
-          <Box sx={{ backgroundColor: "#ffffff", zIndex: "tooltip" }}>
-            <Button onClick={() => setIsOpen(false)}>닫기</Button>
-            <Stack direction="row" spacing={2}>
-              <MeetingThumbnail meeting={meeting} />
-            </Stack>
-          </Box>
+        <Box
+          sx={{
+            backgroundColor: "#ffffff",
+            borderRadius: "16px",
+            width: "300px",
+            padding: "16px",
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            flexDirection: "column",
+          }}
+        >
+          <CancelIcon fontSize="small" onClick={() => setIsOpen(false)} sx={{ alignSelf: "flex-end", marginTop: "-8px", marginRight: "-8px", cursor: "pointer" }} />
+          <Stack direction="row" spacing={2}>
+            <MeetingThumbnail meeting={meeting} />
+          </Stack>
         </Box>
       </CustomOverlayMap>
     );

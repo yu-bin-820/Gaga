@@ -1,18 +1,25 @@
-import { CircularProgress, TextField } from "@mui/material";
-import { Stack } from "@mui/system";
+import { CircularProgress } from "@mui/material";
+import { Box, Stack } from "@mui/system";
 import fetcher from "@utils/fetcher";
 import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
-import { CustomOverlayMap, Map, MapMarker, useMap } from "react-kakao-maps-sdk";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Map } from "react-kakao-maps-sdk";
 import { useNavigate } from "react-router";
 import useSWR from "swr";
 import EventMarkerContainer from "./map/EventMarkerContainer";
+import ListMeetingChip from "./map/ListMeetingChip";
+import ListMeetingSearchBar from "./map/ListMeetingSearchBar";
+
 
 const ListMeeting = () => {
+  const mapRef = useRef();
+
+  const navigate = useNavigate();
+
+
   const [latitude, setLatitude] = useState();
   const [longtitude, setLongtitude] = useState();
   const [meetingList, setMeetingList] = useState();
-  const [mapInstance, setMapInstance] = useState(null);
   const [state, setState] = useState({
     swLat: "",
     swLng: "",
@@ -20,36 +27,54 @@ const ListMeeting = () => {
     neLng: "",
   });
 
-  useEffect(() => {
-    const handleBoundsChanged = () => {
-      if (mapInstance) {
-        const bounds = mapInstance.getBounds();
-        setState({
-          swLat: bounds.getSouthWest().getLat().toString(),
-          swLng: bounds.getSouthWest().getLng().toString(),
-          neLat: bounds.getNorthEast().getLat().toString(),
-          neLng: bounds.getNorthEast().getLng().toString(),
-        });
-      }
-    };
+  const [ keyword, setKeyword] = useState()
+  const [map, setMap] = useState()
 
-    if (mapInstance) {
-      kakao.maps.event.addListener(mapInstance, "bounds_changed", handleBoundsChanged);
-    }
+  const handleKeywordChange = useCallback((e) => {
+      setKeyword(e.target.value);
+    }, []);
 
-    return () => {
-      if (mapInstance) {
-        kakao.maps.event.removeListener(mapInstance, "bounds_changed", handleBoundsChanged);
+  const handleSubmit = useCallback(async () => {
+      
+    if (!map || !keyword) return;
+
+    const ps = new kakao.maps.services.Places()
+
+    ps.keywordSearch(keyword, (data, status, _pagination) => {
+      if (status === kakao.maps.services.Status.OK) {
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+        // LatLngBounds 객체에 좌표를 추가합니다
+        const bounds = new kakao.maps.LatLngBounds()
+        let markers = []
+
+        for (var i = 0; i < data.length; i++) {
+
+          // @ts-ignore
+          bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x))
+        }
+      //   setMarkers(markers)
+
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+        map.setBounds(bounds)
       }
-    };
-  }, [mapInstance]);
+    })
+  }, [map, keyword])
   
-  const navigate = useNavigate();
 
   const { data: myData, mutate: mutateMe } = useSWR(
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+
+  const onClickMeetingSearch = () => {
+    const map = mapRef.current;
+    setState({
+      swLat: map.getBounds().getSouthWest().getLat().toString(),
+      swLng: map.getBounds().getSouthWest().getLng().toString(),
+      neLat: map.getBounds().getNorthEast().getLat().toString(),
+      neLng: map.getBounds().getNorthEast().getLng().toString(),
+    });
+  }
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -59,6 +84,13 @@ const ListMeeting = () => {
           const { latitude, longitude } = position.coords;
           setLatitude(latitude);
           setLongtitude(longitude);
+          // console.log(latitude,longitude);
+          setState({
+            swLat: (latitude-0.002),
+            swLng: (longitude-0.002),
+            neLat: (latitude+0.002),
+            neLng: (longitude+0.002),
+          });
         },
         (err) => {
           console.log(err.message);
@@ -107,27 +139,22 @@ const ListMeeting = () => {
       </Stack>
     );
   }
-
   
   return (
-    <>
+    <Box>
       <Map
         center={{ lat: latitude, lng: longtitude }} // 초기 중심 좌표 설정
         style={{
           width: "100%",
-          height: "450px",
+          height: "80vh",
         }}
         level={3}
-        onBoundsChanged={map => {
-          setMapInstance(map);
-          setState({
-          swLat: ((map.getBounds().getSouthWest()).getLat()).toString(),
-          swLng: ((map.getBounds().getSouthWest()).getLng()).toString(),
-          neLat: ((map.getBounds().getNorthEast()).getLat()).toString(),
-          neLng: ((map.getBounds().getNorthEast()).getLng()).toString(),
-        });
-      }}
+        ref={mapRef}
+        onCreate={setMap}
       >
+      <ListMeetingChip
+        onClick={onClickMeetingSearch}
+      />
         {meetingList?.map((meeting, index) => (
           <EventMarkerContainer
             key={`EventMarkerContainer-${meeting.meetingNo}`}
@@ -138,15 +165,13 @@ const ListMeeting = () => {
         ))}
       </Map>
 
-      {!!state && (
-          <>
-            <p>
-              {'영역좌표는 남서쪽 위도, 경도는  ' + state.swLat +','+state.swLng+ ' 이고'}<br/>
-              {'북동쪽 위도, 경도는  ' + state.neLat+','+state.neLng + '입니다'}
-            </p>
-          </>
-        )}
-    </>
+      <ListMeetingSearchBar 
+      keyword={keyword} 
+      handleKeywordChange={handleKeywordChange} 
+      handleSubmit={handleSubmit}          
+      top= '130px'
+      />
+    </Box>
   );
 };
 

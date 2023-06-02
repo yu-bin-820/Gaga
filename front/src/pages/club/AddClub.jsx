@@ -2,7 +2,7 @@ import AddClub1 from "@components/club/AddClub1";
 import AddClubName from "@components/club/AddClubName";
 import AddClubRegion from "@components/club/AddClubRegion";
 import AddClubImg from "@components/club/AddClubImg";
-import ListCategory from "@components/meeting/ListCategory";
+import ListCategory from "@components/common/ListCategory";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { Button, MobileStepper } from "@mui/material";
 import { Box, useTheme } from "@mui/system";
