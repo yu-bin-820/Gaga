@@ -188,6 +188,10 @@ const router = createBrowserRouter([
         path: 'community',
         children: [
           {
+            path: 'test',
+            element: <Test />,
+          },
+          {
             path: 'profile',
             children: [
               { path: 'mine', element: <GetMyProfile /> },
