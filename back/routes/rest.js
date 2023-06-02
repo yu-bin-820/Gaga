@@ -900,8 +900,9 @@ router.post('/chat/alarm', async (req, res, next) => {
   try {
     const directMessage = await DirectMessage.create({
       receiver_no: req.body.receiverNo,
+      content_type_no: 1,
       content: req.body.content,
-      content_type_no: req.body.contentTypeNo,
+      path: req.body.path,
     });
     const directMessageWithSender = await DirectMessage.findOne({
       where: { message_no: directMessage.message_no },
