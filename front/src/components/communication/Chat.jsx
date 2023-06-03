@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useCallback, useState } from 'react';
 
 import { Alert, Avatar, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
@@ -7,8 +7,13 @@ import fetcher from '@utils/fetcher';
 import PropTypes from 'prop-types';
 import { Box } from '@mui/system';
 import { DateTime } from 'luxon';
+import ChatMap from './ChatMap';
+import { StaticMap } from 'react-kakao-maps-sdk';
+import ChatStaticMap from './ChatStaticMap';
+import useChatMapStore from '@stores/communication/useChatMapStore';
 
 const Chat = ({ data }) => {
+  const { setField } = useChatMapStore();
   const { data: myData } = useSWR(
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
@@ -22,8 +27,13 @@ const Chat = ({ data }) => {
   const sendTime = DateTime.fromISO(data.created_at).toLocaleString(
     DateTime.TIME_SIMPLE
   );
-  // console.log(data);
 
+  const onClickChatMap = useCallback(() => {
+    setField('lat', data.lat);
+    setField('lng', data.lng);
+    setField('isPost', false);
+    setField('locationDrawerOpen', true);
+  }, [setField, data]);
   return (
     <Stack
       direction={'row'}
@@ -101,6 +111,30 @@ const Chat = ({ data }) => {
                 marginRight: isMe ? '10px' : '3px',
               }}
             />
+          )}
+          {data.content_type_no == 3 && (
+            <div onClick={onClickChatMap}>
+              <Box
+                sx={{
+                  maxHeight: '300px',
+                  maxWidth: '300px',
+                  marginLeft: isMe ? '3px' : '0px',
+                  marginRight: isMe ? '10px' : '3px',
+                  padding: '3px',
+                  backgroundColor: messageBackColor,
+                  borderRadius: '0.3em',
+                }}
+              >
+                <ChatStaticMap
+                  lat={data.lat}
+                  lng={data.lng}
+                  messageNo={data.message_no}
+                />
+                <Typography sx={{ marginTop: '2px', fontSize: 13 }}>
+                  {data.content}
+                </Typography>
+              </Box>
+            </div>
           )}
           {!isMe && (
             <Stack marginTop="auto">

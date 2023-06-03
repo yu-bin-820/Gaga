@@ -28,6 +28,14 @@ module.exports = class RoomMessage extends Model {
           type: DataTypes.INTEGER,
           allowNull: false,
         },
+        lat: {
+          type: DataTypes.DOUBLE,
+          allowNull: true,
+        },
+        lng: {
+          type: DataTypes.DOUBLE,
+          allowNull: true,
+        },
       },
       {
         modelName: 'RoomMessage',
