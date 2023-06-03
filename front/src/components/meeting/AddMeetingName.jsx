@@ -15,13 +15,11 @@ const AddMeetingName = () => {
             sx={{marginLeft: '15px',
             marginRight:'20px'}}>
             <TextField
-            fulWidth
-            label="meetingName"
+            fullWidth
             name="meetingName"
             onChange={(e)=>onChangeField('meetingName',e)}
-            placeholder="Please enter text"
+            placeholder="예시: 강남역에서 스터디해요"
             required
-            fullWidth
             variant="standard"
             value={meetingName}
             />
