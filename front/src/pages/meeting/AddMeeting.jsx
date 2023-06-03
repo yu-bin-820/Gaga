@@ -10,6 +10,8 @@ import { Button, MobileStepper } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useState } from 'react';
 import AddMeetingListCategory from '@components/meeting/AddMeetingListCategory';
+import AddMeetingDate from '@components/meeting/AddMeetingDate';
+import AddMeetingFilter from '@components/meeting/AddMeetingFilter';
 
 const AddMeeting = () => {
   const theme = useTheme();
@@ -36,6 +38,10 @@ const AddMeeting = () => {
       case 4:
         return <AddMeetingMap />;
       case 5:
+          return <AddMeetingDate />;
+      case 6:
+        return <AddMeetingFilter />;
+      case 7:
         return <AddMeeting1 />;
       default:
         throw new Error('Unknown step');
@@ -48,7 +54,7 @@ const AddMeeting = () => {
       <Box sx={{ marginTop: '64px'}}>
         <MobileStepper
           variant="progress"
-          steps={7}
+          steps={8}
           position="static"
           activeStep={activeStep}
           sx={{ maxWidth: 500, flexGrow: 1 }}
@@ -56,7 +62,7 @@ const AddMeeting = () => {
             <Button
               size="small"
               onClick={handleNext}
-              disabled={activeStep === 5}
+              disabled={activeStep === 7}
             >
               Next
               {theme.direction === 'rtl' ? (
