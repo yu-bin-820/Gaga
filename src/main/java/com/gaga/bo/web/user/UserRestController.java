@@ -65,6 +65,7 @@ public class UserRestController {
 		return (User)session.getAttribute("user");
 	}
 	
+	
 	@PostMapping("/login")
 	public User login(	@RequestBody User user,
 									HttpSession session ) throws Exception{
@@ -121,6 +122,16 @@ public class UserRestController {
 		// 성공 메시지를 반환합니다.
 		return new ResponseEntity<>("로그아웃 완료!", HttpStatus.OK);
 	}
+	
+	@GetMapping("/addUser")
+	public ResponseEntity<String> addUser() throws Exception{
+		System.out.println("/rest/user/addUser : GET");
+
+		// "redirect:/main.jsx"는 RESTful API에서 일반적으로 사용되지 않습니다. 
+		// 일반적으로 해당 API가 수행하는 작업을 설명하는 메시지를 반환합니다.
+		return new ResponseEntity<>("User add API is ready for POST request.", HttpStatus.OK);
+	}
+	
 
 	@PostMapping("/addUser")
 	public ResponseEntity<User> addUser(@RequestBody User user, HttpSession session) throws Exception {
@@ -128,11 +139,11 @@ public class UserRestController {
 		String userId = user.getUserId();
 		System.out.println("회원가입 요청온 유저정보: "+user);
 		// 아이디 중복 확인
-	    boolean isDuplicate = userService.checkDuplication(user.getUserId());
-	    if (isDuplicate) {
-	    	System.out.println("아이디 중복임");
-	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	    }
+//	    boolean isDuplicate = userService.checkDuplication(user.getUserId());
+//	    if (isDuplicate) {
+//	    	System.out.println("아이디 중복임");
+//	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//	    }
 		// Business Logic
 		userService.addUser(user);
 		
