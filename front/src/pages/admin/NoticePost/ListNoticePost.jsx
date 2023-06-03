@@ -2,6 +2,10 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+import { Button, TextField, Box, Stack, Typography, List, ListItem, ListItemText, Divider } from '@mui/material';
+import CenteredTabsAdmin from '@components/admin/CenteredTabsAdmin';
+
+
 function ListNoticePost() {
   const [noticePosts, setNoticePosts] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -13,7 +17,7 @@ function ListNoticePost() {
   const [hasMore, setHasMore] = useState(true);
 
   const handlePostClick = (noticePostNo) => {
-    navigate(`/getNoticePost/${noticePostNo}`);
+    navigate(`/notice/getNoticePost/noticePostNo/${noticePostNo}`);
   };
 
   useEffect(() => {
@@ -43,7 +47,7 @@ function ListNoticePost() {
 
   const fetchNoticePosts = async () => {
     try {
-      const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePostList`, {
+      const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePostListByCategoryNo`, {
         params: {
           page,
           limit: 6,
@@ -91,36 +95,33 @@ function ListNoticePost() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', width: '100%' }}>
-      <button onClick={() => window.history.back()} style={{ alignSelf: 'flex-start' }}>☜</button>
-      <h2 style={{ textAlign: 'center', margin: '1rem 0' }}>공지사항</h2>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem', alignItems: 'center' }}>
-        <input type="text" value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} style={{ marginRight: '0.5rem' }} />
-        <button onClick={handleSearch}>검색</button>
-      </div>
-      <ul className="notice-post-list" style={{ listStyle: 'none', textAlign: 'center' }}>
-        {filteredNoticePosts.map((noticePost, index) => (
-          <li
-            key={noticePost.noticePostNo}
-            style={{ marginBottom: '1rem', borderBottom: '1px solid #ccc', textAlign: 'center' }}
-            ref={index === filteredNoticePosts.length - 1 ? containerRef : null}
-          >
-            <Link
-              to={`/getNoticePost/${noticePost.noticePostNo}`}
-              onClick={() => handlePostClick(noticePost.noticePostNo)}
-              style={{ textDecoration: 'none', display: 'inline-block', textAlign: 'center' }}
-            >
-              <h3 style={{ margin: 0 }}>{noticePost.noticePostTitle}</h3>
-              <h6 style={{ margin: 0 }}>{noticePost.noticePostRegDate.split('T')[0]}</h6>
-            </Link>
-          </li>
-        ))}
-      </ul>
-      {isLoading && <div style={{ textAlign: 'center' }}>Loading...</div>}
-      <Link to="/addNoticePost" style={{ alignSelf: 'flex-end', margin: '1rem' }}>
-        <button>공지사항 작성</button>
-      </Link>
-    </div>
+    <Box sx={{ marginTop: '64px', marginLeft: '10px', marginRight: '10px' }}>
+      <Stack spacing={2.5}>        
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <CenteredTabsAdmin />
+        </Box>
+        
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem', alignItems: 'center' }}>
+          <TextField type="text" value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} style={{ marginRight: '0.5rem' }} />
+          <Button variant="contained" onClick={handleSearch}>검색</Button>
+        </Box>
+        <Link to="/notice/addNoticePost">
+          <Button variant="contained">공지사항 작성</Button>
+        </Link>
+        <List component="nav">
+          {filteredNoticePosts.map((noticePost, index) => (
+            <div key={noticePost.noticePostNo}>
+              <ListItem button onClick={() => handlePostClick(noticePost.noticePostNo)}>
+                <ListItemText primary={noticePost.noticePostTitle} secondary={noticePost.noticePostRegDate.split('T')[0]} />
+              </ListItem>
+              {index < filteredNoticePosts.length - 1 && <Divider />}
+            </div>
+          ))}
+        </List>
+        {isLoading && <Typography align="center">Loading...</Typography>}
+        
+      </Stack>
+    </Box>
   );
 }
 

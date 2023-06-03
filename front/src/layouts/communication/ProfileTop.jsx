@@ -110,6 +110,7 @@ const ProfileTop = ({ userNo }) => {
   if (!myData) {
     return <Navigate replace to={`/community/profile/userno/${userNo}`} />;
   }
+
   return (
     <>
       <Box>

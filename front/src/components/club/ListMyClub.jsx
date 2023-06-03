@@ -49,8 +49,6 @@ const ListMyClub = () => {
         {clubList?.map((club, i) => (
           <Box key={i}>
             <ClubThumbnail club={club} />
-            <h5>{club.clubName}</h5>
-            <h5>{club.state}</h5>
             <Button id={club.clubNo} onClick={onClickClub}>
               클럽정보
             </Button>

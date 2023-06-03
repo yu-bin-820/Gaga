@@ -194,9 +194,6 @@ export default function ListChatRoom() {
                   }
                   onClick={onClickDirectChat}
                 >
-                  receiver{direct.receiver_no}
-                  <br />
-                  sender{direct.sender_no}
                   <ChatItem
                     avatar={'http://facebook.github.io/react/img/logo.svg'}
                     alt={`http://${

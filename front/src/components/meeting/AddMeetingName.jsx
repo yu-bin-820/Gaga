@@ -1,7 +1,6 @@
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
-import { TextField } from '@mui/material';
+import { TextField, Stack } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
 
 const AddMeetingName = () => {
     const {
@@ -10,8 +9,11 @@ const AddMeetingName = () => {
       } = useMeetingFormStore();
 
     return (
-        <Box>
+        <Box sx={{margin: '5px'}}>
             <h5>모임의 제목을 정해주세요!</h5>
+            <Stack
+            sx={{marginLeft: '15px',
+            marginRight:'20px'}}>
             <TextField
             fulWidth
             label="meetingName"
@@ -19,8 +21,11 @@ const AddMeetingName = () => {
             onChange={(e)=>onChangeField('meetingName',e)}
             placeholder="Please enter text"
             required
+            fullWidth
+            variant="standard"
             value={meetingName}
             />
+            </Stack>
         </Box>
     );
 };

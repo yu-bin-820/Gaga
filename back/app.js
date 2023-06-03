@@ -21,11 +21,14 @@ const restRouter = require('./routes/rest');
 const webSocket = require('./socket');
 const { log } = require('console');
 
-const { PORT, REACT_HOST, REACT_PORT } = process.env;
+const { PORT, REACT_HOST, REACT_PORT, SPRING_HOST, SPRING_PORT } = process.env;
 
 app.use(
   cors({
-    origin: `http://${REACT_HOST}:${REACT_PORT}`,
+    origin: [
+      `http://${REACT_HOST}:${REACT_PORT}`,
+      `http://${SPRING_HOST}:${SPRING_PORT}`,
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   })

@@ -23,14 +23,14 @@ const Payment = () => {
       merchant_uid: `mid_${new Date().getTime()}`, //상점 결제 번호
       amount: 100, // 결제금액
       name: "meeting2",
-      buyer_name: myData?.userNo,
+      buyer_name: myData?.userName,
       userNo: myData?.userNo,
       payNo: `mid_${new Date().getTime()}`,
       payTime: payTime,
       buyer_tel: myData?.phoneNo, // 구매자 전화번호
       buyer_email: myData?.userId, // 구매자 이메일
-      buyer_addr: "주소 없음", // 구매자 주소
-      buyer_postcode: "우편번호 없음", // 구매자 우편번호
+      buyer_addr: "null", // 구매자 주소
+      buyer_postcode: "null", // 구매자 우편번호
       entryFee: 100,
     };
 
@@ -40,22 +40,22 @@ const Payment = () => {
 
       if (success) {
         alert("결제 성공");
+
+        axios
+          .post(`http://${import.meta.env.VITE_SPRING_HOST}/rest/payment`, data)
+          .then((response) => {
+            console.log(data);
+            console.log(response.data);
+
+            const { success, error_msg } = response.data;
+          })
+          .catch((error) => {
+            console.log("결제 오류:", error);
+          });
       } else {
         alert(`결제 실패: ${error_msg}`);
       }
     };
-
-    axios
-      .post(`http://${import.meta.env.VITE_SPRING_HOST}/rest/payment`, data)
-      .then((response) => {
-        console.log(data);
-        console.log(response.data);
-
-        const { success, error_msg } = response.data;
-      })
-      .catch((error) => {
-        console.log("결제 오류:", error);
-      });
 
     IMP.request_pay(data, callback);
   };

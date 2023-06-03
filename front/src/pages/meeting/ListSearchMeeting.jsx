@@ -1,7 +1,8 @@
 import MeetingThumbnail from '@components/meeting/MeetingThumnail';
 import useSearchMeetingFormStore from '@hooks/meeting/useSearchMeetingFormStore';
+import CommonTop from '@layouts/common/CommonTop';
 import { Button } from '@mui/material';
-import { Box } from '@mui/system';
+import { Box, margin } from '@mui/system';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -53,12 +54,6 @@ const ListSearchMeeting = () => {
         setLoading(false);
       };
 
-
-      const onClickMeeting=useCallback((event)=>{
-        const { id } = event.target;
-        navigate(`/meeting/meetingno/${id}`);
-    },[]);
-
     const handleScroll = () => {
         if (
           window.innerHeight + window.scrollY >= document.body.offsetHeight && !loading
@@ -69,16 +64,24 @@ const ListSearchMeeting = () => {
 
     return (
         <div>
-            <Box>
-            <Box sx={{ marginBottom: '136px'}}>
+          <CommonTop />
+            <Box sx={{ bgcolor: '#ededed' }}>
+            <Box sx={{ marginTop: '70px', marginBottom: '136px'}}>
                 {meetingList?.map((meeting,i)=>(
                     
-                    <Box key={i}>
+                    <Box key={i}
+                    sx={{
+                      margin: 0.3,
+                      borderRadius: 3,
+                      p: 2,
+                      minWidth: 300,
+                      padding: 1,
+                      backgroundColor: '#ffffff',
+                      marginLeft: '5px',
+                      marginRight: '5px',
+                      marginTop: '7px'
+                  }}>
                     <MeetingThumbnail meeting={meeting}/>
-                    <h5>{meeting.state}</h5>
-                    <Button
-                    id={meeting.meetingNo}
-                    onClick={onClickMeeting}>미팅정보</Button>
                     </Box>
                     
                 ))}
