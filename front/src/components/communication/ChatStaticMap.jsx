@@ -26,9 +26,7 @@ const ChatStaticMap = ({ lat, lng, messageNo }) => {
       staticMapContainer,
       staticMapOption
     );
-    const clickHandler = () => {};
-    // kakao.maps.addListener(staticMap, 'click', clickHandler);
-  }, []);
+  }, [lat, lng, messageNo]);
   return (
     <div
       id={'staticMap' + messageNo}
