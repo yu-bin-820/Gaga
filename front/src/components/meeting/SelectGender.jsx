@@ -1,10 +1,18 @@
 import StyledToggleButtonGroup from '@components/common/StyledToggleButtonGroup';
 import { ToggleButton } from '@mui/material';
+import { Stack } from '@mui/system';
+import fetcher from '@utils/fetcher';
 import React, { useState } from 'react';
+import useSWR from 'swr';
 
-const SelectGender = ({ onGenderClick, myGender }) => {
+const SelectGender = ({ onGenderClick }) => {
     
     const [selectedValue, setSelectedValue] = useState(null);
+
+    const { data: myData, mutate: mutateMe } = useSWR(
+        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+        fetcher
+        );
 
     const handleChange = (event, newValue) => {
         setSelectedValue(newValue);
@@ -17,6 +25,13 @@ const SelectGender = ({ onGenderClick, myGender }) => {
 
     return (
         <div>
+        <Stack
+        sx={{marginLeft: 1}}>
+            <h4>성별</h4>
+        <Stack
+        direction='row'
+        alignItems="center"
+        sx={{marginLeft: 1}}>
             <StyledToggleButtonGroup
             value={selectedValue}
             exclusive
@@ -30,7 +45,7 @@ const SelectGender = ({ onGenderClick, myGender }) => {
             >
             누구나
         </ToggleButton>
-        {myGender =="1" &&(
+        {myData.gender =="1" &&(
         <ToggleButton 
             value="1"
             onClick={() => onClickGender("1")}
@@ -38,7 +53,7 @@ const SelectGender = ({ onGenderClick, myGender }) => {
             남자만
         </ToggleButton>
         )}
-        {myGender =="2" &&(
+        {myData.gender =="2" &&(
         <ToggleButton 
             value="2"
             onClick={() => onClickGender("2")}
@@ -47,6 +62,8 @@ const SelectGender = ({ onGenderClick, myGender }) => {
         </ToggleButton>
         )}
       </StyledToggleButtonGroup>
+      </Stack>
+      </Stack>
         </div>
     );
 };

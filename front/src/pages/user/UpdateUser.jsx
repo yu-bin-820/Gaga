@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import useSWR, { mutate } from "swr";
 import fetcher from "@utils/fetcher";
 import CommonTop from "@layouts/common/CommonTop";
+import FindId from "./FindId";
 
 function UpdateUser() {
   const [user, setUser] = useState({
@@ -22,6 +23,7 @@ function UpdateUser() {
   );
 
   const [isUpdateSuccess, setUpdateSuccess] = useState(false);
+  const [isFindIdModalOpen, setFindIdModalOpen] = useState(false);
 
   useEffect(() => {
     if (myData) {
@@ -93,6 +95,13 @@ function UpdateUser() {
         style={{ marginTop: "70px", paddingLeft: "12px", paddingRight: "12px" }}
         onChange={(e) => setUser({ ...user, userId: e.target.value })}
       />
+      <Button onClick={() => setFindIdModalOpen(true)}>아이디 찾기</Button>
+      {isFindIdModalOpen && (
+        <FindId
+          onClose={() => setFindIdModalOpen(false)}
+          onIdFound={(foundId) => setUser({ ...user, userId: foundId })}
+        />
+      )}
       <TextField
         label="비밀번호"
         value={user.password}
