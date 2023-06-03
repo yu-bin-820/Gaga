@@ -1,7 +1,7 @@
 import CommonTop from '@layouts/common/CommonTop';
 import { Box, Typography } from '@mui/material';
 import React from 'react'
-import { termCloseWindow } from '@hooks/user/TermCloseWindow'; 
+
 
 const TermsOfGaga = () => {
     
