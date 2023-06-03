@@ -72,6 +72,8 @@ import ListUser from '@pages/admin/BlackList/ListUser.jsx';
 import GetUser from '@pages/admin/BlackList/GetUser.jsx';
 import ListSearchClub from '@pages/club/ListSearchClub.jsx';
 import SearchClub from '@pages/club/SearchClub.jsx';
+import Payment from '@pages/payment/Payment.jsx';
+import PaymentRedirect from '@pages/payment/PaymentRedirect.jsx';
 
 const router = createBrowserRouter([
   {
@@ -352,6 +354,14 @@ const router = createBrowserRouter([
       {
         path: 'payment',
         children: [
+          {
+            path: '',
+            element: <Payment />,
+          },
+          {
+            path: 'redirect',
+            element: <PaymentRedirect />,
+          },
           {
             path: 'adjustment',
             children: [
