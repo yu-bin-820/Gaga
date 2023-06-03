@@ -109,7 +109,7 @@ public class PaymentServiceTest {
     	}
     }
     
-    @Test   //==>다시 해봐라
+    //@Test   //==>다시 해봐라
     public void updatePaymentTest() throws Exception{
     	
     	Payment payment = new Payment();

@@ -260,15 +260,17 @@ public class UserRestController {
 	    }
 	
 	    String code = userService.sendRandomSmsMessage(userPhoneNo);
+	    System.out.println("codeeeeeeeee"+code);
 	    session.setAttribute("rand", code);
 	    
 	    return false;
 	}
 	//서버의 핸드폰 인증코드와, 회원이 입력한 코드를 비교
 	@PostMapping("/phoneAuthOk")
-	public Boolean phoneAuthOk(@RequestBody String phoneAuthCode, HttpSession session) {
+	public Boolean phoneAuthOk(@RequestBody String phoneAuthCode, HttpSession session,HttpServletRequest request) {
 	    String rand = (String) session.getAttribute("rand");
-
+	    String code = (String) request.getParameter("code");
+	    System.out.println("rand"+rand);
 	    System.out.println(rand + " <-서버발송 인증번호 || 회원이입력한 인증번호-> " + phoneAuthCode);
 	    phoneAuthCode = phoneAuthCode.replace("=", ""); // = 기호 제거
 	    if (rand.equals(phoneAuthCode)) {
