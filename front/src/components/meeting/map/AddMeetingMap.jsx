@@ -1,10 +1,9 @@
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
-import { Button, ListItem, ListItemButton, ListItemText, TextField } from '@mui/material';
-import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import { Button, TextField } from '@mui/material';
+import { Stack } from '@mui/system';
+import { useState } from 'react';
 import { useCallback } from 'react';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
-import { FixedSizeList } from 'react-window';
+import AddMeetingMapDrawer from './AddMeetingMapDrawer';
 
 const AddMeetingMap = () => {
 
@@ -19,10 +18,22 @@ const AddMeetingMap = () => {
 
       const [position, setPosition] = useState()
 
+      const [settingsMenuOpen, setSettingsMenuOpen] = useState(false);
 
-    const [info, setInfo] = useState()
+      const onClickSettings = useCallback(() => {
+        // navigate('/settings');
+        setSettingsMenuOpen(true);
+      }, []);
+      const toggleSettingsMenu = useCallback(
+        (state) => () => {
+          setSettingsMenuOpen(state);
+        },
+        []
+      );
+
+
+
     const [ keyword, setKeyword] = useState()
-    const [markers, setMarkers] = useState([])
     const [map, setMap] = useState()
 
     const handleKeywordChange = useCallback((e) => {
@@ -39,7 +50,6 @@ const AddMeetingMap = () => {
           // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
           // LatLngBounds 객체에 좌표를 추가합니다
           const bounds = new kakao.maps.LatLngBounds()
-          let markers = []
   
           for (var i = 0; i < data.length; i++) {
 
@@ -76,71 +86,25 @@ const AddMeetingMap = () => {
           // address 값을 어디에 저장할지 정해야 합니다.
           // setField('meetingAddr', address);
         });
-      }, []);
+      });
 
 
 
 
     return (
         <>
-        <Map // 로드뷰를 표시할 Container
-        center={{
-          lat: 37.566826,
-          lng: 126.9786567,
-        }}
-        style={{
-          width: "100%",
-          height: "350px",
-        }}
-        level={3}
-        onCreate={setMap}
-        onClick={(_t, mouseEvent) => {
-            const lat = mouseEvent.latLng.getLat();
-            const lng = mouseEvent.latLng.getLng();
-            setPosition({
-                lat: lat,
-                lng: lng,
-              });
-              setField('meetingLat', lat.toString());
-              setField('meetingLng', lng.toString());
-              markerAddr(lat, lng);
-            }}
-      >
-        {position && <MapMarker position={position} />}
-
-        {/* {markers.map((marker) => (
-          <MapMarker
-            key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
-            position={marker.position}
-            onClick={() => {
-                setField('meetingLat', marker.position.lat.toString());
-                setField('meetingLng', marker.position.lng.toString());
-                setField('meetingAddr', marker.meetingAddr.toString());
-                setInfo(marker);
-            }}
-          >
-            {info &&info.content === marker.content && (
-              <div style={{color:"#000"}}>{marker.content}</div>
-            )}
-          </MapMarker>
-        ))} */}
-      </Map>
+          <Stack
+            sx={{marginLeft: '15px',
+            marginRight:'20px'}}>
+        <Button onClick={onClickSettings}>지도</Button>
         <TextField
             fullWidth
-            label="keyword"
-            name="keyword"
-            onChange={handleKeywordChange}
-            required
-            value={keyword}
-          />
-        <Button onClick={handleSubmit}>검색</Button>
-        <TextField
-            fullWidth
-            label="meetingAddr"
+            disabled
             name="meetingAddr"
             onChange={(e)=>onChangeField('meetingAddr',e)}
             required
             value={meetingAddr}
+            variant="standard"
           />
         <TextField
             fullWidth
@@ -149,7 +113,9 @@ const AddMeetingMap = () => {
             onChange={(e)=>onChangeField('meetingDetailAddr',e)}
             required
             value={meetingDetailAddr}
+            variant="standard"
           />
+          </Stack>
         <input
           hidden
           name="meetingLat"
@@ -164,6 +130,23 @@ const AddMeetingMap = () => {
           required
           value={meetingLng}
         />
+            <AddMeetingMapDrawer
+                settingsMenuOpen={settingsMenuOpen}
+                toggleSettingsMenu={toggleSettingsMenu}
+                setSettingsMenuOpen={setSettingsMenuOpen}
+                center={{
+                    lat: 37.566826,
+                    lng: 126.9786567,
+                }}
+                setMap={setMap}
+                setPosition={setPosition}
+                setField={setField}
+                markerAddr={markerAddr}
+                position={position}
+                keyword={keyword}
+                handleKeywordChange={handleKeywordChange}
+                handleSubmit={handleSubmit}
+            />
         </>
     );
 };

@@ -37,7 +37,7 @@ export default function MeetingClubTabs() {
             maxHeight: 'calc(100vh - 200px)',
           }}
         >
-          <TabPanel value='meeting'>
+          <TabPanel value='meeting' sx={{ padding: '0' }}>
             <ListMeeting />
           </TabPanel>
 

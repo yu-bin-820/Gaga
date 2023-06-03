@@ -4,6 +4,7 @@ import { Button, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
+import dayjs from 'dayjs';
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import useSWR from 'swr';
@@ -43,15 +44,14 @@ const AddMeeting1 = () => {
 
     try {
       const formData = new FormData();
-
       formData.append('file', file);
       formData.append('mainCategoryNo',mainCategoryNo);
       formData.append('filterTag',filterTag);
       formData.append('meetingName',meetingName);
       formData.append('meetingIntro',meetingIntro);
-      formData.append('meetingDate',meetingDate);
-      formData.append('meetingStartTime',meetingStartTime);
-      formData.append('meetingEndTime',meetingEndTime);
+      formData.append('meetingDate',dayjs(meetingDate).format("YYYY-MM-DD"));
+      formData.append('meetingStartTime',dayjs(meetingStartTime).format('HH:mm:ss'));
+      formData.append('meetingEndTime',dayjs(meetingEndTime).format('HH:mm:ss'));
       formData.append('meetingAddr',meetingAddr);
       formData.append('meetingDetailAddr',meetingDetailAddr);
       formData.append('meetingLat',meetingLat);
@@ -63,7 +63,7 @@ const AddMeeting1 = () => {
       formData.append('entryFee',parseInt(entryFee));
       formData.append('meetingLeaderNo',myData.userNo);
 
-        console.log(useMeetingFormStore.meetingDate)
+        console.log(dayjs(meetingDate).format("YYYY-MM-DD")+meetingStartTime.format('HH:mm:ss'))
 
       const response = await axios.post(
         `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting`,
@@ -79,30 +79,6 @@ const AddMeeting1 = () => {
   }, [meetingDate,meetingStartTime,meetingEndTime,filterGender,filterMinAge,filterMaxAge, entryFee]);
   return (
     <Box>
-      <TextField
-        fulWidth
-        label="meetingDate"
-        name="meetingDate"
-        onChange={(e)=>onChangeField('meetingDate',e)}
-        required
-        value={meetingDate}
-      />
-      <TextField
-        fulWidth
-        label="meetingStartTime"
-        name="meetingStartTime"
-        onChange={(e)=>onChangeField('meetingStartTime',e)}
-        required
-        value={meetingStartTime}
-      />
-      <TextField
-        fulWidth
-        label="meetingEndTime"
-        name="meetingEndTime"
-        onChange={(e)=>onChangeField('meetingEndTime',e)}
-        required
-        value={meetingEndTime}
-      />
       <TextField
         fulWidth
         label="filterGender"

@@ -31,12 +31,12 @@ const ListMyMeeting = () => {
 
     return (
         <Box sx={{ marginBottom: '136px', backgroundColor: '#ededed' }}>
-                meeting.state 0 : leader / 1 : 신청중 / 2: 확정
                 {meetingList?.map((meeting,i)=>(
                     
-                    <Box key={i}>
+                    <Box 
+                    key={i}
+                    sx={{margin:'3px'}}>
                     <ListMyMeetingThumnail meeting={meeting}/>
-                    <h5>{meeting.state}</h5>
                     </Box>
                     
                 ))}

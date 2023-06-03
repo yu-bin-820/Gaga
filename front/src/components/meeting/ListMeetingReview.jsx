@@ -1,5 +1,5 @@
 import { Button, ImageList, ImageListItem, Rating, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
@@ -65,29 +65,23 @@ const ListMeetingReview = () => {
             <Box>
                 {meetingReviewList?.map((meetingReview,i)=>(
                     <Box key={i}>
-                        <ImageList
-                            sx={{ width: 100, height: 100, overflow: 'hidden' }}
-                            cols={1}
-                            rowHeight={100}
-                            >
-                            <ImageListItem>
-                            <CustomedImageListItem
+                        <Stack 
+                        direction="row" 
+                        spacing={2}
+                        alignItems="center">
+                            <img
                                 src={`http://${
                                 import.meta.env.VITE_SPRING_HOST
                                 }/upload_images/meeting/${meetingReview?.meetingReviewImg}`}
+                                style={{ width: '100px', height: '100px' }}
                             />
-                            </ImageListItem>
-                        </ImageList>
-                        <Box
-                            sx={{
-                                width: 200,
-                                display: 'flex',
-                                alignItems: 'center',
-                            }}
-                            >
+                        <Stack spacing={1}>
                             <Rating name="read-only" value={meetingReview.meetingScore} readOnly />
+                            
                             <Box sx={{ ml: 2 }}>{meetingReview.meetingScore}</Box>
-                        </Box>
+                            </Stack>
+                            </Stack>
+                        
                     <Button 
                     id={meetingReview.meetingReviewNo}
                     onClick={onClickUpdateMeetingReview}>수정하기</Button>

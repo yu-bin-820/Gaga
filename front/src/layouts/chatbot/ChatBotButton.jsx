@@ -9,7 +9,7 @@ const ChatBotButton = () => {
   return (
     <Fab
       color="primary"
-      sx={{ position: 'fixed', bottom: '4.5rem', right: '2rem' }}
+      sx={{ position: 'fixed', bottom: '4.5rem', right: '1.1rem' }}
     >
       <SmartToyOutlinedIcon />
     </Fab>

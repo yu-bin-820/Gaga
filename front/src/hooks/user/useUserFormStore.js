@@ -1,24 +1,24 @@
 import {create} from 'zustand';
 
 
-const addUser={
+const userField={
     userId: '',
     password: '',
     userName: '',
     birthday: '',
-    gender: '',
+    gender: 1,
     nickName: '',
     phoneNo: ''
 }
-const userAddUser=create((set=>({
-    ...addUser,
+const useUserFormStore=create((set=>({
+    ...userField,
 
     setField: (field, value)=> set((state)=>({[field]: value})),
     onChangeField: (field, event)=>set((state)=>({[field]:event.target.value})),
     reset: () => {
-        set(addUser)
+        set(userField)
       },
 })))
 
 
-export default userAddUser;
+export default useUserFormStore;

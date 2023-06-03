@@ -1,14 +1,11 @@
 import ListMeetingReview from "@components/meeting/ListMeetingReview";
 import {
-  BottomNavigation,
-  BottomNavigationAction,
   Box,
   Button,
-  ImageListItem,
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import PeopleIcon from "@mui/icons-material/People";
 import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
@@ -96,16 +93,8 @@ const GetMeeting = () => {
   return (
     <>
       <GetMeetingTop />
-      <Box sx={{ marginTop: "50px", marginBottom: "64px" }}>
-        <div style={{ position: "relative", marginBottom: "10px" }}>
-          <ImageListItem
-            sx={{
-              maxWidth: "100%",
-              maxHeight: "100px",
-              minWidth: "100%",
-              minHeight: "100px",
-            }}
-        >
+      <Box sx={{ marginTop: "50px", marginBottom: "64px", marginLeft: '10px', marginRight: '10px' }}>
+
             {meeting?.meetingImg ? (
                   <img
                     src={`http://${
@@ -120,44 +109,54 @@ const GetMeeting = () => {
                 src={`https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c`}
               />
             )}
-          </ImageListItem>
-        </div>
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            background: "rgba(0, 0, 0, 0.7)",
-            padding: "10px",
-          }}
-        ></div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <h4>{meeting?.meetingName}</h4>
 
-        <Stack spacing={1}>
+        <Stack spacing={1} >
+
+        <Typography sx={{ fontSize: 16 }}>
+        {meeting?.meetingName}</Typography>
+        <Typography sx={{ fontSize: 16 }} >
+        모임 소개</Typography>
+
+        <Typography sx={{ fontSize: 13 }}>
+        {meeting?.meetingIntro}</Typography>
+
           <Stack direction={"row"} spacing={1} alignItems={"center"}>
             <PeopleIcon />
             <Typography sx={{ fontSize: 13 }}>
-              {meeting?.memberCount}/{meeting?.meetingMaxMemberNo}
+              {meeting?.count}/{meeting?.meetingMaxMemberNo}
             </Typography>
           </Stack>
 
-          <CenteredText>
-            <CalendarMonthIcon /> {meeting?.meetingDate}
-          </CenteredText>
+          <Stack direction={"row"} spacing={1} alignItems={"center"}>
+            <CalendarMonthIcon /> 
+            <Typography sx={{ fontSize: 13 }}>
+              {meeting?.meetingDate}
+            </Typography>
+          </Stack>
 
-          <CenteredText>
-            <QueryBuilderIcon /> {meeting?.meetingStartTime} ~{" "}
+          <Stack direction={"row"} spacing={1} alignItems={"center"}>
+            <QueryBuilderIcon /> 
+            <Typography sx={{ fontSize: 13 }}>
+            {meeting?.meetingStartTime} ~{" "}
             {meeting?.meetingEndTime}
-          </CenteredText>
-          <CenteredText>
-            <LocationOnIcon /> {meeting?.meetingAddr}
-          </CenteredText>
-          <h5>&nbsp; &nbsp; &nbsp;{meeting?.meetingDetailAddr}</h5>
+            </Typography>
+          </Stack>
+
+          <Stack direction={"row"} spacing={1} alignItems={"center"}>
+            <LocationOnIcon /> 
+            <Typography sx={{ fontSize: 13 }}>
+              {meeting?.meetingAddr}
+            </Typography>
+          </Stack>
+
+          <Stack 
+          direction={"row"} 
+          spacing={1} 
+          alignItems={"center"}>
+          <Typography sx={{ marginLeft: '34px', fontSize: 13 }}>
+          {meeting?.meetingDetailAddr}
+            </Typography>
+          </Stack>
         </Stack>
         <br />
         {meeting && (
@@ -185,6 +184,7 @@ const GetMeeting = () => {
           <Button
             variant="contained"
             sx={{ width: "85vw", borderRadius: "50px" }}
+            onClick={onClickAddMember}
           >
             참여하기
           </Button>
