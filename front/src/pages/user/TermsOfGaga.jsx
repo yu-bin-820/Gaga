@@ -1,16 +1,13 @@
 import CommonTop from '@layouts/common/CommonTop';
-import UserTop from '@layouts/user/UserTop';
 import { Box, Typography } from '@mui/material';
 import React from 'react'
+import { termCloseWindow } from '@hooks/user/TermCloseWindow'; 
 
 const TermsOfGaga = () => {
-    const goBack = () => {
-        window.close();
-    };
-
+    
   return (
     <>
-    <CommonTop onClick={goBack}/>
+    <CommonTop />
     <Box
       sx={{
         padding: '20px',  // 페이지 내부의 여백

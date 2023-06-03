@@ -4,7 +4,6 @@ import fetcher from "@utils/fetcher";
 import useSWR from "swr";
 import axios from "axios";
 import React, { useCallback, useState } from "react";
-import { Navigate } from "react-router";
 import dayjs from "dayjs";
 import MenuItem from "@mui/material/MenuItem";
 import { FormHelperText } from "@mui/material";
@@ -17,7 +16,7 @@ import {
   ListItemText,
   SwipeableDrawer,
   Typography,
-  TextField
+  TextField,
 } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -29,68 +28,76 @@ import { Backdrop } from "@mui/material";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import CommonTop from "@layouts/common/CommonTop";
 import TermsOfGaga from "./TermsOfGaga";
+import useUserFormStore from "@hooks/user/useUserFormStore";
+import { useNavigate } from "react-router";
+import AddUserDate from "@components/user/AddUserDate";
 
 const AddUserTest = () => {
-  const [user, onChangeUser, setUser] = useInput({
-    userId: "",
-    password: "",
-    userName: "",
-    birthday: "",
-    gender: "",
-    nickName: "",
-    phoneNo: "",
-  });
+  const {
+    userId,
+    password,
+    userName,
+    birthday,
+    gender,
+    nickName,
+    phoneNo,
+    reset,
+  } = useUserFormStore();
 
-  const handleChangeUser = (event) => {
-    onChangeUser(event); // 기존 onChangeUser 함수 호출
+  const [openTerms, setOpenTerms] = useState(false);
+
+  const handleOpenTerms = () => {
+    setOpenTerms(true);
   };
+
+  const handleCloseTerms = () => {
+    setOpenTerms(false);
+  };
+
   const { data: myData, mutate: mutateMe } = useSWR(
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
     fetcher
   );
+  const navigate = useNavigate();
+  const handleSubmit = useCallback(async () => {
+    event.preventDefault();
 
-  const checkDuplicateId = async () => {
     try {
+      const formData = new FormData();
+      formData.append("userId", userId);
+      formData.append("password", password);
+      formData.append("userName", userName);
+      formData.append("birthday", dayjs(birthday).format("YYYY-MM-DD"));
+      formData.append("gender", gender);
+      formData.append("nickName", nickName);
+      formData.append("phoneNo", phoneNo);
+
+      console.log(dayjs(birthday).format("YYYY-MM-DD"));
+
       const response = await axios.post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/checkDuplicateId`,
-        { userId: user.userId },
-        { withCredentials: true }
+        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
+        formData
       );
-      return response.data.isDuplicate;
+
+      reset();
+
+      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const handleSubmit = useCallback(
-
-    [user, mutateMe]
-  );
-
+  }, [userId, password, userName, birthday, gender, nickName, phoneNo]);
 
   return (
     <>
       <CommonTop />
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
-        <Box
-          component="form"
-          noValidate
-          sx={{ width: "50%", mt: 8, ml: 10 }}
-        >
-          <FormControlLabel
-            control={
-              <Checkbox/>
-            }
-            label={<Button>이용약관</Button>}
-          />
-          <SwipeableDrawer
-            anchor="right"
-            onClose={() => {}}
-            onOpen={() => {}}
-          > 이용약관 상세보기
-            <TermsOfGaga />
-          </SwipeableDrawer>
+        <Box component="form" noValidate sx={{ width: "50%", mt: 8, ml: 10 }}>
+          <FormControlLabel control={<Checkbox />} label="동의" />
+          <Button onClick={handleOpenTerms}>이용약관 상세보기</Button>
+
+          {openTerms && <TermsOfGaga onClose={handleCloseTerms} />}
+          
           <TextField
             variant="outlined"
             margin="none"
@@ -133,20 +140,7 @@ const AddUserTest = () => {
             name="nickName"
             autoComplete="nickName"
           />
-          <TextField
-            variant="outlined"
-            margin="none"
-            required
-            fullWidth
-            id="birthday"
-            label="생년월일"
-            name="birthday"
-            autoComplete="birthday"
-            inputProps={{
-              maxLength: 8, // 최대 8글자 (YYYYMMDD)
-              pattern: "[0-9]*", // 숫자만 입력 가능
-            }}
-          />
+          <AddUserDate />
           <TextField
             variant="outlined"
             margin="none"
@@ -157,6 +151,7 @@ const AddUserTest = () => {
             name="gender"
             autoComplete="gender"
             select // select 속성 추가
+            defaultValue={1}
           >
             <MenuItem value={1}>남자</MenuItem>
             <MenuItem value={2}>여자</MenuItem>
@@ -171,13 +166,11 @@ const AddUserTest = () => {
             name="phoneNo"
             autoComplete="phoneNo"
             inputProps={{
-              maxLength: 11, // 최대 11글자 
+              maxLength: 11, // 최대 11글자
               pattern: "[0-9]*", // 숫자만 입력 가능
             }}
           />
-          <Button variant="contained">
-            인증 요청
-          </Button>
+          <Button variant="contained">인증 요청</Button>
           <TextField
             variant="outlined"
             margin="none"
@@ -191,6 +184,7 @@ const AddUserTest = () => {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2, marginTop: 1 }}
+            onClick={handleSubmit}
           >
             회원가입
           </Button>
