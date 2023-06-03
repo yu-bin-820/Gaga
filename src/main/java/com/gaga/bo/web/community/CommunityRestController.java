@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.gaga.bo.service.community.CommunityService;
 import com.gaga.bo.service.domain.Report;
+import com.gaga.bo.service.domain.Title;
 import com.gaga.bo.service.domain.User;
 import com.gaga.bo.service.domain.UserReview;
 import com.gaga.bo.service.user.UserService;
@@ -111,6 +112,47 @@ public class CommunityRestController {
 		session.setAttribute("user", user);
 	}
 	
+	@PatchMapping("userintro")
+	public void updateUserIntro(
+								@RequestBody User user,
+								HttpSession session
+													  ) throws Exception {
+		User dbUser = userService.getUser(user.getUserNo());
+		
+		dbUser.setUserIntro(user.getUserIntro());
+		
+		System.out.println(" :: updateUserIntro - user :: " + user);
+		System.out.println(" :: updateUserIntro - dbUser :: " + dbUser);
+		
+		userService.updateUser(dbUser);
+		session.setAttribute("user", dbUser);
+		
+	}
+	
+	@PatchMapping("profile")
+	public void updateProfile(
+							  @RequestBody User user,
+							  HttpSession session
+							  						 ) throws Exception {
+		
+		user.setMainTitleName( communityService.getTitleName( user.getMainTitleNo() ) );
+		userService.updateUser(user);
+		
+		System.out.println(" :: updateProfile() :: " + user);
+		
+		session.setAttribute("user", user);
+		
+	}
+	
+	@GetMapping("title/list/userno/{userNo}")
+	public List<Title> getTitleList(
+							 @PathVariable int userNo) throws Exception {
+		
+		List<Title> userEarnedTitleList = communityService.getUserEarnedTitleList(userNo);
+		System.out.println(" :: getTitleList :: " + userEarnedTitleList);
+		
+		return userEarnedTitleList;
+	}
 	
 	//------------------------Report Request Mapping----------------------------------------------------------
 	

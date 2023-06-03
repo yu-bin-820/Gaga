@@ -21,7 +21,7 @@
 	  <result property="filterMaxAge" column="filter_max_age" jdbcType="INTEGER"/>
 	  <result property="filterTag" column="filter_tag" jdbcType="VARCHAR"/>
 	  <result property="mainCategoryNo" column="main_category_no" jdbcType="INTEGER"/>
-	  <result property="memberCount" column="member_count" jdbcType="INTEGER" />
+	  <result property="memberCount"	column="member_count"	jdbcType="INTEGER"/>
 	</resultMap>
 	
 	<resultMap id="mainCategoryResultMap" type="java.util.HashMap">
@@ -38,11 +38,11 @@
 	<!-- SQL : INSERT -->
 	<insert id="addClub" parameterType="club">
 	  INSERT 
-	  INTO clubs (club_name, club_intro, club_leader_no, club_max_member_no, club_state,
+	  INTO clubs (club_name, club_intro, club_leader_no, club_max_member_no, club_state, club_reg_date,
 	    club_img, club_region, filter_gender, filter_min_age, filter_max_age, filter_tag, main_category_no)
 	  VALUES 
 	   (#{clubName:VARCHAR}, #{clubIntro:VARCHAR}, #{clubLeaderNo:INTEGER}, #{clubMaxMemberNo:INTEGER},
-	   	#{clubState:INTEGER}, #{clubImg:VARCHAR}, #{clubRegion:VARCHAR}, #{filterGender:INTEGER}, 
+	   	#{clubState:INTEGER}, NOW() ,#{clubImg:VARCHAR}, #{clubRegion:VARCHAR}, #{filterGender:INTEGER}, 
 	   	#{filterMinAge:INTEGER}, #{filterMaxAge:INTEGER}, #{filterTag:VARCHAR}, #{mainCategoryNo:INTEGER})
 	</insert>
 	
@@ -50,34 +50,53 @@
 	<select id="getClub" resultMap="ClubResultMap" parameterType="int">
 	  SELECT club_no, club_name, club_intro, club_leader_no, club_max_member_no,
 	         club_reg_date, club_state, club_img, club_region, filter_gender,
-	         filter_min_age, filter_max_age, filter_tag, main_category_no
-	  FROM clubs
+	         filter_min_age, filter_max_age, filter_tag, main_category_no,
+	         (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND club_no = c.club_no) AS member_count
+	  FROM clubs c
 	  WHERE club_no = #{clubNo:INTEGER}
 	</select>
+	
+	<!-- SELECT LIST 검색어 클럽 목록 조회 -->
+	<select id="getSearchClubList" parameterType="search" resultMap="ClubResultMap">
+	  SELECT club_no, club_name, club_intro, club_leader_no, club_max_member_no,
+	         club_reg_date, club_state, club_img, club_region, filter_gender,
+	         filter_min_age, filter_max_age, filter_tag, main_category_no,
+	         (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND club_no = c.club_no) AS member_count
+	  FROM clubs c
+	  WHERE ((club_region LIKE CONCAT('%', #{searchKeyword}, '%')
+	         OR club_name LIKE CONCAT('%', #{searchKeyword}, '%')
+	         OR club_intro LIKE CONCAT('%', #{searchKeyword}, '%'))
+	         AND club_state = 1)
+	  LIMIT #{startRowNum} , #{pageSize}
+	</select>
+
+  
 	
 	<!-- SELECT LIST 회원이 생성한 클럽 목록 조회 -->
 	<select id="getCreateClubList" resultMap="ClubResultMap" parameterType="int">
 	  SELECT club_no, club_name, club_intro, club_leader_no, club_max_member_no,
 	         club_reg_date, club_state, club_img, club_region, filter_gender,
-	         filter_min_age, filter_max_age, filter_tag, main_category_no
-	  FROM clubs
+	         filter_min_age, filter_max_age, filter_tag, main_category_no,
+	         (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND club_no = c.club_no) AS member_count
+	  FROM clubs c
 	  WHERE club_leader_no = #{clubLeaderNo:INTEGER}
 	</select>
 	
-	<!-- SELECT LIST 클럽 목록 검색 -->
-	<select id="getSearchClubList" parameterType="filter" resultMap="ClubResultMap">
-	  SELECT club_no, club_name, club_intro, club_leader_no, club_max_member_no,
-	         club_reg_date, club_state, club_img, club_region, filter_gender,
-	         filter_min_age, filter_max_age, filter_tag, main_category_no
-	  FROM clubs
-      WHERE club_state = 0
-      		AND filter_gender = #{gender:INTEGER}
-  			AND filter_min_age &lt;= #{maxAge:INTEGER}
-            AND filter_max_age &gt;= #{minAge:INTEGER}
-  			AND #{age:INTEGER} BETWEEN filter_min_age AND filter_max_age
-  	  <if test="mainCategoryNo != null">
-  			AND main_category_no =  #{mainCategoryNo}
-  	  </if>
+	<!-- SELECT LIST 클럽 필터 적용 목록 -->
+	<select id="getFilterClubList" parameterType="filter" resultMap="ClubResultMap">
+    SELECT club_no, club_name, club_intro, club_leader_no, club_max_member_no,
+           club_reg_date, club_state, club_img, club_region, filter_gender,
+           filter_min_age, filter_max_age, filter_tag, main_category_no,
+           (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND club_no = c.club_no) AS member_count
+    FROM clubs c
+    WHERE club_state = 1
+          AND filter_gender = #{gender:INTEGER}
+          AND filter_min_age &lt;= #{maxAge:INTEGER}
+          AND filter_max_age &gt;= #{minAge:INTEGER}
+          AND #{age:INTEGER} BETWEEN filter_min_age AND filter_max_age
+    <if test="mainCategoryNo != null and mainCategoryNo != 0">
+        AND main_category_no =  #{mainCategoryNo}
+    </if>
   	<if test="tag != null">
   			AND filter_tag IN (#{tag : LONGVARCHAR}, #{tag2 : LONGVARCHAR}, #{tag3 : LONGVARCHAR})
   	</if>
@@ -88,11 +107,13 @@
 	  SELECT c.club_no, c.club_name, c.club_intro, c.club_leader_no, c.club_max_member_no,
 	         c.club_reg_date, c.club_state, c.club_img, c.club_region, c.filter_gender,
 	         c.filter_min_age, c.filter_max_age, c.filter_tag, c.main_category_no,
-	         COUNT(members.member_no) AS member_count
+	         (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND club_no = c.club_no) AS member_count
 	  FROM clubs c
 	  LEFT JOIN meetings m ON c.club_no = m.parent_club_no
-	  LEFT JOIN members ON c.club_no = members.club_no
+	  LEFT JOIN (SELECT club_no, user_no, state
+  				FROM members) cm ON c.club_no = cm.club_no
 	  WHERE c.main_category_no = #{mainCategoryNo} AND (m.parent_club_no IS NULL OR m.parent_club_no = c.club_no)
+	  		AND c.club_state IN (1,2)
 	  GROUP BY c.club_no
 	  ORDER BY member_count DESC, c.club_reg_date DESC
 	</select>
@@ -103,10 +124,14 @@
 	  SELECT DISTINCT
 	    c.club_no, c.club_name, c.club_intro, c.club_leader_no, c.club_max_member_no,
 	    c.club_reg_date, c.club_state, c.club_img, c.club_region, c.filter_gender,
-	    c.filter_min_age, c.filter_max_age, c.filter_tag, c.main_category_no, cm.state
+	    c.filter_min_age, c.filter_max_age, c.filter_tag, c.main_category_no, 
+	    (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND club_no = c.club_no) AS member_count,
+	    cm.state
 	  FROM clubs c
-	  LEFT JOIN members cm ON c.club_no = cm.club_no
-	  WHERE cm.user_no = #{userNo:INTEGER} OR c.club_leader_no = #{userNo:INTEGER}
+	  LEFT JOIN (SELECT club_no, user_no, state
+  				FROM members
+  				WHERE user_no = #{userNo} ) cm ON c.club_no = cm.club_no
+	  WHERE cm.user_no = #{userNo} OR c.club_leader_no = #{userNo} AND c.club_state IN (1,2)
 	</select>
 	
 	<!-- UPDATE -->
@@ -127,24 +152,18 @@
 		WHERE club_no = #{clubNo:INTEGER}
 	</update>
 	
-	<!-- UPDATE -->
-	<update id="updateParentClubNoToNull" parameterType="int">
-	  UPDATE meetings
-	  SET parent_club_no = NULL
-	  WHERE parent_club_no = #{clubNo:INTEGER}
-	</update>
-	
-	<!-- DELETE -->
-	<delete id="deleteClub" parameterType="int">
-		DELETE FROM clubs
+	<!-- update --> <!-- 클럽 삭제 club_state = 4 -->
+	<update id="deleteClub" parameterType="int">
+		UPDATE clubs
+		SET club_state = 4
 		WHERE club_no = #{clubNo:INTEGER}
-	</delete>
+	</update>
 	
 	<!-- 멤버관리 -->
 	<!-- INSERT -->
 	<insert id="addClubMember" parameterType="Map">
 	  INSERT INTO members (user_no, club_no, state)
-	  VALUES (#{userNo:INTEGER}, #{clubNo:INTEGER}, 1)
+	  VALUES (#{userNo}, #{clubNo}, 1)
 	</insert>
 	
 	<!-- UPDATE -->
@@ -155,22 +174,14 @@
 	  	    confirmed_time = NOW()
 	  	</set>
 
-      WHERE club_no = #{clubNo:INTEGER} AND user_no = #{userNo:INTEGER}
+      WHERE club_no = #{clubNo} AND user_no = #{userNo}
 	</update>
 	
 	<!-- DELETE -->
 	<delete id="deleteClubMember" parameterType="Map">
 	  DELETE 
 	  FROM members
-      WHERE club_no = #{clubNo:INTEGER} AND user_no = #{userNo:INTEGER}
+      WHERE club_no = #{clubNo:INTEGER} AND user_no = #{userNo}
 	</delete>
-	
-	<!-- SQL : SELECT -->
-	<select id="getTotalCount" parameterType="int" resultType="int">
-		SELECT COUNT(*)
-	  	FROM(	SELECT *
-				FROM members
-				WHERE club_no = #{clubNo} ) countTable	
-	</select>
 	
 </mapper>

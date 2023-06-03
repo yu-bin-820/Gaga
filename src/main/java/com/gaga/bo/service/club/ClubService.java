@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.gaga.bo.service.domain.Club;
 import com.gaga.bo.service.domain.Filter;
+import com.gaga.bo.service.domain.Search;
 
 public interface ClubService {
 	
@@ -19,8 +20,11 @@ public interface ClubService {
 	//회원이 생성한 클럽 목록 조회 
 	public List<Club> getCreateClubList(int clubLeaderNo) throws Exception;
 	
-	//클럽 검색시 클럽 목록 조회
-	public List<Club> getSearchClubList(Filter filter) throws Exception;
+	//검색어 클럽 목록 조회
+	public List<Club> getSearchClubList(Search search) throws Exception;
+	
+	//필터적용 클럽 목록 조회
+	public List<Club> getFilterClubList(Filter filter) throws Exception;
 	
 	//회원이 참여한 클럽 목록 조회
 	public List<Club> getMyClublist(int userNo) throws Exception;

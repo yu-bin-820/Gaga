@@ -52,7 +52,7 @@
 	 	INSERT 
 	 	INTO payments (pay_no, user_no, meeting_no, meeting_name, pay_time, refund_time, pay_state, entry_fee)
         VALUES (#{payNo:VARCHAR}, #{userNo:INTEGER}, #{meetingNo:INTEGER}, #{meetingName:VARCHAR}, 
-        #{payTime:TIMESTAMP}, #{refundTime:TIMESTAMP}, #{payState:INTEGER}, #{entryFee:INTEGER})
+        #{payTime:TIMESTAMP}, #{refundTime:TIMESTAMP}, 1, #{entryFee:INTEGER})
 	</insert>
 	
 	<!-- SQL : SELECT -->
@@ -66,7 +66,7 @@
 	<select 	id="getPayNoByUserMeeting"  parameterType="int" resultType="java.lang.String" >
 	 	SELECT pay_no
 		FROM payments
-		WHERE user_no = #{userNo} AND meeting_no = #{meetingNo}
+		WHERE user_no = #{userNo} AND meeting_no = #{meetingNo} AND pay_state = 1
 	</select>
 	
 	<!-- SQL: SELECT -->
@@ -78,7 +78,7 @@
 	
 	<update id="updatePayment" parameterType="String">
 	  UPDATE payments
-	  SET pay_state = 1,
+	  SET pay_state = 2,
 	      refund_time = NOW()
 	  WHERE pay_no = #{payNo}
 	</update>
