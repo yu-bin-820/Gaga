@@ -63,6 +63,7 @@ public class PaymentRestController {
 		paymentService.addPayment(payment);
 				
 	}
+	
 
 	@GetMapping("no/{payNo}")
 	public Payment getPayment(@PathVariable String payNo) throws Exception{
@@ -72,13 +73,19 @@ public class PaymentRestController {
 		return paymentService.getPayment(payNo);
 		
 	}
-
-	@PatchMapping("refund") // 결제 취소 : 2
-	public void updatePayment(@RequestBody Map<String, Object> refund) throws Exception{
+	
+	@PostMapping("refund/usermeeting")
+	public String getPayNoByUserMeeting(@RequestBody Map<String, Object> refund) throws Exception{
 		
 		System.out.println("환불시 결제번호 출력 Ctrl");
 		
-		String payNo = paymentService.getPayNoByUserMeeting(refund);
+		return paymentService.getPayNoByUserMeeting(refund);
+	}
+
+	@PatchMapping("refund/{payNo}") // 결제 취소 : 2
+	public void updatePayment(@PathVariable String payNo) throws Exception{
+		
+		System.out.println("환불 Ctrl");
 		
 		System.out.println("결제번호는?" + payNo);
 		
@@ -101,6 +108,15 @@ public class PaymentRestController {
 		System.out.println("정산 목록 전체 조회 Ctrl");
 		
 		return paymentService.getAllAdjustmentList();
+		
+	}
+	
+	@GetMapping("adjustment/ing")
+	public List<Meeting> getAdjustmentIngList() throws Exception{
+		
+		System.out.println("정산 상태별 목록 조회 Ctrl");
+		
+		return paymentService.getAdjustmentIngList();
 		
 	}
 	

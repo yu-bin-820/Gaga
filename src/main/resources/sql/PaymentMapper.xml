@@ -52,7 +52,7 @@
 	 	INSERT 
 	 	INTO payments (pay_no, user_no, meeting_no, meeting_name, pay_time, refund_time, pay_state, entry_fee)
         VALUES (#{payNo:VARCHAR}, #{userNo:INTEGER}, #{meetingNo:INTEGER}, #{meetingName:VARCHAR}, 
-        #{payTime:TIMESTAMP}, #{refundTime:TIMESTAMP}, 1, #{entryFee:INTEGER})
+        		NOW(), #{refundTime:TIMESTAMP}, 1, #{entryFee:INTEGER})
 	</insert>
 	
 	<!-- SQL : SELECT -->
@@ -86,16 +86,16 @@
 	
 	
 	<!-- 정산 SQL -->
-	<!-- SQL : SELECT -->
+	<!-- SQL : SELECT --> <!-- 1 :진행중 2: 성사 -->
 	<select id="getAllAdjustmentList" resultMap="meetingResultMap">
 		SELECT 
 		    meeting_date, meeting_end_time, adjustment_time, 
-		    adjustment_state, account_no, bank_name, 
-		    meeting_name, meeting_leader_no, entry_fee
+		    adjustment_state, account_no, bank_name, meeting_name, 
+		    meeting_leader_no, entry_fee
 		FROM 
 		    meetings
 		WHERE 
-		    entry_fee != 0 AND meeting_success = 1
+		    entry_fee != 0 AND meeting_success = 2 
 		ORDER BY 
 		    meeting_date DESC,
 		    meeting_end_time DESC;
@@ -105,13 +105,13 @@
 	<!-- SQL : SELECT -->
 	<select id="getAdjustmentList" parameterType="int" resultMap="meetingResultMap">
 	  SELECT 
-		    meeting_date, meeting_start_time, adjustment_time, 
+		    meeting_date, meeting_end_time, adjustment_time, 
 		    adjustment_state, account_no, bank_name, meeting_name, 
 		    meeting_leader_no,entry_fee
 		FROM 
 		    meetings
 		WHERE 
-		    entry_fee != 0 AND meeting_success = 1 AND meeting_leader_no = #{userNo}		    
+		    entry_fee != 0 AND meeting_success = 2 AND meeting_leader_no = #{userNo}		    
 		ORDER BY 
 		    meeting_date DESC,
 		    meeting_end_time DESC;
@@ -123,19 +123,21 @@
 	  UPDATE meetings
 	  <set>
 		  adjustment_time = NOW(),
-	      adjustment_state = 1
+	      adjustment_state = 2
 	  </set> 
 	  	  WHERE meeting_no = #{meetingNo}
 	</update>
 
+	<!-- 정산 상태별 정렬 1. 정산대기(adjustmentState=1) 2. 모임 끝 시간이 최신 -->
 	<!-- SQL : SELECT -->
-	<select id="getTotalCount" parameterType="int" resultType="int">
-		SELECT COUNT(*)
-	  	FROM(	SELECT *
-				FROM members
-				WHERE meeting_no = #{meetingNo} ) countTable	
-	</select>
-	
-	<!-- 정산 상태별 정렬 1. 정산대기(adjustmentState=0) 2. 모임 끝 시간이 최신 -->
-    
+    <select id="getAdjustmentIngList" resultMap="meetingResultMap">
+     SELECT meeting_date, meeting_end_time, adjustment_time, 
+		    adjustment_state, account_no, bank_name, meeting_name, 
+		    meeting_leader_no, entry_fee
+	 FROM meetings
+	 WHERE entry_fee != 0 AND meeting_success = 2 AND adjustment_state = 1
+	 ORDER BY 
+		    meeting_date DESC,
+		    meeting_end_time DESC;    
+    </select>
 </mapper>
