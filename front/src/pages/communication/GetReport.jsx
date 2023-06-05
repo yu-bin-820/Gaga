@@ -23,21 +23,21 @@ const GetReport = () => {
   const [deleteReportDialogOpen, setDeleteReportDialogOpen] = useState(false);
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
   const { data: reportData, mutate: mutateReport } = useSWR(
-    `http://${
+    `${
       import.meta.env.VITE_SPRING_HOST
     }/rest/community/report/reportno/${reportNo}`,
     fetcher
   );
 
   const { data: reportListData, mutate: mutateReportList } = useSWR(
-    `http://${
-      import.meta.env.VITE_SPRING_HOST
-    }/rest/community/report/list/userno/${myData?.userNo}/role/${myData?.role}`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/community/report/list/userno/${
+      myData?.userNo
+    }/role/${myData?.role}`,
     fetcher
   );
 
@@ -58,7 +58,7 @@ const GetReport = () => {
   const onClickDeleteReportConfirm = useCallback(() => {
     axios
       .delete(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/community/report/reportno/${reportNo}`,
         {
@@ -121,7 +121,7 @@ const GetReport = () => {
               <Stack sx={{ marginTop: '10px' }} spacing={2}>
                 {reportData?.reportImg && (
                   <img
-                    src={`http://${
+                    src={`${
                       import.meta.env.VITE_SPRING_HOST
                     }/upload_images/community/${reportData?.reportImg}`}
                     loading="lazy"
@@ -133,7 +133,7 @@ const GetReport = () => {
                 )}
                 {reportData?.reportImg2 && (
                   <img
-                    src={`http://${
+                    src={`${
                       import.meta.env.VITE_SPRING_HOST
                     }/upload_images/community/${reportData?.reportImg2}`}
                     loading="lazy"
@@ -142,7 +142,7 @@ const GetReport = () => {
                 )}
                 {reportData?.reportImg3 && (
                   <img
-                    src={`http://${
+                    src={`${
                       import.meta.env.VITE_SPRING_HOST
                     }/upload_images/community/${reportData?.reportImg3}`}
                     loading="lazy"

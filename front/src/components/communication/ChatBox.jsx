@@ -44,7 +44,7 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
   const [uploadChatImgDialogOpen, setUploadChatImgDialogOpen] = useState(false);
   const { locationDrawerOpen, isPost, setField } = useChatMapStore();
   const open = Boolean(anchorEl);
-  const postPath = `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/${
+  const postPath = `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/${
     groupType == 2 ? 'meeting' : 'club'
   }/message`;
 
@@ -140,7 +140,7 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
 
     axios
       .post(
-        `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/${
+        `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/${
           groupType == 2 ? 'meeting' : 'club'
         }/image`,
         formData,

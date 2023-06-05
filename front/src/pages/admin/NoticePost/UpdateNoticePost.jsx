@@ -16,7 +16,7 @@ function UpdateNoticePost() {
   useEffect(() => {
     if (!noticePost.noticePostNo) {
       axios
-        .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePost/${noticePostNo}`)
+        .get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePost/${noticePostNo}`)
         .then((response) => {
           setNoticePost(response.data);
         })
@@ -49,7 +49,7 @@ function UpdateNoticePost() {
     formData.append('userNo', noticePost.userNo);
 
     axios
-      .put(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/updateNoticePost/${noticePostNo}`, formData, {
+      .put(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/updateNoticePost/${noticePostNo}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }, // Content-Type 설정 추가
       })
       .then((response) => {

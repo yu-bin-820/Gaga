@@ -1,15 +1,26 @@
+import StyledToggleButtonGroup from '@components/common/StyledToggleButtonGroup';
 import useInput from '@hooks/common/useInput';
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
-import { Button, TextField } from '@mui/material';
-import { Box } from '@mui/system';
+import { Button, TextField, ToggleButton } from '@mui/material';
+import { Box, Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
 import useSWR from 'swr';
 
 const AddMeeting1 = () => {
+  const [alignment, setAlignment] = useState("left");
+  const [showEntryFee, setShowEntryFee] = useState(false);
+
+  const handleAlignment = (event, newAlignment) => {
+    setAlignment(newAlignment);
+    setShowEntryFee(newAlignment === "right");
+    if (newAlignment === "left") {
+      setField("entryFee", "0");
+    }
+  };
 
   const {
     mainCategoryNo,
@@ -29,14 +40,15 @@ const AddMeeting1 = () => {
     meetingMaxMemberNo,
     entryFee,
     file,
+    setField,
     onChangeField,
     reset
   } = useMeetingFormStore();
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
-    );
+  );
 
   const navigate = useNavigate();
   const handleSubmit = useCallback(async () => {
@@ -45,82 +57,81 @@ const AddMeeting1 = () => {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('mainCategoryNo',mainCategoryNo);
-      formData.append('filterTag',filterTag);
-      formData.append('meetingName',meetingName);
-      formData.append('meetingIntro',meetingIntro);
-      formData.append('meetingDate',dayjs(meetingDate).format("YYYY-MM-DD"));
-      formData.append('meetingStartTime',dayjs(meetingStartTime).format('HH:mm:ss'));
-      formData.append('meetingEndTime',dayjs(meetingEndTime).format('HH:mm:ss'));
-      formData.append('meetingAddr',meetingAddr);
-      formData.append('meetingDetailAddr',meetingDetailAddr);
-      formData.append('meetingLat',meetingLat);
-      formData.append('meetingLng',meetingLng);
-      formData.append('filterGender',filterGender);
-      formData.append('filterMinAge',filterMinAge);
-      formData.append('filterMaxAge',filterMaxAge);
-      formData.append('meetingMaxMemberNo',meetingMaxMemberNo);
-      formData.append('entryFee',parseInt(entryFee));
-      formData.append('meetingLeaderNo',myData.userNo);
-
-        console.log(dayjs(meetingDate).format("YYYY-MM-DD")+meetingStartTime.format('HH:mm:ss'))
+      formData.append('mainCategoryNo', mainCategoryNo);
+      formData.append('filterTag', filterTag);
+      formData.append('meetingName', meetingName);
+      formData.append('meetingIntro', meetingIntro);
+      formData.append('meetingDate', dayjs(meetingDate).format("YYYY-MM-DD"));
+      formData.append('meetingStartTime', dayjs(meetingStartTime).format('HH:mm:ss'));
+      formData.append('meetingEndTime', dayjs(meetingEndTime).format('HH:mm:ss'));
+      formData.append('meetingAddr', meetingAddr);
+      formData.append('meetingDetailAddr', meetingDetailAddr);
+      formData.append('meetingLat', meetingLat);
+      formData.append('meetingLng', meetingLng);
+      formData.append('filterGender', filterGender);
+      formData.append('filterMinAge', filterMinAge);
+      formData.append('filterMaxAge', filterMaxAge);
+      formData.append('meetingMaxMemberNo', meetingMaxMemberNo);
+      formData.append('entryFee', parseInt(entryFee));
+      formData.append('meetingLeaderNo', myData.userNo);
 
       const response = await axios.post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/meeting`,
         formData
       );
 
-      reset()
+      reset();
 
       console.log(response.data);
     } catch (error) {
       console.error(error);
     }
-  }, [meetingDate,meetingStartTime,meetingEndTime,filterGender,filterMinAge,filterMaxAge, entryFee]);
-  return (
-    <Box>
-      <TextField
-        fulWidth
-        label="filterGender"
-        name="filterGender"
-        onChange={(e)=>onChangeField('filterGender',e)}
-        required
-        value={filterGender}
-      />
-      <TextField
-        fulWidth
-        label="filterMinAge"
-        name="filterMinAge"
-        onChange={(e)=>onChangeField('filterMinAge',e)}
-        required
-        value={filterMinAge}
-      />
-      <TextField
-        fulWidth
-        label="filterMaxAge"
-        name="filterMaxAge"
-        onChange={(e)=>onChangeField('filterMaxAge',e)}
-        required
-        value={filterMaxAge}
-      />
-      <TextField
-        fulWidth
-        label="meetingMaxMemberNo"
-        name="meetingMaxMemberNo"
-        onChange={(e)=>onChangeField('meetingMaxMemberNo',e)}
-        required
-        value={meetingMaxMemberNo}
-      />
-      <TextField
-        fulWidth
-        label="entryFee"
-        name="entryFee"
-        onChange={(e)=>onChangeField('entryFee',e)}
-        required
-        value={entryFee}
-      />
+  }, [meetingDate, meetingStartTime, meetingEndTime, filterGender, filterMinAge, filterMaxAge, entryFee]);
 
-      <Button onClick={handleSubmit}>생성하기</Button>
+  return (
+    <Box sx={{ margin: '10px' }}>
+      <h4>참가비가 있나요?</h4>
+      <Box sx={{ margin: '10px' }}>
+        <h5 style={{ color: 'gray' }}>
+          개인 거래로 문제가 발생하는 것을 예방하기 위해 필요한 모든 금액을 참가비로 설정해 주세요.
+        </h5>
+      </Box>
+      <Stack direction="row" alignItems="center" spacing={12} justifyContent="center" margin={2}>
+        <StyledToggleButtonGroup
+          size="large"
+          value={alignment}
+          exclusive
+          onChange={handleAlignment}
+          aria-label="text alignment"
+        >
+          <ToggleButton value="left">없음</ToggleButton>
+          <ToggleButton value="right">있음</ToggleButton>
+        </StyledToggleButtonGroup>
+        </Stack>
+        <Stack sx={{margin: '30px'}}>
+        {showEntryFee && (
+          <TextField
+            fullWidth
+            name="entryFee"
+            onChange={(e) => onChangeField('entryFee', e)}
+            required
+            variant="standard"
+            value={entryFee}
+          />
+        )}
+        </Stack>
+        <Stack
+          spacing={0}
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ position: "fixed", bottom: 5, left: 0, right: 0 }}
+        >
+      <Button 
+      variant="contained"
+      sx={{ width: "85vw", borderRadius: "50px" }}
+      onClick={handleSubmit}>생성하기</Button>
+      </Stack>
     </Box>
   );
 };

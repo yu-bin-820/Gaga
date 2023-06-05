@@ -12,7 +12,7 @@ const Account = (props) => {
   const [bankList, setBankList] = useState([]);
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
@@ -20,7 +20,7 @@ const Account = (props) => {
     const fetchBanks = async () => {
       try {
         const response = await axios.get(
-          `http://${import.meta.env.VITE_SPRING_HOST}/rest/payment/banks`
+          `${import.meta.env.VITE_SPRING_HOST}/rest/payment/banks`
         );
         setBankList(response.data.response);
       } catch (error) {
@@ -33,7 +33,7 @@ const Account = (props) => {
   const onClickAccount = useCallback(async () => {
     try {
       const response = await axios.post(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/payment/account/holder`,
         {

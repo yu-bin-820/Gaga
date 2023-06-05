@@ -8,7 +8,7 @@ const Banks = () => {
   const onClickBanks = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/payment/banks`
+        `${import.meta.env.VITE_SPRING_HOST}/rest/payment/banks`
       );
 
       console.log(response.data);

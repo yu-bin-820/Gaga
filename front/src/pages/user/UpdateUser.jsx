@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { Button, TextField } from "@mui/material";
-import { useParams } from "react-router-dom";
-import useSWR, { mutate } from "swr";
-import fetcher from "@utils/fetcher";
-import CommonTop from "@layouts/common/CommonTop";
-import FindId from "./FindId";
+import React, { useState, useEffect } from 'react';
+import { Button, TextField } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import useSWR, { mutate } from 'swr';
+import fetcher from '@utils/fetcher';
+import CommonTop from '@layouts/common/CommonTop';
+import FindId from './FindId';
 
 function UpdateUser() {
   const [user, setUser] = useState({
-    userId: "",
-    password: "",
-    userName: "",
-    birthday: "",
+    userId: '',
+    password: '',
+    userName: '',
+    birthday: '',
     gender: 0,
-    nickName: "",
-    phoneNo: "",
+    nickName: '',
+    phoneNo: '',
   });
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
@@ -35,16 +35,12 @@ function UpdateUser() {
   const getUserInfo = async () => {
     try {
       const response = await fetch(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${
-          myData.userId
-        }`
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${myData.userId}`
       );
       const data = await response.json();
       setUser(data);
       mutate(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${
-          myData.userId
-        }`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${myData.userId}`,
         data
       ); // 캐시 갱신을 위해 mutate 함수 호출
     } catch (error) {
@@ -55,30 +51,27 @@ function UpdateUser() {
   const updateUser = async () => {
     try {
       const response = await fetch(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/updateUser`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/updateUser`,
         {
-          method: "POST", // PUT 요청
+          method: 'POST', // PUT 요청
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(user), // 유저 정보를 JSON 형태로 변환
         }
       );
 
       if (!response.ok) {
-        throw new Error("서버 에러");
+        throw new Error('서버 에러');
       }
 
       const data = await response.json();
       setUser(data);
       mutate(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${
-          myData.userId
-        }`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${myData.userId}`,
         data
       );
       setUpdateSuccess(true);
-
     } catch (error) {
       console.log(error);
     }
@@ -92,7 +85,7 @@ function UpdateUser() {
       <TextField
         label="아이디"
         value={user.userId}
-        style={{ marginTop: "70px", paddingLeft: "12px", paddingRight: "12px" }}
+        style={{ marginTop: '70px', paddingLeft: '12px', paddingRight: '12px' }}
         onChange={(e) => setUser({ ...user, userId: e.target.value })}
       />
       <Button onClick={() => setFindIdModalOpen(true)}>아이디 찾기</Button>
@@ -119,7 +112,7 @@ function UpdateUser() {
       />
       <TextField
         label="성별"
-        value={user.gender === 1 ? "남자" : "여자"}
+        value={user.gender === 1 ? '남자' : '여자'}
         onChange={(e) => setUser({ ...user, gender: e.target.value })}
       />
       <TextField

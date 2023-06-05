@@ -64,7 +64,7 @@ export default function AddUserReviewDialog({
   };
 
   const { data: userReviewData, mutate: mutateUserReview } = useSWR(
-    `http://${
+    `${
       import.meta.env.VITE_SPRING_HOST
     }/rest/community/userreview/reviewerno/${reviewerNo}/reviewedno/${reviewedNo}`,
     fetcher
@@ -94,7 +94,7 @@ export default function AddUserReviewDialog({
     isUpdate
       ? axios
           .patch(
-            `http://${
+            `${
               import.meta.env.VITE_SPRING_HOST
             }/rest/community/userreview`,
             data,
@@ -111,7 +111,7 @@ export default function AddUserReviewDialog({
           })
       : axios
           .post(
-            `http://${
+            `${
               import.meta.env.VITE_SPRING_HOST
             }/rest/community/userreview`,
             data,

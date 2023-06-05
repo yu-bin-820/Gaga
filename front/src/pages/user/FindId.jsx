@@ -1,40 +1,38 @@
-import { Button, TextField } from "@mui/material";
-import { Box } from "@mui/system";
-import axios from "axios";
-import React, { useState, useCallback } from "react";
-import MainTop from "@layouts/common/MainTop";
+import { Button, TextField } from '@mui/material';
+import { Box } from '@mui/system';
+import axios from 'axios';
+import React, { useState, useCallback } from 'react';
+import MainTop from '@layouts/common/MainTop';
 
 const FindId = () => {
-  const [phoneNo, setPhoneNo] = useState("");
-  const [phoneAuthCode, setPhoneAuthCode] = useState("");
+  const [phoneNo, setPhoneNo] = useState('');
+  const [phoneAuthCode, setPhoneAuthCode] = useState('');
   const [phoneAuthVerified, setPhoneAuthVerified] = useState(false);
-  const [userId, setUserId] = useState("");
+  const [userId, setUserId] = useState('');
 
   const handlePhoneAuthRequest = async () => {
     try {
-      if (!phoneNo.startsWith("010")) {
-        alert("휴대폰 번호는 010으로 시작해야 합니다.");
+      if (!phoneNo.startsWith('010')) {
+        alert('휴대폰 번호는 010으로 시작해야 합니다.');
         return;
       }
       // 휴대폰 번호 확인
       const checkResponse = await axios.get(
-        `http://${
-          import.meta.env.VITE_SPRING_HOST
-        }/rest/user/phoneno/${phoneNo}`
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneno/${phoneNo}`
       );
       // 휴대폰 번호가 데이터베이스에 없으면
       if (!checkResponse.data) {
-        alert("존재하지 않는 휴대폰 번호입니다.");
+        alert('존재하지 않는 휴대폰 번호입니다.');
         return;
       }
       const response = await axios.post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuth`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuth`,
         phoneNo,
         { withCredentials: true }
       );
 
       if (response.data === false) {
-        alert("인증번호가 발송되었습니다."); //인증번호 발송 알림 추가
+        alert('인증번호가 발송되었습니다.'); //인증번호 발송 알림 추가
       }
     } catch (error) {
       console.error(error);
@@ -44,7 +42,7 @@ const FindId = () => {
   const handlePhoneAuthVerify = async () => {
     try {
       const response = await axios.post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuthOk`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuthOk`,
         phoneAuthCode,
         { withCredentials: true }
       );
@@ -61,15 +59,13 @@ const FindId = () => {
   const handleFindId = async () => {
     try {
       const response = await axios.get(
-        `http://${
-          import.meta.env.VITE_SPRING_HOST
-        }/rest/user/phoneno/${phoneNo}`
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneno/${phoneNo}`
       );
 
       if (response.data) {
         setUserId(response.data.userId);
       } else {
-        alert("해당하는 아이디가 없습니다.");
+        alert('해당하는 아이디가 없습니다.');
       }
     } catch (error) {
       console.error(error);
@@ -79,15 +75,15 @@ const FindId = () => {
   return (
     <>
       <MainTop />
-      <div style={{ color: "black", marginTop: "100px" }}>
+      <div style={{ color: 'black', marginTop: '100px' }}>
         휴대폰 인증 완료후 아이디 찾기
       </div>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          marginTop: "100px",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginTop: '100px',
         }}
       >
         <TextField

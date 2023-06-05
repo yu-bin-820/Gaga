@@ -26,7 +26,7 @@ const MyProfileTop = () => {
   const navigate = useNavigate();
   const { userNo } = useParams();
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
@@ -34,7 +34,7 @@ const MyProfileTop = () => {
 
   const onClickLogOut = useCallback(async () => {
     await axios
-      .delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/user/logout`, {
+      .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/user/logout`, {
         withCredentials: true,
       })
       .then(() => {

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import PeopleIcon from '@mui/icons-material/People';
 import { useNavigate } from 'react-router';
+import SmallChip from './SmallChip';
 
 
 const StyledAvatarGroup = styled(AvatarGroup)({
@@ -13,13 +14,6 @@ const StyledAvatarGroup = styled(AvatarGroup)({
     height: 24,
     fontSize: 12,
   },
-});
-
-const SmallChip = styled(Chip)({
-  fontSize: 10,
-  height: 15,
-  borderRadius: 10,
-  padding: '0 6px',
 });
 
 
@@ -46,7 +40,7 @@ const MeetingThumbnail = ({ meeting }) => {
         >
           {meeting?.meetingImg ? (
             <img
-              src={`http://${
+              src={`${
                     import.meta.env.VITE_SPRING_HOST
                     }/upload_images/meeting/${meeting?.meetingImg}`}
               alt="noImg"

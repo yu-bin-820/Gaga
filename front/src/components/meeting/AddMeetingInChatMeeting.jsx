@@ -12,7 +12,7 @@ const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo }) => {
 
     useEffect(() => {
         axios
-          .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/inchat/no/${userNo}`)
+          .get(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/inchat/no/${userNo}`)
           .then((response) => {
             console.log(response.data);
             setMeetingList(response.data);
@@ -32,6 +32,8 @@ const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo }) => {
         console.log('서브카테고리', subCategoryTag);
         //onSubCategoryClick(subCategoryTag); // 부모 컴포넌트로 subCategoryTag 전달
       };
+
+      console.log(userNo)
 
     return (
         <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>

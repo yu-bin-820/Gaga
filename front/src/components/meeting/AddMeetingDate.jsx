@@ -4,6 +4,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React, { useCallback } from 'react';
 import dayjs from 'dayjs';
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
+import { Box, Stack } from '@mui/system';
+import { Paper, Typography } from '@mui/material';
 
 const AddMeetingDate = () => {
     const [value, setValue] = React.useState(dayjs('2022-04-17'));
@@ -28,26 +30,48 @@ const AddMeetingDate = () => {
       }, [setField]);
 
     return (
-        <div>
+      <Box sx={{ margin: '10px' }}>
+      <h4>언제 만날까요?</h4>
+      <Box sx={{ margin: '10px' }}>
+        <Stack spacing={2}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoItem >
-                <MobileDatePicker value={meetingDate} onChange={handleMeetingDateChange}/>
+                <MobileDatePicker 
+                label="모임날짜"
+                value={meetingDate} 
+                onChange={handleMeetingDateChange}/>
             </DemoItem>
             </LocalizationProvider>
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoItem >
-                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} value={meetingStartTime} onChange={handleMeetingStartTimeChange}/>
+                <MobileTimePicker 
+                value={meetingStartTime} 
+                label="모임 시작 시간"
+                onChange={handleMeetingStartTimeChange}/>
             </DemoItem>
             </LocalizationProvider>
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoItem >
-                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} value={meetingEndTime} onChange={handleMeetingEndTimeChange}/>
+                <MobileTimePicker 
+                value={meetingEndTime} 
+                label="모임 끝나는 시간"
+                onChange={handleMeetingEndTimeChange}/>
             </DemoItem>
             </LocalizationProvider>
+            </Stack>
 
-        </div>
+        </Box>
+        <Paper variant="outlined" sx={{margin: '5px', padding: '10px'}}>
+        <Typography style={{ color: 'gray' }} sx={{ fontSize: 13}}>
+        모임 인원이 다 차거나 모임 시작 시간 이후에는
+        </Typography>
+        <Typography style={{ color: 'gray' }} sx={{ fontSize: 13 }}>
+        모집 완료 상태로 자동 변경됩니다.
+        </Typography>
+      </Paper>
+        </Box>
     );
 };
 

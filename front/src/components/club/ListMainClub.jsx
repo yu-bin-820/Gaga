@@ -22,14 +22,14 @@ const ListMainClub = () => {
   const [mainCategoryNo, setMainCategoryNo] = useState(1);
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
   useEffect(() => {
     axios
       .get(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/club/list/nonuser/${mainCategoryNo}`
       )

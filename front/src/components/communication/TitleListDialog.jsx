@@ -18,7 +18,7 @@ import axios from 'axios';
 const TitleListDialog = ({ open, setOpen, myData, mutateMe }) => {
   const [mainTitle, setMainTitle] = useState(myData.mainTitleNo);
   const { data: titleListData, mutate: mutateTitleList } = useSWR(
-    `http://${
+    `${
       import.meta.env.VITE_SPRING_HOST
     }/rest/community/title/list/userno/${myData.userNo}`,
     fetcher
@@ -37,7 +37,7 @@ const TitleListDialog = ({ open, setOpen, myData, mutateMe }) => {
     myData.mainTitleNo = mainTitle;
     axios
       .patch(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/community/profile`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/community/profile`,
         myData,
         { withCredentials: true }
       )

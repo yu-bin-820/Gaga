@@ -25,7 +25,7 @@ const AddClub1 = () => {
   } = useClubFormStore();
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
@@ -54,7 +54,7 @@ const AddClub1 = () => {
         console.log(useClubFormStore.clubMaxMemberNo);
 
         const response = await axios.post(
-          `http://${import.meta.env.VITE_SPRING_HOST}/rest/club`,
+          `${import.meta.env.VITE_SPRING_HOST}/rest/club`,
           formData
         );
 

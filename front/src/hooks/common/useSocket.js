@@ -2,7 +2,7 @@ import io, { Socket } from 'socket.io-client';
 
 import { useCallback } from 'react';
 
-const backUrl = `http://${import.meta.env.VITE_EXPRESS_HOST}`;
+const backUrl = `${import.meta.env.VITE_EXPRESS_HOST}`;
 
 const sockets = {};
 const useSocket = (chattype) => {
@@ -10,10 +10,12 @@ const useSocket = (chattype) => {
 
   const disconnect = useCallback(() => {
     if (chattype) {
-      sockets[chattype].disconnect();
-      delete sockets[chattype];
+      if (sockets[chattype]) {
+        sockets[chattype].disconnect();
+        delete sockets[chattype];
+      }
     }
-  }, [chattype]);
+  }, [chattype, sockets]);
 
   if (!chattype) {
     return [undefined, disconnect];

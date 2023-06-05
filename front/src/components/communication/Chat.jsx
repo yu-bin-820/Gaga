@@ -15,7 +15,7 @@ import useChatMapStore from '@stores/communication/useChatMapStore';
 const Chat = ({ data }) => {
   const { setField } = useChatMapStore();
   const { data: myData } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
   // console.log('!!!', myData);
@@ -59,7 +59,7 @@ const Chat = ({ data }) => {
         >
           {!isMe && (
             <Avatar
-              src={`http://${
+              src={`${
                 import.meta.env.VITE_SPRING_HOST
               }/upload_images/user/${data?.Sender.profile_img}`}
               alt="Remy Sharp"
@@ -115,7 +115,7 @@ const Chat = ({ data }) => {
               )}
               {data.content_type_no == 2 && (
                 <img
-                  src={`http://${import.meta.env.VITE_EXPRESS_HOST}/uploads/${
+                  src={`${import.meta.env.VITE_EXPRESS_HOST}/uploads/${
                     data.content
                   }`}
                   alt="error"

@@ -24,13 +24,13 @@ const UpdateMeeting = () => {
   });
 
   const [selectedImage, setSelectedImage] = useState(
-    meeting?.meetingImg?
-    `http://${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
-      meeting?.meetingImg
-      }`
+    meeting?.meetingImg
+      ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
+          meeting?.meetingImg
+        }`
       : null
-    );
-  const [selectedFile, setSelectedFile] = useState( null );
+  );
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const onChangeImg = (event) => {
     const file = event.target.files[0];
@@ -38,12 +38,9 @@ const UpdateMeeting = () => {
     setSelectedImage(URL.createObjectURL(file));
   };
 
-
   useEffect(() => {
     axios
-      .get(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${meetingno}`
-      )
+      .get(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${meetingno}`)
       .then((response) => {
         console.log(response.data);
         setMeeting(response.data);
@@ -57,31 +54,30 @@ const UpdateMeeting = () => {
 
   const handleSubmit = useCallback(() => {
     event.preventDefault();
-    
 
     try {
       const formData = new FormData();
 
       formData.append('file', selectedFile);
-      formData.append('meetingName',meeting.meetingName);
-      formData.append('meetingIntro',meeting.meetingIntro);
-      formData.append('meetingDate',meeting.meetingDate);
-      formData.append('meetingStartTime',meeting.meetingStartTime);
-      formData.append('meetingEndTime',meeting.meetingEndTime);
-      formData.append('filterGender',meeting.filterGender);
-      formData.append('filterMinAge',meeting.filterMinAge);
-      formData.append('filterMaxAge',meeting.filterMaxAge);
-      formData.append('meetingMaxMemberNo',meeting.meetingMaxMemberNo);
-      formData.append('entryFee',meeting.entryFee);
-      formData.append('meetingState',meeting.meetingState);
-      formData.append('meetingNo',meetingno);
+      formData.append('meetingName', meeting.meetingName);
+      formData.append('meetingIntro', meeting.meetingIntro);
+      formData.append('meetingDate', meeting.meetingDate);
+      formData.append('meetingStartTime', meeting.meetingStartTime);
+      formData.append('meetingEndTime', meeting.meetingEndTime);
+      formData.append('filterGender', meeting.filterGender);
+      formData.append('filterMinAge', meeting.filterMinAge);
+      formData.append('filterMaxAge', meeting.filterMaxAge);
+      formData.append('meetingMaxMemberNo', meeting.meetingMaxMemberNo);
+      formData.append('entryFee', meeting.entryFee);
+      formData.append('meetingState', meeting.meetingState);
+      formData.append('meetingNo', meetingno);
 
-        console.log(meeting.meetingDate)
+      console.log(meeting.meetingDate);
 
       console.log(formData);
 
       const response = axios.patch(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/meeting`,
         formData
       );
 
@@ -189,36 +185,40 @@ const UpdateMeeting = () => {
         required
         value={meeting.meetingNo}
       />
-        <Stack direction="row" spacing={2} alignItems={'center'} marginLeft='5px'>
+      <Stack direction="row" spacing={2} alignItems={'center'} marginLeft="5px">
         <Button
-              variant="outlined"
-              startIcon={<Avatar><AddPhotoAlternateIcon /></Avatar>}
-              color="primary"
-              aria-label="upload picture"
-              component="label"
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderColor: 'grey',
-                width: '150px',
-                height: '150px',
-              }}
-              size="large"
-            >
-              <input
-                hidden
-                accept="image/*"
-                type="file"
-                id="file"
-                name="file"
-                onChange={onChangeImg}
-              />
-            </Button>
-            <ImageListItem>
-            {selectedImage && <img src={selectedImage} /> }
-            </ImageListItem>
-            </Stack>
+          variant="outlined"
+          startIcon={
+            <Avatar>
+              <AddPhotoAlternateIcon />
+            </Avatar>
+          }
+          color="primary"
+          aria-label="upload picture"
+          component="label"
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderColor: 'grey',
+            width: '150px',
+            height: '150px',
+          }}
+          size="large"
+        >
+          <input
+            hidden
+            accept="image/*"
+            type="file"
+            id="file"
+            name="file"
+            onChange={onChangeImg}
+          />
+        </Button>
+        <ImageListItem>
+          {selectedImage && <img src={selectedImage} />}
+        </ImageListItem>
+      </Stack>
       <Button onClick={handleSubmit}>수정하기</Button>
     </Box>
   );

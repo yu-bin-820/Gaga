@@ -10,7 +10,7 @@ import axios from 'axios';
 
 const UpdateUserIntroTextField = ({ isUpdateIntro, setIsUpdateIntro }) => {
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
   const [userIntro, onChangeUserIntro, setUserIntro] = useInputOrigin(
@@ -19,7 +19,7 @@ const UpdateUserIntroTextField = ({ isUpdateIntro, setIsUpdateIntro }) => {
   const onClickUpdateIntro = useCallback(() => {
     axios
       .patch(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/community/userintro`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/community/userintro`,
         { userNo: myData?.userNo, userIntro: userIntro },
         { withCredentials: true }
       )

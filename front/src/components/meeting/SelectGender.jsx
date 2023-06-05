@@ -4,13 +4,14 @@ import { Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import React, { useState } from 'react';
 import useSWR from 'swr';
+import WcIcon from '@mui/icons-material/Wc';
 
 const SelectGender = ({ onGenderClick }) => {
     
     const [selectedValue, setSelectedValue] = useState(null);
 
     const { data: myData, mutate: mutateMe } = useSWR(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
         fetcher
         );
 
@@ -19,15 +20,25 @@ const SelectGender = ({ onGenderClick }) => {
       };
 
       const onClickGender = (gender) => {
-        console.log('성별 선택', gender);
+        // console.log('성별 선택', gender);
         onGenderClick(gender); // 부모 컴포넌트로 subCategoryTag 전달
       };
 
     return (
         <div>
         <Stack
-        sx={{marginLeft: 1}}>
+        sx={{marginLeft: 1}}
+        spacing={2}>
+        <Stack
+        direction='row'
+        alignItems="center"
+        spacing={2}
+        sx={{marginLeft: 1, marginRight: 1.5, borderBottom: '1.5px solid #bfbdbd'}}
+        >
+        <WcIcon />
             <h4>성별</h4>
+        </Stack>
+        
         <Stack
         direction='row'
         alignItems="center"

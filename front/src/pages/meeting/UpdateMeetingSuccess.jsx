@@ -8,59 +8,56 @@ import { Box } from '@mui/system';
 import { Button, TextField } from '@mui/material';
 
 const UpdateMeetingSuccess = () => {
-    const { meetingno } = useParams();
-    const [meeting, onChangeMeeting, setMeeting] = useInput({
-        meetingNo: '',
-        accountNo: '',
-        bankName: ''
-      });
-    
-    
-      const navigate = useNavigate();
-      const onClickMeetingSuccess = useCallback(async () => {
-        event.preventDefault();
-    
-        try {
-          const data = {
-            meetingNo: meetingno,
-            accountNo: meeting.accountNo,
-            bankName: meeting.bankName
-          };
-    
-          const response = await axios.patch(
-            `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/meetingsuccess`,
-            data
-    
-          );
-    
-          console.log(response.data);
-        } catch (error) {
-          console.error(error);
-        }
-      }, [meeting]);
+  const { meetingno } = useParams();
+  const [meeting, onChangeMeeting, setMeeting] = useInput({
+    meetingNo: '',
+    accountNo: '',
+    bankName: '',
+  });
 
-    return (
-        <Box sx={{ marginTop: '64px' }}>
-        <TextField
-          fulWidth
-          label="accountNo"
-          name="accountNo"
-          onChange={onChangeMeeting}
-          required
-          value={meeting.accountNo}
-        />
-        <TextField
-          fulWidth
-          label="bankName"
-          name="bankName"
-          onChange={onChangeMeeting}
-          required
-          value={meeting.bankName}
-        />
-        <Button onClick={onClickMeetingSuccess}>성사하기 </Button>
+  const navigate = useNavigate();
+  const onClickMeetingSuccess = useCallback(async () => {
+    event.preventDefault();
 
-        </Box>
-    );
+    try {
+      const data = {
+        meetingNo: meetingno,
+        accountNo: meeting.accountNo,
+        bankName: meeting.bankName,
+      };
+
+      const response = await axios.patch(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/meetingsuccess`,
+        data
+      );
+
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [meeting]);
+
+  return (
+    <Box sx={{ marginTop: '64px' }}>
+      <TextField
+        fulWidth
+        label="accountNo"
+        name="accountNo"
+        onChange={onChangeMeeting}
+        required
+        value={meeting.accountNo}
+      />
+      <TextField
+        fulWidth
+        label="bankName"
+        name="bankName"
+        onChange={onChangeMeeting}
+        required
+        value={meeting.bankName}
+      />
+      <Button onClick={onClickMeetingSuccess}>성사하기 </Button>
+    </Box>
+  );
 };
 
 export default UpdateMeetingSuccess;

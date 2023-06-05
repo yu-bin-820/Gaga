@@ -1,9 +1,10 @@
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
 import { Button, TextField } from '@mui/material';
-import { Stack } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import { useState } from 'react';
 import { useCallback } from 'react';
 import AddMeetingMapDrawer from './AddMeetingMapDrawer';
+import MapIcon from '@mui/icons-material/Map';
 
 const AddMeetingMap = () => {
 
@@ -92,23 +93,34 @@ const AddMeetingMap = () => {
 
 
     return (
-        <>
+      <Box sx={{ margin: '10px' }}>
+      <h4>어디서 만날까요?</h4>
           <Stack
             sx={{marginLeft: '15px',
             marginRight:'20px'}}>
-        <Button onClick={onClickSettings}>지도</Button>
+        <TextField
+          fullWidth
+          disabled
+          name="meetingAddr"
+          onChange={(e) => onChangeField('meetingAddr', e)}
+          required
+          value={meetingAddr}
+          variant="standard"
+          InputProps={{
+            endAdornment: (
+              <MapIcon
+                onClick={onClickSettings}
+                sx={{
+                  cursor: 'pointer',
+                  color: 'rgba(0, 0, 0, 0.54)',
+                }}
+              />
+            ),
+          }}
+        />
         <TextField
             fullWidth
-            disabled
-            name="meetingAddr"
-            onChange={(e)=>onChangeField('meetingAddr',e)}
-            required
-            value={meetingAddr}
-            variant="standard"
-          />
-        <TextField
-            fullWidth
-            label="meetingDetailAddr"
+            label="상세주소"
             name="meetingDetailAddr"
             onChange={(e)=>onChangeField('meetingDetailAddr',e)}
             required
@@ -147,7 +159,7 @@ const AddMeetingMap = () => {
                 handleKeywordChange={handleKeywordChange}
                 handleSubmit={handleSubmit}
             />
-        </>
+        </Box>
     );
 };
 

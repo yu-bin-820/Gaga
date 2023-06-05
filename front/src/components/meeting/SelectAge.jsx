@@ -1,64 +1,77 @@
 import { Slider } from '@mui/material';
-import { Box } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import React from 'react';
+import LinearScaleIcon from '@mui/icons-material/LinearScale';
+
 
 const marks = [
-    {
-      value: 0,
-      label: '0°C',
-    },
-    {
-      value: 20,
-      label: '20°C',
-    },
-    {
-      value: 37,
-      label: '37°C',
-    },
-    {
-      value: 100,
-      label: '100°C',
-    },
-  ];
+  {
+    value: 14,
+    label: '14',
+  },
+  {
+    value: 20,
+    label: '20',
+  },
+  {
+    value: 30,
+    label: '30',
+  },
+  {
+    value: 40,
+    label: '40',
+  },
+  {
+    value: 50,
+    label: '50+',
+  },
+];
 
 
-  function valuetext(value) {
-    return `${value}°C`;
+const SelectAge = ({onAgeSlider}) => {
+
+  const [value, setValue] = React.useState([20, 37]);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const commitAge = (event,commitValue) => {
+    onAgeSlider(commitValue[0],commitValue[1]);
   }
-  
-  function valueLabelFormat(value) {
-    return marks.findIndex((mark) => mark.value === value) + 1;
-  }
 
-
-const SelectAge = () => {
-    const [value, setValue] = React.useState([20, 37]);
-
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-      };
 
     return (
-    <Box sx={{ width: 300 }}>
+      <Stack
+        sx={{marginLeft: 1}}
+        spacing={2}>
+        <Stack
+        direction='row'
+        alignItems="center"
+        spacing={2}
+        sx={{marginLeft: 1, marginRight: 1.5, borderBottom: '1.5px solid #bfbdbd'}}
+        >
+        <LinearScaleIcon />
+            <h4>연령</h4>
+        </Stack>
+        
+        <Stack
+        alignItems="center"
+        sx={{marginLeft: '3px', marginRight: '3px'}}>
+        <Box sx={{ width: 300 }}>
       <Slider
-        aria-label="Restricted values"
-        defaultValue={20}
-        valueLabelFormat={valueLabelFormat}
-        getAriaValueText={valuetext}
-        step={10}
-        valueLabelDisplay="auto"
-        marks={marks}
-      />
-
-<Slider
         getAriaLabel={() => 'Temperature range'}
         value={value}
         onChange={handleChange}
+        onChangeCommitted={commitAge}
         valueLabelDisplay="auto"
-        getAriaValueText={valuetext}
+        min={14}
+        max={50}
+        marks={marks}
       />
-    </Box>
+      </Box>
+      </Stack>
+      </Stack>
     );
 };
 

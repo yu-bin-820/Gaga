@@ -50,7 +50,7 @@ const ListMyMeetingThumnail = ({ meeting }) => {
     );
 };
 
-MeetingThumbnail.propTypes = {
+ListMyMeetingThumnail.propTypes = {
     meeting: PropTypes.shape({
       meetingState: PropTypes.number.isRequired,
       meetingSuccuess: PropTypes.number.isRequired,

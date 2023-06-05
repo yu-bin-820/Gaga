@@ -56,78 +56,80 @@ const AddUser = () => {
 
   const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   const [emailError, setEmailError] = useState(false); // 이메일 에러 상태
-  
+
   // 이메일 형식 검증 함수
   const checkEmail = (email) => {
-    if(emailRegex.test(email)) {
+    if (emailRegex.test(email)) {
       setEmailError(false);
       setEmailVerified(true); // 이메일 형식이 맞으면 이메일 인증 상태를 true로 설정
     } else {
       setEmailError(true);
       setEmailVerified(false); // 이메일 형식이 아니면 이메일 인증 상태를 false로 설정
     }
-  }
-  
-  
-  const [authCode, setAuthCode] = useState('');  // 서버에서 받아온 인증 코드
-  const [userAuthCode, setUserAuthCode] = useState('');  // 사용자가 입력한 인증 코드
-  const [isEmailVerified, setIsEmailVerified] = useState(false);  // 이메일 인증이 완료되었는지 확인하는 상태
+  };
+
+  const [authCode, setAuthCode] = useState(''); // 서버에서 받아온 인증 코드
+  const [userAuthCode, setUserAuthCode] = useState(''); // 사용자가 입력한 인증 코드
+  const [isEmailVerified, setIsEmailVerified] = useState(false); // 이메일 인증이 완료되었는지 확인하는 상태
 
   const requestEmailAuth = useCallback(async () => {
     const response = await axios.post(
-      `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/mailAuth`,
+      `${import.meta.env.VITE_SPRING_HOST}/rest/user/mailAuth`,
       { email: user.userId },
       { withCredentials: true }
     );
-    
+
     if (response.data) {
       setAuthCode(response.data);
     }
   }, [user]);
-  
+
   const handleChangeUser = (event) => {
-    if(event.target.name === 'userId') {
+    if (event.target.name === 'userId') {
       checkEmail(event.target.value); // 아이디(이메일) 값이 변경되었을 때, 이메일 형식 검증
-    }
-    else if(event.target.name === 'password') {
+    } else if (event.target.name === 'password') {
       checkPassword(event.target.value); // 비밀번호 값이 변경되었을 때, 비밀번호 형식 검증
-    } 
+    }
     // else if (event.target.name === 'birthday') {
     //   checkBirthday(event.target.value); // 생년월일 값이 변경되었을 때, 유효성 검사
     // }
 
     onChangeUser(event); // 기존 onChangeUser 함수 호출
-  }
+  };
   // 사용자가 입력한 이메일 인증 코드를 확인하는 함수
-  const handleAuthCodeChange = useCallback((event) => {
-    const newAuthCode = event.target.value;
-    setUserAuthCode(newAuthCode);
-    
-    if (newAuthCode === authCode) {
-      setIsEmailVerified(true);
-    } else {
-      setIsEmailVerified(false);
-    }
-  }, [authCode]);
-  
+  const handleAuthCodeChange = useCallback(
+    (event) => {
+      const newAuthCode = event.target.value;
+      setUserAuthCode(newAuthCode);
+
+      if (newAuthCode === authCode) {
+        setIsEmailVerified(true);
+      } else {
+        setIsEmailVerified(false);
+      }
+    },
+    [authCode]
+  );
+
   // 비밀번호 형식 검증 함수
-  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,14}$/;
+  const passwordRegex =
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,14}$/;
   const [passwordError, setPasswordError] = useState(false); // 비밀번호 에러 상태
 
   const checkPassword = (password) => {
-    if(passwordRegex.test(password)) {
+    if (passwordRegex.test(password)) {
       setPasswordError(false);
     } else {
       setPasswordError(true);
     }
-  }
+  };
 
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(false);
-  
+
   const handleChangePasswordConfirm = (event) => {
     setPasswordConfirm(event.target.value);
-  
+
     if (event.target.value === user.password) {
       setPasswordMatch(true);
     } else {
@@ -135,18 +137,21 @@ const AddUser = () => {
     }
   };
 
-  const handleChangePhone = useCallback((event) => {
-    let { value } = event.target;
-    const numberOnly = value.replace(/[^0-9]/g, ''); // 숫자만 입력되게 한다
-  
-    // 전화번호가 11자리를 초과하면 alert을 띄우고 아니면 그대로 진행
-    if (numberOnly.length > 11) {
-      alert('휴대폰 번호는 010으로 시작하는 11자리 숫자여야 합니다.');
-      return;
-    }
-  
-    setUser({ ...user, phoneNo: numberOnly }); // 수정된 부분
-  }, [user]); 
+  const handleChangePhone = useCallback(
+    (event) => {
+      let { value } = event.target;
+      const numberOnly = value.replace(/[^0-9]/g, ''); // 숫자만 입력되게 한다
+
+      // 전화번호가 11자리를 초과하면 alert을 띄우고 아니면 그대로 진행
+      if (numberOnly.length > 11) {
+        alert('휴대폰 번호는 010으로 시작하는 11자리 숫자여야 합니다.');
+        return;
+      }
+
+      setUser({ ...user, phoneNo: numberOnly }); // 수정된 부분
+    },
+    [user]
+  );
 
   const [tel, setTel] = useState('');
   const [phoneAuthCode, setPhoneAuthCode] = useState('');
@@ -155,7 +160,7 @@ const AddUser = () => {
   const handlePhoneAuthRequest = async () => {
     try {
       const response = await axios.post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuth`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuth`,
         tel,
         { withCredentials: true }
       );
@@ -176,7 +181,7 @@ const AddUser = () => {
       };
       console.log(phoneAuthCode);
       const response = await axios.post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuthOk`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuthOk`,
         phoneAuthCode,
         { withCredentials: true }
       );
@@ -192,15 +197,13 @@ const AddUser = () => {
     }
   };
 
-
-
   const [emailVerified, setEmailVerified] = useState(false);
   const [phoneVerified, setPhoneVerified] = useState(false);
 
   const [registerSuccess, setRegisterSuccess] = useState(false);
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
     fetcher
   );
 
@@ -209,7 +212,9 @@ const AddUser = () => {
       event.preventDefault();
       if (
         Object.values(user).some((value) => value === '') ||
-        !emailVerified || !phoneVerified)         {
+        !emailVerified ||
+        !phoneVerified
+      ) {
         alert('모든 정보를 입력하고, 이메일과 전화번호 인증을 완료해주세요.');
         return;
       }
@@ -222,15 +227,13 @@ const AddUser = () => {
           birthday: dayjs(user.birthday).format('YYYY-MM-DD'), // dayjs로 변환
           gender: user.gender,
           nickName: user.nickName,
-          phoneNo: user.phoneNo, 
+          phoneNo: user.phoneNo,
         };
 
         const response = await axios
-          .post(
-            `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
-            data,
-            { withCredentials: true }
-          )
+          .post(`${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`, data, {
+            withCredentials: true,
+          })
           .then((response) => {
             console.log(response);
             mutateMe();
@@ -270,15 +273,14 @@ const AddUser = () => {
             onChange={handleChangeUser}
             error={emailError} // 이메일 형식 오류 시 오류 표시
           />
-          {emailError && <FormHelperText error>이메일 형식이 아닙니다.</FormHelperText>}
+          {emailError && (
+            <FormHelperText error>이메일 형식이 아닙니다.</FormHelperText>
+          )}
           {!emailError && (
             <>
               {!isEmailVerified ? (
                 <>
-                  <Button
-                    onClick={requestEmailAuth}
-                    variant="contained"
-                  >
+                  <Button onClick={requestEmailAuth} variant="contained">
                     인증 요청
                   </Button>
                   <TextField
@@ -313,8 +315,11 @@ const AddUser = () => {
             onChange={handleChangeUser}
             error={passwordError} // 비밀번호 형식 오류 시 오류 표시
           />
-          {passwordError && <FormHelperText error>비밀번호는 8~14글자이며, 영문, 숫자, 특수문자 조합이어야 합니다.</FormHelperText>}
-          
+          {passwordError && (
+            <FormHelperText error>
+              비밀번호는 8~14글자이며, 영문, 숫자, 특수문자 조합이어야 합니다.
+            </FormHelperText>
+          )}
           {!passwordMatch && (
             <TextField
               variant="outlined"
@@ -331,31 +336,33 @@ const AddUser = () => {
               error={!passwordMatch && passwordConfirm !== ''} // 입력한 값이 비밀번호와 불일치하면 오류 표시
             />
           )}
-          {!passwordMatch && passwordConfirm !== '' && <FormHelperText error>비밀번호가 일치하지 않습니다.</FormHelperText>}
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="userName"
-          label="회원실명"
-          name="userName"
-          autoComplete="userName"
-          value={user.userName}
-          onChange={onChangeUser}
-        />
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="nickName"
-          label="닉네임"
-          name="nickName"
-          autoComplete="nickName"
-          value={user.nickName}
-          onChange={onChangeUser}
-        />
+          {!passwordMatch && passwordConfirm !== '' && (
+            <FormHelperText error>비밀번호가 일치하지 않습니다.</FormHelperText>
+          )}
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="userName"
+            label="회원실명"
+            name="userName"
+            autoComplete="userName"
+            value={user.userName}
+            onChange={onChangeUser}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="nickName"
+            label="닉네임"
+            name="nickName"
+            autoComplete="nickName"
+            value={user.nickName}
+            onChange={onChangeUser}
+          />
           <TextField
             variant="outlined"
             margin="normal"
@@ -372,45 +379,44 @@ const AddUser = () => {
               pattern: '[0-9]*', // 숫자만 입력 가능
             }}
           />
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="gender"
-          label="성별"
-          name="gender"
-          autoComplete="gender"
-          value={user.gender}
-          onChange={onChangeUser}
-          select // select 속성 추가
-        >
-          <MenuItem value={1}>남자</MenuItem>
-          <MenuItem value={2}>여자</MenuItem>
-        </TextField>
-
-        <TextField
-                label="전화번호"
-                name="tel"
-                onChange={(e) => setTel(e.target.value)}
-                required
-                value={tel}
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="gender"
+            label="성별"
+            name="gender"
+            autoComplete="gender"
+            value={user.gender}
+            onChange={onChangeUser}
+            select // select 속성 추가
+          >
+            <MenuItem value={1}>남자</MenuItem>
+            <MenuItem value={2}>여자</MenuItem>
+          </TextField>
+          <TextField
+            label="전화번호"
+            name="tel"
+            onChange={(e) => setTel(e.target.value)}
+            required
+            value={tel}
+          />
+          <Button onClick={handlePhoneAuthRequest}>인증 요청</Button>
+          <br />
+          <br />
+          {phoneAuthVerified ? (
+            <div>인증 완료</div>
+          ) : (
+            <>
+              <TextField
+                label="인증번호"
+                value={phoneAuthCode}
+                onChange={(e) => setPhoneAuthCode(e.target.value)}
               />
-              <Button onClick={handlePhoneAuthRequest}>인증 요청</Button>
-              <br />
-              <br />
-              {phoneAuthVerified ? (
-                <div>인증 완료</div>
-              ) : (
-                <>
-                  <TextField
-                    label="인증번호"
-                    value={phoneAuthCode}
-                    onChange={(e) => setPhoneAuthCode(e.target.value)}
-                  />
-                  <Button onClick={handlePhoneAuthVerify}>인증 확인</Button>
-                </>
-              )}
+              <Button onClick={handlePhoneAuthVerify}>인증 확인</Button>
+            </>
+          )}
           <Button
             type="submit"
             fullWidth
@@ -419,7 +425,8 @@ const AddUser = () => {
           >
             회원가입
           </Button>
-          {registerSuccess && <Navigate to="/" />} {/* 원하는 경로로 변경해주세요. */}
+          {registerSuccess && <Navigate to="/" />}{' '}
+          {/* 원하는 경로로 변경해주세요. */}
         </Box>
       </Grid>
     </>

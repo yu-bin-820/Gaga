@@ -9,7 +9,7 @@ import axios from 'axios';
 
 const UnauthenticatedMain = () => {
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
@@ -17,7 +17,7 @@ const UnauthenticatedMain = () => {
 
   const onClickLogOut = useCallback(async () => {
     await axios
-      .delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/user/logout`, {
+      .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/user/logout`, {
         withCredentials: true,
       })
       .then(() => {

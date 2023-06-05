@@ -45,7 +45,7 @@ function ListQnaPost() {
 
   const fetchQnaPosts = async () => {
     try {
-      const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePostList`, {
+      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePostList`, {
         params: {
           page,
           limit: 6,
@@ -95,7 +95,7 @@ function ListQnaPost() {
 
   const increasePostCount = async (qnaPostNo) => {
     try {
-      await axios.put(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/increasePostCount`, {
+      await axios.put(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/increasePostCount`, {
         noticePostNo: qnaPostNo,
       });
     } catch (error) {
