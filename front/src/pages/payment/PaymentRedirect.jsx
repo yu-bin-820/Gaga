@@ -1,12 +1,15 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Stack } from '@mui/system';
 import CommonTop from '@layouts/common/CommonTop';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Button, Typography } from '@mui/material';
+import fetcher from '@utils/fetcher';
+import useSWR from 'swr';
 
 const PaymentRedirect = () => {
+  const [meetingData, setMeetingData] = useState();
   const { search } = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(search);

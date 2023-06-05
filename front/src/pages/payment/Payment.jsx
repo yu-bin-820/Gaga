@@ -21,7 +21,7 @@ const Payment = ({ meeting }) => {
     const payTime = new Date().toISOString();
     const orderId = `mid_${Date.now()}`;
     const meetingNo = meeting?.meetingNo;
-    const meetingName = meeting?.meetinName;
+    const meetingName = meeting?.meetingName;
     const entryFee = meeting?.entryFee;
     const nickName = myData?.nickName;
 
@@ -33,7 +33,7 @@ const Payment = ({ meeting }) => {
       name: meetingName, // 상품명 여기에서는 미팅 이름 여기까지 아임포트 필수 입력값
       buyer_name: myData?.userName,
       userNo: myData?.userNo,
-      nickName: nickName,
+      nickName: myData?.nickName,
       meetingNo: meetingNo,
       meetingName: meetingName,
       payNo: orderId,
@@ -43,9 +43,9 @@ const Payment = ({ meeting }) => {
       entryFee: entryFee,
       m_redirect_url: `http://${
         import.meta.env.VITE_REACT_HOST
-      }/payment/redirect?payNo=${orderId}&userNo=${
-        myData?.userNo
-      }&nickName=${nickName}&meetingNo=${meetingNo}&meetingName=${meetingName}&entryFee=${entryFee}`,
+      }/payment/redirect?payNo=${orderId}&userNo=${myData?.userNo}&nickName=${
+        myData?.nickName
+      }&meetingNo=${meetingNo}&meetingName=${meetingName}&entryFee=${entryFee}`,
     };
 
     const callback = (response) => {
