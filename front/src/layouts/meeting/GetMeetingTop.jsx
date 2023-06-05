@@ -6,7 +6,6 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 import { useNavigate, useParams } from 'react-router';
 import { Box } from '@mui/system';
-import axios from 'axios';
 import DeleteMeetingDialog from '@components/meeting/DeleteMeetingDialog';
 
 const GetMeetingTop = () => {
@@ -40,30 +39,6 @@ useState(false);
 const onClickDeleteSelect = useCallback(() => {
   setDeleteMeetingDialogOpen(true);
 }, []);
-
-const onClickDelete = useCallback(
-  async (event) => {
-      event.preventDefault();
-
-      try {
-      const data = {
-          meetingNo: meetingno
-      };
-
-      console.log(data);
-
-      const response = await axios.delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting`, {
-          data: data,
-      });
-
-      navigate(`/`);
-          
-      } catch (error) {
-          console.error(error);
-      }
-  },
-  []
-);
 
   return (
     <>
