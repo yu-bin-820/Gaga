@@ -1,18 +1,21 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { Button, TextField, Box, Stack, Typography, List, ListItem, ListItemText, Divider } from '@mui/material';
 
+import CommonTop from '@layouts/common/CommonTop';
+import AdminTabs from '@components/admin/AdminTabs';
+
 function ListQnaPost() {
   const [noticePosts, setNoticePosts] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [filteredNoticePosts, setFilteredNoticePosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
   const navigate = useNavigate();
-  const containerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [lastPostId, setLastPostId] = useState(null);
+  const noticePostCategoryNo = 2; // 카테고리 번호 1로 설정
 
   const handlePostClick = (noticePostNo) => {
     navigate(`/notice/getNoticePost/noticePostNo/${noticePostNo}`);
@@ -23,118 +26,103 @@ function ListQnaPost() {
   }, []);
 
   useEffect(() => {
-    filterQnaPosts();
-  }, [noticePosts, searchKeyword]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, {
-      root: null,
-      threshold: 0.1,
-    });
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
+    const fetchLatestPostId = async () => {
+      try {
+        const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getLatestPostId`);
+        const latestPostId = response.data;
+        setLastPostId(latestPostId);
+        fetchQnaPosts(latestPostId);
+      } catch (error) {
+        console.error(error);
       }
-    };
-  }, [filteredNoticePosts]);
+    }
+    fetchLatestPostId();
+    fetchQnaPosts();
+  }, []);
 
-  const fetchQnaPosts = async () => {
+  const fetchQnaPosts = async (lastPostId = null) => {
+    if (isLoading) return;
+
+    setIsLoading(true);
+
     try {
-      const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePostList`, {
-        params: {
-          page,
-          limit: 6,
-          noticePostCategoryNo: 2, // 카테고리 번호 2인 Q&A 게시물 가져오기
-        },
+      const params = {
+        noticePostCategoryNo,
+        lastPostId: lastPostId === null ? undefined : String(lastPostId),
+      };
+
+      const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePostListByCategoryNo`, {
+        params,
+
       });
 
       const newNoticePosts = response.data;
-      setNoticePosts((prevPosts) => {
-        const uniquePosts = [...prevPosts, ...newNoticePosts];
-        return Array.from(new Set(uniquePosts.map((post) => post.noticePostNo))).map((noticePostNo) =>
-          uniquePosts.find((post) => post.noticePostNo === noticePostNo)
-        );
-      });
+
+      setNoticePosts((prevPosts) => [...prevPosts, ...newNoticePosts]);
 
       if (newNoticePosts.length === 0) {
         setHasMore(false);
+      } else {
+        setLastPostId(newNoticePosts[newNoticePosts.length - 1].noticePostNo);
       }
+
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleObserver = (entries) => {
-    const target = entries[0];
-    if (target.isIntersecting && !isLoading && hasMore) {
-      setPage((prevPage) => prevPage + 1);
-      setIsLoading(true);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight * 0.9 && hasMore && !isLoading) {
+        fetchQnaPosts(lastPostId);
+      }
     }
-  };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasMore, isLoading, lastPostId]);
 
   const handleSearch = () => {
-    filterQnaPosts();
-  };
-
-  const filterQnaPosts = () => {
-    const filteredPosts = noticePosts.filter((qnaPost) => {
-      const { noticePostTitle, noticePostText } = qnaPost;
+    const result = noticePosts.filter((noticePost) => {
+      const { noticePostTitle, noticePostText } = noticePost;
       const lowerCaseKeyword = searchKeyword.toLowerCase();
       return (
         noticePostTitle.toLowerCase().includes(lowerCaseKeyword) ||
         noticePostText.toLowerCase().includes(lowerCaseKeyword)
       );
     });
-    setFilteredNoticePosts(filteredPosts);
+    setFilteredPosts(result);
   };
 
-  const increasePostCount = async (qnaPostNo) => {
-    try {
-      await axios.put(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/increasePostCount`, {
-        noticePostNo: qnaPostNo,
-      });
-    } catch (error) {
-      console.error(error);
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch();
     }
   };
 
   return (
     <Box sx={{ marginTop: '64px', marginLeft: '10px', marginRight: '10px' }}>
+      <CommonTop pageName="Q&A" prevPath="/community/profile/mine" />
       <Stack spacing={2.5}>
-        <Button onClick={() => window.history.back()}>☜</Button>
-        <Typography variant="h4" component="h2" align="center" marginY="1rem">
-          Q&A
-        </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem', alignItems: 'center' }}>
-          <TextField
-            type="text"
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-            style={{ marginRight: '0.5rem' }}
-          />
-          <Button variant="contained" onClick={handleSearch}>
-            검색
-          </Button>
+          <TextField type="text" value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} onKeyPress={handleKeyPress} style={{ marginRight: '0.5rem' }} />
+          <Button variant="contained" onClick={handleSearch}>검색</Button>
         </Box>
+        <Link to="/notice/addNoticePost">
+          <Button variant="contained">Q&A 작성</Button>
+        </Link>
         <List component="nav">
-          {filteredNoticePosts.map((qnaPost, index) => (
-            <div key={qnaPost.noticePostNo}>
-              <ListItem button onClick={() => { handlePostClick(qnaPost.noticePostNo); increasePostCount(qnaPost.noticePostNo); }}>
-                <ListItemText primary={qnaPost.noticePostTitle} secondary={qnaPost.noticePostRegDate.split('T')[0]} />
+          {(filteredPosts.length > 0 ? filteredPosts : noticePosts).map((noticePost, index) => (
+            <div key={noticePost.noticePostNo}>
+              <ListItem button onClick={() => handlePostClick(noticePost.noticePostNo)}>
+                <ListItemText primary={noticePost.noticePostTitle} secondary={noticePost.noticePostRegDate.split('T')[0]} />
               </ListItem>
-              {index < filteredNoticePosts.length - 1 && <Divider />}
+              {index < noticePosts.length - 1 && <Divider />}
             </div>
           ))}
         </List>
         {isLoading && <Typography align="center">Loading...</Typography>}
-        <Link to="/qna/addQnaPost">
-          <Button variant="contained">Q&A 작성</Button>
-        </Link>
       </Stack>
     </Box>
   );

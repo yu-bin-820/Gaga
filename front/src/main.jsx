@@ -58,7 +58,6 @@ import ListEventPost from "@pages/admin/NoticePost/ListEventPost.jsx";
 import UpdateNoticePost from "@pages/admin/NoticePost/UpdateNoticePost.jsx";
 
 import GetBlackList from "@pages/admin/BlackList/GetBlackList.jsx";
-import SearchUser from "@pages/admin/BlackList/ListUser.jsx";
 import GetReportAdmin from "@pages/admin/Report/GetReportAdmin.jsx";
 import ListReportAdmin from "@pages/admin/Report/ListReportAdmin.jsx";
 import ListBlackList from "@pages/admin/BlackList/ListBlackList.jsx";
@@ -70,6 +69,7 @@ import DeleteUser from "@pages/user/DeleteUser.jsx";
 import ListSearchMeeting from "@pages/meeting/ListSearchMeeting.jsx";
 import ListUser from "@pages/admin/BlackList/ListUser.jsx";
 import GetUser from "@pages/admin/BlackList/GetUser.jsx";
+
 
 
 
@@ -278,7 +278,7 @@ const router = createBrowserRouter([
       },
       //------------------------------------------------Notice------------------------------------------------
       {
-        path: "notice",
+        path: "notice",        
         children: [
           {
             path: "addNoticePost",

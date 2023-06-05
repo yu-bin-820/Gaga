@@ -46,7 +46,7 @@ function GetNoticePost() {
         <Typography variant="body1"><strong>제목:</strong> {noticePost.noticePostTitle}</Typography>
         <Typography variant="body1"><strong>내용:</strong> {noticePost.noticePostText}</Typography>
         <Typography variant="body1"><strong>이미지:</strong> {noticePost.noticePostImg}</Typography>
-        <img src={`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getImage/${noticePost.noticePostImg}`} alt="공지사항 이미지" />
+        <img src={`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getImage/${noticePost.noticePostImg}`} alt="공지사항 이미지" style={{ maxWidth: '100%', maxHeight: '30vh'}} />
       </Paper>
       <Grid container spacing={2} sx={{ marginTop: '1rem' }}>
         <Grid item>
