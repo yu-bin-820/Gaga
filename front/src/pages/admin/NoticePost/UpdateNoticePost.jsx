@@ -49,7 +49,7 @@ function UpdateNoticePost() {
     formData.append('userNo', noticePost.userNo);
 
     axios
-      .put(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/updateNoticePost/noticePostNo/${noticePostNo}`, formData, {
+      .put(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/updateNoticePost/noticePostNo/${noticePostNo}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }, // Content-Type 설정 추가
       })
       .then((response) => {

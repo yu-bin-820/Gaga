@@ -12,7 +12,7 @@ function GetBlackList() {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getBlackList/${userNo}`);
+      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getBlackList/${userNo}`);
       setUser(response.data);
     } catch (error) {
       console.error(error);

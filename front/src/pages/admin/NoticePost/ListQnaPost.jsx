@@ -28,7 +28,7 @@ function ListQnaPost() {
   useEffect(() => {
     const fetchLatestPostId = async () => {
       try {
-        const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getLatestPostId`);
+        const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getLatestPostId`);
         const latestPostId = response.data;
         setLastPostId(latestPostId);
         fetchQnaPosts(latestPostId);
@@ -51,7 +51,7 @@ function ListQnaPost() {
         lastPostId: lastPostId === null ? undefined : String(lastPostId),
       };
 
-      const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePostListByCategoryNo`, {
+      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePostListByCategoryNo`, {
         params,
 
       });

@@ -28,7 +28,7 @@ function ListNoticePost() {
     // 첫 로딩시 가장 최신의 게시글 번호를 가져옴
     const fetchLatestPostId = async () => {
       try {
-        const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getLatestPostId`);
+        const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getLatestPostId`);
         const latestPostId = response.data;
         setLastPostId(latestPostId);
         fetchNoticePosts(latestPostId);
@@ -51,7 +51,7 @@ function ListNoticePost() {
         lastPostId: lastPostId === null ? undefined : String(lastPostId),
       };
 
-      const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePostListByCategoryNo`, {
+      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePostListByCategoryNo`, {
         params,
 
       });
@@ -83,16 +83,17 @@ function ListNoticePost() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [hasMore, isLoading, lastPostId]);
 
-  const handleSearch = () => {
-    const result = noticePosts.filter((noticePost) => {
-      const { noticePostTitle, noticePostText } = noticePost;
-      const lowerCaseKeyword = searchKeyword.toLowerCase();
-      return (
-        noticePostTitle.toLowerCase().includes(lowerCaseKeyword) ||
-        noticePostText.toLowerCase().includes(lowerCaseKeyword)
-      );
-    });
-    setFilteredPosts(result);
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/searchNoticePost`, {
+        params: {
+          searchKeyword: searchKeyword,
+        },
+      });
+      setNoticePosts(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleKeyPress = (event) => {
