@@ -261,7 +261,8 @@ const Login = () => {
                     to="/user/addusertest"
                     color={'Green'}
                   >
-                    {'회원이 아니신가요? 작업중 '}
+                    {"회원이 아니신가요? 작성완료 일단 쓰세요  "}
+
                   </Typography>
                   <br />
                   <Typography
