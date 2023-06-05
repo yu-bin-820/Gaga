@@ -15,17 +15,26 @@ import GetMeetingStaticMap from "@components/meeting/map/GetMeetingStaticMap";
 import { Stack, styled } from "@mui/system";
 import MeetingMember from "@components/meeting/MeetingMember";
 import GetMeetingTop from "@layouts/meeting/GetMeetingTop";
-
-const CenteredText = styled("h5")({
-  display: "flex",
-  alignItems: "center",
-});
+import CommonTop from "@layouts/common/CommonTop";
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
+import SmallChip from "@components/meeting/SmallChip";
 
 const GetMeeting = () => {
   const { meetingno } = useParams();
   const [meeting, setMeeting] = useState();
   const [pendingMemberList, setPendingMemberList] = useState();
   const [confirmedMemberList, setConfirMemberList] = useState();
+
+  const { data: myData, mutate: mutateMe } = useSWR(
+    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+    );
+
+    const { data: leaderData, mutate: mutateLeader } = useSWR(
+      `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/userno/${meeting?.meetingLeaderNo}`,
+      fetcher
+    );
 
   const navigate = useNavigate();
 
@@ -81,8 +90,6 @@ const GetMeeting = () => {
     navigate(`/meeting/member/addmember/${meetingno}`);
   }, []);
 
-        const confirmedMemberCount = confirmedMemberList ? confirmedMemberList.length : 0;
-
 
   const [imageLoadingError, setImageLoadingError] = useState(false);
 
@@ -90,9 +97,16 @@ const GetMeeting = () => {
     setImageLoadingError(true);
   }, []);
 
+if(!leaderData){
+  return <>로딩중</>
+}
   return (
     <>
-      <GetMeetingTop />
+    {meeting?.meetingLeaderNo === myData?.userNo ? (
+        <GetMeetingTop />
+      ) : (
+        <CommonTop />
+      )}
       <Box sx={{ marginTop: "50px", marginBottom: "64px", marginLeft: '10px', marginRight: '10px' }}>
 
             {meeting?.meetingImg ? (
@@ -111,14 +125,15 @@ const GetMeeting = () => {
             )}
 
         <Stack spacing={1} >
-
-        <Typography sx={{ fontSize: 16 }}>
+        <Box>
+        <SmallChip label={meeting?.filterTag} />
+        </Box>
+        <Typography 
+        variant="h3"
+        sx={{ fontSize: 16 }}>
         {meeting?.meetingName}</Typography>
-        <Typography sx={{ fontSize: 16 }} >
-        모임 소개</Typography>
 
-        <Typography sx={{ fontSize: 13 }}>
-        {meeting?.meetingIntro}</Typography>
+        <MeetingMember member={leaderData} />
 
           <Stack direction={"row"} spacing={1} alignItems={"center"}>
             <PeopleIcon />
@@ -141,6 +156,12 @@ const GetMeeting = () => {
             {meeting?.meetingEndTime}
             </Typography>
           </Stack>
+
+          <Typography sx={{ fontSize: 16 }} >
+        모임 소개</Typography>
+
+        <Typography sx={{ fontSize: 13 }}>
+        {meeting?.meetingIntro}</Typography>
 
           <Stack direction={"row"} spacing={1} alignItems={"center"}>
             <LocationOnIcon /> 

@@ -33,6 +33,8 @@ const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo }) => {
         //onSubCategoryClick(subCategoryTag); // 부모 컴포넌트로 subCategoryTag 전달
       };
 
+      console.log(userNo)
+
     return (
         <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel3bh-content" id="panel3bh-header">
