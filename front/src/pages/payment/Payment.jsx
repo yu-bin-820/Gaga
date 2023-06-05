@@ -20,8 +20,8 @@ const Payment = () => {
 
     const payTime = new Date().toISOString();
     const orderId = `mid_${Date.now()}`;
-    const meetingNo = 9;
-    const meetingName = 'meetingName9';
+    const meetingNo = 13;
+    const meetingName = 'meetingName13';
     const entryFee = 100;
 
     const data = {
@@ -60,8 +60,6 @@ const Payment = () => {
             console.log(response.data);
 
             const { success, error_msg } = response.data;
-
-            // 결제 처리가 완료되었으므로 성공한 경우 해당 경로로 리디렉션
           })
           .catch((error) => {
             console.log('결제 오류:', error);

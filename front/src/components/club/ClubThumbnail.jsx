@@ -1,13 +1,13 @@
-import React from "react";
-import { Box, Stack, ThemeProvider, createTheme } from "@mui/system";
-import { Avatar, AvatarGroup, Chip, ImageListItem, Paper } from "@mui/material";
-import { styled } from "@mui/system";
-import { PropTypes } from "prop-types";
-import { useNavigate } from "react-router";
-import { useCallback } from "react";
+import React from 'react';
+import { Box, Stack, ThemeProvider, createTheme } from '@mui/system';
+import { Avatar, AvatarGroup, Chip, ImageListItem, Paper } from '@mui/material';
+import { styled } from '@mui/system';
+import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router';
+import { useCallback } from 'react';
 
 const StyledAvatarGroup = styled(AvatarGroup)({
-  "& .MuiAvatar-root": {
+  '& .MuiAvatar-root': {
     width: 24,
     height: 24,
     fontSize: 12,
@@ -26,7 +26,7 @@ const ClubThumbnail = ({ club }) => {
     <Box
       sx={{
         margin: 1,
-        bgcolor: "background.paper",
+        bgcolor: 'background.paper',
         boxShadow: 1,
         borderRadius: 2,
         p: 2,
@@ -34,60 +34,60 @@ const ClubThumbnail = ({ club }) => {
         padding: 1.3,
       }}
     >
-      <Stack direction="row" spacing={2}>
+      <Stack direction='row' spacing={2}>
         <ImageListItem
           sx={{
-            maxWidth: "100px",
-            maxHeight: "100px",
-            minWidth: "100px",
-            minHeight: "100px",
+            maxWidth: '100px',
+            maxHeight: '100px',
+            minWidth: '100px',
+            minHeight: '100px',
           }}
         >
           <img
             src={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=164&h=164&fit=crop&auto=format`}
-            style={{ borderRadius: "7px" }}
+            style={{ borderRadius: '7px' }}
           />
         </ImageListItem>
         <Box>
-          <Chip label={club.filterTag} size="small" />
+          <Chip label={club.filterTag} size='small' />
           <Box
-            sx={{ color: "text.primary", fontSize: 16, fontWeight: "medium" }}
+            sx={{ color: 'text.primary', fontSize: 16, fontWeight: 'medium' }}
           >
             {clubName}
           </Box>
 
           <Box
-            sx={{ color: "text.secondary", display: "inline", fontSize: 12 }}
+            sx={{ color: 'text.secondary', display: 'inline', fontSize: 12 }}
           >
             {clubRegion}
           </Box>
-          <Stack direction="row" spacing={2}>
+          <Stack direction='row' spacing={2}>
             <StyledAvatarGroup max={6}>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-              <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-              <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-              <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
+              <Avatar alt='Remy Sharp' src='/static/images/avatar/1.jpg' />
+              <Avatar alt='Travis Howard' src='/static/images/avatar/2.jpg' />
+              <Avatar alt='Cindy Baker' src='/static/images/avatar/3.jpg' />
+              <Avatar alt='Agnes Walker' src='/static/images/avatar/4.jpg' />
               <Avatar
-                alt="Trevor Henderson"
-                src="/static/images/avatar/5.jpg"
+                alt='Trevor Henderson'
+                src='/static/images/avatar/5.jpg'
               />
               <Avatar
-                alt="Trevor Henderson"
-                src="/static/images/avatar/5.jpg"
+                alt='Trevor Henderson'
+                src='/static/images/avatar/5.jpg'
               />
               <Avatar
-                alt="Trevor Henderson"
-                src="/static/images/avatar/5.jpg"
+                alt='Trevor Henderson'
+                src='/static/images/avatar/5.jpg'
               />
               <Avatar
-                alt="Trevor Henderson"
-                src="/static/images/avatar/5.jpg"
+                alt='Trevor Henderson'
+                src='/static/images/avatar/5.jpg'
               />
             </StyledAvatarGroup>
             <Box
               sx={{
-                color: "text.secondary",
-                display: "inline",
+                color: 'text.secondary',
+                display: 'inline',
                 fontSize: 14,
               }}
             >
@@ -100,7 +100,7 @@ const ClubThumbnail = ({ club }) => {
   );
 };
 
-ClubThumbnail.PropTypes = {
+ClubThumbnail.propTypes = {
   club: PropTypes.shape({
     filterTag: PropTypes.string.isRequired,
     clubName: PropTypes.string.isRequired,
