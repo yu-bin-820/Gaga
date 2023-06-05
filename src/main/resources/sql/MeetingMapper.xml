@@ -83,9 +83,10 @@
     filter_gender,
     filter_min_age,
     filter_max_age,
-    filter_tag
+    filter_tag,
+    (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND meeting_no = m.meeting_no) AS count
   FROM
-    meetings
+    meetings AS m
   WHERE
     meeting_no = #{meetingNo}
 </select>
