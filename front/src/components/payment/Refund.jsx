@@ -14,7 +14,7 @@ const Refund = () => {
 
   const onClickRefund = useCallback(async () => {
     try {
-      const userData = { userNo: 2, meetingNo: 13 };
+      const userData = { userNo: 2, meetingNo: 45 };
 
       const responseOne = await axios.post(
         `http://${
