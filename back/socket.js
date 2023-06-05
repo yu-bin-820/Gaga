@@ -7,7 +7,18 @@ module.exports = (server, app) => {
   const io = SocketIO(server, {
     path: '/socket.io',
     cors: {
-      origin: `http://${REACT_HOST}:${REACT_PORT}`,
+      origin: [
+        `http://${REACT_HOST}:${REACT_PORT}`,
+        `http://${SPRING_HOST}:${SPRING_PORT}`,
+        `http://localhost:${REACT_PORT}`,
+        `http://localhost:${SPRING_PORT}`,
+        `http://127.0.0.1:${REACT_PORT}`,
+        `http://127.0.0.1:${SPRING_PORT}`,
+        'http://223.130.145.151:80',
+        'http://223.130.144.173:80',
+        'http://www.gaga.works',
+        'http://gaga.works:80',
+      ],
       methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
     },
   });
