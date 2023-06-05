@@ -1,5 +1,6 @@
 import ListMeetingParentClubNo from "@components/meeting/ListMeetingParentClubNo";
 import styled from "@emotion/styled";
+import CommonTop from "@layouts/common/CommonTop";
 import { Box, Button } from "@mui/material";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
@@ -20,7 +21,7 @@ const GetClub = () => {
 
   useEffect(() => {
     axios
-      .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/club/no/${clubNo}`)
+      .get(`${import.meta.env.VITE_SPRING_HOST}/rest/club/no/${clubNo}`)
       .then((response) => {
         console.log(response.data);
         setClub(response.data);
@@ -33,7 +34,7 @@ const GetClub = () => {
   useEffect(() => {
     axios
       .get(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/user/list/grouptype/1/no/${clubNo}/state/2`
       )
@@ -49,7 +50,7 @@ const GetClub = () => {
   useEffect(() => {
     axios
       .get(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/user/list/grouptype/1/no/${clubNo}/state/1`
       )
@@ -80,7 +81,7 @@ const GetClub = () => {
       console.log(data);
 
       const response = await axios.delete(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/club`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/club`,
         {
           data: data,
         }
@@ -94,10 +95,12 @@ const GetClub = () => {
 
   return (
     <>
+      <CommonTop />
       <Box sx={{ marginTop: "64px" }}>
         <h2>여기는 클럽 상세페이지입니다. </h2>
         <br />
         <h5>클럽이름 {club?.clubName}</h5>
+        클럽소개 {club?.clubIntro} <br />
         클럽장 번호 {club?.clubLeaderNo} <br />
         최대인원 {club?.clubMaxMemberNo} <br />
         생성일 {club?.clubRegDate} <br />
@@ -109,6 +112,7 @@ const GetClub = () => {
         최대나이 {club?.filterMaxAge} <br />
         태그 {club?.filterTag} <br />
         메인 카테고리 번호 {club?.mainCategoryNo} <br />
+        클럽 참여 인원 {club?.memberCount}
         <h3>클럽 내 생성 모임 목록</h3>
         <ListMeetingParentClubNo />
         <Button onClick={onClickUpdate}>수정하기</Button>

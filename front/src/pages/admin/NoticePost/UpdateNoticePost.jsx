@@ -16,7 +16,7 @@ function UpdateNoticePost() {
   useEffect(() => {
     if (!noticePost.noticePostNo) {
       axios
-        .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePost/${noticePostNo}`)
+        .get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePost/${noticePostNo}`)
         .then((response) => {
           setNoticePost(response.data);
         })

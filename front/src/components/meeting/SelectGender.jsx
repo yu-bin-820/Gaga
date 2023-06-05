@@ -1,22 +1,48 @@
 import StyledToggleButtonGroup from '@components/common/StyledToggleButtonGroup';
 import { ToggleButton } from '@mui/material';
+import { Stack } from '@mui/system';
+import fetcher from '@utils/fetcher';
 import React, { useState } from 'react';
+import useSWR from 'swr';
+import WcIcon from '@mui/icons-material/Wc';
 
-const SelectGender = ({ onGenderClick, myGender }) => {
+const SelectGender = ({ onGenderClick }) => {
     
     const [selectedValue, setSelectedValue] = useState(null);
+
+    const { data: myData, mutate: mutateMe } = useSWR(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+        fetcher
+        );
 
     const handleChange = (event, newValue) => {
         setSelectedValue(newValue);
       };
 
       const onClickGender = (gender) => {
-        console.log('성별 선택', gender);
+        // console.log('성별 선택', gender);
         onGenderClick(gender); // 부모 컴포넌트로 subCategoryTag 전달
       };
 
     return (
         <div>
+        <Stack
+        sx={{marginLeft: 1}}
+        spacing={2}>
+        <Stack
+        direction='row'
+        alignItems="center"
+        spacing={2}
+        sx={{marginLeft: 1, marginRight: 1.5, borderBottom: '1.5px solid #bfbdbd'}}
+        >
+        <WcIcon />
+            <h4>성별</h4>
+        </Stack>
+        
+        <Stack
+        direction='row'
+        alignItems="center"
+        sx={{marginLeft: 1}}>
             <StyledToggleButtonGroup
             value={selectedValue}
             exclusive
@@ -30,7 +56,7 @@ const SelectGender = ({ onGenderClick, myGender }) => {
             >
             누구나
         </ToggleButton>
-        {myGender =="1" &&(
+        {myData.gender =="1" &&(
         <ToggleButton 
             value="1"
             onClick={() => onClickGender("1")}
@@ -38,7 +64,7 @@ const SelectGender = ({ onGenderClick, myGender }) => {
             남자만
         </ToggleButton>
         )}
-        {myGender =="2" &&(
+        {myData.gender =="2" &&(
         <ToggleButton 
             value="2"
             onClick={() => onClickGender("2")}
@@ -47,6 +73,8 @@ const SelectGender = ({ onGenderClick, myGender }) => {
         </ToggleButton>
         )}
       </StyledToggleButtonGroup>
+      </Stack>
+      </Stack>
         </div>
     );
 };

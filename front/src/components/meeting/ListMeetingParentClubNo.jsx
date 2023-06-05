@@ -6,14 +6,14 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { useNavigate, useParams } from "react-router";
 
 const ListMeetingParentClubNo = () => {
-  const { clubno } = useParams();
+  const { clubNo } = useParams();
   const [meetingList, setMeetingList] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
       .get(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/meeting/list/clubno/${clubNo}`
       )
@@ -29,9 +29,9 @@ const ListMeetingParentClubNo = () => {
   useEffect(() => {
     axios
       .get(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
-        }/rest/meeting/list/clubno/${clubno}`
+        }/rest/meeting/list/clubno/${clubNo}`
       )
       .then((response) => {
         console.log(response.data);
@@ -40,7 +40,7 @@ const ListMeetingParentClubNo = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, [clubno]);
+  }, [clubNo]);
 
   const onClickMeeting = useCallback((event) => {
     const { id } = event.target;

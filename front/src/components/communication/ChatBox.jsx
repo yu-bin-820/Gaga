@@ -32,6 +32,8 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ClearIcon from '@mui/icons-material/Clear';
 import axios from 'axios';
 import useInputOrigin from '@hooks/common/useInputOrigin';
+import LocationDrawer from './LocationDrawer';
+import useChatMapStore from '@stores/communication/useChatMapStore';
 
 const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
   const [chat, onChangeChat, setChat] = useInputOrigin('');
@@ -40,12 +42,11 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [uploadChatImgDialogOpen, setUploadChatImgDialogOpen] = useState(false);
-
+  const { locationDrawerOpen, isPost, setField } = useChatMapStore();
   const open = Boolean(anchorEl);
-
-  const onClickPictureMenu = useCallback(() => {
-    setUploadChatImgDialogOpen(true);
-  }, []);
+  const postPath = `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/${
+    groupType == 2 ? 'meeting' : 'club'
+  }/message`;
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -58,6 +59,14 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
     setAnchorEl(null);
     setUploadChatImgDialogOpen(false);
   }, []);
+
+  const toggleLocationDrawer = useCallback(
+    (state) => () => {
+      setField('locationDrawerOpen', state);
+    },
+    [setField]
+  );
+
   const onChangeChatImg = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
@@ -70,9 +79,7 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
       if (chat?.trim()) {
         axios
           .post(
-            `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/${
-              groupType == 2 ? 'meeting' : 'club'
-            }/message`,
+            postPath,
             {
               senderNo: senderNo,
               groupNo: groupNo,
@@ -90,7 +97,7 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
           });
       }
     },
-    [chat, setChat, mutateGroupMessages, senderNo, groupNo, groupType]
+    [chat, setChat, mutateGroupMessages, senderNo, groupNo, postPath]
   );
 
   // const onKeydownChat = useCallback(
@@ -115,6 +122,16 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
     [onSubmitForm]
   );
 
+  const onClickPictureMenu = useCallback(() => {
+    setUploadChatImgDialogOpen(true);
+  }, []);
+
+  const onClickLocationMenu = useCallback(() => {
+    handleClose();
+    setField('isPost', true);
+    setField('locationDrawerOpen', true);
+  }, [setField]);
+
   const submitUploadChatImgDialog = useCallback(() => {
     const formData = new FormData();
     formData.append('file', selectedFile);
@@ -123,7 +140,7 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
 
     axios
       .post(
-        `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/${
+        `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/${
           groupType == 2 ? 'meeting' : 'club'
         }/image`,
         formData,
@@ -210,7 +227,7 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
           </Button>
         </MenuItem>
 
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={onClickLocationMenu}>
           <Button
             startIcon={<LocationOnIcon />}
             color="primary"
@@ -281,6 +298,14 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
           <Button onClick={submitUploadChatImgDialog}>전송</Button>
         </DialogActions>
       </Dialog>
+      {/* ----------------------------------------드로워-------------------------------------------- */}
+      <LocationDrawer
+        locationDrawerOpen={locationDrawerOpen}
+        toggleLocationDrawer={toggleLocationDrawer}
+        postPath={postPath}
+        senderNo={senderNo}
+        groupNo={groupNo}
+      />
     </Box>
   );
 };

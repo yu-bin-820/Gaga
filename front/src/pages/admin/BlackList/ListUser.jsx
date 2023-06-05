@@ -16,7 +16,7 @@ function ListUser() {
 
   const fetchUserList = async () => {
     try {
-      const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getUserList`);
+      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getUserList`);
       setUserList(response.data);
     } catch (error) {
       console.error(error);
@@ -25,7 +25,7 @@ function ListUser() {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/searchUser`);
+      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/searchUser`);
       setUserList(response.data);
 
     } catch (error) {

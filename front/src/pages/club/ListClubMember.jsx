@@ -13,14 +13,14 @@ const ListClubMember = () => {
   const navigate = useNavigate();
 
   const { data: pendingMemberList, mutate: mutatePendingMemberList } = useSWR(
-    `http://${
+    `${
       import.meta.env.VITE_SPRING_HOST
     }/rest/user/list/grouptype/1/no/${clubNo}/state/1`,
     fetcher
   );
   const { data: confirmedMemberList, mutate: mutateConfirmedMemberList } =
     useSWR(
-      `http://${
+      `${
         import.meta.env.VITE_SPRING_HOST
       }/rest/user/list/grouptype/1/no/${clubNo}/state/2`,
       fetcher
@@ -41,7 +41,7 @@ const ListClubMember = () => {
 
       const response = await axios
         .patch(
-          `http://${import.meta.env.VITE_SPRING_HOST}/rest/club/member`,
+          `${import.meta.env.VITE_SPRING_HOST}/rest/club/member`,
           data
         )
         .then(() => {
@@ -66,7 +66,7 @@ const ListClubMember = () => {
       console.log(data);
 
       const response = await axios
-        .delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/club/member`, {
+        .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/club/member`, {
           data: data,
         })
         .then(() => {
@@ -87,10 +87,10 @@ const ListClubMember = () => {
           <Box key={i}>
             <MeetingMember member={pendingMember} />
             <Button id={pendingMember.userNo} onClick={onClickDeleteMember}>
-              거절{" "}
+              거절
             </Button>
             <Button id={pendingMember.userNo} onClick={onClickUpdateMember}>
-              수락{" "}
+              수락
             </Button>
           </Box>
         ))}
@@ -99,7 +99,7 @@ const ListClubMember = () => {
           <Box key={i}>
             <MeetingMember key={i} member={confirmedMember} />
             <Button id={confirmedMember.userNo} onClick={onClickDeleteMember}>
-              내보내기{" "}
+              내보내기
             </Button>
           </Box>
         ))}

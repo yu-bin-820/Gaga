@@ -2,9 +2,12 @@ require('dotenv').config();
 const { sequelize } = require('./models');
 const path = require('path');
 const express = require('express');
-
 const app = express();
-app.set('PORT', process.env.PORT || 8909);
+
+const { PORT, REACT_HOST, REACT_PORT, SPRING_HOST, SPRING_PORT } = process.env;
+
+app.set('PORT', PORT || 8909);
+
 sequelize
   .sync()
   .then(() => {
@@ -21,11 +24,20 @@ const restRouter = require('./routes/rest');
 const webSocket = require('./socket');
 const { log } = require('console');
 
-const { PORT, REACT_HOST, REACT_PORT } = process.env;
-
 app.use(
   cors({
-    origin: `http://${REACT_HOST}:${REACT_PORT}`,
+    origin: [
+      `http://${REACT_HOST}:${REACT_PORT}`,
+      `http://${SPRING_HOST}:${SPRING_PORT}`,
+      `http://localhost:${REACT_PORT}`,
+      `http://localhost:${SPRING_PORT}`,
+      `http://127.0.0.1:${REACT_PORT}`,
+      `http://127.0.0.1:${SPRING_PORT}`,
+      'http://223.130.145.151:80',
+      'http://223.130.144.173:80',
+      'http://www.gaga.works',
+      'http://gaga.works:80',
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   })

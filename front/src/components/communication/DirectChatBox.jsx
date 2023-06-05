@@ -70,7 +70,7 @@ const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
       if (chat?.trim()) {
         axios
           .post(
-            `http://${
+            `${
               import.meta.env.VITE_EXPRESS_HOST
             }/rest/chat/direct/message`,
             {
@@ -123,7 +123,7 @@ const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
 
     axios
       .post(
-        `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/
+        `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/
          direct/image`,
         formData,
         { withCredentials: true }

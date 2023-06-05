@@ -1,64 +1,51 @@
-import { Slider } from '@mui/material';
-import { Box } from '@mui/system';
-import React from 'react';
-
-const marks = [
-    {
-      value: 0,
-      label: '0°C',
-    },
-    {
-      value: 20,
-      label: '20°C',
-    },
-    {
-      value: 37,
-      label: '37°C',
-    },
-    {
-      value: 100,
-      label: '100°C',
-    },
-  ];
-
-
-  function valuetext(value) {
-    return `${value}°C`;
-  }
-  
-  function valueLabelFormat(value) {
-    return marks.findIndex((mark) => mark.value === value) + 1;
-  }
-
+import { Box, Stack } from '@mui/system';
+import React, { useCallback } from 'react';
+import SelectGender from './SelectGender';
+import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
+import SelectAge from './SelectAge';
+import { Paper, Typography } from '@mui/material';
 
 const AddMeetingFilter = () => {
-    const [value, setValue] = React.useState([20, 37]);
 
+    const {
+        filterGender,
+        filterMinAge,
+        filterMaxAge,
+        setField,
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-      };
+      } = useMeetingFormStore();
+
+    const handleGenderChange = useCallback((gender) => {
+        setField('filterGender', gender);
+      }, [setField]);
+
+      const handleAgeChange = useCallback((filterMinAge,filterMaxAge) => {
+        setField('filterMinAge', filterMinAge);
+        setField('filterMaxAge', filterMaxAge);
+        console.log(filterMaxAge);
+      }, [setField]);
 
     return (
-    <Box sx={{ width: 300 }}>
-      <Slider
-        aria-label="Restricted values"
-        defaultValue={20}
-        valueLabelFormat={valueLabelFormat}
-        getAriaValueText={valuetext}
-        step={10}
-        valueLabelDisplay="auto"
-        marks={marks}
-      />
+      <Box sx={{ margin: '10px' }}>
+      <h4>어떤 멤버를 만날까요?</h4>
+        <Stack
+        sx={{margin: '10px'}}
+        spacing={2}>
+        <SelectGender
+            onGenderClick={handleGenderChange}
+        />
 
-<Slider
-        getAriaLabel={() => 'Temperature range'}
-        value={value}
-        onChange={handleChange}
-        valueLabelDisplay="auto"
-        getAriaValueText={valuetext}
-      />
-    </Box>
+        <SelectAge
+            onAgeSlider={handleAgeChange}
+        ></SelectAge>
+            
+        </Stack>
+        <Paper variant="outlined" sx={{margin: '5px', padding: '10px'}}>
+        <Typography style={{ color: 'gray' }} sx={{ fontSize: 13}}>
+        설정한 조건에 맞는 사람에게만 모임이 노출되어요.
+        </Typography>
+      </Paper>
+        </Box>
     );
 };
 

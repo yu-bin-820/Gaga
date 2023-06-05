@@ -13,14 +13,14 @@ const ListMyClub = () => {
   const navigate = useNavigate();
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
   useEffect(() => {
     axios
       .get(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/club/list/join/${
+        `${import.meta.env.VITE_SPRING_HOST}/rest/club/list/join/${
           myData?.userNo
         }`
       )
@@ -49,8 +49,6 @@ const ListMyClub = () => {
         {clubList?.map((club, i) => (
           <Box key={i}>
             <ClubThumbnail club={club} />
-            <h5>{club.clubName}</h5>
-            <h5>{club.state}</h5>
             <Button id={club.clubNo} onClick={onClickClub}>
               클럽정보
             </Button>

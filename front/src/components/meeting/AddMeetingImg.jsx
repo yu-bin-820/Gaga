@@ -24,7 +24,8 @@ const AddMeetingImg = () => {
   };
 
     return (
-        <div>
+      <Box sx={{ margin: '10px' }}>
+      <h4>모임을 소개해 주세요!</h4>
             <Stack direction="row" spacing={2} alignItems={'center'} marginLeft='5px'>
             <Button
                 variant="outlined"
@@ -55,15 +56,15 @@ const AddMeetingImg = () => {
                 {image && 
                 <img 
                 src={image}
-                style={{ maxWidth: '90px', maxHeight: '90px', minWidth: '90px', minHeight: '90px' }} /> }
+                style={{ width: '90px', height: '90px'}} /> }
             </ImageListItem>
             </Stack>
             <br/>
             <TextField
                 id="outlined-multiline-static"
-                label="meetingIntro"
                 name="meetingIntro"
-                placeholder="Search by email address, phone number, or user UID"
+                placeholder="소개글을 입력해 주세요(선택)
+참가비가 있을 경우 참가비 정보도 함께 적어주세요!"
                 onChange={(e)=>onChangeField('meetingIntro',e)}
                 fullWidth
                 multiline
@@ -72,7 +73,7 @@ const AddMeetingImg = () => {
                 />
 
 
-        </div>
+        </Box>
     );
 };
 

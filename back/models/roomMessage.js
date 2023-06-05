@@ -22,11 +22,19 @@ module.exports = class RoomMessage extends Model {
         },
         sender_no: {
           type: DataTypes.INTEGER,
-          allowNull: false,
+          allowNull: true,
         },
         content_type_no: {
           type: DataTypes.INTEGER,
           allowNull: false,
+        },
+        lat: {
+          type: DataTypes.DOUBLE,
+          allowNull: true,
+        },
+        lng: {
+          type: DataTypes.DOUBLE,
+          allowNull: true,
         },
       },
       {

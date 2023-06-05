@@ -24,7 +24,7 @@ const UpdateClub = () => {
 
   const [selectedImage, setSelectedImage] = useState(
     club?.clubImg
-      ? `http://${import.meta.env.VITE_SPRING_HOST}/upload_images/club/${
+      ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/club/${
           club?.clubImg
         }`
       : null
@@ -39,7 +39,7 @@ const UpdateClub = () => {
 
   useEffect(() => {
     axios
-      .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/club/no/${clubNo}`)
+      .get(`${import.meta.env.VITE_SPRING_HOST}/rest/club/no/${clubNo}`)
       .then((response) => {
         console.log(response.data);
         setClub(response.data);
@@ -74,7 +74,7 @@ const UpdateClub = () => {
       console.log(formData);
 
       const response = axios.patch(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/club`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/club`,
         formData
       );
 

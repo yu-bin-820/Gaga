@@ -20,16 +20,16 @@ const ListReport = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
   const { setField } = useCommunityStore();
 
   const { data: reportListData, mutate: mutateReportList } = useSWR(
-    `http://${
-      import.meta.env.VITE_SPRING_HOST
-    }/rest/community/report/list/userno/${myData?.userNo}/role/${myData?.role}`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/community/report/list/userno/${
+      myData?.userNo
+    }/role/${myData?.role}`,
     fetcher
   );
 

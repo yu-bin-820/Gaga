@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 const GetMeetingStaticMap = ({ meeting }) => {
   const { meetingLat, meetingLng} = meeting;
+  console.log(meetingLat, meetingLng)
 
     return (
         <StaticMap // 지도를 표시할 Container

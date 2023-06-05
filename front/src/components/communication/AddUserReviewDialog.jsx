@@ -62,20 +62,24 @@ export default function AddUserReviewDialog({
   const handleClose = () => {
     setOpen(false);
   };
-  const [view, setView] = useState('list');
-  const [userScore, setUserScore] = useState(3);
 
   const { data: userReviewData, mutate: mutateUserReview } = useSWR(
-    `http://${
+    `${
       import.meta.env.VITE_SPRING_HOST
     }/rest/community/userreview/reviewerno/${reviewerNo}/reviewedno/${reviewedNo}`,
     fetcher
   );
+  const [view, setView] = useState(
+    userReviewData?.userScore?.toString() || 'list'
+  );
+  const [userScore, setUserScore] = useState(3);
 
   const handleChange = (event, nextView) => {
     setView(nextView);
+
     setUserScore(event.currentTarget.value);
     console.log('userScore', userScore);
+    console.log('nextView', nextView);
   };
 
   const submitUserReview = useCallback(() => {
@@ -90,7 +94,7 @@ export default function AddUserReviewDialog({
     isUpdate
       ? axios
           .patch(
-            `http://${
+            `${
               import.meta.env.VITE_SPRING_HOST
             }/rest/community/userreview`,
             data,
@@ -107,7 +111,7 @@ export default function AddUserReviewDialog({
           })
       : axios
           .post(
-            `http://${
+            `${
               import.meta.env.VITE_SPRING_HOST
             }/rest/community/userreview`,
             data,

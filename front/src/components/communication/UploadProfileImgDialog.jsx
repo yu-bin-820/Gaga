@@ -19,7 +19,7 @@ export default function UploadProfileImgDialog({ open, setOpen }) {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
@@ -39,7 +39,7 @@ export default function UploadProfileImgDialog({ open, setOpen }) {
 
     axios
       .patch(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/community/profileimg/userno/${myData?.userNo}`,
         formData,

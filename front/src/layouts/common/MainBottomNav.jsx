@@ -1,22 +1,22 @@
-import * as React from 'react';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import FolderIcon from '@mui/icons-material/Folder';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import HomeIcon from '@mui/icons-material/Home';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
-import PersonIcon from '@mui/icons-material/Person';
-import { useNavigate } from 'react-router';
-import fetcher from '@utils/fetcher';
-import useSWR from 'swr';
-import useSocket from '@hooks/common/useSocket';
-import { useEffect } from 'react';
-import { PropTypes } from 'prop-types';
-import { Badge } from '@mui/material';
-import useCommonStore from '@stores/common/useCommonStore';
+import * as React from "react";
+import BottomNavigation from "@mui/material/BottomNavigation";
+import BottomNavigationAction from "@mui/material/BottomNavigationAction";
+import FolderIcon from "@mui/icons-material/Folder";
+import RestoreIcon from "@mui/icons-material/Restore";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import HomeIcon from "@mui/icons-material/Home";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
+import PersonIcon from "@mui/icons-material/Person";
+import { useNavigate } from "react-router";
+import fetcher from "@utils/fetcher";
+import useSWR from "swr";
+import useSocket from "@hooks/common/useSocket";
+import { useEffect } from "react";
+import { PropTypes } from "prop-types";
+import { Badge } from "@mui/material";
+import useCommonStore from "@stores/common/useCommonStore";
 export default function MainBottomNav({ pageName }) {
   const navigate = useNavigate();
 
@@ -27,11 +27,11 @@ export default function MainBottomNav({ pageName }) {
   };
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
   const { data: unreadsData, mutate: mutateUnreads } = useSWR(
-    `http://${
+    `${
       import.meta.env.VITE_EXPRESS_HOST
     }/rest/chat/group/message/unreads/userno/${myData?.userNo}`,
     fetcher
@@ -39,7 +39,7 @@ export default function MainBottomNav({ pageName }) {
   //-------------------------채팅 (상황봐서 지울예정)------------------------------------------
 
   // const { data: groupsData, mutate: mutateGroups } = useSWR(
-  //   `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/group/list/userno/${
+  //   `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/group/list/userno/${
   //     myData?.userNo
   //   }`,
   //   fetcher
@@ -96,10 +96,10 @@ export default function MainBottomNav({ pageName }) {
   }, [navigate]);
 
   const onClickAddGroup = React.useCallback(() => {
-    if (groupType == 'meeting') {
+    if (groupType == "meeting") {
       navigate(`/meeting/addmeeting`);
     } else {
-      navigate('/club/addclub');
+      navigate("/club/addclub");
     }
   }, [navigate, groupType]);
 
@@ -115,7 +115,7 @@ export default function MainBottomNav({ pageName }) {
 
   return (
     <BottomNavigation
-      sx={{ width: '100%', position: 'fixed', bottom: '0rem' }}
+      sx={{ width: "100%", position: "fixed", bottom: "0rem" }}
       value={value}
       onChange={handleChange}
     >

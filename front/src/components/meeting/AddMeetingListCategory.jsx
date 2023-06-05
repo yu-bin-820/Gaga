@@ -23,7 +23,8 @@ const AddMeetingListCategory = () => {
       }, [setField]);
 
     return (
-        <Box>
+      <Box sx={{ margin: '10px' }}>
+      <h4>모임 목적을 선택해 주세요!</h4>
       <ListCategory
         onMainCategoryChange={handleMainCategoryChange}
         onSubCategoryClick={handleSubCategoryClick}

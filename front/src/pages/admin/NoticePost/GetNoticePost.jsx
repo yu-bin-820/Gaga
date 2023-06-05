@@ -11,7 +11,7 @@ function GetNoticePost() {
 
   useEffect(() => {
     axios
-      .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePost/noticePostNo/${noticePostNo}`)
+      .get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePost/noticePostNo/${noticePostNo}`)
       .then((response) => {
         setNoticePost(response.data);
       })
@@ -23,7 +23,7 @@ function GetNoticePost() {
   const handleDelete = () => {
     if (window.confirm('정말로 공지사항을 삭제하시겠습니까?')) {
       axios
-        .delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/deleteNoticePost/noticePostNo/${noticePostNo}`)
+        .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/deleteNoticePost/noticePostNo/${noticePostNo}`)
         .then(() => {
           console.log('공지사항 삭제 완료');
           navigate('/listNoticePost');

@@ -51,7 +51,7 @@ const GetMyProfile = () => {
   const [isUpdateNickName, setIsUpdateNickName] = useState(false);
   const [updateMainTitleOpen, setUpdateMainTitleOpen] = useState(false);
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
@@ -120,9 +120,9 @@ const GetMyProfile = () => {
             <div onClick={onClickProfileImg}>
               <Avatar
                 alt={myData?.nickName}
-                src={`http://${
-                  import.meta.env.VITE_SPRING_HOST
-                }/upload_images/user/${myData?.profileImg}`}
+                src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+                  myData?.profileImg
+                }`}
                 sx={{ width: 76, height: 76, marginRight: '100px' }}
               />
             </div>
@@ -180,7 +180,11 @@ const GetMyProfile = () => {
               alignItems: 'center',
             }}
           >
-            <Typography>{myData?.userIntro}</Typography>
+            <Typography>
+              {myData?.userIntro.split('\n').map((line, i) => (
+                <div key={i}>{line}</div>
+              ))}
+            </Typography>
             <IconButton
               sx={{ marginLeft: 'auto' }}
               onClick={onClickUpdateIntro}
@@ -224,19 +228,19 @@ const GetMyProfile = () => {
               rowHeight={100}
             >
               <CustomedImageListItem
-                src={`http://${
-                  import.meta.env.VITE_SPRING_HOST
-                }/upload_images/user/${myData?.activityImg}`}
+                src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+                  myData?.activityImg
+                }`}
               />
               <CustomedImageListItem
-                src={`http://${
-                  import.meta.env.VITE_SPRING_HOST
-                }/upload_images/user/${myData?.activityImg2}`}
+                src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+                  myData?.activityImg2
+                }`}
               />
               <CustomedImageListItem
-                src={`http://${
-                  import.meta.env.VITE_SPRING_HOST
-                }/upload_images/user/${myData?.activityImg3}`}
+                src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+                  myData?.activityImg3
+                }`}
               />
             </ImageList>
           </Box>

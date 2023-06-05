@@ -25,7 +25,7 @@ const ListCategory = ({ onMainCategoryChange, onSubCategoryClick }) => {
   useEffect(() => {
     axios
       .get(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/maincategory`
+        `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/maincategory`
       )
       .then((response) => {
         console.log(response.data);
@@ -39,7 +39,7 @@ const ListCategory = ({ onMainCategoryChange, onSubCategoryClick }) => {
   useEffect(() => {
     axios
       .get(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/subcategory`
+        `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/subcategory`
       )
       .then((response) => {
         console.log(response.data);

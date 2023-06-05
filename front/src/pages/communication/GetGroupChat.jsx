@@ -23,14 +23,14 @@ const GetGroupChat = () => {
   const boxRef = useRef();
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
   const isMeeting = chatType === 2;
   const [socket, discconect] = useSocket(isMeeting ? 'meeting' : 'club');
 
   const { data: groupMessagesData, mutate: mutateGroupMessages } = useSWR(
-    `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/${
+    `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/${
       isMeeting ? 'meetingno' : 'clubno'
     }/${chatRoomEntryNo}/message/list/userno/${myData?.userNo}`,
     fetcher
@@ -46,9 +46,11 @@ const GetGroupChat = () => {
 
   useEffect(() => {
     return () => {
-      discconect();
+      if (socket) {
+        discconect();
+      }
     };
-  }, [discconect]);
+  }, [discconect, socket]);
 
   const onMessage = useCallback(() => {
     mutateGroupMessages();
@@ -64,10 +66,11 @@ const GetGroupChat = () => {
   useEffect(() => {
     scrollToBottom();
   }, [groupMessagesData, scrollToBottom]);
-  if (!groupMessagesData) {
+  if (!groupMessagesData || !socket) {
     return <>로딩</>;
   }
   // console.log(meetingMessagesData);
+
   return (
     <div ref={boxRef}>
       <GetChatTop

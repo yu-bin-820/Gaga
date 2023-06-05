@@ -8,19 +8,19 @@ import { Button } from "@mui/material";
 import ClubThumbnail from "./ClubThumbnail";
 
 const ListCreateClub = () => {
-  const { userno } = useParams();
+  const { userNo } = useParams();
   const [clubList, setClubList] = useState();
   const navigate = useNavigate();
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
   useEffect(() => {
     axios
       .get(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/club/list/create/${
+        `${import.meta.env.VITE_SPRING_HOST}/rest/club/list/create/${
           myData?.userNo
         }`
       )

@@ -3,7 +3,7 @@ import fetcher from '@utils/fetcher';
 
 const useLoginData = () => {
   const { data, mutate } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 

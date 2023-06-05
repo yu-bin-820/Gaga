@@ -1,4 +1,5 @@
-import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogTitle, Typography } from '@mui/material';
+import { Stack } from '@mui/system';
 import axios from 'axios';
 import React, { useCallback } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router';
@@ -26,7 +27,7 @@ const DeleteMeetingDialog = ({ open, setOpen }) => {
 
             console.log(data);
 
-            const response = axios.patch(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/delete`, 
+            const response = axios.patch(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/delete`, 
                 data);
 
             navigate(`/`);
@@ -40,15 +41,34 @@ const DeleteMeetingDialog = ({ open, setOpen }) => {
 
     return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>모임을 삭제하시겠습니까?</DialogTitle>
+      <Dialog 
+      open={open} 
+      onClose={handleClose}
+      sx={{padding: '20px'}}>
+        <Typography 
+        variant="h6" 
+        sx={{ fontSize: '16px', padding: '20px' }}>
+            모임을 삭제하시겠습니까?
+          </Typography>
         <DialogActions>
-          <Button
-          variant="contained"
-          onClick={handleClose}>취소</Button>
-          <Button 
-          variant="contained"
-          onClick={onClickDelete}>삭제하기</Button>
+          <Stack
+          direction={'row'}
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}>
+            <Button 
+            variant="contained" 
+            sx={{ width: '100px' }} 
+            onClick={handleClose}>
+              취소
+            </Button>
+            <Button 
+            variant="contained" 
+            sx={{ width: '100px' }} 
+            onClick={onClickDelete}>
+              삭제하기
+            </Button>
+          </Stack>
         </DialogActions>
       </Dialog>
     </div>

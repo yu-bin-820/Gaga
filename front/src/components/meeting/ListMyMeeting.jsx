@@ -5,6 +5,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import useSWR from 'swr';
 import ListMyMeetingThumnail from './ListMyMeetingThumnail';
+import ListMyConfirmMeetingThumnail from './ListMyConfirmMeetingThumnail';
+import ListMySuccessMeeting from './ListMySuccessMeeting';
+import ListMyPendingMeetingThumnail from './ListMyPendingMeetingThumnail';
 
 const ListMyMeeting = () => {
     
@@ -13,13 +16,13 @@ const ListMyMeeting = () => {
     const navigate = useNavigate();
 
     const { data: myData, mutate: mutateMe } = useSWR(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
         fetcher
         );
 
     useEffect(()=>{
         axios
-            .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${userNo ? userNo: myData.userNo}`)
+            .get(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${userNo ? userNo: myData.userNo}`)
             .then((response)=>{
                 console.log(response.data);
                 setMeetingList(response.data);
@@ -30,16 +33,58 @@ const ListMyMeeting = () => {
     },[userNo]);
 
     return (
-        <Box sx={{ marginBottom: '136px', backgroundColor: '#ededed' }}>
-                meeting.state 0 : leader / 1 : 신청중 / 2: 확정
-                {meetingList?.map((meeting,i)=>(
-                    
-                    <Box key={i}>
-                    <ListMyMeetingThumnail meeting={meeting}/>
-                    <h5>{meeting.state}</h5>
+        <Box sx={{ marginBottom: '170px', backgroundColor: '#ededed' }}>
+            <h5 style={{margin:'1px'}}>참여 확정 모임</h5>
+            {meetingList?.map((meeting, i) => {
+                if (meeting.state === 2 && meeting.meetingSuccess === 1) {
+                return (
+                    <Box key={i} sx={{ margin: '3px' }}>
+                    <ListMyConfirmMeetingThumnail meeting={meeting} />
                     </Box>
-                    
-                ))}
+                );
+                } else {
+                return null;
+                }
+            })}
+            <h5 style={{margin:'1px'}}>참여 신청 모임</h5>
+            {meetingList?.map((meeting, i) => {
+                if (meeting.state === 1) {
+                return (
+                    <Box key={i} sx={{ margin: '3px' }}>
+                    <ListMyPendingMeetingThumnail meeting={meeting} />
+                    </Box>
+                );
+                } else {
+                return null;
+                }
+            })}
+
+            <h5 style={{margin:'1px'}}>주최한 모임</h5>
+            {meetingList?.map((meeting, i) => {
+                if (meeting.state === 0) {
+                return (
+                    <Box key={i} sx={{ margin: '3px' }}>
+                    <ListMyMeetingThumnail meeting={meeting} />
+                    </Box>
+                );
+                } else {
+                return null;
+                }
+            })}
+
+            <h5>성사된 모임</h5>
+            {meetingList?.map((meeting, i) => {
+                if (meeting.state === (2 || 3) && meeting.meetingSuccess === 2) {
+                return (
+                    <Box key={i} sx={{ margin: '3px' }}>
+                    <ListMySuccessMeeting meeting={meeting} />
+                    </Box>
+                );
+                } else {
+                return null;
+                }
+            })}
+
         </Box>
     );
 };

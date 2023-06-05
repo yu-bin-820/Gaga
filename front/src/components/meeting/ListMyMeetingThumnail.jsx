@@ -31,10 +31,9 @@ const ListMyMeetingThumnail = ({ meeting }) => {
         <div>
             <Box
                 sx={{
-                    margin: 0.3,
                     borderRadius: 2,
                     p: 2,
-                    minWidth: 300,
+                    minWidth: 295,
                     padding: 1,
                     backgroundColor: '#ffffff'
                 }}
@@ -51,7 +50,7 @@ const ListMyMeetingThumnail = ({ meeting }) => {
     );
 };
 
-MeetingThumbnail.propTypes = {
+ListMyMeetingThumnail.propTypes = {
     meeting: PropTypes.shape({
       meetingState: PropTypes.number.isRequired,
       meetingSuccuess: PropTypes.number.isRequired,
