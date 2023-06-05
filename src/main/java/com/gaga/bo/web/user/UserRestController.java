@@ -255,43 +255,48 @@ public class UserRestController {
 		return userService.getGroupMemberList(map);
 	} 
 
-	//회원,비회원이 핸드폰 인증을 요청하면 회원핸드폰번호에 인증코드 발송하여 요청 처리
-	@PostMapping("/phoneAuth")
-	public Boolean phoneAuth(@RequestBody String userPhoneNo, HttpSession session) {
-		System.out.println("핸드폰 인증 요청 옴");
-	    try {
-	        // 이미 가입된 전화번호가 있는지 확인
-	        User user = userService.getUserByPhoneNo(userPhoneNo);
-	        if(user != null && user.getPhoneNo().equals(userPhoneNo)) {
-	            return true;
-	        }
-	    } catch (Exception e) {
-	        System.out.println("폰인증 에러"+e);
-	        e.printStackTrace();
-	    }
-	
-	    String code = userService.sendRandomSmsMessage(userPhoneNo);
-	    System.out.println("codeeeeeeeee"+code);
-	    session.setAttribute("rand", code);
-	    
-	    return false;
+//	//회원,비회원이 핸드폰 인증을 요청하면 회원핸드폰번호에 인증코드 발송하여 요청 처리
+//	@PostMapping("/phoneAuth")
+//	public Boolean phoneAuth(@RequestBody String userPhoneNo, HttpSession session) {
+//		System.out.println("핸드폰 인증 요청 옴");
+//	    try {
+//	        // 이미 가입된 전화번호가 있는지 확인
+//	        User user = userService.getUserByPhoneNo(userPhoneNo);
+//	        if(user != null && user.getPhoneNo().equals(userPhoneNo)) {
+//	            return true;
+//	        }
+//	    } catch (Exception e) {
+//	        System.out.println("폰인증 에러"+e);
+//	        e.printStackTrace();
+//	    }
+//	    System.out.println("phoneAuth session ID: " + session.getId());
+//	    String code = userService.sendRandomSmsMessage(userPhoneNo);
+//	    System.out.println("codeeeeeeeee"+code);
+//	    session.setAttribute("rand", code);
+//	    
+//	    return false;
+//	}
+//	//서버의 핸드폰 인증코드와, 회원이 입력한 코드를 비교
+//	@PostMapping("/phoneAuthOk")
+//	public Boolean phoneAuthOk(@RequestBody String phoneAuthCode, HttpSession session,HttpServletRequest request) {
+//	    String rand = (String) session.getAttribute("rand");
+//	    String code = (String) request.getParameter("code");
+//	    System.out.println("rand"+rand);
+//	    System.out.println(rand + " <-서버발송 인증번호 || 회원이입력한 인증번호-> " + phoneAuthCode);
+//	    phoneAuthCode = phoneAuthCode.replace("=", ""); // = 기호 제거
+//	    if (rand.equals(phoneAuthCode)) {
+//	        session.removeAttribute("rand");
+//	        return true;
+//	    } 
+//	    System.out.println("phoneAuthOk session ID: " + session.getId());
+//	    return false;
+//	}
+	@PostMapping(value= "/phoneNo")
+	public String phoneNo(@RequestBody Map<String, String> body) throws Exception{
+		String userPhoneNo=body.get("phoneNo");
+		String phoneAuthCode= userService.sendRandomSmsMessage(userPhoneNo);
+		return phoneAuthCode;
 	}
-	//서버의 핸드폰 인증코드와, 회원이 입력한 코드를 비교
-	@PostMapping("/phoneAuthOk")
-	public Boolean phoneAuthOk(@RequestBody String phoneAuthCode, HttpSession session,HttpServletRequest request) {
-	    String rand = (String) session.getAttribute("rand");
-	    String code = (String) request.getParameter("code");
-	    System.out.println("rand"+rand);
-	    System.out.println(rand + " <-서버발송 인증번호 || 회원이입력한 인증번호-> " + phoneAuthCode);
-	    phoneAuthCode = phoneAuthCode.replace("=", ""); // = 기호 제거
-	    if (rand.equals(phoneAuthCode)) {
-	        session.removeAttribute("rand");
-	        return true;
-	    } 
-
-	    return false;
-	}
-	
 	@PostMapping(value = "/mailAuth") 		//이메일 인증, 회원 아이디(이메일)에 대해 인증 코드 발송
 	public String mailConfirm(@RequestBody Map<String, String> body) throws Exception {
 	    String userEmail = body.get("email");
