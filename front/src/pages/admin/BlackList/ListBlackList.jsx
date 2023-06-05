@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import CenteredTabsBlackList from '@components/admin/CenteredTabsBlackList';
+
+import CommonTop from '@layouts/common/CommonTop';
 
 
 function ListBlackList() {
@@ -41,14 +42,16 @@ function ListBlackList() {
   };
 
   return (
+    
     <div style={{ textAlign: 'center' }}>
+        <CommonTop pageName="블랙리스트" prevPath="/community/profile/mine" />
       <h2>블랙리스트 목록</h2>
-      <CenteredTabsBlackList />
+
       <input type="text" value={searchText} onChange={handleSearch} placeholder="검색" />
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         {filteredBlacklist.map((user) => (
           <div key={user.userNo}>
-            <Link to={`/getBlackList/${user.userNo}`}>
+            <Link to={`/blackList/getBlackList/blackListNo/${user.userNo}`}>
               <span>{user.userName}</span>
             </Link>
             <hr style={{ width: '50%', margin: '10px auto' }} />

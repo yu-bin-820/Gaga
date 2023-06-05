@@ -4,12 +4,11 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
-import axios from 'axios';
 
-export default function CenteredTabsAdmin() {
+export default function CenteredTabsBlackList() {
     const [value, setValue] = useState('1');
     const [noticePosts, setNoticePosts] = useState([]);
-    const [tabLabels, setTabLabels] = useState(['공지사항', '이벤트', 'Q&A']);
+    const [tabLabels, setTabLabels] = useState(['블랙리스트', '신고', '회원검색']);
   
     const navigate = useNavigate();
 
@@ -18,13 +17,13 @@ export default function CenteredTabsAdmin() {
 
       switch(newValue) {
         case '1':
-          navigate('/notice/listNoticePost');
+          navigate('/blackList/listBlackList');
           break;
         case '2':
-          navigate('/notice/listEventPost');
+          navigate('/blackList/listReportAdmin');
           break;
         case '3':
-          navigate('/notice/listQnaPost');
+          navigate('/blackList/listUser');
           break;
         default:
           break;
@@ -32,11 +31,11 @@ export default function CenteredTabsAdmin() {
     };
   
     const reorderTabs = (index) => {
-      const reorderedLabels = [...tabLabels];
-      const clickedTabLabel = reorderedLabels.splice(index, 1)[0];
-      reorderedLabels.unshift(clickedTabLabel);
-      setTabLabels(reorderedLabels);
-    };
+        const reorderedLabels = [...tabLabels];
+        const clickedTabLabel = reorderedLabels.splice(index, 1)[0];
+        reorderedLabels.unshift(clickedTabLabel);
+        setTabLabels(reorderedLabels);
+      };
   
     useEffect(() => {
       // 초기 탭의 게시글 가져오기
@@ -52,7 +51,7 @@ export default function CenteredTabsAdmin() {
                   <Tab
                     key={label}
                     label={label}
-                    value={String(index + 1)}
+                    value={String(index + 1)}                   
                     onClick={() => reorderTabs(index)}
                     sx={{ fontSize: '20px', textTransform: 'capitalize',display: 'flex', justifyContent: 'center'  }}
                   />
@@ -62,4 +61,4 @@ export default function CenteredTabsAdmin() {
           </TabContext>
         </Box>
       );
-  }
+}
