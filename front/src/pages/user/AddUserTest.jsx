@@ -1,11 +1,9 @@
-
 import fetcher from "@utils/fetcher";
 import useSWR from "swr";
 import axios from "axios";
 import React, { useCallback, useState } from "react";
 import dayjs from "dayjs";
 import MenuItem from "@mui/material/MenuItem";
-
 import {
   Button,
   Grid,
@@ -22,7 +20,6 @@ import useUserFormStore from "@hooks/user/useUserFormStore";
 import { useNavigate } from "react-router";
 import AddUserDate from "@components/user/AddUserDate";
 import Modal from "@mui/material/Modal";
-
 
 const AddUserTest = () => {
   const {
@@ -74,7 +71,7 @@ const AddUserTest = () => {
   };
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
+    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
     fetcher
   );
   const navigate = useNavigate();
@@ -83,18 +80,17 @@ const AddUserTest = () => {
 
     try {
       const formData = new FormData();
-      formData.append('userId', userId);
-      formData.append('password', password);
-      formData.append('userName', userName);
-      formData.append('birthday', dayjs(birthday).format('YYYY-MM-DD'));
-      formData.append('gender', gender);
-      formData.append('nickName', nickName);
-      formData.append('phoneNo', phoneNo);
+      formData.append("userId", userId);
+      formData.append("password", password);
+      formData.append("userName", userName);
+      formData.append("birthday", dayjs(birthday).format("YYYY-MM-DD"));
+      formData.append("gender", gender);
+      formData.append("nickName", nickName);
+      formData.append("phoneNo", phoneNo);
 
-      console.log(dayjs(birthday).format('YYYY-MM-DD'));
+      console.log(dayjs(birthday).format("YYYY-MM-DD"));
 
       const response = await axios.post(
-
         `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
         {
           userId: userId,
@@ -110,8 +106,6 @@ const AddUserTest = () => {
             "Content-Type": "application/json",
           },
         }
-        `${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
-        formData
       );
 
       // 회원가입이 성공적으로 완료되면, 메시지를 출력합니다.
@@ -245,7 +239,7 @@ const AddUserTest = () => {
   return (
     <>
       <CommonTop />
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
         <Box component="form" noValidate sx={{ width: "50%", mt: 8, ml: 10 }}>
           <FormControlLabel
@@ -277,13 +271,6 @@ const AddUserTest = () => {
             </Box>
           </Modal>
           {/* {openTerms && <TermsOfGaga onClose={handleCloseTerms} />} */}
-          </Box>
-        <Box component="form" noValidate sx={{ width: '50%', mt: 8, ml: 10 }}>
-          <FormControlLabel control={<Checkbox />} label="동의" />
-          <Button onClick={handleOpenTerms}>이용약관 상세보기</Button>
-
-          {openTerms && <TermsOfGaga onClose={handleCloseTerms} />}
-
           <TextField
             label="아이디 이메일형식"
             variant="outlined"
@@ -420,7 +407,7 @@ const AddUserTest = () => {
             defaultValue="010"
             inputProps={{
               maxLength: 11, // 최대 11글자
-              pattern: '[0-9]*', // 숫자만 입력 가능
+              pattern: "[0-9]*", // 숫자만 입력 가능
             }}
           />
           <Button
