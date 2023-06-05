@@ -1,0 +1,11 @@
+import { create } from 'zustand';
+
+const useAdminStore = create((set) => ({
+    noticePostCategoryNo: 0,
+
+  setField: (field, value) => set((state) => ({ [field]: value })),
+  onChangeField: (field, event) =>
+    set((state) => ({ [field]: event.target.value })),
+}));
+
+export default useAdminStore;

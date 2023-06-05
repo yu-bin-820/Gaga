@@ -1,67 +1,194 @@
-import React, { useEffect, useState } from 'react';
+import CustomedImageListItem from '@components/common/CustomedImageListItem';
+import CommonTop from '@layouts/common/CommonTop';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  ImageList,
+  Typography,
+} from '@mui/material';
+import { Box, Stack } from '@mui/system';
+import useCommunityStore from '@stores/communication/useCommunityStore';
+import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
-
-const GetReportAdmin = () => {
-  const { reportNo } = useParams();
-  const [report, setReport] = useState(null);
+import React, { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router';
+import useSWR from 'swr';
+const GetReport = () => {
   const navigate = useNavigate();
+  const { reportNo, reportCategory, prevPath } = useCommunityStore();
+  const [deleteReportDialogOpen, setDeleteReportDialogOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchReport = async () => {
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getReportAdmin/reportNo/${reportNo}`);
-        setReport(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const { data: myData, mutate: mutateMe } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+  );
 
-    fetchReport();
-  }, [reportNo]);
+  const { data: reportData, mutate: mutateReport } = useSWR(
+    `${
+      import.meta.env.VITE_SPRING_HOST
+    }/rest/community/report/reportno/${reportNo}`,
+    fetcher
+  );
 
-  const getReportReason = (reportCategoryNo) => {
-    switch (reportCategoryNo) {
-      case 1:
-        return '욕설';
-      case 2:
-        return '성추행';
-      case 3:
-        return '범죄';
-      case 4:
-        return '규정위반';
-      default:
-        return '신고';
-    }
-  };
+  const { data: reportListData, mutate: mutateReportList } = useSWR(
+    `${
+      import.meta.env.VITE_SPRING_HOST
+    }/rest/community/report/list/userno/${myData?.userNo}/role/${myData?.role}`,
+    fetcher
+  );
 
-  const goBack = () => {
-    navigate(-1); // 뒤로 가기
-  };
+  console.log(reportData);
 
-  const goHome = () => {
-    navigate('/'); // 홈으로 이동
-  };
+  const onCloseDeleteReportDialog = useCallback(() => {
+    setDeleteReportDialogOpen(false);
+  }, []);
+
+  const onClickDeleteReport = useCallback(() => {
+    setDeleteReportDialogOpen(true);
+  }, []);
+
+  const onClickUpdateReport = useCallback(() => {
+    navigate('/community/report/update');
+  }, [navigate]);
+
+  const onClickDeleteReportConfirm = useCallback(() => {
+    axios
+      .delete(
+        `${
+          import.meta.env.VITE_SPRING_HOST
+        }/rest/admin/getReportAdmin/reportNo/${reportNo}`,
+        {
+          withCredentials: true,
+        }
+      )
+      .then(() => {
+        mutateReportList();
+        navigate('/community/report/list');
+      });
+  }, [reportNo, navigate, mutateReportList]);
+
+  if (!reportData) {
+    return <>로딩중</>;
+  }
 
   return (
     <>
-      <h2>신고조회</h2>
-      <button onClick={goBack}>뒤로 가기</button>
-      <button onClick={goHome}>홈으로 돌아가기</button>
-      {report ? (
-        <div>
-          <p>피신고자: {report.reportedNo}</p>
-          <p>신고자: {report.reportingNo}</p>
-          <p>신고사유: {getReportReason(report.reportCategoryNo)}</p>
-          <p>신고날짜: {report.reportDate}</p>
-          <p>신고내용: {report.reportContent}</p>
-          <p>신고사진: {report.reportImg}</p>
-        </div>
-      ) : (
-        <p>신고 정보를 불러오는 중입니다...</p>
-      )}
+      <CommonTop prevPath={prevPath} />
+      <Box sx={{ marginTop: '73px', marginLeft: '15px', marginRight: '15px' }}>
+        <Stack spacing={2.5}>
+          <Stack spacing={1}>
+            <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
+              신고자 ID
+            </Typography>
+            <Typography sx={{ fontSize: 13 }}>
+              {reportData?.reportingId}
+            </Typography>
+          </Stack>
+          <Stack spacing={1}>
+            <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
+              피신고자 ID
+            </Typography>
+            <Typography sx={{ fontSize: 13 }}>
+              {reportData?.reportedId}
+            </Typography>
+          </Stack>
+          <Stack spacing={1}>
+            <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
+              신고 항목
+            </Typography>
+            <Typography sx={{ fontSize: 13 }}>
+              {reportCategory[reportData?.reportCategoryNo - 1]}
+            </Typography>
+          </Stack>
+
+          <Stack spacing={1}>
+            <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
+              신고 사유
+            </Typography>
+            <Typography sx={{ fontSize: 13 }}>
+              {reportData?.reportContent}
+            </Typography>
+          </Stack>
+          <Stack spacing={0}>
+            <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
+              신고 사진
+            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <Stack sx={{ marginTop: '10px' }} spacing={2}>
+                {reportData?.reportImg && (
+                  <img
+                    src={`${
+                      import.meta.env.VITE_SPRING_HOST
+                    }/upload_images/community/${reportData?.reportImg}`}
+                    loading="lazy"
+                    style={{
+                      maxWidth: '90vw',
+                      maxHeight: '30vh',
+                    }}
+                  />
+                )}
+                {reportData?.reportImg2 && (
+                  <img
+                    src={`${
+                      import.meta.env.VITE_SPRING_HOST
+                    }/upload_images/community/${reportData?.reportImg2}`}
+                    loading="lazy"
+                    style={{ maxWidth: '80vw', maxHeight: '30vh' }}
+                  />
+                )}
+                {reportData?.reportImg3 && (
+                  <img
+                    src={`${
+                      import.meta.env.VITE_SPRING_HOST
+                    }/upload_images/community/${reportData?.reportImg3}`}
+                    loading="lazy"
+                    style={{ maxWidth: '80vw', maxHeight: '30vh' }}
+                  />
+                )}
+              </Stack>
+            </Box>
+          </Stack>
+          <Stack direction={'row'} spacing={1}>
+            <Button
+              sx={{ flexGrow: 1, backgroundColor: 'grey' }}
+              variant="contained"
+              onClick={onClickDeleteReport}
+            >
+              신고 삭제
+            </Button>
+            <Button
+              sx={{ flexGrow: 1 }}
+              variant="contained"
+              onClick={onClickUpdateReport}
+            >
+              신고 수정
+            </Button>
+          </Stack>
+        </Stack>
+      </Box>
+      {/* ---------------------------------- 다이얼로그 ----------------------------------------------- */}
+      <Dialog open={deleteReportDialogOpen} onClose={onCloseDeleteReportDialog}>
+        <DialogTitle>{'신고 삭제'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            신고를 삭제합니다.
+            <br />
+            삭제된 신고는 되돌릴 수 없습니다.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onCloseDeleteReportDialog}>취소</Button>
+          <Button autoFocus onClick={onClickDeleteReportConfirm}>
+            삭제
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
 
-export default GetReportAdmin;
+export default GetReport;
