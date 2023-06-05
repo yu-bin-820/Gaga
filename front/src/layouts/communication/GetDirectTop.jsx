@@ -24,12 +24,12 @@ import useCommunityStore from '@stores/communication/useCommunityStore';
 
 const GetDirectTop = ({ receiverNo }) => {
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
   const { data: userData, mutate: mutateUser } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/userno/${receiverNo}`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/userno/${receiverNo}`,
     fetcher
   );
 
@@ -107,7 +107,7 @@ const GetDirectTop = ({ receiverNo }) => {
               <Stack direction={'row'} spacing={2} alignItems={'center'}>
                 <Avatar
                   alt={myData?.nickName}
-                  src={`http://${
+                  src={`${
                     import.meta.env.VITE_SPRING_HOST
                   }/upload_images/user/${myData?.profileImg}`}
                 />
@@ -119,7 +119,7 @@ const GetDirectTop = ({ receiverNo }) => {
               <Stack direction={'row'} spacing={2} alignItems={'center'}>
                 <Avatar
                   alt={userData?.nickName}
-                  src={`http://${
+                  src={`${
                     import.meta.env.VITE_SPRING_HOST
                   }/upload_images/user/${userData?.profileImg}`}
                 />

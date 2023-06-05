@@ -24,7 +24,7 @@ import useCommunityStore from '@stores/communication/useCommunityStore';
 
 const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
   const { data: memberData, mutate: mutateMember } = useSWR(
-    `http://${
+    `${
       import.meta.env.VITE_SPRING_HOST
     }/rest/user/list/grouptype/${groupType}/no/${groupNo}/state/2`,
     fetcher
@@ -106,7 +106,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
               <Stack direction={'row'} spacing={2} alignItems={'center'}>
                 <Avatar
                   alt={groupLeader.nick_name}
-                  src={`http://${
+                  src={`${
                     import.meta.env.VITE_SPRING_HOST
                   }/upload_images/user/${groupLeader.profile_img}`}
                 />
@@ -122,7 +122,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
                 <Stack direction={'row'} spacing={2} alignItems={'center'}>
                   <Avatar
                     alt={member.nickName}
-                    src={`http://${
+                    src={`${
                       import.meta.env.VITE_SPRING_HOST
                     }/upload_images/user/${member.profileImg}`}
                   />

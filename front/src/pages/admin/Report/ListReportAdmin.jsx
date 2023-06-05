@@ -7,7 +7,7 @@ const ListReportAdmin = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getReportAdminList`);
+        const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getReportAdminList`);
         setReports(response.data);
       } catch (error) {
         console.error(error);

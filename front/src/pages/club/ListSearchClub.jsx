@@ -40,7 +40,7 @@ const ListSearchClub = () => {
     console.log(data);
 
     const response = await axios.post(
-      `http://${import.meta.env.VITE_SPRING_HOST}/rest/club/search`,
+      `${import.meta.env.VITE_SPRING_HOST}/rest/club/search`,
       data
     );
     const newData = await response.data;

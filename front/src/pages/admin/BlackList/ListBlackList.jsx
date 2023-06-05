@@ -19,7 +19,7 @@ function ListBlackList() {
 
   const fetchBlacklist = async () => {
     try {
-      const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getBlackListList`);
+      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getBlackListList`);
       const blacklist = response.data.filter((user) => user.blacklist !== 0);
       setBlacklist(blacklist);
       setFilteredBlacklist(blacklist);

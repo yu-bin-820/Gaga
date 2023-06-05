@@ -57,7 +57,7 @@ const ListMeeting = () => {
   
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
@@ -114,7 +114,7 @@ const ListMeeting = () => {
 
     axios
       .post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list`,
         data
       )
       .then((response) => {

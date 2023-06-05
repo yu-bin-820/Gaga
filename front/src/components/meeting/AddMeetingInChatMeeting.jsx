@@ -12,7 +12,7 @@ const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo }) => {
 
     useEffect(() => {
         axios
-          .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/inchat/no/${userNo}`)
+          .get(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/inchat/no/${userNo}`)
           .then((response) => {
             console.log(response.data);
             setMeetingList(response.data);

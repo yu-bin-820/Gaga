@@ -27,7 +27,7 @@ const DeleteMeetingDialog = ({ open, setOpen }) => {
 
             console.log(data);
 
-            const response = axios.patch(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/delete`, 
+            const response = axios.patch(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/delete`, 
                 data);
 
             navigate(`/`);

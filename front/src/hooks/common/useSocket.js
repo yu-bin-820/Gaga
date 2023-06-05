@@ -2,7 +2,7 @@ import io, { Socket } from 'socket.io-client';
 
 import { useCallback } from 'react';
 
-const backUrl = `http://${import.meta.env.VITE_EXPRESS_HOST}`;
+const backUrl = `${import.meta.env.VITE_EXPRESS_HOST}`;
 
 const sockets = {};
 const useSocket = (chattype) => {

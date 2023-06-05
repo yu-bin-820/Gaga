@@ -14,19 +14,19 @@ const GetDirectChat = () => {
   const boxRef = useRef();
   const { chatRoomEntryNo } = useCommunityStore();
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
   const [socket, discconect] = useSocket('direct');
 
   const { data: directMessagesData, mutate: mutateDirectMessages } = useSWR(
-    `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/direct/senderno/${
+    `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/direct/senderno/${
       myData?.userNo
     }/receiverno/${chatRoomEntryNo}`,
     fetcher
   );
   // console.log(
-  //   `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/direct/senderno/${
+  //   `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/direct/senderno/${
   //     myData?.userNo
   //   }/receiverno/${chatRoomEntryNo}`
   // );

@@ -21,7 +21,7 @@ import useSWR from 'swr';
 export default function LeftDrawer() {
   const { chattype, channel } = useParams();
   const { data: myData } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
   const [myChannel, setMyChannel] = useState(myData?.userId);
@@ -35,7 +35,7 @@ export default function LeftDrawer() {
     // setSize,
   } = useSWRInfinite(
     () =>
-      `http://${
+      `${
         import.meta.env.VITE_SPRING_SVR_URL
       }:8909/api/chattypes/${chattype}/channels/${myChannel}/chats`,
     fetcher
@@ -81,7 +81,7 @@ export default function LeftDrawer() {
 
       axios
         .post(
-          `http://${
+          `${
             import.meta.env.VITE_SPRING_SVR_URL
           }:8909/api/chattypes/${chattype}/channels/${myChannel}/images`,
           data,

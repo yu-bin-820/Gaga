@@ -13,13 +13,13 @@ const AddClubMember = () => {
   const [club, setClub] = useState();
   const navigate = useNavigate();
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
   useEffect(() => {
     axios
-      .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/club/no/${clubNo}`)
+      .get(`${import.meta.env.VITE_SPRING_HOST}/rest/club/no/${clubNo}`)
       .then((response) => {
         console.log(response.data);
         setClub(response.data);
@@ -42,7 +42,7 @@ const AddClubMember = () => {
         console.log(data);
 
         const response = await axios.post(
-          `http://${import.meta.env.VITE_SPRING_HOST}/rest/club/member`,
+          `${import.meta.env.VITE_SPRING_HOST}/rest/club/member`,
           data
         );
 

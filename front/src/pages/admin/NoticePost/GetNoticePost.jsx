@@ -11,7 +11,7 @@ function GetNoticePost() {
 
   useEffect(() => {
     axios
-      .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePost/noticePostNo/${noticePostNo}`)
+      .get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePost/noticePostNo/${noticePostNo}`)
       .then((response) => {
         setNoticePost(response.data);
       })
@@ -23,7 +23,7 @@ function GetNoticePost() {
   const handleDelete = () => {
     if (window.confirm('정말로 공지사항을 삭제하시겠습니까?')) {
       axios
-        .delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/deleteNoticePost/noticePostNo/${noticePostNo}`)
+        .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/deleteNoticePost/noticePostNo/${noticePostNo}`)
         .then(() => {
           console.log('공지사항 삭제 완료');
           navigate('/listNoticePost');
@@ -46,7 +46,7 @@ function GetNoticePost() {
         <Typography variant="body1"><strong>제목:</strong> {noticePost.noticePostTitle}</Typography>
         <Typography variant="body1"><strong>내용:</strong> {noticePost.noticePostText}</Typography>
         <Typography variant="body1"><strong>이미지:</strong> {noticePost.noticePostImg}</Typography>
-        <img src={`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getImage/${noticePost.noticePostImg}`} alt="공지사항 이미지" />
+        <img src={`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getImage/${noticePost.noticePostImg}`} alt="공지사항 이미지" />
       </Paper>
       <Grid container spacing={2} sx={{ marginTop: '1rem' }}>
         <Grid item>

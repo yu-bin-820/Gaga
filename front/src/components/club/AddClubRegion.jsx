@@ -40,7 +40,7 @@ const AddClubRegionTest = () => {
 
   useEffect(() => {
     axios
-      .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/club/region/sigu`)
+      .get(`${import.meta.env.VITE_SPRING_HOST}/rest/club/region/sigu`)
       .then((response) => {
         let options = [{ value: "", label: "시도선택" }];
         response.data.response.result.featureCollection.features.forEach(
@@ -66,7 +66,7 @@ const AddClubRegionTest = () => {
 
     axios
       .get(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/club/region/sigungu/${selectedSido}`
       )

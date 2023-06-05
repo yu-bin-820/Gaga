@@ -10,7 +10,7 @@ import axios from 'axios';
 
 const UpdateNickNameTextField = ({ isUpdateNickName, setIsUpdateNickName }) => {
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
   const [nickName, onChangeNickName, setNickName] = useInputOrigin(
@@ -24,7 +24,7 @@ const UpdateNickNameTextField = ({ isUpdateNickName, setIsUpdateNickName }) => {
 
           axios
             .patch(
-              `http://${
+              `${
                 import.meta.env.VITE_SPRING_HOST
               }/rest/community/profile`,
               myData,

@@ -39,14 +39,14 @@ const PaymentRedirect = () => {
       navigate('/payment/fail', { state: { meetingNo } });
     } else {
       axios
-        .post(`http://${import.meta.env.VITE_SPRING_HOST}/rest/payment`, data)
+        .post(`${import.meta.env.VITE_SPRING_HOST}/rest/payment`, data)
         .then((paymentData) => {
           console.log('결제 Data received:', paymentData);
           alert('결제 성공');
 
           axios
             .post(
-              `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`,
+              `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`,
               data
             )
             .then((memberData) => {
@@ -72,34 +72,34 @@ const PaymentRedirect = () => {
 
   return (
     <>
-      <CommonTop prevPath='/' />
+      <CommonTop prevPath="/" />
       {imp_success === true ? (
         <Stack sx={{ marginTop: '100px', alignItems: 'center' }}>
           <h2>결제 완료</h2>
-          <CheckCircleIcon color='success' sx={{ fontSize: '60px' }} />
+          <CheckCircleIcon color="success" sx={{ fontSize: '60px' }} />
           <h3>{data.nickName}님 결제가 정상적으로 처리되었습니다.</h3>
           <Stack sx={{ marginTop: '20px', alignItems: 'center' }}>
-            <Typography variant='h7' component='div'>
+            <Typography variant="h7" component="div">
               미팅 이름 : {data.meetingName}
             </Typography>
-            <Typography variant='h7' component='div'>
+            <Typography variant="h7" component="div">
               참가비 : {data.entryFee}원
             </Typography>
           </Stack>
-          <Stack sx={{ marginTop: '20px' }} direction='row' spacing={2}>
+          <Stack sx={{ marginTop: '20px' }} direction="row" spacing={2}>
             <Button
               onClick={onClickMeeting}
-              variant='contained'
-              color='primary'
-              size='large'
+              variant="contained"
+              color="primary"
+              size="large"
             >
               모임
             </Button>
             <Button
               onClick={onClickMain}
-              variant='contained'
-              color='primary'
-              size='large'
+              variant="contained"
+              color="primary"
+              size="large"
             >
               메인
             </Button>

@@ -16,7 +16,7 @@ const ListMeetingReview = () => {
     const navigate = useNavigate();
 
     const { data: myData, mutate: mutateMe } = useSWR(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
         fetcher
         );
 
@@ -29,7 +29,7 @@ const ListMeetingReview = () => {
 
     useEffect(()=>{
         axios
-            .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/${meetingno}`)
+            .get(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/${meetingno}`)
             .then((response)=>{
                 console.log(response.data);
                 setMeetingReviewList(response.data);
@@ -56,7 +56,7 @@ const ListMeetingReview = () => {
         
                     console.log(data);
         
-                    const response = await axios.delete(`http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`, {
+                    const response = await axios.delete(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`, {
                         data: data,
                     });
                     navigate(`/meeting/meetingno/${meetingno}`)
@@ -79,7 +79,7 @@ const ListMeetingReview = () => {
                         spacing={2}
                         alignItems="center">
                             <img
-                                src={`http://${
+                                src={`${
                                 import.meta.env.VITE_SPRING_HOST
                                 }/upload_images/meeting/${meetingReview?.meetingReviewImg}`}
                                 style={{ width: '100px', height: '100px' }}

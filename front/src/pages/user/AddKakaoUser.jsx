@@ -1,31 +1,31 @@
-import React, { useState, useEffect } from "react";
-import { Button, TextField } from "@mui/material";
-import { useParams } from "react-router-dom";
-import useSWR, { mutate } from "swr";
-import fetcher from "@utils/fetcher";
-import Grid from "@mui/material/Grid";
-import MainTop from "@layouts/common/MainTop";
+import React, { useState, useEffect } from 'react';
+import { Button, TextField } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import useSWR, { mutate } from 'swr';
+import fetcher from '@utils/fetcher';
+import Grid from '@mui/material/Grid';
+import MainTop from '@layouts/common/MainTop';
 import dayjs from 'dayjs';
 import MenuItem from '@mui/material/MenuItem';
-import CommonTop from "@layouts/common/CommonTop";
+import CommonTop from '@layouts/common/CommonTop';
 
 function AddKakaoUser() {
   const [user, setUser] = useState({
-    userId: "",
-    password: "",
-    userName: "",
-    birthday: "",
+    userId: '',
+    password: '',
+    userName: '',
+    birthday: '',
     gender: 1,
-    nickName: "",
-    phoneNo: "",
+    nickName: '',
+    phoneNo: '',
   });
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
-  console.log("로그인된 사용자냐?" + myData);
+  console.log('로그인된 사용자냐?' + myData);
 
   useEffect(() => {
     if (myData) {
@@ -37,16 +37,12 @@ function AddKakaoUser() {
   const getUserInfo = async () => {
     try {
       const response = await fetch(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${
-          myData.userId
-        }`
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${myData.userId}`
       );
       const data = await response.json();
       setUser(data);
       mutate(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${
-          myData.userId
-        }`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${myData.userId}`,
         data
       ); // 캐시 갱신을 위해 mutate 함수 호출
     } catch (error) {
@@ -55,31 +51,29 @@ function AddKakaoUser() {
   };
   // 유저 정보 업데이트 함수
   const addNaverUser = async () => {
-    const formattedBirthday = dayjs(user.birthday).format("YYYY-MM-DD");
+    const formattedBirthday = dayjs(user.birthday).format('YYYY-MM-DD');
     const userWithFormattedBirthday = { ...user, birthday: formattedBirthday };
-    console.log("addNaverUser 함수 실행" + JSON.stringify(user));
+    console.log('addNaverUser 함수 실행' + JSON.stringify(user));
     try {
       const response = await fetch(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
         {
-          method: "POST", // PUT 요청
+          method: 'POST', // PUT 요청
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(userWithFormattedBirthday), // 유저 정보를 JSON 형태로 변환
         }
       );
 
       if (!response.ok) {
-        throw new Error("서버 에러");
+        throw new Error('서버 에러');
       }
 
       const data = await response.json();
       setUser(data);
       mutate(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${
-          myData.userId
-        }`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${myData.userId}`,
         data
       );
     } catch (error) {
@@ -93,11 +87,12 @@ function AddKakaoUser() {
       <Grid
         container
         component="main"
-        sx={{ height: "100vh", marginTop: "63px" }}
+        sx={{ height: '100vh', marginTop: '63px' }}
       >
         <div>
-          카카오 회원가입<br/>
-        <TextField label="아이디" value={user.userId} disabled />
+          카카오 회원가입
+          <br />
+          <TextField label="아이디" value={user.userId} disabled />
           <TextField
             label="비밀번호"
             value={user.password}
@@ -119,7 +114,9 @@ function AddKakaoUser() {
             fullWidth
             value={user.gender}
             select
-            onChange={(e) => setUser({ ...user, gender: parseInt(e.target.value) })}
+            onChange={(e) =>
+              setUser({ ...user, gender: parseInt(e.target.value) })
+            }
           >
             <MenuItem value={1}>남자</MenuItem>
             <MenuItem value={2}>여자</MenuItem>
@@ -136,7 +133,7 @@ function AddKakaoUser() {
           />
           <div>
             {/* TextField들... */}
-            <Button onClick={addNaverUser}>회원가입</Button>{" "}
+            <Button onClick={addNaverUser}>회원가입</Button>{' '}
             {/* 정보수정 버튼 */}
           </div>
         </div>

@@ -47,7 +47,7 @@ function ListNoticePost() {
 
   const fetchNoticePosts = async () => {
     try {
-      const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePostListByCategoryNo`, {
+      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePostListByCategoryNo`, {
         params: {
           page,
           limit: 6,

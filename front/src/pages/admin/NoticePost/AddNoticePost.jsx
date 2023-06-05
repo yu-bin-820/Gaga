@@ -59,7 +59,7 @@ const AddNoticePost = () => {
     formData.append('noticePostTitle', noticePostTitle);
     formData.append('noticePostText', noticePostText);
     formData.append('userNo', data?.userNo);
-    axios.post(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/addNoticePost`, formData, {
+    axios.post(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/addNoticePost`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

@@ -12,7 +12,7 @@ export default function useCheckDuplicateId() {
     setError(null);
     try {
       const response = await axios.post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/checkDuplicateId`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/checkDuplicateId`,
         { userId },
         { withCredentials: true }
       );
