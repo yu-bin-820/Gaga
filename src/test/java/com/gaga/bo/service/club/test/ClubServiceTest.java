@@ -86,7 +86,7 @@ public class ClubServiceTest {
 		filter.setAge(57);
 		filter.setTag("축구");
 		
-		List<Club> clubList = clubService.getSearchClubList(filter);
+		List<Club> clubList = clubService.getFilterClubList(filter);
 	
 		System.out.println("검색 결과 출력 시작");
 		if (clubList != null) {

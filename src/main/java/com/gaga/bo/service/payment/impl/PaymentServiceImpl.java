@@ -105,6 +105,13 @@ public class PaymentServiceImpl implements PaymentService {
 
 
 	@Override
+	public List<Meeting> getAdjustmentIngList() throws Exception {
+		System.out.println("정산 상태별 목록 조회");
+		
+		return paymentDao.getAdjustmentIngList();
+	}
+
+	@Override
 	public void updateAdjustmentState(Meeting meeting) throws Exception {
 		
 		System.out.println("정산 상태 변경 서비스");

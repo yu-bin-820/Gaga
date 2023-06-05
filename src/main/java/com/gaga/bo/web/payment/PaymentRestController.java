@@ -50,7 +50,7 @@ public class PaymentRestController {
 		// TODO Auto-generated constructor stub
 	}
 
-	@PostMapping("")
+	@PostMapping("") //결제완료 : 1 ,  결제취소 : 2
 	public void addPayment(@RequestBody Payment payment) throws Exception{
 		
 		System.out.println("결제 내역 추가 Ctrl" + payment);
@@ -63,6 +63,7 @@ public class PaymentRestController {
 		paymentService.addPayment(payment);
 				
 	}
+	
 
 	@GetMapping("no/{payNo}")
 	public Payment getPayment(@PathVariable String payNo) throws Exception{
@@ -72,13 +73,19 @@ public class PaymentRestController {
 		return paymentService.getPayment(payNo);
 		
 	}
-
-	@PatchMapping("refund")
-	public void updatePayment(@RequestBody Map<String, Object> refund) throws Exception{
+	
+	@PostMapping("refund/usermeeting")
+	public String getPayNoByUserMeeting(@RequestBody Map<String, Object> refund) throws Exception{
 		
 		System.out.println("환불시 결제번호 출력 Ctrl");
 		
-		String payNo = paymentService.getPayNoByUserMeeting(refund);
+		return paymentService.getPayNoByUserMeeting(refund);
+	}
+
+	@PatchMapping("refund/{payNo}") // 결제 취소 : 2
+	public void updatePayment(@PathVariable String payNo) throws Exception{
+		
+		System.out.println("환불 Ctrl");
 		
 		System.out.println("결제번호는?" + payNo);
 		
@@ -104,6 +111,15 @@ public class PaymentRestController {
 		
 	}
 	
+	@GetMapping("adjustment/ing")
+	public List<Meeting> getAdjustmentIngList() throws Exception{
+		
+		System.out.println("정산 상태별 목록 조회 Ctrl");
+		
+		return paymentService.getAdjustmentIngList();
+		
+	}
+	
 	@GetMapping("adjustment/{userNo}")
 	public List<Meeting> getAdjustmentList(@PathVariable int userNo) throws Exception{
 		
@@ -120,7 +136,7 @@ public class PaymentRestController {
 		paymentService.updateAdjustmentState(meeting);
 	}
 	
-	@PostMapping("refund/test")
+	@PostMapping("refund")
 	public ResponseEntity<String> refundTest(@RequestBody Map<String, String> requestData) throws Exception {
 
 	    String merchantUid = requestData.get("merchant_uid");
@@ -149,6 +165,11 @@ public class PaymentRestController {
 	                        String.class);
 
 	        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+	        	
+	        	paymentService.updatePayment(merchantUid);
+         	
+	        	System.out.println("환불처리가 성공적으로 진행되었습니다.");
+	        	
 	            return ResponseEntity.ok("Refund successful");
 	        } else {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Refund failed");

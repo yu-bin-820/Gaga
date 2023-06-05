@@ -11,7 +11,7 @@ public class Club {
     private int clubLeaderNo;
     private int clubMaxMemberNo;
     private LocalDateTime clubRegDate;
-    private int clubState; //0:모집중 1: 모집완료
+    private int clubState; //1:모집중 2:모집완료 4:삭제된 클럽
     private String clubImg;
     private String clubRegion;
     private int filterGender;
@@ -19,7 +19,7 @@ public class Club {
     private int filterMaxAge;
     private String filterTag;
     private int mainCategoryNo;
-    private int state;
+    private int state; //1:신청중 2:참여중
     private int memberCount;
  
     //Constructor
