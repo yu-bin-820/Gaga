@@ -249,7 +249,7 @@ const Login = () => {
                     to="/user/adduser"
                     color={"Green"}
                   >
-                    {"회원이 아니신가요? 원본 "}
+                    {"회원이 아니신가요? 기존 "}
                   </Typography>
                   <br />
                   <Typography
@@ -257,7 +257,7 @@ const Login = () => {
                     to="/user/addusertest"
                     color={"Green"}
                   >
-                    {"회원이 아니신가요? 작업중 "}
+                    {"회원이 아니신가요? 작성완료 일단 쓰세요  "}
                   </Typography>
                   <br />
                   <Typography

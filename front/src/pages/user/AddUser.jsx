@@ -36,6 +36,7 @@ import { Backdrop } from "@mui/material";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import CommonTop from "@layouts/common/CommonTop";
 import TermsOfGaga from "./TermsOfGaga";
+import AddUserDate from "@components/user/AddUserDate";
 
 const AddUser = () => {
   const [user, onChangeUser, setUser] = useInput({
@@ -68,9 +69,6 @@ const AddUser = () => {
   const toggleTermsDrawer = () => {
     setIsTermsDrawerOpen(!isTermsDrawerOpen);
   };  // 약관 드로어 오픈 여부 상태 변경 함수
-
-  // const [autocompleteResults, setAutocompleteResults] = useState([]);//오토컴플릿 회원아이디 검색 결과
-  // const [searchValue, setSearchValue] = useState("");//오토컴플릿 회원아이디 검색 값
 
   const [registerSuccess, setRegisterSuccess] = useState(false); // 회원가입 성공 여부 상태
 
@@ -112,6 +110,7 @@ const AddUser = () => {
   const handleSubmit = useCallback(
     async (event) => {
       event.preventDefault();
+      console.log("User data:", user);
       if (!user.userId && !user.password && !user.userName && !user.birthday && !user.gender && !user.nickName && !user.phoneNo) {
         return;
       }
@@ -129,10 +128,10 @@ const AddUser = () => {
         alert("닉네임을 입력해주세요.");
         return;
       }
-      if (user.birthday === "") {
-        alert("생년월일을 입력해주세요.");
-        return;
-      }
+      // if (user.birthday === "") {
+      //   alert("생년월일을 입력해주세요.");
+      //   return;
+      // }
       if (user.gender === "") {
         alert("성별을 선택해주세요.");
         return;
@@ -142,17 +141,17 @@ const AddUser = () => {
         return;
       }
 
-      const isDuplicate = await checkDuplicateId();
-      if (isDuplicate) {
-        alert("중복된 아이디입니다.");
-        return;
-      }
+      // const isDuplicate = await checkDuplicateId();
+      // if (isDuplicate) {
+      //   alert("중복된 아이디입니다.");
+      //   return;
+      // }
       try {
         const data = {
           userId: user.userId,
           password: user.password,
           userName: user.userName,
-          birthday: dayjs(user.birthday).format("YYYY-MM-DD"), // dayjs로 변환
+          birthday: user.birthday,
           gender: user.gender,
           nickName: user.nickName,
           phoneNo: user.phoneNo,
@@ -401,22 +400,7 @@ const AddUser = () => {
             value={user.nickName}
             onChange={onChangeUser}
           />
-          <TextField
-            variant="outlined"
-            margin="none"
-            required
-            fullWidth
-            id="birthday"
-            label="생년월일"
-            name="birthday"
-            autoComplete="birthday"
-            value={user.birthday}
-            onChange={handleChangeUser}
-            inputProps={{
-              maxLength: 8, // 최대 8글자 (YYYYMMDD)
-              pattern: "[0-9]*", // 숫자만 입력 가능
-            }}
-          />
+          <AddUserDate setUser={setUser} />
           <TextField
             variant="outlined"
             margin="none"
