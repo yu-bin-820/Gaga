@@ -1,10 +1,18 @@
 HELP.md
+!**/src/main/resources/static/**/.gitkeep
 target/
 !.mvn/wrapper/maven-wrapper.jar
+
 !**/src/main/**/target/
 !**/src/test/**/target/
-**/src/main/resources/static/**
-**/src/main/resources/static/upload_images/**
+
+**/src/main/resources/static/*
+!**/src/main/resources/static/*/
+**/src/main/resources/static/upload_images/*
+!**/src/main/resources/static/upload_images/*/
+**/src/main/resources/static/upload_images/*/*
+!.gitkeep
+
 ### STS ###
 .apt_generated
 .classpath

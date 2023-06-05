@@ -58,7 +58,7 @@ public class CommunityRestController {
 		String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 		String uuidFileName = UUID.randomUUID().toString()+ext;
 
-		file.transferTo(new File(fileUploadPath+"\\user\\"+uuidFileName));
+		file.transferTo(new File(fileUploadPath+"user/"+uuidFileName));
 		
 		user.setProfileImg(uuidFileName);
 		userService.updateUser(user);
@@ -84,7 +84,7 @@ public class CommunityRestController {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(fileUploadPath+"\\user\\"+uuidFileName));
+			file.transferTo(new File(fileUploadPath+"user/"+uuidFileName));
 			
 			user.setActivityImg(uuidFileName);
 		}
@@ -93,7 +93,7 @@ public class CommunityRestController {
 			String ext = file2.getOriginalFilename().substring(file2.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file2.transferTo(new File(fileUploadPath+"\\user\\"+uuidFileName));
+			file2.transferTo(new File(fileUploadPath+"user/"+uuidFileName));
 			
 			user.setActivityImg2(uuidFileName);
 		}
@@ -102,7 +102,7 @@ public class CommunityRestController {
 			String ext = file3.getOriginalFilename().substring(file3.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file3.transferTo(new File(fileUploadPath+"\\user\\"+uuidFileName));
+			file3.transferTo(new File(fileUploadPath+"user/"+uuidFileName));
 			
 			user.setActivityImg3(uuidFileName);
 		}
@@ -207,7 +207,7 @@ public class CommunityRestController {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(fileUploadPath+"\\community\\"+uuidFileName));
+			file.transferTo(new File(fileUploadPath+"community/"+uuidFileName));
 			
 			report.setReportImg(uuidFileName);
 		}
@@ -216,7 +216,7 @@ public class CommunityRestController {
 			String ext = file2.getOriginalFilename().substring(file2.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file2.transferTo(new File(fileUploadPath+"\\community\\"+uuidFileName));
+			file2.transferTo(new File(fileUploadPath+"community/"+uuidFileName));
 			
 			report.setReportImg2(uuidFileName);
 		}
@@ -225,7 +225,7 @@ public class CommunityRestController {
 			String ext = file3.getOriginalFilename().substring(file3.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file3.transferTo(new File(fileUploadPath+"\\community\\"+uuidFileName));
+			file3.transferTo(new File(fileUploadPath+"community/"+uuidFileName));
 			
 			report.setReportImg3(uuidFileName);
 		}
@@ -248,7 +248,7 @@ public class CommunityRestController {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(fileUploadPath+"\\community\\"+uuidFileName));
+			file.transferTo(new File(fileUploadPath+"community/"+uuidFileName));
 			
 			report.setReportImg(uuidFileName);
 		}
@@ -257,7 +257,7 @@ public class CommunityRestController {
 			String ext = file2.getOriginalFilename().substring(file2.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file2.transferTo(new File(fileUploadPath+"\\community\\"+uuidFileName));
+			file2.transferTo(new File(fileUploadPath+"community/"+uuidFileName));
 			
 			report.setReportImg2(uuidFileName);
 		}
@@ -266,7 +266,7 @@ public class CommunityRestController {
 			String ext = file3.getOriginalFilename().substring(file3.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file3.transferTo(new File(fileUploadPath+"\\community\\"+uuidFileName));
+			file3.transferTo(new File(fileUploadPath+"community/"+uuidFileName));
 			
 			report.setReportImg3(uuidFileName);
 		}
