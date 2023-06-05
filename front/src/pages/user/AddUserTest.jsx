@@ -71,7 +71,7 @@ const AddUserTest = () => {
   };
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
     fetcher
   );
   const navigate = useNavigate();
@@ -91,7 +91,7 @@ const AddUserTest = () => {
       console.log(dayjs(birthday).format("YYYY-MM-DD"));
 
       const response = await axios.post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
         {
           userId: userId,
           password: password,
@@ -114,6 +114,8 @@ const AddUserTest = () => {
       }
 
       reset();
+
+      navigate("/");
 
       console.log(response.data);
     } catch (error) {
@@ -140,7 +142,7 @@ const AddUserTest = () => {
   const handleEmailAuthRequest = async () => {
     try {
       const response = await axios.post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/mailAuth`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/mailAuth`,
         {
           email: userId,
         },
@@ -180,7 +182,7 @@ const AddUserTest = () => {
   const handlePhoneAuthRequest = async () => {
     try {
       const response = await axios.post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneNo`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneNo`,
         {
           phoneNo: phoneNo,
         },
