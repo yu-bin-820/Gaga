@@ -34,7 +34,7 @@ export default function MeetingClubTabs() {
         <Box
           sx={{
             overflowY: 'auto',
-            maxHeight: 'calc(100vh - 200px)',
+            maxHeight: 'calc(100vh - 100px)',
           }}
         >
           <TabPanel value='meeting' sx={{ padding: '0' }}>

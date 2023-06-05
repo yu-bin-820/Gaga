@@ -76,6 +76,7 @@ import ListSearchClub from '@pages/club/ListSearchClub.jsx';
 import SearchClub from '@pages/club/SearchClub.jsx';
 import Payment from '@pages/payment/Payment.jsx';
 import PaymentRedirect from '@pages/payment/PaymentRedirect.jsx';
+import PaymentFail from '@pages/payment/PaymentFail.jsx';
 
 const router = createBrowserRouter([
   {
@@ -367,6 +368,10 @@ const router = createBrowserRouter([
           {
             path: 'redirect',
             element: <PaymentRedirect />,
+          },
+          {
+            path: 'fail',
+            element: <PaymentFail />,
           },
           {
             path: 'adjustment',

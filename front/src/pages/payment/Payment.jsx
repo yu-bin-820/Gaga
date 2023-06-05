@@ -4,9 +4,9 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import { Box } from '@mui/system';
 import { Button, Grid, Typography } from '@mui/material';
-import usePaymentFormStore from '@hooks/payment/usePaymentFormStore';
+import PropTypes from 'prop-types';
 
-const Payment = () => {
+const Payment = ({ meeting }) => {
   const { data: myData, mutate: mutateMe } = useSWR(
     `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
@@ -20,18 +20,20 @@ const Payment = () => {
 
     const payTime = new Date().toISOString();
     const orderId = `mid_${Date.now()}`;
-    const meetingNo = 9;
-    const meetingName = 'meetingName9';
-    const entryFee = 100;
+    const meetingNo = meeting?.meetingNo;
+    const meetingName = meeting?.meetinName;
+    const entryFee = meeting?.entryFee;
+    const nickName = myData?.nickName;
 
     const data = {
       pg: 'html5_inicis', // PG사
       pay_method: 'card', // 결제수단
       merchant_uid: orderId, //상점 결제 번호, 환불시 필요
-      amount: entryFee, // 결제금액 여기까지 아임포트 필수 입력값
-      name: meetingName,
+      amount: entryFee, // 결제금액
+      name: meetingName, // 상품명 여기에서는 미팅 이름 여기까지 아임포트 필수 입력값
       buyer_name: myData?.userName,
       userNo: myData?.userNo,
+      nickName: nickName,
       meetingNo: meetingNo,
       meetingName: meetingName,
       payNo: orderId,
@@ -43,7 +45,7 @@ const Payment = () => {
         import.meta.env.VITE_REACT_HOST
       }/payment/redirect?payNo=${orderId}&userNo=${
         myData?.userNo
-      }&meetingNo=${meetingNo}&meetingName=${meetingName}&entryFee=${entryFee}`,
+      }&nickName=${nickName}&meetingNo=${meetingNo}&meetingName=${meetingName}&entryFee=${entryFee}`,
     };
 
     const callback = (response) => {
@@ -60,8 +62,6 @@ const Payment = () => {
             console.log(response.data);
 
             const { success, error_msg } = response.data;
-
-            // 결제 처리가 완료되었으므로 성공한 경우 해당 경로로 리디렉션
           })
           .catch((error) => {
             console.log('결제 오류:', error);
@@ -95,29 +95,19 @@ const Payment = () => {
   }, []);
 
   return (
-    <>
-      <Box
-        display='flex'
-        flexDirection='column'
-        alignItems='center'
-        justifyContent='center'
-        minHeight='10vh'
-      >
-        <Grid container spacing={2} justifyContent='center'>
-          <Grid item xs={12}>
-            <Button
-              onClick={onClickPayment}
-              variant='contained'
-              color='primary'
-              size='large'
-            >
-              결제하기
-            </Button>
-          </Grid>
-        </Grid>
-      </Box>
-    </>
+    <Button
+      onClick={onClickPayment}
+      variant='contained'
+      sx={{ width: '85vw', borderRadius: '50px' }}
+    >
+      결제하기
+    </Button>
   );
+};
+
+Payment.propTypes = {
+  meeting: PropTypes.object.isRequired,
+  myData: PropTypes.object.isRequired,
 };
 
 export default Payment;

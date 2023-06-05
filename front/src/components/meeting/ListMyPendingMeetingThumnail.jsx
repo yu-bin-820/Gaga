@@ -1,42 +1,37 @@
-import { Button } from '@mui/material';
-import { Box, Stack } from '@mui/system';
 import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router';
-import MeetingThumbnail from './MeetingThumnail';
 import PropTypes from 'prop-types';
-import axios from 'axios';
-import useSWR from 'swr';
-import fetcher from '@utils/fetcher';
+import { useNavigate } from 'react-router';
+import { Box, Stack } from '@mui/system';
+import MeetingThumbnail from './MeetingThumnail';
+import { Button } from '@mui/material';
 import useCommonStore from '@stores/common/useCommonStore';
+import axios from 'axios';
+import fetcher from '@utils/fetcher';
+import useSWR from 'swr';
 import DeleteMemberDialog from './DeleteMemberDialog';
 
 
-const ListMyConfirmMeetingThumnail = ({ meeting }) => {
 
-    const { meetingNo } = meeting;
+const ListMyPendingMeetingThumnail = ({ meeting }) => {
+
     const {setField} = useCommonStore();
 
     const [deleteMemberDialogOpen, setDeleteMemberDialogOpen] =
     useState(false);
 
-
     const navigate = useNavigate();
 
-    const { data: myData, mutate: mutateMe } = useSWR(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
-        fetcher
-        );
+        const onClickDeleteMember = useCallback(() => {
+            setDeleteMemberDialogOpen(true);
+        }, []);
 
-    const onClickDeleteMember = useCallback(() => {
-        setDeleteMemberDialogOpen(true);
-    }, []);
-
-    const onClickChatRoom=useCallback((event)=>{
-        setField('chatRoomEntryNo',meetingNo);
-        setField('chatType',2);
-        setField('chatRoomLeader',meeting.meetingLeaderNo)
-        navigate(`/chat/group/message/list`);
-    },[]);
+    const onClickDirectChat = useCallback(
+        (e) => {
+        setField('chatRoomEntryNo', meeting.meetingLeaderNo);
+        navigate('/chat/direct/message/list');
+        },
+        [navigate, setField]
+    );
 
     return (
         <div>
@@ -61,25 +56,29 @@ const ListMyConfirmMeetingThumnail = ({ meeting }) => {
                     <Button
                     variant="outlined"
                     sx={{ width: '180px' }}
-                    onClick={onClickDeleteMember}>참여 취소</Button>
+                    onClick={onClickDeleteMember}>
+                        참여 취소
+                        </Button>
                     <Button
                     variant="outlined"
                     sx={{ width: '180px' }}
-                    onClick={onClickChatRoom}>채팅방 입장</Button>
+                    onClick={onClickDirectChat}>
+                        리더에게 문의
+                        </Button>
                     </Stack>
                     </Stack>
                 </Box>
-            <DeleteMemberDialog
+                <DeleteMemberDialog
                 open={deleteMemberDialogOpen}
                 setOpen={setDeleteMemberDialogOpen}
                 meeting={meeting}
             />
-        </div> 
+        </div>
     );
 };
 
-ListMyConfirmMeetingThumnail.propTypes = {
+ListMyPendingMeetingThumnail.propTypes = {
     meeting: PropTypes.object.isRequired,
   };
 
-export default ListMyConfirmMeetingThumnail;
+export default ListMyPendingMeetingThumnail;
