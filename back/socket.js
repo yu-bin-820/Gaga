@@ -1,6 +1,6 @@
 require('dotenv').config();
 const SocketIO = require('socket.io');
-const { REACT_HOST, REACT_PORT } = process.env;
+const { REACT_HOST, REACT_PORT, SPRING_HOST, SPRING_PORT } = process.env;
 const onlineMap = {};
 
 module.exports = (server, app) => {
