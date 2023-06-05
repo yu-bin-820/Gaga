@@ -1,11 +1,13 @@
 import useInput from '@hooks/common/useInput';
 import CommonTop from '@layouts/common/CommonTop';
-import { Avatar, Button, ImageListItem, Rating, TextField } from '@mui/material';
+import { Avatar, Button, CircularProgress, ImageListItem, Rating, TextField } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import CancelIcon from '@mui/icons-material/Cancel';
+
 
 
 const UpdateMeetingReview = () => {
@@ -40,16 +42,16 @@ const UpdateMeetingReview = () => {
           .then((response) => {
             console.log(response.data);
             setMeetingReview(response.data);
-            setSelectedImage(   meetingReview?.meetingReviewImg?
-              `http://${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
-                meetingReview?.meetingReviewImg
-                }`
-                : null)
+            setSelectedImage(
+              response.data?.meetingReviewImg
+                ? `http://${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${response.data?.meetingReviewImg}`
+                : null
+            );
           })
           .catch((error) => {
             console.log(error);
           });
-      }, [reviewno,setMeetingReview]);
+      }, [reviewno, setMeetingReview]);
 
       const navigate = useNavigate();
 
@@ -79,10 +81,16 @@ const UpdateMeetingReview = () => {
         }
       }, [meetingReview, selectedFile, navigate]);
 
+
     return (
-      <>
-        <CommonTop/>
+      <Box sx={{ margin: '10px' }}>
+      <CommonTop/>
         <Box sx={{ marginTop: '64px' }}>
+        <Stack
+          direction={'row'}
+          spacing={3}
+          sx={{marginBottom: '30px'}}
+          >
           <Button
               variant="outlined"
               startIcon={<Avatar><AddPhotoAlternateIcon /></Avatar>}
@@ -94,8 +102,8 @@ const UpdateMeetingReview = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderColor: 'grey',
-                width: '150px',
-                height: '150px',
+                width: '110px',
+                height: '110px',
               }}
               size="large"
             >
@@ -108,10 +116,37 @@ const UpdateMeetingReview = () => {
                 onChange={onChangeImg}
               />
             </Button>
-            <ImageListItem>
-            {selectedImage && <img src={selectedImage} /> }
-            </ImageListItem>
-          <Stack spacing={1}>
+            {selectedImage && (
+              <Box
+                  sx={{
+                    backgroundColor: "#ffffff",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    justifyContent: "space-between",
+                    flexDirection: "column",
+                  }}
+                >
+                <CancelIcon
+                fontSize="small"
+                onClick={() => setSelectedImage(null)}
+                sx={{
+                  alignSelf: "flex-end",
+                  marginTop: "-8px",
+                  marginRight: "-8px",
+                  cursor: "pointer",
+                }}/>
+              <img 
+              src={selectedImage} 
+              style={{ width: '100px', height: '100px' }} />
+            </Box>
+          )}
+            </Stack>
+          <Stack 
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+          marginBottom={1.3}
+          >
             <Rating
             name="meetingScore" 
             defaultValue={5} 
@@ -120,10 +155,10 @@ const UpdateMeetingReview = () => {
             required
             value={meetingReview.meetingScore}
             size="large" />
-          </Stack>
           <h3>{meetingReview.meetingScore}/5</h3>
+          </Stack>
           <TextField
-            fulWidth
+            fullWidth
             label="meetingReviewContent"
             name="meetingReviewContent"
             onChange={onChangeMeetingReview}
@@ -133,10 +168,22 @@ const UpdateMeetingReview = () => {
             value={meetingReview.meetingReviewContent}
           />
 
-    
-          <Button onClick={handleSubmit}>수정하기</Button>
+        <Stack
+          spacing={0}
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ position: "fixed", bottom: 5, left: 0, right: 0 }}
+        >
+          <Button 
+          variant="contained"
+          sx={{ width: "85vw", borderRadius: "50px" }}
+          onClick={handleSubmit}>
+            수정하기
+            </Button>
+          </Stack>
         </Box>
-      </>
+      </Box>
     );
 };
 

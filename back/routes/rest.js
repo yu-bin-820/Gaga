@@ -297,6 +297,8 @@ router.get(
             Sender: message.Sender,
             Club: message.Club,
             club_no: message.club_no,
+            lat: message.lat,
+            lng: message.lng,
             readCount,
           };
         })
@@ -382,6 +384,8 @@ router.get(
             Sender: message.Sender,
             Meeting: message.Meeting,
             meeting_no: message.meeting_no,
+            lat: message.lat,
+            lng: message.lng,
             readCount,
           };
         })
@@ -406,6 +410,8 @@ router.post('/chat/club/message', async (req, res, next) => {
       club_no: req.body.groupNo,
       content: req.body.content,
       content_type_no: req.body.contentTypeNo,
+      lat: req.body.lat,
+      lng: req.body.lng,
     });
     //1: text, 2: imgFile, 3:location
     const roomMessageWithUser = await RoomMessage.findOne({
@@ -430,15 +436,17 @@ router.post('/chat/club/message', async (req, res, next) => {
       .emit('message', roomMessageWithUser);
 
     let lastMessage = req.body.content;
-    if (lastMessage.length > 15) {
-      lastMessage = lastMessage.slice(0, 15) + '...'; // 15글자까지 자르기
-    }
 
     if (req.body.contentTypeNo === 2) {
       lastMessage = '(사진)';
     } else if (req.body.contentTypeNo === 3) {
-      lastMessage = '(위치 공유)';
+      lastMessage = '(위치 공유)' + lastMessage;
     }
+
+    if (lastMessage.length > 15) {
+      lastMessage = lastMessage.slice(0, 15) + '...'; // 15글자까지 자르기
+    }
+
     await club.update({
       last_message_time: literal('NOW()'),
       last_message: lastMessage,
@@ -460,6 +468,8 @@ router.post('/chat/meeting/message', async (req, res, next) => {
       meeting_no: req.body.groupNo,
       content: req.body.content,
       content_type_no: req.body.contentTypeNo,
+      lat: req.body.lat,
+      lng: req.body.lng,
     });
 
     const roomMessageWithUser = await RoomMessage.findOne({
@@ -483,14 +493,15 @@ router.post('/chat/meeting/message', async (req, res, next) => {
       .emit('message', roomMessageWithUser);
 
     let lastMessage = req.body.content;
-    if (lastMessage.length > 15) {
-      lastMessage = lastMessage.slice(0, 15) + '...'; // 15글자까지 자르기
-    }
 
     if (req.body.contentTypeNo === 2) {
       lastMessage = '(사진)';
     } else if (req.body.contentTypeNo === 3) {
-      lastMessage = '(위치 공유)';
+      lastMessage = '(위치 공유)' + lastMessage;
+    }
+
+    if (lastMessage.length > 15) {
+      lastMessage = lastMessage.slice(0, 15) + '...'; // 15글자까지 자르기
     }
 
     await meeting.update({

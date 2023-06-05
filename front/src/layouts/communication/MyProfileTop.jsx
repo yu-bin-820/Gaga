@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Container from "@mui/material/Container";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import React, { useCallback, useState } from 'react';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Container from '@mui/material/Container';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import {
   Button,
   Divider,
@@ -12,15 +12,15 @@ import {
   ListItemText,
   SwipeableDrawer,
   Typography,
-} from "@mui/material";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
-import { Box } from "@mui/system";
-import axios from "axios";
-import useSWR from "swr";
-import fetcher from "@utils/fetcher";
-import SettingsIcon from "@mui/icons-material/Settings";
-import SettingsMenuTop from "./SettingsMenuTop";
-import UpdateUser from "@pages/user/UpdateUser";
+} from '@mui/material';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Box } from '@mui/system';
+import axios from 'axios';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
+import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsMenuTop from './SettingsMenuTop';
+import UpdateUser from '@pages/user/UpdateUser';
 
 const MyProfileTop = () => {
   const navigate = useNavigate();
@@ -54,21 +54,21 @@ const MyProfileTop = () => {
   );
 
   const onClickReportList = useCallback(() => {
-    navigate("/community/report/list");
+    navigate('/community/report/list');
   }, [navigate]);
 
   const onClickUpdateUser = useCallback(() => {
-    navigate("/user/updateuser");
+    navigate('/user/updateuser');
   }, [navigate]);
 
   const onClickDeleteUser = useCallback(() => {
-    navigate("/user/deleteuser");
+    navigate('/user/deleteuser');
   }, [navigate]);
 
   const onClickNoticePostList = useCallback(() => {
     navigate('/notice/listNoticePost');
   }, [navigate]);
-  
+
   const onClickListBlackList = useCallback(() => {
     navigate('/blackList/listBlackList');
   }, [navigate]);
@@ -90,29 +90,30 @@ const MyProfileTop = () => {
         position="fixed"
         color="secondary"
         elevation={0}
-        sx={{ height: "58px", borderBottom: "1px solid #ccc" }}
+        sx={{ height: '58px', borderBottom: '1px solid #ccc' }}
       >
         <Container maxWidth="xl">
           <Toolbar
             disableGutters
-            sx={{ display: "flex", justifyContent: "space-between" }}
+            sx={{ display: 'flex', justifyContent: 'space-between' }}
           >
-            <Button sx={{ marginLeft: "auto" }} onClick={onClickLogOut}>
+            <Button sx={{ marginLeft: 'auto' }} onClick={onClickLogOut}>
               Logout
             </Button>
-            <IconButton sx={{ marginRight: "-10px" }} onClick={onClickSettings}>
+            <IconButton sx={{ marginRight: '-10px' }} onClick={onClickSettings}>
               <SettingsIcon />
             </IconButton>
           </Toolbar>
         </Container>
       </AppBar>
+      {/* --------------------------------Drawer----------------------------------------------------- */}
       <SwipeableDrawer
         anchor="right"
         open={settingsMenuOpen}
         onClose={toggleSettingsMenu(false)}
         onOpen={toggleSettingsMenu(true)}
       >
-        <Box sx={{ minWidth: "100vw" }}>
+        <Box sx={{ minWidth: '100vw' }}>
           <List>
             <ListItem>
               <IconButton
@@ -124,9 +125,9 @@ const MyProfileTop = () => {
               </IconButton>
               <Box
                 sx={{
-                  minWidth: "calc(100vw - 108px)",
-                  display: "flex",
-                  justifyContent: "center",
+                  minWidth: 'calc(100vw - 108px)',
+                  display: 'flex',
+                  justifyContent: 'center',
                 }}
               >
                 <Typography
@@ -142,66 +143,70 @@ const MyProfileTop = () => {
 
             <Divider />
             <ListItem
-              sx={{ marginTop: "10px", marginBottom: "10px" }}
+              sx={{ marginTop: '10px', marginBottom: '10px' }}
               onClick={onClickUpdateUser}
             >
               <ListItemText
-                sx={{ display: "flex", justifyContent: "center" }}
+                sx={{ display: 'flex', justifyContent: 'center' }}
                 primary="개인 정보 수정"
               />
             </ListItem>
             <Divider />
 
             <ListItem
-              sx={{ marginTop: "10px", marginBottom: "10px" }}
+              sx={{ marginTop: '10px', marginBottom: '10px' }}
               onClick={onClickReportList}
             >
               <ListItemText
-                sx={{ display: "flex", justifyContent: "center" }}
+                sx={{ display: 'flex', justifyContent: 'center' }}
                 primary="신고 내역 조회"
               />
             </ListItem>
             <Divider />
             <ListItem
-              sx={{ marginTop: "10px", marginBottom: "10px" }}
+              sx={{ marginTop: '10px', marginBottom: '10px' }}
               onClick={onClickDeleteUser}
             >
               <ListItemText
-                sx={{ display: "flex", justifyContent: "center" }}
+                sx={{ display: 'flex', justifyContent: 'center' }}
                 primary="회원 탈퇴"
               />
             </ListItem>
             <Divider />
 
-            <ListItem sx={{ marginTop: "10px", marginBottom: "10px" }}>
+            <ListItem sx={{ marginTop: '10px', marginBottom: '10px' }}>
               <ListItemText
-                sx={{ display: "flex", justifyContent: "center" }}
+                sx={{ display: 'flex', justifyContent: 'center' }}
                 onClick={onClickUpdateAccount}
                 primary="계좌 관리"
               />
             </ListItem>
             <Divider />
 
-            <ListItem sx={{ marginTop: "10px", marginBottom: "10px" }}>
+            <ListItem sx={{ marginTop: '10px', marginBottom: '10px' }}>
               <ListItemText
-                sx={{ display: "flex", justifyContent: "center" }}
+                sx={{ display: 'flex', justifyContent: 'center' }}
                 onClick={onClickListPayment}
                 primary="결제 정보 조회"
               />
             </ListItem>
             <Divider />
 
-            <ListItem 
-                sx={{ marginTop: '10px', marginBottom: '10px' }} 
-                onClick={onClickNoticePostList}>
+            <ListItem
+              sx={{ marginTop: '10px', marginBottom: '10px' }}
+              onClick={onClickNoticePostList}
+            >
               <ListItemText
-                sx={{ display: "flex", justifyContent: "center" }}
+                sx={{ display: 'flex', justifyContent: 'center' }}
                 primary="공지사항"
               />
             </ListItem>
             <Divider />
 
-            <ListItem sx={{ marginTop: "10px", marginBottom: "10px" }} onClick={onClickListBlackList}>
+            <ListItem
+              sx={{ marginTop: '10px', marginBottom: '10px' }}
+              onClick={onClickListBlackList}
+            >
               <ListItemText
                 sx={{ display: 'flex', justifyContent: 'center' }}
                 primary="블랙리스트"

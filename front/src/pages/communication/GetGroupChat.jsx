@@ -46,9 +46,11 @@ const GetGroupChat = () => {
 
   useEffect(() => {
     return () => {
-      discconect();
+      if (socket) {
+        discconect();
+      }
     };
-  }, [discconect]);
+  }, [discconect, socket]);
 
   const onMessage = useCallback(() => {
     mutateGroupMessages();
@@ -64,10 +66,11 @@ const GetGroupChat = () => {
   useEffect(() => {
     scrollToBottom();
   }, [groupMessagesData, scrollToBottom]);
-  if (!groupMessagesData) {
+  if (!groupMessagesData || !socket) {
     return <>로딩</>;
   }
   // console.log(meetingMessagesData);
+
   return (
     <div ref={boxRef}>
       <GetChatTop

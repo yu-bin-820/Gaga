@@ -10,10 +10,12 @@ const useSocket = (chattype) => {
 
   const disconnect = useCallback(() => {
     if (chattype) {
-      sockets[chattype].disconnect();
-      delete sockets[chattype];
+      if (sockets[chattype]) {
+        sockets[chattype].disconnect();
+        delete sockets[chattype];
+      }
     }
-  }, [chattype]);
+  }, [chattype, sockets]);
 
   if (!chattype) {
     return [undefined, disconnect];

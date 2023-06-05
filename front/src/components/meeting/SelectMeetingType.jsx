@@ -25,8 +25,18 @@ const SelectMeetingType = () => {
 
 
   return (
-    <Box>
-      <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+    <Box sx={{ margin: '10px' }}>
+      <h4>어떤 모임을 만들까요?</h4>
+      <Box sx={{ margin: '10px' }}>
+        <h5 style={{ color: 'gray' }}>
+        '모임'은 직접 만나 취향 활동을 함께할 수 있어요.
+          <br/>
+          장기간 함께 하는 공간을 원하실 경우 '클럽'으로 열어주세요!
+        </h5>
+        </Box>
+      <Accordion 
+      expanded={expanded === 'panel1'} 
+      onChange={handleChange('panel1')}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
@@ -38,9 +48,6 @@ const SelectMeetingType = () => {
           </Stack>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget maximus est, id dignissim quam.
-          </Typography>
         </AccordionDetails>
       </Accordion>
       <AddMeetingParentsClub expanded={expanded} handleChange={handleChange} />

@@ -8,6 +8,8 @@ import React, { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import useSWR from 'swr';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import CancelIcon from '@mui/icons-material/Cancel';
+
 
 const AddMeetingReveiw = () => {
 
@@ -60,9 +62,14 @@ const AddMeetingReveiw = () => {
         }
       }, [meetingReview, selectedFile]);
       return (
-        <>
+        <Box sx={{ margin: '10px' }}>
         <CommonTop/>
         <Box sx={{ marginTop: '64px' }}>
+          <Stack
+          direction={'row'}
+          spacing={3}
+          sx={{marginBottom: '30px'}}
+          >
           <Button
               variant="outlined"
               startIcon={<Avatar><AddPhotoAlternateIcon /></Avatar>}
@@ -74,8 +81,8 @@ const AddMeetingReveiw = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderColor: 'grey',
-                width: '150px',
-                height: '150px',
+                width: '110px',
+                height: '110px',
               }}
               size="large"
             >
@@ -88,10 +95,37 @@ const AddMeetingReveiw = () => {
                 onChange={onChangeImg}
               />
             </Button>
-            <ImageListItem>
-            {selectedImage && <img src={selectedImage} /> }
-            </ImageListItem>
-          <Stack spacing={1}>
+            {selectedImage && (
+              <Box
+                  sx={{
+                    backgroundColor: "#ffffff",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    justifyContent: "space-between",
+                    flexDirection: "column",
+                  }}
+                >
+                <CancelIcon
+                fontSize="small"
+                onClick={() => setSelectedImage(null)}
+                sx={{
+                  alignSelf: "flex-end",
+                  marginTop: "-8px",
+                  marginRight: "-8px",
+                  cursor: "pointer",
+                }}/>
+              <img 
+              src={selectedImage} 
+              style={{ width: '100px', height: '100px' }} />
+            </Box>
+          )}
+            </Stack>
+          <Stack 
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+          marginBottom={1.3}
+          >
             <Rating 
             name="meetingScore" 
             defaultValue={5} 
@@ -100,10 +134,10 @@ const AddMeetingReveiw = () => {
             required
             value={meetingReview.meetingScore}
             size="large" />
-          </Stack>
           <h3>{meetingReview.meetingScore}/5</h3>
+          </Stack>
           <TextField
-            fulWidth
+            fullWidth
             label="meetingReviewContent"
             name="meetingReviewContent"
             onChange={onChangeMeetingReview}
@@ -112,10 +146,22 @@ const AddMeetingReveiw = () => {
             required
             value={meetingReview.meetingReviewContent}
           />
-    
-          <Button onClick={handleSubmit}>작성하기</Button>
+          <Stack
+          spacing={0}
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ position: "fixed", bottom: 5, left: 0, right: 0 }}
+        >
+          <Button 
+          variant="contained"
+          sx={{ width: "85vw", borderRadius: "50px" }}
+          onClick={handleSubmit}>
+            작성하기
+            </Button>
+          </Stack>
         </Box>
-        </>
+        </Box>
     );
 };
 

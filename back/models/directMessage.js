@@ -40,6 +40,14 @@ module.exports = class DirectMessage extends Model {
           type: DataTypes.INTEGER,
           defaultValue: 1,
         },
+        lat: {
+          type: DataTypes.DOUBLE,
+          allowNull: true,
+        },
+        lng: {
+          type: DataTypes.DOUBLE,
+          allowNull: true,
+        },
       },
       {
         modelName: 'DirectMessage',
