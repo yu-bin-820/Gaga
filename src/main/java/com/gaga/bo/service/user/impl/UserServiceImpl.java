@@ -19,6 +19,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
+import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -59,7 +60,6 @@ public class UserServiceImpl implements UserService {
 		
 		return userDao.getUser(userNo);
 	}
-	
 
 	public User getUserById(String userId) throws Exception {
 	    return userDao.getUserById(userId);
@@ -76,10 +76,8 @@ public class UserServiceImpl implements UserService {
 		userDao.updateUser(user);
 	}
 
-
-	@Override
-	public void deleteUser(int userNo) throws Exception {
-		userDao.deleteUser(userNo);
+	public void deleteUser(User user) throws Exception {
+		userDao.deleteUser(user);
 		
 	}
 
@@ -397,6 +395,6 @@ public class UserServiceImpl implements UserService {
 
         return emailVerificationCode; // 메일로 사용자에게 보낸 인증코드를 서버로 반환! 인증코드 일치여부를 확인하기 위함 
     }
-    
+
 }
 

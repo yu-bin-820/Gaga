@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.gaga.bo.service.domain.Filter;
 import com.gaga.bo.service.domain.Meeting;
 import com.gaga.bo.service.domain.MeetingReview;
+import com.gaga.bo.service.domain.Search;
 import com.gaga.bo.service.meeting.MeetingDao;
 import com.gaga.bo.service.meeting.MeetingService;
 
@@ -117,6 +118,13 @@ public class MeetingServiceImpl implements MeetingService {
 		// TODO Auto-generated method stub
 		return  meetingDao.getMeetingList(filter);
 	}
+	
+
+	@Override
+	public List<Meeting> getMeetingListByKeyword(Search search) throws Exception {
+		// TODO Auto-generated method stub
+		return meetingDao.getMeetingListByKeyword(search);
+	}
 
 
 
@@ -172,6 +180,7 @@ public class MeetingServiceImpl implements MeetingService {
 		// TODO Auto-generated method stub
 		return meetingDao.getSubCategory();
 	}
+
 
 
 

@@ -34,6 +34,7 @@ public class Meeting {
     private String accountNo;
     private String bankName;
     private int state;
+    private int count;
     
     public Meeting() {
     	
@@ -219,6 +220,14 @@ public class Meeting {
 		this.mainCategoryNo = mainCategoryNo;
 	}
 
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
 	@Override
 	public String toString() {
 		return "Meeting [meetingNo=" + meetingNo + ", entryFee=" + entryFee + ", meetingDate=" + meetingDate
@@ -231,7 +240,9 @@ public class Meeting {
 				+ ", filterMinAge=" + filterMinAge + ", filterMaxAge=" + filterMaxAge + ", mainCategoryNo="
 				+ mainCategoryNo + ", filterTag=" + filterTag + ", adjustmentTime=" + adjustmentTime
 				+ ", adjustmentState=" + adjustmentState + ", accountNo=" + accountNo + ", bankName=" + bankName
-				+ ", state=" + state + "]";
+				+ ", state=" + state + ", count=" + count + "]";
 	}
+
+
     
 }

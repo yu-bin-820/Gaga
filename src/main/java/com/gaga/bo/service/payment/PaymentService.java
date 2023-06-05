@@ -30,8 +30,11 @@ public interface PaymentService {
 	
 	//정산 목록 조회(회원)
 	public List<Meeting> getAdjustmentList(int userNo) throws Exception;
+	
+	//정산 상태별 목록 조회 state 1 :정산대기
+	public List<Meeting> getAdjustmentIngList() throws Exception;
 
-	//정산상태 변경  state 정산대기0->정산성공1
+	//정산상태 변경  state 정산대기1->정산성공2
 	public void updateAdjustmentState(Meeting meeting) throws Exception;
 	
 	//아임포트 토큰 발급

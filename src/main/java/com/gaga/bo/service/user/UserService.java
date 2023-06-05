@@ -2,12 +2,15 @@ package com.gaga.bo.service.user;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,7 +32,7 @@ public interface UserService {
 	
 	public boolean checkDuplication(String userId) throws Exception;
 	
-	public void deleteUser(int userNo) throws Exception;
+	public void deleteUser(User user) throws Exception;
 	
 	public String getAccessNaverToken(String authorize_code) throws Exception;
 	
@@ -48,6 +51,5 @@ public interface UserService {
     public String createEmailKey() throws Exception;
     // 메일 발송
     public String sendEmailContent(String userEmail) throws Exception;
-
 
 }

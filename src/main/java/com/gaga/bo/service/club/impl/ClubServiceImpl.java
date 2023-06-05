@@ -12,6 +12,7 @@ import com.gaga.bo.service.club.ClubDao;
 import com.gaga.bo.service.club.ClubService;
 import com.gaga.bo.service.domain.Club;
 import com.gaga.bo.service.domain.Filter;
+import com.gaga.bo.service.domain.Search;
 
 @Service
 public class ClubServiceImpl implements ClubService {
@@ -31,8 +32,10 @@ public class ClubServiceImpl implements ClubService {
 	public void addClub(Club club) throws Exception {
 
 		System.out.println("클럽 생성 서비스");
+		
 		clubDao.addClub(club);
 
+		System.out.println("생성은 잘 됐는지?");
 		// TODO Auto-generated method stub
 
 	}
@@ -56,11 +59,17 @@ public class ClubServiceImpl implements ClubService {
 	  }
 	  
 	@Override
-	public List<Club> getSearchClubList(Filter filter) throws Exception {
-			
-		System.out.println("클럽 목록 검색 서비스");
+	public List<Club> getSearchClubList(Search search) throws Exception {
 		// TODO Auto-generated method stub
-		return clubDao.getSearchClubList(filter);
+		return clubDao.getSearchClubList(search);
+	}
+
+	@Override
+	public List<Club> getFilterClubList(Filter filter) throws Exception {
+			
+		System.out.println("클럽 목록 필터적용 서비스");
+		// TODO Auto-generated method stub
+		return clubDao.getFilterClubList(filter);
 	}
 
 	@Override
@@ -103,7 +112,6 @@ public class ClubServiceImpl implements ClubService {
 		System.out.println("클럽 삭제 서비스");
 		
 		clubDao.deleteClub(clubNo);
-		// TODO Auto-generated method stub
 		
 	}
 

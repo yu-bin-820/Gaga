@@ -65,6 +65,7 @@ public class UserRestController {
 		return (User)session.getAttribute("user");
 	}
 	
+	
 	@PostMapping("/login")
 	public User login(	@RequestBody User user,
 									HttpSession session ) throws Exception{
@@ -78,8 +79,7 @@ public class UserRestController {
 				session.setAttribute("user", dbUser);
 			}
 		}
-		System.out.println("::"+user);
-		System.out.println("::"+dbUser);		
+		System.out.println("::"+user);	
 		return dbUser;
 		
 	}
@@ -123,26 +123,27 @@ public class UserRestController {
 		return new ResponseEntity<>("로그아웃 완료!", HttpStatus.OK);
 	}
 	
-//	@GetMapping("/addUser")
-//	public ResponseEntity<String> addUser() throws Exception{
-//		System.out.println("/rest/user/addUser : GET");
-//
-//		// "redirect:/main.jsx"는 RESTful API에서 일반적으로 사용되지 않습니다. 
-//		// 일반적으로 해당 API가 수행하는 작업을 설명하는 메시지를 반환합니다.
-//		return new ResponseEntity<>("User add API is ready for POST request.", HttpStatus.OK);
-//	}
+	@GetMapping("/addUser")
+	public ResponseEntity<String> addUser() throws Exception{
+		System.out.println("/rest/user/addUser : GET");
+
+		// "redirect:/main.jsx"는 RESTful API에서 일반적으로 사용되지 않습니다. 
+		// 일반적으로 해당 API가 수행하는 작업을 설명하는 메시지를 반환합니다.
+		return new ResponseEntity<>("User add API is ready for POST request.", HttpStatus.OK);
+	}
 	
+
 	@PostMapping("/addUser")
 	public ResponseEntity<User> addUser(@RequestBody User user, HttpSession session) throws Exception {
 		System.out.println("/resr/user/addUser : POST");
 		String userId = user.getUserId();
 		System.out.println("회원가입 요청온 유저정보: "+user);
 		// 아이디 중복 확인
-	    boolean isDuplicate = userService.checkDuplication(user.getUserId());
-	    if (isDuplicate) {
-	    	System.out.println("아이디 중복임");
-	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	    }
+//	    boolean isDuplicate = userService.checkDuplication(user.getUserId());
+//	    if (isDuplicate) {
+//	    	System.out.println("아이디 중복임");
+//	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//	    }
 		// Business Logic
 		userService.addUser(user);
 		
@@ -154,25 +155,20 @@ public class UserRestController {
 	}
 	
 	@PostMapping("/updateUser")
-	public ResponseEntity<User> updateUser(@RequestBody User user) throws Exception {
+	public ResponseEntity<User> updateUser(@RequestBody User user,HttpSession session) throws Exception {
 		System.out.println("/rest/user/updateUser : POST");
-//		String userId = user.getUserId();
-//		// 아이디 중복 확인
-//	    boolean isDuplicate = userService.checkDuplication(userId);
-//	    if (isDuplicate) {
-//	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//	    }
-		// Business Logic
+
 		userService.updateUser(user);
 
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping("/deleteUser/{userNo}")
-    public ResponseEntity<Void> deleteUser(@PathVariable int userNo) {
+	@PostMapping("/deleteUser")
+    public ResponseEntity<User> deleteUser(@RequestBody User user) throws Exception{
         try {
-            userService.deleteUser(userNo);
-            System.out.println("회원번호="+userNo+"유저정보 삭제완료");
+            userService.deleteUser(user);
+            System.out.println("회원번호="+user+"유저정보 삭제완료");
+            System.out.println((userService.getUser(user.getUserNo())));
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
         	System.out.println("오류가 발생했습니다: " + e.getMessage());
@@ -198,8 +194,7 @@ public class UserRestController {
 	        session.setAttribute("user", user);
 	        System.out.println("네이버 로그인 유저 정보: " + user);
 	        response.sendRedirect("http://192.168.0.159:5173/"); 
-	    } else {
-	        // 존재하지 않는 아이디인 경우, 유저 객체에 정보 담기
+	    } else {		// 존재하지 않는 아이디인 경우, 유저 객체에 정보 담기
 	        User user = new User();
 	        user.setUserId(userId);
 	        user.setUserName((String) userInfoMap.get("name"));
@@ -212,7 +207,7 @@ public class UserRestController {
 
 	        session.setAttribute("user", user);
 	        System.out.println("네이버 로그인 유저 정보: " + user);
-	        response.sendRedirect("http://192.168.0.159:5173/user/addnaveruser"); // AddNaverUser 페이지 URL로 변경해주세요.
+	        response.sendRedirect("http://192.168.0.159:5173/user/addnaveruser"); 
 	    }
 	}
 	
@@ -232,21 +227,16 @@ public class UserRestController {
 	        User user = userService.getUserById(userId);
 	        session.setAttribute("user", user);
 	        System.out.println("카카오 로그인 유저 정보: " + user);
-	        response.sendRedirect("http://192.168.0.159:5173/"); // 로그인 후 이동할 페이지 URL로 변경해주세요.
+	        response.sendRedirect("http://192.168.0.159:5173/"); 
 	    } else {
 	        // 존재하지 않는 아이디인 경우, 유저 객체에 정보 담기, 카카오는 id 닉네임 2개만 우리가 사용함
 	        User user = new User();
 	        user.setUserId(userId);
-//	        user.setUserName((String) userInfoMap.get("nickname"));
 	        user.setNickName((String) userInfoMap.get("nickname"));
-//	        user.setPassword(userId);
-//	        user.setPhoneNo("01051884079");
-//	        user.setBirthday(LocalDate.now());
-//	        user.setGender(1);
 
 	        session.setAttribute("user", user);
 	        System.out.println("카카오 로그인 유저 정보: " + user);
-	        response.sendRedirect("http://192.168.0.159:5173/user/addkakaouser"); // AddKakaoUser 페이지 URL로 변경해주세요.
+	        response.sendRedirect("http://192.168.0.159:5173/user/addkakaouser");
 	    }
 	}
 
@@ -265,41 +255,48 @@ public class UserRestController {
 		return userService.getGroupMemberList(map);
 	} 
 
-	//회원,비회원이 핸드폰 인증을 요청하면 회원핸드폰번호에 인증코드 발송하여 요청 처리
-	@PostMapping("/phoneAuth")
-	public Boolean phoneAuth(@RequestBody String userPhoneNo, HttpSession session) {
-		System.out.println("핸드폰 인증 요청 옴");
-	    try {
-	        // 이미 가입된 전화번호가 있는지 확인
-	        User user = userService.getUserByPhoneNo(userPhoneNo);
-	        if(user != null && user.getPhoneNo().equals(userPhoneNo)) {
-	            return true;
-	        }
-	    } catch (Exception e) {
-	        System.out.println("폰인증 에러"+e);
-	        e.printStackTrace();
-	    }
-	
-	    String code = userService.sendRandomSmsMessage(userPhoneNo);
-	    session.setAttribute("rand", code);
-	    
-	    return false;
+//	//회원,비회원이 핸드폰 인증을 요청하면 회원핸드폰번호에 인증코드 발송하여 요청 처리
+//	@PostMapping("/phoneAuth")
+//	public Boolean phoneAuth(@RequestBody String userPhoneNo, HttpSession session) {
+//		System.out.println("핸드폰 인증 요청 옴");
+//	    try {
+//	        // 이미 가입된 전화번호가 있는지 확인
+//	        User user = userService.getUserByPhoneNo(userPhoneNo);
+//	        if(user != null && user.getPhoneNo().equals(userPhoneNo)) {
+//	            return true;
+//	        }
+//	    } catch (Exception e) {
+//	        System.out.println("폰인증 에러"+e);
+//	        e.printStackTrace();
+//	    }
+//	    System.out.println("phoneAuth session ID: " + session.getId());
+//	    String code = userService.sendRandomSmsMessage(userPhoneNo);
+//	    System.out.println("codeeeeeeeee"+code);
+//	    session.setAttribute("rand", code);
+//	    
+//	    return false;
+//	}
+//	//서버의 핸드폰 인증코드와, 회원이 입력한 코드를 비교
+//	@PostMapping("/phoneAuthOk")
+//	public Boolean phoneAuthOk(@RequestBody String phoneAuthCode, HttpSession session,HttpServletRequest request) {
+//	    String rand = (String) session.getAttribute("rand");
+//	    String code = (String) request.getParameter("code");
+//	    System.out.println("rand"+rand);
+//	    System.out.println(rand + " <-서버발송 인증번호 || 회원이입력한 인증번호-> " + phoneAuthCode);
+//	    phoneAuthCode = phoneAuthCode.replace("=", ""); // = 기호 제거
+//	    if (rand.equals(phoneAuthCode)) {
+//	        session.removeAttribute("rand");
+//	        return true;
+//	    } 
+//	    System.out.println("phoneAuthOk session ID: " + session.getId());
+//	    return false;
+//	}
+	@PostMapping(value= "/phoneNo")
+	public String phoneNo(@RequestBody Map<String, String> body) throws Exception{
+		String userPhoneNo=body.get("phoneNo");
+		String phoneAuthCode= userService.sendRandomSmsMessage(userPhoneNo);
+		return phoneAuthCode;
 	}
-	//서버의 핸드폰 인증코드와, 회원이 입력한 코드를 비교
-	@PostMapping("/phoneAuthOk")
-	public Boolean phoneAuthOk(@RequestBody String phoneAuthCode, HttpSession session) {
-	    String rand = (String) session.getAttribute("rand");
-
-	    System.out.println(rand + " <-서버발송 인증번호 || 회원이입력한 인증번호-> " + phoneAuthCode);
-	    phoneAuthCode = phoneAuthCode.replace("=", ""); // = 기호 제거
-	    if (rand.equals(phoneAuthCode)) {
-	        session.removeAttribute("rand");
-	        return true;
-	    } 
-
-	    return false;
-	}
-	
 	@PostMapping(value = "/mailAuth") 		//이메일 인증, 회원 아이디(이메일)에 대해 인증 코드 발송
 	public String mailConfirm(@RequestBody Map<String, String> body) throws Exception {
 	    String userEmail = body.get("email");

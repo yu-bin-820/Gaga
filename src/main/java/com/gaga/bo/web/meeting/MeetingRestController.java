@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.gaga.bo.service.domain.Filter;
 import com.gaga.bo.service.domain.Meeting;
 import com.gaga.bo.service.domain.MeetingReview;
+import com.gaga.bo.service.domain.Search;
 import com.gaga.bo.service.meeting.MeetingService;
 import com.gaga.bo.service.user.UserService;
 
@@ -43,6 +44,9 @@ public class MeetingRestController {
 	
 	@Value("${fileUploadPath}")
 	String fileUploadPath;
+	
+	@Value("${pageSize}")
+	int pageSize;
 	
 	public MeetingRestController() {
 		System.out.println(this.getClass());
@@ -77,11 +81,28 @@ public class MeetingRestController {
 		return list;
 	}
 	
+	@PostMapping("search")
+	public List<Meeting> getMeetingListByKeyword(@RequestBody Search search) throws Exception{
+		
+		if(search.getCurrentPage() ==0 ){
+			search.setCurrentPage(1);
+		}
+		
+		System.out.println("searchmeeting : " + search);
+		
+		search.setPageSize(pageSize);
+		
+		System.out.println(search.getStartRowNum());
+		
+		List<Meeting> list = meetingService.getMeetingListByKeyword(search);
+		System.out.println(list);
+		return list;
+	}
+	
 	@PatchMapping("")
 	public void updateMeeting(@ModelAttribute Meeting meeting,
 	 		   				  @RequestParam(value = "file", required = false) MultipartFile file
 							  ) throws Exception{
-		System.out.println(file.getOriginalFilename());
 		
 		System.out.println("img변경 전 : "+meeting);
 		
@@ -108,8 +129,7 @@ public class MeetingRestController {
 	public void addMeeting(@ModelAttribute Meeting meeting,
 				 		   @RequestParam(value = "file", required = false) MultipartFile file
 						   ) throws Exception{
-		System.out.println(file.getOriginalFilename());
-		
+
 		System.out.println("img변경 전 : "+meeting);
 		
 		if (file != null) {
@@ -167,7 +187,7 @@ public class MeetingRestController {
 			  					 @RequestParam(value = "file", required = false) MultipartFile file
 								) throws Exception{
 		
-		System.out.println(file.getOriginalFilename());
+		
 		
 		System.out.println("img변경 전 : "+meetingReview);
 
