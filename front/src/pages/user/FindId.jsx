@@ -26,7 +26,7 @@ const FindId = () => {
         return;
       }
       const response = await axios.post(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuth`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneNo`,
         phoneNo,
         { withCredentials: true }
       );
