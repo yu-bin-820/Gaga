@@ -5,12 +5,20 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import StarIcon from '@mui/icons-material/Star';
 import CustomedImageListItem from '@components/common/CustomedImageListItem';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
+
 
 
 const ListMeetingReview = () => {
     const { meetingno } = useParams();
     const [meetingReviewList, setMeetingReviewList] = useState();
     const navigate = useNavigate();
+
+    const { data: myData, mutate: mutateMe } = useSWR(
+        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+        fetcher
+        );
 
     const [imageLoadingError, setImageLoadingError] = useState(false);
 
@@ -65,6 +73,7 @@ const ListMeetingReview = () => {
             <Box>
                 {meetingReviewList?.map((meetingReview,i)=>(
                     <Box key={i}>
+                        <Stack>
                         <Stack 
                         direction="row" 
                         spacing={2}
@@ -75,19 +84,30 @@ const ListMeetingReview = () => {
                                 }/upload_images/meeting/${meetingReview?.meetingReviewImg}`}
                                 style={{ width: '100px', height: '100px' }}
                             />
-                        <Stack spacing={1}>
-                            <Rating name="read-only" value={meetingReview.meetingScore} readOnly />
+                        <Stack 
+                        spacing={1}
+                        direction={'row'}>
+                            <Rating 
+                            name="read-only" 
+                            value={meetingReview.meetingScore} 
+                            size='small'
+                            readOnly />
                             
-                            <Box sx={{ ml: 2 }}>{meetingReview.meetingScore}</Box>
+                            <Typography variant="subtitle2">{meetingReview.meetingScore}</Typography>
                             </Stack>
                             </Stack>
-                        
+                            <Typography variant="subtitle2">{meetingReview.meetingReviewContent}</Typography>
+                            </Stack>
+                    {myData.userNo === meetingReview.meetingReviewerNo && (
+                    <>
                     <Button 
                     id={meetingReview.meetingReviewNo}
                     onClick={onClickUpdateMeetingReview}>수정하기</Button>
                     <Button 
                     id={meetingReview.meetingReviewNo}
                     onClick={onClickDelete}>삭제하기</Button>
+                    </>
+                    )}
                     </Box>
                     
                 ))}

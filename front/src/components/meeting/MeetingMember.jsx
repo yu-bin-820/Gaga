@@ -26,9 +26,8 @@ const MeetingMember = ({ member }) => {
             display: 'flex',
           }}
         >
-          <Stack direction={'row'} spacing={10} alignItems={'center'}
+          <Stack direction={'row'} spacing={5} alignItems={'center'}
            onClick={onClickProfileImg} data-value={userNo}>
-            <div>
               <Avatar
                 alt={nickName}
                 src={`http://${
@@ -36,12 +35,13 @@ const MeetingMember = ({ member }) => {
                 }/upload_images/user/${profileImg}`}
                 sx={{ width: 40, height: 40 }}
               />
-            </div>
             <Stack direction="column" spacing={0} alignItems="left">
               <Typography sx={{ fontSize: 15 }}>
                 {nickName}
               </Typography>
-              <Typography sx={{ fontSize: 10 }}>{userIntro}</Typography>
+              <Typography sx={{ fontSize: 10 }}>
+                {userIntro}
+                </Typography>
             </Stack>
           </Stack>
         </Box>
