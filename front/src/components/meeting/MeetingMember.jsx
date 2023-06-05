@@ -30,7 +30,7 @@ const MeetingMember = ({ member }) => {
            onClick={onClickProfileImg} data-value={userNo}>
               <Avatar
                 alt={nickName}
-                src={`http://${
+                src={`${
                   import.meta.env.VITE_SPRING_HOST
                 }/upload_images/user/${profileImg}`}
                 sx={{ width: 40, height: 40 }}

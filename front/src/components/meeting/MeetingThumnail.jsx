@@ -40,7 +40,7 @@ const MeetingThumbnail = ({ meeting }) => {
         >
           {meeting?.meetingImg ? (
             <img
-              src={`http://${
+              src={`${
                     import.meta.env.VITE_SPRING_HOST
                     }/upload_images/meeting/${meeting?.meetingImg}`}
               alt="noImg"

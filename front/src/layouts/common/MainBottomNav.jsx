@@ -27,11 +27,11 @@ export default function MainBottomNav({ pageName }) {
   };
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
   const { data: unreadsData, mutate: mutateUnreads } = useSWR(
-    `http://${
+    `${
       import.meta.env.VITE_EXPRESS_HOST
     }/rest/chat/group/message/unreads/userno/${myData?.userNo}`,
     fetcher
@@ -39,7 +39,7 @@ export default function MainBottomNav({ pageName }) {
   //-------------------------채팅 (상황봐서 지울예정)------------------------------------------
 
   // const { data: groupsData, mutate: mutateGroups } = useSWR(
-  //   `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/group/list/userno/${
+  //   `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/group/list/userno/${
   //     myData?.userNo
   //   }`,
   //   fetcher

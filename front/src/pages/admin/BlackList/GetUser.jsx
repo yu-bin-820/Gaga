@@ -15,7 +15,7 @@ const GetUser = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getUser/userNo/${userNo}`);
+      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getUser/userNo/${userNo}`);
       setUser(response.data);
       setIsBlacklisted(response.data.blacklist === 2); // 블랙리스트 상태 설정
       console.log(response.data, "나와라얍");
@@ -27,15 +27,15 @@ const GetUser = () => {
   const toggleBlacklist = async () => {
     try {
       if (isBlacklisted) {
-        await axios.post(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/toggleBlackList/${userNo}`);
+        await axios.post(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/toggleBlackList/${userNo}`);
       } else {
-        await axios.post(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/toggleBlackList/${userNo}`);
+        await axios.post(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/toggleBlackList/${userNo}`);
       }
       let confirmMessage = isBlacklisted ? "이 회원을 블랙리스트에서 해제하시겠습니까?" : "이 회원을 블랙리스트로 등록하시겠습니까?";
   if(window.confirm(confirmMessage)) {
     setIsBlacklisted(!isBlacklisted);
   }
-      const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/getUser/userNo/${userNo}`);
+      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getUser/userNo/${userNo}`);
       setUser(response.data);
       setIsBlacklisted(response.data.blacklist === 2);
     } catch (error) {

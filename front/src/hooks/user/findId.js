@@ -18,7 +18,7 @@ const FindId = () => {
       }
       // 휴대폰 번호 확인
       const checkResponse = await axios.get(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/user/phoneno/${phoneNo}`
       );
@@ -28,7 +28,7 @@ const FindId = () => {
         return;
       }
       const response = await axios.post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuth`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuth`,
         phoneNo,
         { withCredentials: true }
       );
@@ -44,7 +44,7 @@ const FindId = () => {
   const handlePhoneAuthVerify = async () => {
     try {
       const response = await axios.post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuthOk`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuthOk`,
         phoneAuthCode,
         { withCredentials: true }
       );
@@ -61,7 +61,7 @@ const FindId = () => {
   const handleFindId = async () => {
     try {
       const response = await axios.get(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/user/phoneno/${phoneNo}`
       );

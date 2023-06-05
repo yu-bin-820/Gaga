@@ -57,19 +57,17 @@ const GetProfile = () => {
   const { userNo } = useParams();
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
   const { data: userData, mutate: mutateUser } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/userno/${userNo}`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/userno/${userNo}`,
     fetcher
   );
 
   const { data: userReviewData, mutate: mutateUserReview } = useSWR(
-    `http://${
-      import.meta.env.VITE_SPRING_HOST
-    }/rest/community/userreview/reviewerno/${
+    `${import.meta.env.VITE_SPRING_HOST}/rest/community/userreview/reviewerno/${
       myData?.userNo
     }/reviewedno/${userNo}`,
     fetcher
@@ -114,7 +112,7 @@ const GetProfile = () => {
     console.log('deleteUserReview', myData?.userNo, userData?.userNo);
     axios
       .delete(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/community/userreview/reviewerno/${myData?.userNo}/reviewedno/${
           userData?.userNo
@@ -167,9 +165,9 @@ const GetProfile = () => {
           <Stack direction={'row'} spacing={10} alignItems={'center'}>
             <Avatar
               alt={userData?.nickName}
-              src={`http://${
-                import.meta.env.VITE_SPRING_HOST
-              }/upload_images/user/${userData?.profileImg}`}
+              src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+                userData?.profileImg
+              }`}
               sx={{ width: 76, height: 76 }}
             />
             <Stack direction="column" spacing={0} alignItems="center">
@@ -245,19 +243,19 @@ const GetProfile = () => {
             rowHeight={100}
           >
             <CustomedImageListItem
-              src={`http://${
-                import.meta.env.VITE_SPRING_HOST
-              }/upload_images/user/${userData?.activityImg}`}
+              src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+                userData?.activityImg
+              }`}
             />
             <CustomedImageListItem
-              src={`http://${
-                import.meta.env.VITE_SPRING_HOST
-              }/upload_images/user/${userData?.activityImg2}`}
+              src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+                userData?.activityImg2
+              }`}
             />
             <CustomedImageListItem
-              src={`http://${
-                import.meta.env.VITE_SPRING_HOST
-              }/upload_images/user/${userData?.activityImg3}`}
+              src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+                userData?.activityImg3
+              }`}
             />
           </ImageList>
         </Box>

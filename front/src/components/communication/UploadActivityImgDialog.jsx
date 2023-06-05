@@ -30,7 +30,7 @@ export default function UploadActivityImgDialog({ open, setOpen }) {
   const [imageLoadingError, setImageLoadingError] = useState(false);
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
@@ -68,7 +68,7 @@ export default function UploadActivityImgDialog({ open, setOpen }) {
 
     axios
       .patch(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/community/activityimg/userno/${myData?.userNo}`,
         formData,

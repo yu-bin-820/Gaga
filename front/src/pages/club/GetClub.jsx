@@ -21,7 +21,7 @@ const GetClub = () => {
 
   useEffect(() => {
     axios
-      .get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/club/no/${clubNo}`)
+      .get(`${import.meta.env.VITE_SPRING_HOST}/rest/club/no/${clubNo}`)
       .then((response) => {
         console.log(response.data);
         setClub(response.data);
@@ -34,7 +34,7 @@ const GetClub = () => {
   useEffect(() => {
     axios
       .get(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/user/list/grouptype/1/no/${clubNo}/state/2`
       )
@@ -50,7 +50,7 @@ const GetClub = () => {
   useEffect(() => {
     axios
       .get(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/user/list/grouptype/1/no/${clubNo}/state/1`
       )
@@ -81,7 +81,7 @@ const GetClub = () => {
       console.log(data);
 
       const response = await axios.delete(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/club`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/club`,
         {
           data: data,
         }

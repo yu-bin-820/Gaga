@@ -64,7 +64,7 @@ const Login = () => {
   };
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
@@ -88,13 +88,9 @@ const Login = () => {
         console.log(data);
 
         const response = await axios
-          .post(
-            `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
-            data,
-            {
-              withCredentials: true,
-            }
-          )
+          .post(`${import.meta.env.VITE_SPRING_HOST}/rest/user/login`, data, {
+            withCredentials: true,
+          })
           .then((response) => {
             console.log(response);
             if (response.data.userId == null) {

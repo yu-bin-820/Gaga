@@ -44,7 +44,7 @@ function ListEventPost() {
 
   const fetchNoticePosts = async () => {
     try {
-      const response = await axios.get(`http://${import.meta.env.VITE_SPRING_HOST}/rest/admin/listNoticePost`, {
+      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/listNoticePost`, {
         params: {
           page,
           limit: 6,

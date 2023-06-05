@@ -24,7 +24,7 @@ const DeleteClubDialog = ({ open, setOpen }) => {
         console.log(data);
 
         const response = axios.patch(
-          `http://${import.meta.env.VITE_SPRING_HOST}/rest/club/delete`,
+          `${import.meta.env.VITE_SPRING_HOST}/rest/club/delete`,
           data
         );
 

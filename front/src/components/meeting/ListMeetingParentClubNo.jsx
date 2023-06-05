@@ -13,7 +13,7 @@ const ListMeetingParentClubNo = () => {
   useEffect(() => {
     axios
       .get(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/meeting/list/clubno/${clubNo}`
       )
@@ -29,7 +29,7 @@ const ListMeetingParentClubNo = () => {
   useEffect(() => {
     axios
       .get(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/meeting/list/clubno/${clubNo}`
       )

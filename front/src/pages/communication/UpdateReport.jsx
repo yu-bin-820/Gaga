@@ -23,12 +23,12 @@ const UpdateReport = () => {
   const navigate = useNavigate();
   const { reportNo, reportCategory } = useCommunityStore();
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
   const { data: reportData, mutate: mutateReport } = useSWR(
-    `http://${
+    `${
       import.meta.env.VITE_SPRING_HOST
     }/rest/community/report/reportno/${reportNo}`,
     fetcher
@@ -36,21 +36,21 @@ const UpdateReport = () => {
 
   const [selectedImage, setSelectedImage] = useState(
     reportData?.reportImg
-      ? `http://${import.meta.env.VITE_SPRING_HOST}/upload_images/community/${
+      ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/community/${
           reportData?.reportImg
         }`
       : null
   );
   const [selectedImage2, setSelectedImage2] = useState(
     reportData?.reportImg2
-      ? `http://${import.meta.env.VITE_SPRING_HOST}/upload_images/community/${
+      ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/community/${
           reportData?.reportImg2
         }`
       : null
   );
   const [selectedImage3, setSelectedImage3] = useState(
     reportData?.reportImg3
-      ? `http://${import.meta.env.VITE_SPRING_HOST}/upload_images/community/${
+      ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/community/${
           reportData?.reportImg3
         }`
       : null
@@ -107,7 +107,7 @@ const UpdateReport = () => {
 
     axios
       .patch(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/community/report`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/community/report`,
         formData,
         { withCredentials: true }
       )

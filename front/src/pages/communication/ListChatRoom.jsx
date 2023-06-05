@@ -20,33 +20,33 @@ export default function ListChatRoom() {
   const { chatRoomEntryNo, chatType, setField } = useCommunityStore();
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
   const { data: groupsData, mutate: mutateGroups } = useSWR(
-    `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/group/list/userno/${
+    `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/group/list/userno/${
       myData?.userNo
     }`,
     fetcher
   );
 
   const { data: directListData, mutate: mutateDirectMessages } = useSWR(
-    `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/direct/list/userno/${
+    `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/direct/list/userno/${
       myData?.userNo
     }`,
     fetcher
   );
 
   const { data: unreadsData, mutate: mutateUnreads } = useSWR(
-    `http://${
+    `${
       import.meta.env.VITE_EXPRESS_HOST
     }/rest/chat/group/message/unreads/userno/${myData?.userNo}`,
     fetcher
   );
 
   console.log(
-    `http://${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/direct/list/userno/${
+    `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/direct/list/userno/${
       myData?.userNo
     }`,
     directListData
@@ -161,10 +161,10 @@ export default function ListChatRoom() {
                   onClick={onClickGroupChatOne}
                 >
                   <ChatItem
-                    avatar={`http://${
-                      import.meta.env.VITE_EXPRESS_HOST
-                    }/uploads/${group.meeting_img}`}
-                    alt={`http://${
+                    avatar={`${import.meta.env.VITE_EXPRESS_HOST}/uploads/${
+                      group.meeting_img
+                    }`}
+                    alt={`${
                       import.meta.env.VITE_EXPRESS_HOST
                     }/uploads/group_alt.jpg`}
                     title={
@@ -196,7 +196,7 @@ export default function ListChatRoom() {
                 >
                   <ChatItem
                     avatar={'http://facebook.github.io/react/img/logo.svg'}
-                    alt={`http://${
+                    alt={`${
                       import.meta.env.VITE_EXPRESS_HOST
                     }/uploads/user_alt.jpg`}
                     title={

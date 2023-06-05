@@ -44,11 +44,11 @@ const ProfileTop = ({ userNo }) => {
     useState(false);
   const [deleteReportDialogOpen, setDeleteReportDialogOpen] = useState(false);
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
   const { data: reportData, mutate: mutateReport } = useSWR(
-    `http://${
+    `${
       import.meta.env.VITE_SPRING_HOST
     }/rest/community/report/reportingno/${myData?.userNo}/reportedno/${userNo}`,
     fetcher
@@ -83,7 +83,7 @@ const ProfileTop = ({ userNo }) => {
   const onClickDeleteReportConfirm = useCallback(() => {
     axios
       .delete(
-        `http://${
+        `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/community/report/reportno/${reportData?.reportNo}`,
         {

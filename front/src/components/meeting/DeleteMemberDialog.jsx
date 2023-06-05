@@ -14,7 +14,7 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
     };
 
     const { data: myData, mutate: mutateMe } = useSWR(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
         fetcher
         );
 
@@ -31,7 +31,7 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
 
         const response = await axios
             .delete(
-            `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`,
+            `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`,
             {
                 data: data,
             }

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 
 const Payment = ({ meeting }) => {
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
@@ -41,7 +41,7 @@ const Payment = ({ meeting }) => {
       buyer_tel: myData?.phoneNo, // 구매자 전화번호
       buyer_email: myData?.userId, // 구매자 이메일
       entryFee: entryFee,
-      m_redirect_url: `http://${
+      m_redirect_url: `${
         import.meta.env.VITE_REACT_HOST
       }/payment/redirect?payNo=${orderId}&userNo=${
         myData?.userNo
@@ -56,7 +56,7 @@ const Payment = ({ meeting }) => {
         alert('결제 성공');
 
         axios
-          .post(`http://${import.meta.env.VITE_SPRING_HOST}/rest/payment`, data)
+          .post(`${import.meta.env.VITE_SPRING_HOST}/rest/payment`, data)
           .then((response) => {
             console.log(data);
             console.log(response.data);
@@ -97,7 +97,7 @@ const Payment = ({ meeting }) => {
   return (
     <Button
       onClick={onClickPayment}
-      variant='contained'
+      variant="contained"
       sx={{ width: '85vw', borderRadius: '50px' }}
     >
       결제하기

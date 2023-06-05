@@ -33,7 +33,7 @@ const AddReport = () => {
   const { reportCategory } = useCommunityStore();
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
@@ -70,7 +70,7 @@ const AddReport = () => {
     formData.append('reportContent', reportContent);
     axios
       .post(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/community/report`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/community/report`,
         formData,
         { withCredentials: true }
       )

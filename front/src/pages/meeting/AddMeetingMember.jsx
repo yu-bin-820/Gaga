@@ -14,17 +14,13 @@ const AddMeetingMember = () => {
   const [meeting, setMeeting] = useState();
   const navigate = useNavigate();
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
   useEffect(() => {
     axios
-      .get(
-        `http://${
-          import.meta.env.VITE_SPRING_HOST
-        }/rest/meeting/no/${meetingno}`
-      )
+      .get(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${meetingno}`)
       .then((response) => {
         console.log(response.data);
         setMeeting(response.data);
@@ -47,7 +43,7 @@ const AddMeetingMember = () => {
         console.log(data);
 
         const response = await axios.post(
-          `http://${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`,
+          `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`,
           data
         );
 
@@ -73,8 +69,8 @@ const AddMeetingMember = () => {
           <Box sx={{ bgcolor: 'white' }}>
             <Stack
               direction={'row'}
-              justifyContent='space-between'
-              alignItems='center'
+              justifyContent="space-between"
+              alignItems="center"
               sx={{ marginLeft: '10px', marginRight: '10px' }}
             >
               <h4>결제금액</h4>
@@ -100,14 +96,14 @@ const AddMeetingMember = () => {
         </Stack>
         <Stack
           spacing={0}
-          direction='row'
-          justifyContent='center'
-          alignItems='center'
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
           sx={{ position: 'fixed', bottom: 5, left: 0, right: 0 }}
         >
           {meeting.entryFee === 0 ? (
             <Button
-              variant='contained'
+              variant="contained"
               sx={{ width: '85vw', borderRadius: '50px' }}
               onClick={onClickAddMember}
             >

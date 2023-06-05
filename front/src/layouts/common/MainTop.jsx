@@ -30,11 +30,11 @@ const MainTop = () => {
   const [alarmData, setAlarmData] = useState([]);
   const { groupType } = useCommonStore();
   const { data: myData, mutate: mutateMe } = useSWR(
-    `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
   const { data: unreadsData, mutate: mutateUnreads } = useSWR(
-    `http://${
+    `${
       import.meta.env.VITE_EXPRESS_HOST
     }/rest/chat/group/message/unreads/userno/${myData?.userNo}`,
     fetcher
@@ -45,7 +45,7 @@ const MainTop = () => {
     (e) => {
       axios
         .get(
-          `http://${
+          `${
             import.meta.env.VITE_EXPRESS_HOST
           }/rest/chat/alarm/receiverno/${myData?.userNo}`,
           { withCredentials: true }

@@ -11,7 +11,7 @@ const SelectGender = ({ onGenderClick }) => {
     const [selectedValue, setSelectedValue] = useState(null);
 
     const { data: myData, mutate: mutateMe } = useSWR(
-        `http://${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
         fetcher
         );
 
