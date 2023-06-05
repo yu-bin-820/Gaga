@@ -8,6 +8,7 @@ import MainTop from '@layouts/common/MainTop';
 import dayjs from 'dayjs';
 import MenuItem from '@mui/material/MenuItem';
 import CommonTop from '@layouts/common/CommonTop';
+import UserLogout from '@layouts/user/UserLogout';
 
 function AddKakaoUser() {
   const [user, setUser] = useState({
@@ -83,7 +84,7 @@ function AddKakaoUser() {
 
   return (
     <>
-      <CommonTop />
+      <UserLogout/>
       <Grid
         container
         component="main"

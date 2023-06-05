@@ -5,6 +5,7 @@ import useSWR, { mutate } from 'swr';
 import fetcher from '@utils/fetcher';
 import Grid from '@mui/material/Grid';
 import MainTop from '@layouts/common/MainTop';
+import UserLogout from '@layouts/user/UserLogout';
 
 function AddNaverUser() {
   const [user, setUser] = useState({
@@ -78,7 +79,7 @@ function AddNaverUser() {
 
   return (
     <>
-      <MainTop />
+      <UserLogout/>
       <Grid
         container
         component="main"
