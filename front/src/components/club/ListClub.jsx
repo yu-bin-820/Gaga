@@ -1,13 +1,13 @@
-import { Button } from "@mui/material";
-import { Box, Stack } from "@mui/system";
-import fetcher from "@utils/fetcher";
-import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import useSWR from "swr";
-import ClubThumbnail from "./ClubThumbnail";
-import Refund from "@components/payment/Refund";
-import Payment from "@components/payment/Payment";
+import { Button } from '@mui/material';
+import { Box, Stack } from '@mui/system';
+import fetcher from '@utils/fetcher';
+import axios from 'axios';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import useSWR from 'swr';
+import ClubThumbnail from './ClubThumbnail';
+import Refund from '@components/payment/Refund';
+import Payment from '@pages/payment/Payment';
 
 const ListClub = () => {
   const [clubList, setClubList] = useState();
@@ -53,7 +53,7 @@ const ListClub = () => {
 
   return (
     <>
-      <Box sx={{ marginTop: "10px" }}>
+      <Box sx={{ marginTop: '10px' }}>
         <Box>
           <Box>
             {clubList?.map((club, i) => (

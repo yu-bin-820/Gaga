@@ -254,7 +254,7 @@ const Login = () => {
                   <br />
                   <Typography
                     component={Link}
-                    to="/user/adduserbackup"
+                    to="/user/addusertest"
                     color={"Green"}
                   >
                     {"회원이 아니신가요? 작업중 "}
