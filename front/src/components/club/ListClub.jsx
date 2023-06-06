@@ -8,6 +8,7 @@ import useSWR from 'swr';
 import ClubThumbnail from './ClubThumbnail';
 import Refund from '@components/payment/Refund';
 import Payment from '@pages/payment/Payment';
+import Account from '@components/payment/Account';
 
 const ListClub = () => {
   const [clubList, setClubList] = useState();
@@ -29,10 +30,7 @@ const ListClub = () => {
       tag3: myData?.filterTag3,
     };
     axios
-      .post(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/club/list/filter`,
-        data
-      )
+      .post(`${import.meta.env.VITE_SPRING_HOST}/rest/club/list/filter`, data)
       .then((response) => {
         console.log(data);
         console.log(response.data);
@@ -62,7 +60,6 @@ const ListClub = () => {
                 <Button id={club.clubNo} onClick={onClickClub}></Button>
               </Box>
             ))}
-            <Payment />
             <Refund />
           </Box>
         </Box>

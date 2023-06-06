@@ -3,8 +3,9 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import useSWR from 'swr';
-import { Box } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import CommonTop from '@layouts/common/CommonTop';
+import PaymentThumnail from '@components/payment/PaymentThumnail';
 
 const ListPayment = () => {
   const { userNo } = useParams();
@@ -37,25 +38,15 @@ const ListPayment = () => {
   return (
     <>
       <CommonTop />
-      <Box sx={{ marginTop: '100px' }}>
-        <Box>
-          {paymentList.map((payment, i) => (
-            <Box key={i}>
-              <h3>{i + 1}번 결제정보</h3>
-              결제 번호 : {payment.payNo}
-              <br />
-              결제 시간 : {payment.payTime}
-              <br />
-              환불 시간 : {payment.refundTime}
-              <br />
-              결제 상태 : {payment.payState}
-              <br />
-              결제 금액 : {payment.entryFee}
-              <br />
-            </Box>
+      <Stack sx={{ marginTop: '100px' }}>
+        <Stack>
+          {paymentList?.map((payment, i) => (
+            <Stack key={i} sx={{ marginBottom: '30px' }}>
+              <PaymentThumnail payment={payment} />
+            </Stack>
           ))}
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     </>
   );
 };

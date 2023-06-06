@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Account from '@components/payment/Account';
 import CommonTop from '@layouts/common/CommonTop';
-import { Box } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
 import useInput from '@hooks/common/useInput';
@@ -17,9 +17,9 @@ const UpdateAccount = () => {
     fetcher
   );
 
-  const handleBankInfoChange = (bank, accountNumber) => {
-    setBankName(bank);
-    setAccountNo(accountNumber);
+  const handleBankInfoChange = (bankName, accountNo) => {
+    setBankName(bankName);
+    setAccountNo(accountNo);
   };
 
   const onButtonClick = () => {
@@ -42,10 +42,31 @@ const UpdateAccount = () => {
   return (
     <>
       <CommonTop />
-      <Box sx={{ marginTop: '64px' }}>
+      <Stack sx={{ marginTop: '64px' }}>
+        등록된 계좌 정보
+        <br />
+        <TextField
+          sx={{ marginTop: '16px' }}
+          label='bankName'
+          value={myData.bankName}
+        />
+        <TextField
+          sx={{ marginTop: '16px' }}
+          label='accountNo'
+          value={myData.accountNo}
+        />
+      </Stack>
+      <Stack sx={{ marginTop: '8px', marginBottom: '8px' }}>
+        새로 등록할 계좌 정보
         <Account onBankInfoChange={handleBankInfoChange} />
-      </Box>
-      <Button onClick={onButtonClick}>정보수정</Button>
+      </Stack>
+      <Button
+        onClick={onButtonClick}
+        variant='contained'
+        sx={{ marginTop: '16px', width: '100%' }}
+      >
+        계좌 등록
+      </Button>
     </>
   );
 };
