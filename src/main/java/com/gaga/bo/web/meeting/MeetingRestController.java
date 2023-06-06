@@ -129,8 +129,7 @@ public class MeetingRestController {
 	public void addMeeting(@ModelAttribute Meeting meeting,
 				 		   @RequestParam(value = "file", required = false) MultipartFile file
 						   ) throws Exception{
-		System.out.println(file.getOriginalFilename());
-		
+
 		System.out.println("img변경 전 : "+meeting);
 		
 		if (file != null) {
@@ -188,7 +187,7 @@ public class MeetingRestController {
 			  					 @RequestParam(value = "file", required = false) MultipartFile file
 								) throws Exception{
 		
-		System.out.println(file.getOriginalFilename());
+		
 		
 		System.out.println("img변경 전 : "+meetingReview);
 
