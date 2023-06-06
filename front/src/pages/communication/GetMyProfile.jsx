@@ -25,7 +25,7 @@ import CustomedImageListItem from '@components/common/CustomedImageListItem';
 import useInputOrigin from '@hooks/common/useInputOrigin';
 import CheckIcon from '@mui/icons-material/Check';
 import axios from 'axios';
-import UpdateUserIntroTextField from '@components/communication/updateUserIntroTextField';
+import UpdateUserIntroTextField from '@components/communication/UpdateUserIntroTextField';
 import UpdateNickNameTextField from '@components/communication/UpdateNickNameTextField';
 import TitleListDialog from '@components/communication/TitleListDialog';
 

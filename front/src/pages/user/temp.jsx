@@ -37,7 +37,7 @@ import { Checkbox, FormControlLabel } from "@mui/material";
 import CommonTop from "@layouts/common/CommonTop";
 import TermsOfGaga from "./TermsOfGaga";
 
-const AddUserTest = () => {
+const AddUser = () => {
   const [user, onChangeUser, setUser] = useInput({
     userId: "",
     password: "",
@@ -485,4 +485,4 @@ const AddUserTest = () => {
   );
 };
 
-export default AddUserTest;
+export default AddUser;

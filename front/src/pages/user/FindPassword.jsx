@@ -2,16 +2,17 @@ import { Button, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
 import React, { useState, useCallback } from 'react';
-import MainTop from '@layouts/common/MainTop';
 import MenuItem from '@mui/material/MenuItem';
 import { FormHelperText } from '@mui/material';
+import CommonTop from '@layouts/common/CommonTop';
 
 const FindPassword = () => {
   const passwordRegex =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,14}$/;
   const [phoneNo, setPhoneNo] = useState('');
   const [phoneAuthCode, setPhoneAuthCode] = useState('');
-  const [phoneAuthVerified, setPhoneAuthVerified] = useState(false);
+  const [phoneVerificationCode, setPhoneVerificationCode] = useState("");
+  const [phoneVerified, setPhoneVerified] = useState(false); // 인증 완료 여부를 저장하는 state 추가
   const [newPassword, setNewPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [passwordError, setPasswordError] = useState(false);
@@ -68,60 +69,57 @@ const FindPassword = () => {
       console.error(error);
     }
   };
-
   const handlePhoneAuthRequest = async () => {
     try {
       if (!phoneNo.startsWith('010')) {
         alert('휴대폰 번호는 010으로 시작해야 합니다.');
         return;
       }
-      // 휴대폰 번호 확인
-      const checkResponse = await axios.get(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneno/${phoneNo}`
-      );
-      // 휴대폰 번호가 데이터베이스에 없으면
-      if (!checkResponse.data) {
-        alert('존재하지 않는 휴대폰 번호입니다.');
-        return;
-      }
+           // 휴대폰 번호 확인
+           const checkResponse = await axios.get(
+            `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneno/${phoneNo}`
+          );
+          // 휴대폰 번호가 데이터베이스에 없으면
+          if (!checkResponse.data) {
+            alert('존재하지 않는 휴대폰 번호입니다.');
+            return;
+          }
       const response = await axios.post(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuth`,
-        phoneNo,
-        { withCredentials: true }
-      );
-      console.log('폰인증전 오는 데이터' + response.data);
-      if (response.data === false) {
-        console.log('폰인증후 오는 데이터' + response.data);
-        alert('인증번호가 발송되었습니다.'); //인증번호 발송 알림 추가
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  console.log(phoneNo);
-  const handlePhoneAuthVerify = async () => {
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneAuthOk`,
-        phoneAuthCode,
-        { withCredentials: true }
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneNo`,
+        {
+          phoneNo: phoneNo,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
 
-      if (response.data === true) {
-        // 인증 성공한 경우 처리
-        setPhoneAuthVerified(true);
-      } else {
-        // 인증 실패한 경우 처리
-        alert('인증번호가 일치하지 않습니다.');
-      }
+      // 핸드폰 인증 코드를 받아옴
+      const phoneAuthCode = response.data;
+      setPhoneAuthCode(phoneAuthCode);
+      alert("인증 코드가 핸드폰으로 발송되었습니다.");
     } catch (error) {
       console.error(error);
+      alert("인증 코드 발송에 실패했습니다. 다시 시도해 주세요.");
+    }
+  };
+
+  const handlePhoneVerification = () => {
+    console.log("서버코드" + phoneVerificationCode);
+    console.log("화면코드" + phoneAuthCode);
+    if (phoneVerificationCode === String(phoneAuthCode)) {
+      alert("인증이 완료되었습니다!");
+      setPhoneVerified(true);
+    } else {
+      alert("인증 코드가 올바르지 않습니다. 다시 확인해 주세요.");
     }
   };
 
   return (
     <>
-      <MainTop />
+      <CommonTop />
       <div style={{ color: 'black', marginTop: '100px' }}>
         휴대폰 인증 완료후 비밀번호 변경
       </div>
@@ -152,22 +150,22 @@ const FindPassword = () => {
         </Button>
         <TextField
           label="인증번호"
-          value={phoneAuthCode}
+          value={phoneVerificationCode}
           onChange={(e) => {
             const input = e.target.value;
             const regex = /^[0-9]{0,6}$/; // 0부터 9까지의 숫자로 이루어진 최대 6자리의 정규식 패턴
             if (regex.test(input)) {
-              setPhoneAuthCode(input);
+              setPhoneVerificationCode(input);
             }
           }}
         />
         <Button
-          onClick={handlePhoneAuthVerify}
-          disabled={!/^\d{6}$/.test(phoneAuthCode)}
+          onClick={handlePhoneVerification}
+          disabled={!/^\d{6}$/.test(phoneVerificationCode)}
         >
           인증번호 확인
         </Button>
-        {phoneAuthVerified && (
+        {phoneVerified && (
           <>
             <TextField
               type="password"
