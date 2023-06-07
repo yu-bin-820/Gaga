@@ -108,19 +108,14 @@ public class UserRestController {
 		
 		System.out.println("/rest/user/logout : DELETE 로그아웃 요청옴");
 		
-		session.removeAttribute("user");
+//		session.removeAttribute("user");
 		session.removeAttribute("access_token"); 	// 네이버/카카오 로그인 토큰 정보 제거
 		session.invalidate();
 	    Cookie[] cookies = request.getCookies();	// 쿠키 삭제
 	    if (cookies != null) {
-	    	for (Cookie cookie : cookies) {
-	            // JWT 토큰을 담고 있는 쿠키를 찾는다.
-	            if (cookie.getName().equals("JWT-TOKEN")) {
-	                cookie.setValue(null);
-	                cookie.setMaxAge(0);
-	                cookie.setPath("/");
-	                response.addCookie(cookie);
-	            }
+	        for (Cookie cookie : cookies) {
+	            cookie.setMaxAge(0);
+	            response.addCookie(cookie);
 	        }
 	    }
 	    System.out.println("로그아웃 완료");
@@ -192,7 +187,6 @@ public class UserRestController {
 	    String userId = (String) userInfoMap.get("id");
 	    // 아이디가 데이터베이스에 존재하는지 확인
 	    boolean isExistingUser = userService.checkDuplication(userId);
-	    System.out.println(isExistingUser+"존재하는가?");
 
 	    if (isExistingUser) {
 	        // 기존에 가입된 아이디인 경우, 로그인 처리
