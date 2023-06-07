@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router';
 import { useCallback } from 'react';
 import PeopleIcon from '@mui/icons-material/People';
+import { Place } from '@mui/icons-material';
 
 const StyledAvatarGroup = styled(AvatarGroup)({
   '& .MuiAvatar-root': {
@@ -50,11 +51,14 @@ const ClubThumbnail = ({ club }) => {
         minWidth: 295,
         padding: 1,
         backgroundColor: '#ffffff',
+        margin: 1,
       }}
     >
       <Stack spacing={0.8}>
         <Stack direction='row' spacing={2}>
           <ImageListItem
+            id={club.clubNo}
+            onClick={onClickClub}
             sx={{
               maxWidth: '100px',
               maxHeight: '100px',
@@ -85,10 +89,11 @@ const ClubThumbnail = ({ club }) => {
               {clubName}
             </Stack>
 
-            <Stack
-              sx={{ color: 'text.secondary', display: 'inline', fontSize: 12 }}
-            >
-              {clubRegion}
+            <Stack direction='row' spacing={1} alignItems={'center'}>
+              <Place />
+              <Typography sx={{ fontSize: 12, spacing: 1 }}>
+                {clubRegion}
+              </Typography>
             </Stack>
 
             <Stack direction='row' spacing={1} alignItems={'center'}>

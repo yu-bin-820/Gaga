@@ -1,9 +1,10 @@
-import { Button } from "@mui/material";
-import { Box } from "@mui/system";
-import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
-import { useNavigate, useParams } from "react-router";
+import { Button } from '@mui/material';
+import { Box } from '@mui/system';
+import axios from 'axios';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import { useNavigate, useParams } from 'react-router';
+import MeetingThumbnail from './MeetingThumnail';
 
 const ListMeetingParentClubNo = () => {
   const { clubNo } = useParams();
@@ -13,9 +14,7 @@ const ListMeetingParentClubNo = () => {
   useEffect(() => {
     axios
       .get(
-        `${
-          import.meta.env.VITE_SPRING_HOST
-        }/rest/meeting/list/clubno/${clubNo}`
+        `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/clubno/${clubNo}`
       )
       .then((response) => {
         console.log(response.data);
@@ -29,9 +28,7 @@ const ListMeetingParentClubNo = () => {
   useEffect(() => {
     axios
       .get(
-        `${
-          import.meta.env.VITE_SPRING_HOST
-        }/rest/meeting/list/clubno/${clubNo}`
+        `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/clubno/${clubNo}`
       )
       .then((response) => {
         console.log(response.data);
@@ -52,11 +49,11 @@ const ListMeetingParentClubNo = () => {
       <Box>
         {meetingList?.map((meeting, i) => (
           <Box key={i}>
-            <h5>{meeting.meetingName}</h5>
-            <h5>{meeting.state}</h5>
-            <Button id={meeting.meetingNo} onClick={onClickMeeting}>
-              미팅정보
-            </Button>
+            <MeetingThumbnail
+              meeting={meeting}
+              id={meeting.meetingNo}
+              onClick={onClickMeeting}
+            />
           </Box>
         ))}
       </Box>

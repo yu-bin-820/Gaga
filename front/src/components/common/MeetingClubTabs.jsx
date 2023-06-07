@@ -41,7 +41,7 @@ export default function MeetingClubTabs() {
             <ListMeeting />
           </TabPanel>
 
-          <TabPanel value='club'>
+          <TabPanel value='club' sx={{ padding: '0' }}>
             <ListClub />
           </TabPanel>
         </Box>
