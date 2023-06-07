@@ -8,6 +8,7 @@ import ListMyMeetingThumnail from './ListMyMeetingThumnail';
 import ListMyConfirmMeetingThumnail from './ListMyConfirmMeetingThumnail';
 import ListMySuccessMeeting from './ListMySuccessMeeting';
 import ListMyPendingMeetingThumnail from './ListMyPendingMeetingThumnail';
+import ListMeetingProfile from './ListMeetingProfile';
 
 const ListMyMeeting = () => {
     
@@ -20,9 +21,11 @@ const ListMyMeeting = () => {
         fetcher
         );
 
+    const isMyProfile = !(userNo);
+
     useEffect(()=>{
         axios
-            .get(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${userNo ? userNo: myData.userNo}`)
+            .get(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${userNo ? userNo: myData?.userNo}`)
             .then((response)=>{
                 console.log(response.data);
                 setMeetingList(response.data);
@@ -30,7 +33,7 @@ const ListMyMeeting = () => {
             .catch((error)=>{
                 console.log(error);
             });
-    },[userNo]);
+    },[userNo, myData]);
 
     return (
         <Box sx={{ marginBottom: '170px', backgroundColor: '#ededed' }}>
@@ -39,49 +42,45 @@ const ListMyMeeting = () => {
                 if (meeting.state === 2 && meeting.meetingSuccess === 1) {
                 return (
                     <Box key={i} sx={{ margin: '3px' }}>
-                    <ListMyConfirmMeetingThumnail meeting={meeting} />
+                    {!isMyProfile&&(<ListMeetingProfile meeting={meeting} />)}
+                    {isMyProfile&&(<ListMyConfirmMeetingThumnail meeting={meeting} />)}
                     </Box>
                 );
-                } else {
-                return null;
                 }
             })}
             <h5 style={{margin:'1px'}}>참여 신청 모임</h5>
             {meetingList?.map((meeting, i) => {
-                if (meeting.state === 1) {
+                if (meeting.state === 1 && meeting.meetingSuccess===1 ) {
                 return (
                     <Box key={i} sx={{ margin: '3px' }}>
+                    {!isMyProfile&&(<ListMeetingProfile meeting={meeting} />)}
                     <ListMyPendingMeetingThumnail meeting={meeting} />
                     </Box>
                 );
-                } else {
-                return null;
                 }
             })}
 
             <h5 style={{margin:'1px'}}>주최한 모임</h5>
             {meetingList?.map((meeting, i) => {
-                if (meeting.state === 0) {
+                if (meeting.state === 0 && meeting.meetingSuccess === 1) {
                 return (
                     <Box key={i} sx={{ margin: '3px' }}>
-                    <ListMyMeetingThumnail meeting={meeting} />
+                    {!isMyProfile&&(<ListMeetingProfile meeting={meeting} />)}
+                    {isMyProfile&&(<ListMyMeetingThumnail meeting={meeting} />)}
                     </Box>
                 );
-                } else {
-                return null;
                 }
             })}
 
             <h5>성사된 모임</h5>
             {meetingList?.map((meeting, i) => {
-                if (meeting.state === (2 || 3) && meeting.meetingSuccess === 2) {
+                if (meeting.state === ( 0|| 2 || 3) && meeting.meetingSuccess === 2) {
                 return (
                     <Box key={i} sx={{ margin: '3px' }}>
-                    <ListMySuccessMeeting meeting={meeting} />
+                    {!isMyProfile&&(<ListMeetingProfile />)}
+                    {isMyProfile&&(<ListMySuccessMeeting meeting={meeting} />)}
                     </Box>
                 );
-                } else {
-                return null;
                 }
             })}
 

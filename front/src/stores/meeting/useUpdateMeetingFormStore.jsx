@@ -2,28 +2,22 @@ import {create} from 'zustand';
 
 
 const meetingField={
-    mainCategoryNo: '',
-    filterTag: '',
     meetingName: '',
     meetingIntro: '',
     meetingImg: '',
     meetingDate: null,
     meetingStartTime: null,
     meetingEndTime: null,
-    meetingAddr: '',
-    meetingDetailAddr: '',
-    meetingLat: '',
-    meetingLng: '',
     filterGender: '',
     filterMinAge: '',
     filterMaxAge: '',
-    parentClubNo: null,
     meetingMaxMemberNo: null,
-    entryFee: 0,
+    meetingState: null,
     file: null,
     image: null,
 }
-const useMeetingFormStore=create((set=>({
+
+const useUpdateMeetingFormStore =create((set=>({
     ...meetingField,
 
     setField: (field, value)=> set((state)=>({[field]: value})),
@@ -34,4 +28,5 @@ const useMeetingFormStore=create((set=>({
 })))
 
 
-export default useMeetingFormStore;
+
+export default useUpdateMeetingFormStore;
