@@ -31,13 +31,17 @@ public interface AdminService {
 	
 	User getBlackList(int userNo) throws Exception;
 	
-	List<User> getBlackListList() throws Exception;
+	List<User> getBlackListList(int lastUserNo) throws Exception;
 	
-	List<User> searchUser(User user) throws Exception;
+	int getLatestUserNo()throws Exception;
 	
-	List<User> getUserList() throws Exception;
+	List<User> searchUser(String searchKeyword) throws Exception;
+	
+	List<User> getUserList(int lastUserNo) throws Exception;
 	
 	User getUser(int userNo) throws Exception;
+	
+	public List<User> searchBlackList(String searchKeyword);
 	
 	//신고게시판
 	//List<Report> getReportAdmin(int reportedNo) throws Exception;
