@@ -4,7 +4,7 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import ListMeeting from '@components/meeting/ListMeeting';
+import ListMeeting from '@components/meeting/map/ListMeeting';
 import ListClub from '@components/club/ListClub';
 import useCommonStore from '@stores/common/useCommonStore';
 
@@ -41,7 +41,7 @@ export default function MeetingClubTabs() {
             <ListMeeting />
           </TabPanel>
 
-          <TabPanel value='club'>
+          <TabPanel value='club' sx={{ padding: '0' }}>
             <ListClub />
           </TabPanel>
         </Box>

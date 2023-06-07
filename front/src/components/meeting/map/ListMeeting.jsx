@@ -5,9 +5,9 @@ import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Map } from "react-kakao-maps-sdk";
 import useSWR from "swr";
-import EventMarkerContainer from "./map/EventMarkerContainer";
-import ListMeetingChip from "./map/ListMeetingChip";
-import ListMeetingSearchBar from "./map/ListMeetingSearchBar";
+import EventMarkerContainer from "./EventMarkerContainer";
+import ListMeetingChip from "./ListMeetingChip";
+import ListMeetingSearchBar from "./ListMeetingSearchBar";
 
 
 const ListMeeting = () => {

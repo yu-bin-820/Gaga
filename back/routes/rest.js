@@ -841,6 +841,8 @@ router.post('/chat/direct/message', async (req, res, next) => {
       receiver_no: req.body.receiverNo,
       content: req.body.content,
       content_type_no: req.body.contentTypeNo,
+      lat: req.body.lat,
+      lng: req.body.lng,
     });
     const directMessageWithSender = await DirectMessage.findOne({
       where: { message_no: directMessage.message_no },

@@ -1,11 +1,11 @@
-import { AppBar, Button, Divider, IconButton, List, ListItem, SwipeableDrawer, Toolbar, Typography } from '@mui/material';
+import { AppBar, Button, Divider, Grid, IconButton, List, ListItem, SwipeableDrawer, Toolbar, Typography } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import React, { useCallback, useState } from 'react';
 import Container from '@mui/material/Container';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 import { useNavigate, useParams } from 'react-router';
-import { Box } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import DeleteMeetingDialog from '@components/meeting/DeleteMeetingDialog';
 
 const GetMeetingTop = () => {
@@ -68,16 +68,16 @@ const onClickDeleteSelect = useCallback(() => {
       >
         <Box sx={{ minWidth: '300px' }}>
           <List>
-            <ListItem>
+            <ListItem sx={{ display: 'flex', justifyContent: 'center'}}>
               <Button 
-              variant="contained"
-              onClick={onClickUpdate}>수정하기</Button>
+              onClick={onClickUpdate}
+              sx={{minWidth: '100vw'}}>수정하기</Button>
             </ListItem>
-            <Divider />
-            <ListItem>
+            <Divider sx={{minWidth: '100vw'}} />
+            <ListItem sx={{ display: 'flex', justifyContent: 'center'}}>
               <Button 
-              variant="contained"
-              onClick={onClickDeleteSelect}>삭제하기</Button>
+              onClick={onClickDeleteSelect}
+              sx={{minWidth: '100vw'}}>삭제하기</Button>
             </ListItem>
           </List>
         </Box>

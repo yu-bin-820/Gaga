@@ -32,6 +32,8 @@ const MyProfileTop = () => {
 
   const [settingsMenuOpen, setSettingsMenuOpen] = useState(false);
 
+  const isAdmin = myData?.role == 1;
+
   const onClickLogOut = useCallback(async () => {
     await axios
       .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/user/logout`, {
@@ -97,10 +99,7 @@ const MyProfileTop = () => {
             disableGutters
             sx={{ display: 'flex', justifyContent: 'space-between' }}
           >
-            <Button sx={{ marginLeft: 'auto' }} onClick={onClickLogOut}>
-              Logout
-            </Button>
-            <IconButton sx={{ marginRight: '-10px' }} onClick={onClickSettings}>
+            <IconButton sx={{ marginLeft: 'auto' }} onClick={onClickSettings}>
               <SettingsIcon />
             </IconButton>
           </Toolbar>
@@ -202,14 +201,29 @@ const MyProfileTop = () => {
               />
             </ListItem>
             <Divider />
+            {isAdmin && (
+              <>
+                <ListItem
+                  sx={{ marginTop: '10px', marginBottom: '10px' }}
+                  onClick={onClickListBlackList}
+                >
+                  <ListItemText
+                    sx={{ display: 'flex', justifyContent: 'center' }}
+                    primary="블랙리스트"
+                  />
+                </ListItem>
+
+                <Divider />
+              </>
+            )}
 
             <ListItem
               sx={{ marginTop: '10px', marginBottom: '10px' }}
-              onClick={onClickListBlackList}
+              onClick={onClickLogOut}
             >
               <ListItemText
                 sx={{ display: 'flex', justifyContent: 'center' }}
-                primary="블랙리스트"
+                primary="로그아웃"
               />
             </ListItem>
             <Divider />

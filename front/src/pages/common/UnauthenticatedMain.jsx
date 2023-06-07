@@ -64,7 +64,7 @@ const UnauthenticatedMain = () => {
               onClick={onClickLogin}
               sx={{ width: '85vw' }}
             >
-              LogIn
+              로그인 후 가가 서비스 이용하기
             </Button>
           )}
           {myData && !myData?.profileImg && (
@@ -73,7 +73,7 @@ const UnauthenticatedMain = () => {
               onClick={onClickRegistProfile}
               sx={{ width: '85vw' }}
             >
-              profileImg등록
+              프로필 사진 등록 후 가가 서비스 이용하기
             </Button>
           )}
         </Box>
