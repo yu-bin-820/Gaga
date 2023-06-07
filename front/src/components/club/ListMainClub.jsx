@@ -16,7 +16,7 @@ import {
 import fetcher from '@utils/fetcher';
 
 const NumberButton = ({ number, handleClick, renderButton }) => (
-  <Stack alignItems="center" justifyContent="center" sx={{ width: '33%' }}>
+  <Stack alignItems='center' justifyContent='center' sx={{ width: '33%' }}>
     <Button
       key={number}
       onClick={() => handleClick(number)}
@@ -131,7 +131,7 @@ const ListMainClub = () => {
       <Stack>
         <Stack>
           <Stack sx={{ marginTop: '56px', paddingLeft: '15px' }}>
-            <Stack direction="row" alignItems="center">
+            <Stack direction='row' alignItems='center'>
               {[1, 2, 3].map((number) => (
                 <NumberButton
                   key={number}
@@ -141,7 +141,7 @@ const ListMainClub = () => {
                 />
               ))}
             </Stack>
-            <Stack direction="row" alignItems="center">
+            <Stack direction='row' alignItems='center'>
               {[4, 5, 6].map((number) => (
                 <NumberButton
                   key={number}
@@ -169,9 +169,6 @@ const ListMainClub = () => {
           {clubList?.map((club, i) => (
             <Stack key={i}>
               <ClubThumbnail club={club} />
-              <Button id={club.clubNo} onClick={onClickClub}>
-                클럽정보
-              </Button>
             </Stack>
           ))}
         </Stack>
