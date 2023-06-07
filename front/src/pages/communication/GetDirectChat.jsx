@@ -72,7 +72,7 @@ const GetDirectChat = () => {
         <Box sx={{ position: 'fixed', bottom: 65, left: 0, right: 0 }}>
           <DirectChatBox
             senderNo={myData?.userNo}
-            receiverNo={chatRoomEntryNo}
+            receiverNo={parseInt(chatRoomEntryNo)}
             mutateDirectMessages={mutateDirectMessages}
           />
         </Box>

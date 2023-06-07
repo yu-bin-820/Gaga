@@ -32,6 +32,9 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ClearIcon from '@mui/icons-material/Clear';
 import axios from 'axios';
 import useInputOrigin from '@hooks/common/useInputOrigin';
+import LocationDrawer from './LocationDrawer';
+import useChatMapStore from '@stores/communication/useChatMapStore';
+import DirectLocationDrawer from './DirectLocationDrawer';
 
 const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
   const [chat, onChangeChat, setChat] = useInputOrigin('');
@@ -40,6 +43,19 @@ const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [uploadChatImgDialogOpen, setUploadChatImgDialogOpen] = useState(false);
+
+  const { setField } = useChatMapStore();
+
+  const postPath = `${
+    import.meta.env.VITE_EXPRESS_HOST
+  }/rest/chat/direct/message`;
+
+  const toggleLocationDrawer = useCallback(
+    (state) => () => {
+      setField('locationDrawerOpen', state);
+    },
+    [setField]
+  );
 
   const open = Boolean(anchorEl);
 
@@ -70,9 +86,7 @@ const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
       if (chat?.trim()) {
         axios
           .post(
-            `${
-              import.meta.env.VITE_EXPRESS_HOST
-            }/rest/chat/direct/message`,
+            `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/direct/message`,
             {
               senderNo: senderNo,
               receiverNo: receiverNo,
@@ -107,8 +121,6 @@ const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
 
   const onClickChat = useCallback(
     (e) => {
-      console.log(e);
-
       e.preventDefault();
       onSubmitForm(e);
     },
@@ -123,8 +135,7 @@ const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
 
     axios
       .post(
-        `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/
-         direct/image`,
+        `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/direct/image`,
         formData,
         { withCredentials: true }
       )
@@ -140,7 +151,11 @@ const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
         setAnchorEl(null);
       });
   }, [selectedFile, setUploadChatImgDialogOpen, senderNo, receiverNo]);
-
+  const onClickLocationMenu = useCallback(() => {
+    handleClose();
+    setField('isPost', true);
+    setField('locationDrawerOpen', true);
+  }, [setField]);
   return (
     <Box>
       <Stack
@@ -209,7 +224,7 @@ const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
           </Button>
         </MenuItem>
 
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={onClickLocationMenu}>
           <Button
             startIcon={<LocationOnIcon />}
             color="primary"
@@ -280,6 +295,12 @@ const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
           <Button onClick={submitUploadChatImgDialog}>전송</Button>
         </DialogActions>
       </Dialog>
+      <DirectLocationDrawer
+        toggleLocationDrawer={toggleLocationDrawer}
+        postPath={postPath}
+        senderNo={senderNo}
+        receiverNo={receiverNo}
+      />
     </Box>
   );
 };
