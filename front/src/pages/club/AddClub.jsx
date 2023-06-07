@@ -40,8 +40,6 @@ const AddClub = () => {
         return <AddClubFilter />;
       case 6:
         return <AddClubMaxMember />;
-      case 7:
-        return <AddClub1 />;
       default:
         throw new Error('Unknown step');
     }
@@ -53,7 +51,7 @@ const AddClub = () => {
       <Box sx={{ marginTop: '64px' }}>
         <MobileStepper
           variant='progress'
-          steps={6}
+          steps={7}
           position='static'
           activeStep={activeStep}
           sx={{ maxWidth: 400, flexGrow: 1 }}
@@ -61,7 +59,7 @@ const AddClub = () => {
             <Button
               size='small'
               onClick={handleNext}
-              disabled={activeStep === 5}
+              disabled={activeStep === 6}
             >
               Next
               {theme.direction === 'rtl' ? (

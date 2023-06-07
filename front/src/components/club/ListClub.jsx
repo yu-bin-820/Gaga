@@ -60,7 +60,6 @@ const ListClub = () => {
                 <Button id={club.clubNo} onClick={onClickClub}></Button>
               </Box>
             ))}
-            <Refund />
           </Box>
         </Box>
       </Box>

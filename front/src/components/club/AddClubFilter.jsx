@@ -20,7 +20,7 @@ const AddClubFilter = () => {
     (filterMinAge, filterMaxAge) => {
       setField('filterMinAge', filterMinAge);
       setField('filterMaxAge', filterMaxAge);
-      console.log(filterMaxAge);
+      console.log(filterMinAge, filterMaxAge);
     },
     [setField]
   );

@@ -46,7 +46,16 @@ const AddClubImg = () => {
             height: '95px',
           }}
           size='large'
-        ></Button>
+        >
+          <input
+            hidden
+            accept='image/*'
+            type='file'
+            id='file'
+            name='clubImg'
+            onChange={onChangeImg}
+          />
+        </Button>
         <ImageListItem>
           {image && (
             <img src={image} style={{ width: '90px', height: '90px' }} />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Button,
   FormControl,
@@ -7,17 +7,18 @@ import {
   MenuItem,
   Select,
   TextField,
-} from "@mui/material";
-import { Box } from "@mui/system";
-import axios from "axios";
-import useClubFormStore from "@hooks/club/useClubFormStore";
+} from '@mui/material';
+import { Box, Stack } from '@mui/system';
+import axios from 'axios';
+import useClubFormStore from '@hooks/club/useClubFormStore';
+import PlaceIcon from '@mui/icons-material/Place';
 
 const AddClubRegionTest = () => {
   const [sidoOptions, setSidoOptions] = useState([]);
   const [sigoonOptions, setSigoonOptions] = useState([]);
-  const [selectedSido, setSelectedSido] = useState("");
-  const [selectedSigoon, setSelectedSigoon] = useState("");
-  const [finalValue, setFinalValue] = useState("");
+  const [selectedSido, setSelectedSido] = useState('');
+  const [selectedSigoon, setSelectedSigoon] = useState('');
+  const [finalValue, setFinalValue] = useState('');
   const { clubRegion, onChangeField, setClubRegion } = useClubFormStore();
 
   const hasValuesBeenSet = useRef(false);
@@ -25,7 +26,7 @@ const AddClubRegionTest = () => {
   useEffect(() => {
     if (
       !hasValuesBeenSet.current ||
-      (typeof finalValue !== "undefined" && finalValue !== clubRegion)
+      (typeof finalValue !== 'undefined' && finalValue !== clubRegion)
     ) {
       setClubRegion(finalValue);
       hasValuesBeenSet.current = true;
@@ -33,7 +34,7 @@ const AddClubRegionTest = () => {
   }, [finalValue, clubRegion, setClubRegion]);
 
   useEffect(() => {
-    if (typeof finalValue !== "undefined" && finalValue !== clubRegion) {
+    if (typeof finalValue !== 'undefined' && finalValue !== clubRegion) {
       setClubRegion(finalValue);
     }
   }, [finalValue, clubRegion, setClubRegion]);
@@ -42,10 +43,10 @@ const AddClubRegionTest = () => {
     axios
       .get(`${import.meta.env.VITE_SPRING_HOST}/rest/club/region/sigu`)
       .then((response) => {
-        let options = [{ value: "", label: "시도선택" }];
+        let options = [{ value: '', label: '시도선택' }];
         response.data.response.result.featureCollection.features.forEach(
           (f) => {
-            console.log("f:", f);
+            console.log('f:', f);
             let 행정구역코드 = f.properties.ctprvn_cd;
             let 행정구역명 = f.properties.ctp_kor_nm;
             options.push({
@@ -57,7 +58,7 @@ const AddClubRegionTest = () => {
         setSidoOptions(options);
       })
       .catch((error) => {
-        console.error("error:", error);
+        console.error('error:', error);
       });
   }, []);
 
@@ -71,7 +72,7 @@ const AddClubRegionTest = () => {
         }/rest/club/region/sigungu/${selectedSido}`
       )
       .then((response) => {
-        let options = [{ value: "", label: "시군구선택" }];
+        let options = [{ value: '', label: '시군구선택' }];
         response.data.response.result.featureCollection.features.forEach(
           (f) => {
             let 행정구역코드 = f.properties.sig_cd;
@@ -100,19 +101,19 @@ const AddClubRegionTest = () => {
   };
 
   const handleChooseClick = () => {
-    let selectedTextOne = "";
-    let selectedTextTwo = "";
+    let selectedTextOne = '';
+    let selectedTextTwo = '';
 
     if (selectedSido) {
       selectedTextOne =
         sidoOptions.find((option) => option.value === selectedSido)?.label ||
-        "";
+        '';
     }
 
     if (selectedSigoon) {
       selectedTextTwo =
         sigoonOptions.find((option) => option.value === selectedSigoon)
-          ?.label || "";
+          ?.label || '';
     }
 
     let finalValue = `${selectedTextOne} ${selectedTextTwo}`;
@@ -122,63 +123,63 @@ const AddClubRegionTest = () => {
 
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <FormControl fullWidth>
-            <InputLabel id="sido-select-label">시도 선택</InputLabel>
-            <Select
-              labelId="sido-select-label"
-              value={selectedSido}
-              onChange={handleSidoChange}
-              label="시도 선택"
-            >
-              {sidoOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-
-        <Grid item xs={12}>
-          <FormControl fullWidth>
-            <InputLabel id="sigoon-select-label">
-              시군구 선택(미선택시 시도전체)
-            </InputLabel>
-            <Select
-              labelId="sigoon-select-label"
-              value={selectedSigoon}
-              onChange={handleSigoonChange}
-              label="시군구 선택(미선택시 시도전체)"
-            >
-              {sigoonOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Button onClick={handleChooseClick} variant="contained">
-            선택
-          </Button>
-        </Grid>
-
-        <Grid item xs={12}>
+      <Box sx={{ margin: '5px' }}>
+        <h5>지역은 어디인가요? </h5>
+        <Stack sx={{ marginLeft: '15px', marginRight: '20px' }}>
+          <PlaceIcon />
           <TextField
             fullWidth
-            label="clubRegion"
-            name="clubRegion"
-            onChange={(e) => onChangeField("clubRegion", e)}
-            placeholder="Please enter text"
+            name='clubRegion'
+            onChange={(e) => onChangeField('clubRegion', e)}
+            placeholder='예시: 서울특별시 강남구'
             required
+            variant='standard'
             value={finalValue}
           />
-        </Grid>
-      </Grid>
+          <Box width='45%'>
+            <FormControl fullWidth>
+              <InputLabel id='sido-select-label'>시도 선택</InputLabel>
+              <Select
+                labelId='sido-select-label'
+                value={selectedSido}
+                onChange={handleSidoChange}
+                label='시도 선택'
+              >
+                {sidoOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+          <Box width='45%'>
+            <FormControl fullWidth>
+              <InputLabel id='sigoon-select-label'>
+                시군구 선택(미선택시 시도전체)
+              </InputLabel>
+              <Select
+                labelId='sigoon-select-label'
+                value={selectedSigoon}
+                onChange={handleSigoonChange}
+                label='시군구 선택(미선택시 시도전체)'
+              >
+                {sigoonOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+
+          <Grid item xs={12}>
+            <Button onClick={handleChooseClick} variant='contained'>
+              선택
+            </Button>
+          </Grid>
+        </Stack>
+      </Box>
     </>
   );
 };

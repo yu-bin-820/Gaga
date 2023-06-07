@@ -10,15 +10,6 @@ import useSWR from 'swr';
 
 const AddClub1 = () => {
   const [alignment, setAlignment] = useState('left');
-  const [showEntryFee, setShowEntryFee] = useState(false);
-
-  const handleAlignment = (event, newAlignment) => {
-    setAlignment(newAlignment);
-    setShowEntryFee(newAlignment === 'right');
-    if (newAlignment === 'left') {
-      setField('entryFee', '0');
-    }
-  };
 
   const {
     mainCategoryNo,
