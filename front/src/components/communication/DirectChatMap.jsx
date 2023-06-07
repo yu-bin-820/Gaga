@@ -9,7 +9,7 @@ import useChatMapStore from '@stores/communication/useChatMapStore';
 
 const { kakao } = window;
 
-const ChatMap = ({ postPath, senderNo, groupNo }) => {
+const DirectChatMap = ({ postPath, senderNo, receiverNo }) => {
   const { setField, lat, lng, isPost } = useChatMapStore();
   const [map, setMap] = useState(null);
 
@@ -85,7 +85,7 @@ const ChatMap = ({ postPath, senderNo, groupNo }) => {
           postPath,
           {
             senderNo: senderNo,
-            groupNo: groupNo,
+            receiverNo: receiverNo,
             content: markerContent,
             contentTypeNo: 3,
             lat: markerLat,
@@ -99,7 +99,7 @@ const ChatMap = ({ postPath, senderNo, groupNo }) => {
     }
   }, [
     senderNo,
-    groupNo,
+    receiverNo,
     markerContent,
     postPath,
     setField,
@@ -171,10 +171,10 @@ const ChatMap = ({ postPath, senderNo, groupNo }) => {
   );
 };
 
-ChatMap.propTypes = {
+DirectChatMap.propTypes = {
   postPath: PropTypes.string,
   senderNo: PropTypes.number,
-  groupNo: PropTypes.number,
+  receiverNo: PropTypes.number,
 };
 
-export default ChatMap;
+export default DirectChatMap;

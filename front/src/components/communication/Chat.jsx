@@ -62,7 +62,7 @@ const Chat = ({ data }) => {
               src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
                 data?.Sender.profile_img
               }`}
-              alt='Remy Sharp'
+              alt="Remy Sharp"
               sx={{ marginLeft: '10px' }}
             />
           )}
@@ -71,7 +71,7 @@ const Chat = ({ data }) => {
 
             <Stack direction={'row'} sx={{ maxWidth: '78vw' }}>
               {isMe && (
-                <Stack marginTop='auto'>
+                <Stack marginTop="auto">
                   <Typography
                     sx={{
                       fontSize: 12,
@@ -95,7 +95,7 @@ const Chat = ({ data }) => {
 
               {data.content_type_no == 1 && (
                 <Typography
-                  component='div'
+                  component="div"
                   sx={{
                     backgroundColor: `${messageBackColor}`,
                     color: `${messageColor}`,
@@ -118,8 +118,8 @@ const Chat = ({ data }) => {
                   src={`${import.meta.env.VITE_EXPRESS_HOST}/uploads/${
                     data.content
                   }`}
-                  alt='error'
-                  loading='lazy'
+                  alt="error"
+                  loading="lazy"
                   style={{
                     maxHeight: '200px',
                     maxWidth: '200px',
@@ -154,7 +154,7 @@ const Chat = ({ data }) => {
               )}
 
               {!isMe && (
-                <Stack marginTop='auto'>
+                <Stack marginTop="auto">
                   <Typography sx={{ fontSize: 12, color: 'grey' }}>
                     {sendTime}
                   </Typography>

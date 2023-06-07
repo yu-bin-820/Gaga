@@ -42,7 +42,7 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [uploadChatImgDialogOpen, setUploadChatImgDialogOpen] = useState(false);
-  const { locationDrawerOpen, isPost, setField } = useChatMapStore();
+  const { locationDrawerOpen, setField } = useChatMapStore();
   const open = Boolean(anchorEl);
   const postPath = `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/${
     groupType == 2 ? 'meeting' : 'club'

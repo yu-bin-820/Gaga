@@ -1,32 +1,47 @@
 import useInput from '@hooks/common/useInput';
-import { Avatar, Button, ImageListItem, TextField } from '@mui/material';
+import { Avatar, Button, ImageListItem, MobileStepper, TextField } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
+import useUpdateMeetingFormStore from '@stores/meeting/useUpdateMeetingFormStore';
+import UpdateMeetingName from '@components/meeting/UpdateMeetingName';
+import { useTheme } from '@emotion/react';
+import CommonTop from '@layouts/common/CommonTop';
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
+import UpdateMeetingImg from '@components/meeting/UpdateMeetingImg';
+import UpdateMeetingDate from '@components/meeting/UpdateMeetingDate';
+import dayjs from 'dayjs';
+import UpdateMeetingFilter from '@components/meeting/UpdateMeetingFilter';
+import UpdateMeetingMaxMember from '@components/meeting/UpdateMeetingMaxMember';
+import UpdateMeetingState from '@components/meeting/UpdateMeetingState';
 
 const UpdateMeeting = () => {
   const { meetingno } = useParams();
-  const [meeting, onChangeMeeting, setMeeting] = useInput({
-    meetingName: '',
-    meetingIntro: '',
-    meetingImg: '',
-    meetingDate: '',
-    meetingStartTime: '',
-    meetingEndTime: '',
-    filterGender: '',
-    filterMinAge: '',
-    filterMaxAge: '',
-    meetingState: '',
-    meetingMaxMemberNo: '',
-    meetingNo: '',
-  });
+  const {
+    meetingName,
+    meetingIntro,
+    meetingImg,
+    meetingDate,
+    meetingStartTime,
+    meetingEndTime,
+    filterGender,
+    filterMinAge,
+    filterMaxAge,
+    meetingMaxMemberNo,
+    meetingState,
+    file,
+    image,
+    setField,
+    onChangeField,
+  } =useUpdateMeetingFormStore();
+
 
   const [selectedImage, setSelectedImage] = useState(
-    meeting?.meetingImg
+    meetingImg
       ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
-          meeting?.meetingImg
+          meetingImg
         }`
       : null
   );
@@ -43,7 +58,17 @@ const UpdateMeeting = () => {
       .get(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${meetingno}`)
       .then((response) => {
         console.log(response.data);
-        setMeeting(response.data);
+        setField('meetingName', response.data.meetingName);
+        setField('meetingIntro', response.data.meetingIntro);
+        setField('meetingImg', response.data.meetingImg);
+        setField('meetingDate', dayjs(response.data.meetingDate));
+        setField('meetingStartTime', dayjs(response.data.meetingDate+'T'+response.data.meetingStartTime));
+        setField('meetingEndTime', dayjs(response.data.meetingDate+'T'+response.data.meetingEndTime));
+        setField('filterGender', response.data.filterGender);
+        setField('filterMinAge', response.data.filterMinAge);
+        setField('filterMaxAge', response.data.filterMaxAge);
+        setField('meetingMaxMemberNo', response.data.meetingMaxMemberNo);
+        setField('meetingState', response.data.meetingState);
       })
       .catch((error) => {
         console.log(error);
@@ -59,20 +84,19 @@ const UpdateMeeting = () => {
       const formData = new FormData();
 
       formData.append('file', selectedFile);
-      formData.append('meetingName', meeting.meetingName);
-      formData.append('meetingIntro', meeting.meetingIntro);
-      formData.append('meetingDate', meeting.meetingDate);
-      formData.append('meetingStartTime', meeting.meetingStartTime);
-      formData.append('meetingEndTime', meeting.meetingEndTime);
-      formData.append('filterGender', meeting.filterGender);
-      formData.append('filterMinAge', meeting.filterMinAge);
-      formData.append('filterMaxAge', meeting.filterMaxAge);
-      formData.append('meetingMaxMemberNo', meeting.meetingMaxMemberNo);
-      formData.append('entryFee', meeting.entryFee);
-      formData.append('meetingState', meeting.meetingState);
+      formData.append('meetingName', meetingName);
+      formData.append('meetingIntro', meetingIntro);
+      formData.append('meetingDate', meetingDate);
+      formData.append('meetingStartTime', meetingStartTime);
+      formData.append('meetingEndTime', meetingEndTime);
+      formData.append('filterGender', filterGender);
+      formData.append('filterMinAge', filterMinAge);
+      formData.append('filterMaxAge', filterMaxAge);
+      formData.append('meetingMaxMemberNo', meetingMaxMemberNo);
+      formData.append('meetingState', meetingState);
       formData.append('meetingNo', meetingno);
 
-      console.log(meeting.meetingDate);
+      console.log(meetingDate);
 
       console.log(formData);
 
@@ -85,105 +109,177 @@ const UpdateMeeting = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [meeting, selectedFile, meetingno, navigate]);
+  }, [meetingno, navigate]);
 
+  const theme = useTheme();
+  const [activeStep, setActiveStep] = useState(0);
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return <UpdateMeetingName />;
+      case 1:
+        return <UpdateMeetingImg />;
+      case 2:
+        return <UpdateMeetingDate />;
+      case 3:
+        return <UpdateMeetingFilter />;
+      case 4:
+        return <UpdateMeetingMaxMember />;
+      case 5:
+        return <UpdateMeetingState />;
+      default:
+        throw new Error('Unknown step');
+    }
+  }
   return (
+    <>
+          <CommonTop />
+      <Box sx={{ marginTop: '64px'}}>
+        <MobileStepper
+          variant="progress"
+          steps={9}
+          position="static"
+          activeStep={activeStep}
+          sx={{ maxWidth: 500, flexGrow: 1 }}
+          nextButton={
+            <Button
+              size="small"
+              onClick={handleNext}
+              disabled={activeStep === 6}
+            >
+              Next
+              {theme.direction === 'rtl' ? (
+                <KeyboardArrowLeft />
+              ) : (
+                <KeyboardArrowRight />
+              )}
+            </Button>
+          }
+          backButton={
+            <Button
+              size="small"
+              onClick={handleBack}
+              disabled={activeStep === 0}
+            >
+              {theme.direction === 'rtl' ? (
+                <KeyboardArrowRight />
+              ) : (
+                <KeyboardArrowLeft />
+              )}
+              Back
+            </Button>
+          }
+        />
+        <React.Fragment>
+          {getStepContent(activeStep)}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}></Box>
+        </React.Fragment>
+      </Box>
     <Box sx={{ marginTop: '64px' }}>
       <TextField
         fulWidth
         label="meetingName"
         name="meetingName"
-        onChange={onChangeMeeting}
+        onChange={(e)=>onChangeField('meetingName',e)}
         required
-        value={meeting.meetingName}
+        value={meetingName}
       />
       <TextField
         fulWidth
         label="meetingIntro"
         name="meetingIntro"
-        onChange={onChangeMeeting}
+        onChange={(e)=>onChangeField('meetingIntro',e)}
         required
-        value={meeting.meetingIntro}
+        value={meetingIntro}
       />
       <TextField
         fulWidth
         label="meetingImg"
         name="meetingImg"
-        onChange={onChangeMeeting}
+        onChange={(e)=>onChangeField('meetingImg',e)}
         required
-        value={meeting.meetingImg}
+        value={meetingImg}
       />
       <TextField
         fulWidth
         label="filterGender"
         name="filterGender"
-        onChange={onChangeMeeting}
+        onChange={(e)=>onChangeField('filterGender',e)}
         required
-        value={meeting.filterGender}
+        value={filterGender}
       />
       <TextField
         fulWidth
         label="meetingDate"
         name="meetingDate"
-        onChange={onChangeMeeting}
+        onChange={(e)=>onChangeField('meetingDate',e)}
         required
-        value={meeting.meetingDate}
+        value={meetingDate}
       />
       <TextField
         fulWidth
         label="meetingStartTime"
         name="meetingStartTime"
-        onChange={onChangeMeeting}
+        onChange={(e)=>onChangeField('meetingStartTime',e)}
         required
-        value={meeting.meetingStartTime}
+        value={meetingStartTime}
       />
       <TextField
         fulWidth
         label="meetingEndTime"
         name="meetingEndTime"
-        onChange={onChangeMeeting}
+        onChange={(e)=>onChangeField('meetingEndTime',e)}
         required
-        value={meeting.meetingEndTime}
+        value={meetingEndTime}
       />
       <TextField
         fulWidth
         label="meetingMaxMemberNo"
         name="meetingMaxMemberNo"
-        onChange={onChangeMeeting}
+        onChange={(e)=>onChangeField('meetingMaxMemberNo',e)}
         required
-        value={meeting.meetingMaxMemberNo}
+        value={meetingMaxMemberNo}
       />
       <TextField
         fulWidth
         label="meetingState"
         name="meetingState"
-        onChange={onChangeMeeting}
+        onChange={(e)=>onChangeField('meetingState',e)}
         required
-        value={meeting.meetingState}
+        value={meetingState}
       />
       <TextField
         fulWidth
         label="filterMinAge"
         name="filterMinAge"
-        onChange={onChangeMeeting}
+        onChange={(e)=>onChangeField('filterMinAge',e)}
         required
-        value={meeting.filterMinAge}
+        value={filterMinAge}
       />
       <TextField
         fulWidth
         label="filterMaxAge"
         name="filterMaxAge"
-        onChange={onChangeMeeting}
+        onChange={(e)=>onChangeField('filterMaxAge',e)}
         required
-        value={meeting.filterMaxAge}
+        value={filterMaxAge}
       />
       <TextField
         fulWidth
         label="meetingNo"
         name="meetingNo"
-        onChange={onChangeMeeting}
+        onChange={(e)=>onChangeField('meetingNo',e)}
         required
-        value={meeting.meetingNo}
+        value={meetingno}
       />
       <Stack direction="row" spacing={2} alignItems={'center'} marginLeft="5px">
         <Button
@@ -221,6 +317,7 @@ const UpdateMeeting = () => {
       </Stack>
       <Button onClick={handleSubmit}>수정하기</Button>
     </Box>
+    </>
   );
 };
 

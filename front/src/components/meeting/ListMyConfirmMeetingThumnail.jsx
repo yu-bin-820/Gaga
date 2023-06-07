@@ -36,7 +36,7 @@ const ListMyConfirmMeetingThumnail = ({ meeting }) => {
         setField('chatType',2);
         setField('chatRoomLeader',meeting.meetingLeaderNo)
         navigate(`/chat/group/message/list`);
-    },[]);
+    },[meetingNo, meeting, setField, navigate]);
 
     return (
         <div>

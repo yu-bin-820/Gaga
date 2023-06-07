@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router';
 import useSWR from 'swr';
 
 const AddMeeting1 = () => {
-  const [alignment, setAlignment] = useState("left");
+  const [alignment, setAlignment] = useState(null);
   const [showEntryFee, setShowEntryFee] = useState(false);
 
   const handleAlignment = (event, newAlignment) => {

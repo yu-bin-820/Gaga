@@ -81,6 +81,7 @@ export default function ListChatRoom() {
   );
 
   console.log(groupsData);
+  console.log(directListData);
   if (!directListData) {
     return <>로딩</>;
   }
@@ -200,9 +201,9 @@ export default function ListChatRoom() {
                       import.meta.env.VITE_EXPRESS_HOST
                     }/uploads/user_alt.jpg`}
                     title={
-                      direct.receiver_no === myData?.userNo
-                        ? direct.Sender?.nick_name
-                        : direct.Receiver?.nick_name
+                      direct.receiver_no == myData?.userNo
+                        ? direct.Receiver?.nick_name
+                        : direct.Sender?.nick_name
                     }
                     subtitle={direct.content}
                     date={new Date(direct.created_at)}
