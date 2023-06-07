@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Button, TextField, Box, Stack, Typography, List, ListItem, ListItemText, Divider } from '@mui/material';
 
 import CommonTop from '@layouts/common/CommonTop';
-
+import AdminTabs from '@components/admin/AdminTabs'; 
 function ListEventPost() {
   const [noticePosts, setNoticePosts] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -35,7 +35,6 @@ function ListEventPost() {
       }
     }
     fetchLatestPostId();
-    fetchEventPosts();
   }, []);
 
   const fetchEventPosts = async (lastPostId = null) => {
@@ -51,6 +50,7 @@ function ListEventPost() {
 
       const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getNoticePostListByCategoryNo`, {
         params,
+
       });
 
       const newNoticePosts = response.data;
@@ -101,6 +101,7 @@ function ListEventPost() {
   return (
     <Box sx={{ marginTop: '64px', marginLeft: '10px', marginRight: '10px' }}>
       <CommonTop pageName="이벤트" prevPath="/community/profile/mine" />
+      <AdminTabs />
       <Stack spacing={2.5}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem', alignItems: 'center' }}>
           <TextField type="text" value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} onKeyPress={handleKeyPress} style={{ marginRight: '0.5rem' }} />

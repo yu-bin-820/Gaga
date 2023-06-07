@@ -5,14 +5,10 @@ import ChatIcon from '@mui/icons-material/Chat';
 import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 import SmartToyOutlinedIcon from '@mui/icons-material/SmartToyOutlined';
+import Chatbot from '@components/chatbot/ChatBot';
 const ChatBotButton = () => {
   return (
-    <Fab
-      color="primary"
-      sx={{ position: 'fixed', bottom: '4.5rem', right: '1.1rem' }}
-    >
-      <SmartToyOutlinedIcon />
-    </Fab>
+    <Chatbot />
   );
 };
 
