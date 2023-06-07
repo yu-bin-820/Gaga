@@ -1,7 +1,7 @@
 import fetcher from "@utils/fetcher";
 import useSWR from "swr";
 import axios from "axios";
-import React, { useCallback, useState,useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import dayjs from "dayjs";
 import MenuItem from "@mui/material/MenuItem";
 import {
@@ -26,13 +26,30 @@ import UpdateUserDate from "@components/user/UpdateUserDate";
 
 const UpdateUser = () => {
   const {
+    userNo,
     userId,
     password,
     userName,
     birthday,
-    gender=1,
+    gender = 1,
     nickName,
     phoneNo,
+    profileImg,
+    activityImg,
+    activityImg2,
+    activityImg3,
+    userIntro,
+    mainTitleNo,
+    bankCode,
+    bankName,
+    accountNo,
+    blacklist,
+    filterGender,
+    filterMaxAge,
+    filterMinAge,
+    filterTag,
+    filterTag2,
+    filterTag3,
     setField,
     onChangeField,
     reset,
@@ -64,9 +81,11 @@ const UpdateUser = () => {
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+  console.log("로그인한 사용자정보는=" + myData.userNo);
 
   useEffect(() => {
     if (myData) {
+      setField("userNo", myData.userNo);
       setField("userId", myData.userId);
       setField("password", myData.password);
       setField("userName", myData.userName);
@@ -74,58 +93,81 @@ const UpdateUser = () => {
       setField("gender", myData.gender);
       setField("nickName", myData.nickName);
       setField("phoneNo", myData.phoneNo);
+      setField("profileImg", myData.profileImg);
+      setField("activityImg", myData.activityImg);
+      setField("activityImg2", myData.activityImg2);
+      setField("activityImg3", myData.activityImg3);
+      setField("userIntro", myData.userIntro);
+      setField("mainTitleNo", myData.mainTitleNo);
+      setField("bankCode", myData.bankCode);
+      setField("bankName", myData.bankName);
+      setField("accountNo", myData.accountNo);
+      setField("blacklist", myData.blacklist);
+      setField("filterGender", myData.filterGender);
+      setField("filterMaxAge", myData.filterMaxAge);
+      setField("filterMinAge", myData.filterMinAge);
+      setField("filterTag", myData.filterTag);
+      setField("filterTag2", myData.filterTag2);
+      setField("filterTag3", myData.filterTag3);
+
     }
+    // return () => {
+    //   reset();
+    // }
   }, [myData]);
-  console.log("로그인한 사용자정보는="+myData);
+  console.log("로그인한 사용자정보는=" + myData.userNo);
   console.dir(myData);
-  console.log(birthday)
+  console.log(birthday);
 
   const navigate = useNavigate();
   const handleSubmit = useCallback(async () => {
     event.preventDefault();
-    try {
-      const formData = new FormData();
-      formData.append("userId", userId);
-      formData.append("password", password);
-      formData.append("userName", userName);
-      formData.append("birthday", dayjs(birthday).format("YYYY-MM-DD"));
-      formData.append("gender", gender);
-      formData.append("nickName", nickName);
-      formData.append("phoneNo", phoneNo);
-      console.log("회원이 수정한 생년월일은?=" + dayjs(birthday).format("YYYY-MM-DD"));
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/user/updateUser`,
-        {
-          userId: userId,
-          password: password,
-          userName: userName,
-          birthday: dayjs(birthday).format("YYYY-MM-DD"),
-          gender: gender,
-          nickName: nickName,
-          phoneNo: phoneNo,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_SPRING_HOST}/rest/user/updateUser`,
+          {
+            userNo,
+            userId,
+            password,
+            userName,
+            birthday: dayjs(birthday).format('YYYY-MM-DD'),
+            gender,
+            nickName,
+            phoneNo,
+            profileImg,
+            activityImg,
+            activityImg2,
+            activityImg3,
+            userIntro,
+            mainTitleNo,
+            bankCode,
+            bankName,
+            accountNo,
+            blacklist,
+            filterGender,
+            filterMaxAge,
+            filterMinAge,
+            filterTag,
+            filterTag2,
+            filterTag3,
           },
-        }
-      );
-      if (response.data) {
-        alert("회원정보가 성공적으로 업데이트 되었습니다!");
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log("요청할때정보는?"+birthday);
+        console.log("요청할때정보는?"+nickName);
+        console.log("요청할때정보는?"+dayjs(birthday).format('YYYY-MM-DD'));
+        alert('정보수정 완료되었습니다.');
+      } catch (error) {
+        console.error(error);
+        alert("오류가 발생했습니다. 다시 시도해 주세요.");
       }
-
-      reset();
-
-      navigate("/");
-
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-      alert("회원정보 업데이트에 실패했습니다. 다시 시도해 주세요."); 
-    }
-  }, [userId, password, userName, birthday, gender, nickName, phoneNo,isUserIdValid]);
-
+    } 
+    , [userId, password, userName, birthday, gender, nickName, phoneNo]);
 
   function isValidEmail(email) {
     const re =
@@ -259,15 +301,23 @@ const UpdateUser = () => {
 
   return (
     <>
-      <CommonTop pageName="Gaga 회원정보수정"/>
-      <Grid container component="main" sx={{ height: "100vh",display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center", }}>
+      <CommonTop pageName="Gaga 회원정보수정" />
+      <Grid
+        container
+        component="main"
+        sx={{
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          mb: 13
+        }}
+      >
         <CssBaseline />
-        <Box component="form" noValidate sx={{ width: "80%", mt: 3}}>
+        <Box component="form" noValidate sx={{ width: "80%", mt: 3 }}>
           <TextField
-            label="아이디 이메일형식"
+            label="아이디"
             variant="outlined"
             margin="none"
             required
@@ -348,7 +398,7 @@ const UpdateUser = () => {
               maxLength: 16,
             }}
           />
-          <UpdateUserDate birthday={birthday}/>
+          <UpdateUserDate birthday={birthday} />
           <TextField
             variant="outlined"
             margin="none"
@@ -360,7 +410,7 @@ const UpdateUser = () => {
             value={gender}
             onChange={handleGenderChange}
             autoComplete="gender"
-            select 
+            select
             defaultValue={1}
           >
             <MenuItem value={1}>남자</MenuItem>
@@ -379,8 +429,8 @@ const UpdateUser = () => {
             onChange={(e) => onChangeField("phoneNo", e)}
             defaultValue="010"
             inputProps={{
-              maxLength: 11, 
-              pattern: "[0-9]*", 
+              maxLength: 11,
+              pattern: "[0-9]*",
             }}
           />
           <Button
