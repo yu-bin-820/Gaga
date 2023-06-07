@@ -1,14 +1,16 @@
 import useClubFormStore from '@hooks/club/useClubFormStore';
 import useInput from '@hooks/common/useInput';
 import { Button, TextField } from '@mui/material';
-import { Box } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
 import useSWR from 'swr';
 
 const AddClub1 = () => {
+  const [alignment, setAlignment] = useState('left');
+
   const {
     mainCategoryNo,
     filterTag,
@@ -20,6 +22,7 @@ const AddClub1 = () => {
     filterMaxAge,
     clubMaxMemberNo,
     file,
+    setField,
     onChangeField,
     reset,
   } = useClubFormStore();
@@ -72,53 +75,21 @@ const AddClub1 = () => {
 
   return (
     <Box>
-      <TextField
-        fulWidth
-        label='filterGender'
-        name='filterGender'
-        onChange={(e) => onChangeField('filterGender', e)}
-        required
-        value={filterGender}
-      />
-      <br />
-      <TextField
-        fulWidth
-        label='filterMinAge'
-        name='filterMinAge'
-        onChange={(e) => onChangeField('filterMinAge', e)}
-        required
-        value={filterMinAge}
-      />
-      <br />
-      <TextField
-        fulWidth
-        label='filterMaxAge'
-        name='filterMaxAge'
-        onChange={(e) => onChangeField('filterMaxAge', e)}
-        required
-        value={filterMaxAge}
-      />
-      <br />
-      <TextField
-        fulWidth
-        label='clubMaxMemberNo'
-        name='clubMaxMemberNo'
-        onChange={(e) => onChangeField('clubMaxMemberNo', e)}
-        required
-        value={clubMaxMemberNo}
-      />
-      <br />
-      <br />
-      <br />
-
-      <Button
-        onClick={handleSubmit}
-        variant='contained'
-        color='primary'
-        size='large'
+      <Stack
+        spacing={0}
+        direction='row'
+        justifyContent='center'
+        alignItems='center'
+        sx={{ position: 'fixed', bottom: 5, left: 0, right: 0 }}
       >
-        생성하기
-      </Button>
+        <Button
+          variant='contained'
+          sx={{ width: '85vw', borderRadius: '50px' }}
+          onClick={handleSubmit}
+        >
+          생성하기
+        </Button>
+      </Stack>
     </Box>
   );
 };

@@ -77,7 +77,6 @@ import Payment from '@pages/payment/Payment.jsx';
 import PaymentRedirect from '@pages/payment/PaymentRedirect.jsx';
 import PaymentFail from '@pages/payment/PaymentFail.jsx';
 
-
 const router = createBrowserRouter([
   {
     path: '/',

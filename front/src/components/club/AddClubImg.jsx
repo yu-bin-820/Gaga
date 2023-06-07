@@ -4,12 +4,11 @@ import {
   ImageListItem,
   TextField,
   Typography,
-} from "@mui/material";
-import { Box, Stack } from "@mui/system";
-import React, { useState } from "react";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import useMeetingFormStore from "@hooks/meeting/useMeetingFormStore";
-import useClubFormStore from "@hooks/club/useClubFormStore";
+} from '@mui/material';
+import { Box, Stack } from '@mui/system';
+import React, { useState } from 'react';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import useClubFormStore from '@hooks/club/useClubFormStore';
 
 const AddClubImg = () => {
   const { file, image, setField, clubIntro, onChangeField } =
@@ -20,68 +19,61 @@ const AddClubImg = () => {
 
   const onChangeImg = (event) => {
     const file = event.target.files[0];
-    setField("file", file);
-    setField("image", URL.createObjectURL(file));
+    setField('file', file);
+    setField('image', URL.createObjectURL(file));
   };
 
   return (
-    <div>
-      <Stack direction="row" spacing={2} alignItems={"center"} marginLeft="5px">
+    <Box sx={{ margin: '10px' }}>
+      <h4>클럽을 소개해 주세요!</h4>
+      <Stack direction='row' spacing={2} alignItems={'center'} marginLeft='5px'>
         <Button
-          variant="outlined"
+          variant='outlined'
           startIcon={
             <Avatar>
               <AddPhotoAlternateIcon />
             </Avatar>
           }
-          color="info"
-          aria-label="upload picture"
-          component="label"
+          color='info'
+          aria-label='upload picture'
+          component='label'
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            borderWidth: "3px", // 테두리 두께 조정
-            width: "95px",
-            height: "95px",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderWidth: '3px', // 테두리 두께 조정
+            width: '95px',
+            height: '95px',
           }}
-          size="large"
+          size='large'
         >
           <input
             hidden
-            accept="image/*"
-            type="file"
-            id="file"
-            name="meetingReviewImg"
+            accept='image/*'
+            type='file'
+            id='file'
+            name='clubImg'
             onChange={onChangeImg}
           />
         </Button>
         <ImageListItem>
           {image && (
-            <img
-              src={image}
-              style={{
-                maxWidth: "90px",
-                maxHeight: "90px",
-                minWidth: "90px",
-                minHeight: "90px",
-              }}
-            />
+            <img src={image} style={{ width: '90px', height: '90px' }} />
           )}
         </ImageListItem>
       </Stack>
       <br />
       <TextField
-        id="outlined-multiline-static"
-        label="clubIntro"
-        name="clubIntro"
-        onChange={(e) => onChangeField("clubIntro", e)}
+        id='outlined-multiline-static'
+        name='clubIntro'
+        placeholder='소개글을 입력해 주세요(선택)'
+        onChange={(e) => onChangeField('clubIntro', e)}
         fullWidth
         multiline
         value={clubIntro}
         rows={4}
       />
-    </div>
+    </Box>
   );
 };
 
