@@ -74,6 +74,7 @@
 	    SELECT pay_no, user_no, meeting_no, meeting_name, pay_time, refund_time, pay_state, entry_fee
 	    FROM payments
 	    WHERE user_no = #{userNo}
+	    ORDER BY pay_time DESC
 	</select>
 	
 	<update id="updatePayment" parameterType="String">
