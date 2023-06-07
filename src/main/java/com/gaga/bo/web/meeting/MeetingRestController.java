@@ -187,7 +187,6 @@ public class MeetingRestController {
 			  					 @RequestParam(value = "file", required = false) MultipartFile file
 								) throws Exception{
 		
-		
 		System.out.println("img변경 전 : "+meetingReview);
 
 

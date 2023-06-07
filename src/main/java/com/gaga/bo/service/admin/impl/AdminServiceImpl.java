@@ -35,11 +35,17 @@ public class AdminServiceImpl implements AdminService {
 	public List<NoticePost> getNoticePostList() throws Exception {
 		return adminDao.getNoticePostList();
 	}
-	
+
 	@Override
-    public List<NoticePost> getNoticePostListByCategory(int noticePostCategoryNo) throws Exception {
-        return adminDao.getNoticePostListByCategory(noticePostCategoryNo);
-    }
+	public List<NoticePost> getNoticePostListByCategoryNo(int noticePostCategoryNo, int lastPostId) throws Exception {
+		return adminDao.getNoticePostListByCategoryNo(noticePostCategoryNo, lastPostId);
+	}
+
+	@Override
+	public int getLatestPostId() throws Exception {
+		Integer latestPostId = adminDao.getLatestPostId();
+		return latestPostId != null ? latestPostId : 0; // If latestPostId is null, return 0.
+	}
 
 	@Override
 	public NoticePost getNoticePost(int noticePostNo) throws Exception {
@@ -56,14 +62,36 @@ public class AdminServiceImpl implements AdminService {
 		adminDao.deleteNoticePost(noticePostNo);
 	}
 
-	// @Override 리액트로 구현
-	// public List<NoticePost> searchNoticePost(String keyword) {
-	// return adminDao.searchNoticePost(keyword);
-	// }
+	@Override
+	public List<NoticePost> searchNoticePost(String searchKeyword) throws Exception {
+		return adminDao.searchNoticePost(searchKeyword);
+	}
+
 	@Override
 	public void addBlackList(int userNo) throws Exception {
 		adminDao.addBlackList(userNo);
 
+	}
+
+	@Override
+	public void deleteBlackList(int userNo) throws Exception {
+		adminDao.deleteBlackList(userNo);
+
+	}
+
+	@Override
+	public List<User> searchUser(User user) throws Exception {
+		return adminDao.searchUser(user);
+	}
+
+	@Override
+	public List<User> getUserList() throws Exception {
+		return adminDao.getUserList();
+	}
+
+	@Override
+	public User getUser(int userNo) throws Exception {
+		return adminDao.getUser(userNo);
 	}
 
 	@Override
@@ -76,13 +104,23 @@ public class AdminServiceImpl implements AdminService {
 		return adminDao.getBlackListList();
 	}
 
+//	@Override
+//	public List<Report> getReportAdmin(int reportedNo) throws Exception {
+//		return adminDao.getReportAdmin(reportedNo);
+//	}
+
+//	@Override
+//	public List<Report> getReportAdminList() {
+//		return adminDao.getReportAdminList();
+//	} 
+
 	@Override
-	public List<Report> getReportAdmin(int reportedNo) {
-		return adminDao.getReportAdmin(reportedNo);
+	public Report getReport(int reportNo) throws Exception {
+		return adminDao.getReport(reportNo);
 	}
 
 	@Override
-	public List<Report> getReportAdminList() {
-		return adminDao.getReportAdminList();
-	} 
+	public List<Report> getReportList(int userNo, int role) throws Exception {
+		return adminDao.getReportList(userNo, role);
+	}
 }

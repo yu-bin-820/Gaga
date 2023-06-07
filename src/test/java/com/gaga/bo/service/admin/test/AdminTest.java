@@ -111,21 +111,21 @@ class AdminTest {
         assertEquals(1, blacklistStatus.getBlacklist());
     }
     ////////// 신고게시판
-    //@Test
-    public void testGetReportAdmin() {
-        int reportedNo = 3; // 테스트할 reportedNo 값
-        List<Report> reports = adminService.getReportAdmin(reportedNo);
-        // report의 데이터를 확인하는 로직
-        for (Report report : reports) {
-            assertEquals(3, report.getReportedNo());
-        }
-    }
+//    //@Test
+//    public void testGetReportAdmin() throws Exception {
+//        int reportNo = 3; // 테스트할 reportedNo 값
+//        List<Report> reports = adminService.getReport(reportNo);
+//        // report의 데이터를 확인하는 로직
+//        for (Report report : reports) {
+//            assertEquals(3, report.getReportedNo());
+//        }
+//    }
     
-    //@Test
-    public void testListReportListAdmin() {
-        List<Report> report = adminService.getReportAdminList();
-        // report의 데이터를 확인하는 로직
-        assertTrue(report.size() > 0);
-    }
+//    //@Test
+//    public void testListReportListAdmin() throws Exception {
+//        List<Report> report = adminService.getReportAdminList();
+//        // report의 데이터를 확인하는 로직
+//        assertTrue(report.size() > 0);
+//    }
 	
 }

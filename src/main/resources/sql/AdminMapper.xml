@@ -79,8 +79,16 @@
 		<id column="report_no" property="reportNo" jdbcType="INTEGER" />
 		<result column="reporting_no" property="reportingNo"
 			jdbcType="INTEGER" />
+		<result column="reporting_id" property="reportingId"
+			jdbcType="VARCHAR" />
+		<result column="reporting_nick_name"
+			property="reportingNickName" jdbcType="VARCHAR" />
 		<result column="reported_no" property="reportedNo"
 			jdbcType="INTEGER" />
+		<result column="reported_id" property="reportedId"
+			jdbcType="VARCHAR" />
+		<result column="reported_nick_name" property="reportedNickName"
+			jdbcType="VARCHAR" />
 		<result column="report_category_no" property="reportCategoryNo"
 			jdbcType="INTEGER" />
 		<result column="report_content" property="reportContent"
@@ -93,7 +101,6 @@
 			jdbcType="VARCHAR" />
 		<result column="report_img3" property="reportImg3"
 			jdbcType="VARCHAR" />
-		<result column="user_id" property="userId" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<!-- 관리자게시판 -->
@@ -117,8 +124,6 @@
 		)
 	</insert>
 
-
-
 	<select id="getNoticePostList" resultMap="noticePostResult">
 		SELECT * FROM
 		notice_posts
@@ -126,10 +131,17 @@
 
 	<select id="getNoticePostListByCategoryNo"
 		resultMap="noticePostResult">
-		SELECT * FROM
-		notice_posts 
-		where notice_post_Category_no =
+		SELECT * FROM notice_posts
+		WHERE notice_post_no &lt;=
+		#{lastPostId} AND notice_post_Category_no =
 		#{noticePostCategoryNo}
+		ORDER BY notice_post_no DESC
+		LIMIT 10
+	</select>
+
+	<select id="getLatestPostId" resultType="Integer">
+		SELECT
+		MAX(notice_post_no) FROM notice_posts
 	</select>
 
 	<select id="searchNoticePost" resultMap="noticePostResult">
@@ -166,9 +178,16 @@
 	<insert id="addBlackList"
 		parameterType="com.gaga.bo.service.domain.User">
 		UPDATE users
-		SET blacklist = 1
+		SET blacklist = 2
 		WHERE user_no = #{userNo}
 	</insert>
+
+	<update id="deleteBlackList"
+		parameterType="com.gaga.bo.service.domain.User">
+		UPDATE users
+		SET blacklist = 0
+		WHERE user_no = #{userNo}
+	</update>
 
 	<select id="getBlackList" resultMap="userResultMap">
 		SELECT *
@@ -184,32 +203,94 @@
 		blacklist != 0
 	</select>
 
-	<insert id="deleteBlackList"
-		parameterType="com.gaga.bo.service.domain.User">
-		UPDATE users
-		SET blacklist = 0
-		WHERE user_no = #{userNo}
-	</insert>
-
-	<!-- 신고조회 CRUD -->
-
-	<select id="getReportAdmin" resultMap="reportResultMap">
-		SELECT
-		r.reported_no,
-		r.reporting_no, r.report_category_no, r.report_date,
-		r.report_content,
-		r.report_img, r.report_img2, r.report_img3, u.user_id, u.user_name
-		FROM reports r
-		INNER JOIN users u ON r.reported_no = u.user_no
+	<select id="searchUser" resultMap="userResultMap">
+		SELECT *
+		FROM users
 		WHERE
-		r.reported_no = #{reportedNo}
+		1=1
+		<if test="userNo != null">
+			AND user_no = #{userNo}
+		</if>
+		<if test="userId != null">
+			AND user_id = #{userId}
+		</if>
+		<if test="nickName != null">
+			AND nick_name = #{nickName}
+		</if>
+		<if test="userName != null">
+			AND user_name = #{userName}
+		</if>
 	</select>
 
-	<select id="getReportAdminList" resultMap="reportResultMap">
-		SELECT
-		r.report_category_no, r.reported_no, r.report_date, u.user_id
-		FROM
-		reports r
-		INNER JOIN users u ON r.reported_no = u.user_no
+	<select id="getUser" parameterType="int"
+		resultMap="userResultMap">
+		SELECT *
+		FROM users
+		WHERE user_no = #{userNo}
 	</select>
+
+	<select id="getUserList" resultMap="userResultMap">
+		SELECT *
+		FROM users
+	</select>
+
+
+	<!-- 신고조회 CRUD <select id="getReportAdmin" resultMap="reportResultMap"> 
+		SELECT r.report_no, r.reported_no, r.reporting_no, r.report_category_no, 
+		r.report_date, r.report_content, r.report_img, r.report_img2, r.report_img3, 
+		u.user_id, u.user_name FROM reports r INNER JOIN users u ON r.reported_no 
+		= u.user_no WHERE r.report_no = #{reportNo} </select> -->
+
+	<select id="getReport" parameterType="int"
+		resultMap="reportResultMap">
+		SELECT
+		r.report_no,
+		r.reporting_no,
+		r.reported_no,
+		r.report_category_no,
+		r.report_content,
+		r.report_date,
+		r.report_img,
+		r.report_img2,
+		r.report_img3,
+		reporting.user_id AS reporting_id,
+		reported.user_id AS reported_id,
+		reporting.nick_name AS
+		reporting_nick_name,
+		reported.nick_name AS reported_nick_name
+		FROM
+		reports AS r
+		INNER JOIN users AS reporting ON r.reporting_no =
+		reporting.user_no
+		INNER JOIN users AS reported ON r.reported_no =
+		reported.user_no
+		WHERE r.report_no = #{reportNo}
+	</select>
+
+	<select id="getReportList" parameterType="user"
+		resultMap="reportResultMap">
+		SELECT
+		r.report_no,
+		r.reporting_no,
+		r.reported_no,
+		r.report_category_no,
+		r.report_date,
+		reporting.user_id AS reporting_id,
+		reported.user_id AS
+		reported_id,
+		reporting.nick_name AS reporting_nick_name,
+		reported.nick_name AS reported_nick_name
+		FROM reports AS r
+		INNER JOIN
+		users AS reporting ON r.reporting_no = reporting.user_no
+		INNER JOIN
+		users AS reported ON r.reported_no = reported.user_no
+		<where>
+			<if test="role != 0">
+				1=1
+			</if>
+		</where>
+	</select>
+
+
 </mapper>

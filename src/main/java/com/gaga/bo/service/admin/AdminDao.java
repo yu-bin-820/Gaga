@@ -15,27 +15,39 @@ public interface AdminDao {
 
 	List<NoticePost> getNoticePostList() throws Exception;
 	
-	List<NoticePost> getNoticePostListByCategory(int noticePostCategoryNo) throws Exception;
+	List<NoticePost> getNoticePostListByCategoryNo(int noticePostCategoryNo, int lastPostId) throws Exception;
+	
+	int getLatestPostId() throws Exception;
 
 	NoticePost getNoticePost(int noticePostNo) throws Exception;
 
 	void updateNoticePost(NoticePost noticePost) throws Exception;
 
 	void deleteNoticePost(int noticePostNo) throws Exception;
-	//기능필요없이 데이터요청하면 수정예정<5/25>
-	/* List<NoticePost> searchNoticePost(String keyword); */
+	
+	List<NoticePost> searchNoticePost(String searchKeyword) throws Exception;
 	
 	//#블랙리스트 
+	List<User> searchUser(User user) throws Exception;
+	
+	List<User> getUserList() throws Exception;
+	
+	User getUser(int userNo) throws Exception;
+	
 	void addBlackList(int userNo) throws Exception;
-
+	
+	void deleteBlackList(int userNo) throws Exception;
+	
 	User getBlackList(int userNo) throws Exception;
 
 	List<User> getBlackListList() throws Exception;
 	
 	//#신고게시판
-	List<Report> getReportAdmin(int reportingNo);
+	//List<Report> getReportAdmin(int reportingNo) throws Exception;
 	
-    List<Report> getReportAdminList();
+    List<Report> getReportAdminList() throws Exception;
     
+    Report getReport(int reportNo) throws Exception;
     
+    List<Report> getReportList(int userNo, int role) throws Exception;
 }
