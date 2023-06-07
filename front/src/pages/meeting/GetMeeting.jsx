@@ -15,7 +15,7 @@ import CommonTop from '@layouts/common/CommonTop';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import SmallChip from '@components/meeting/SmallChip';
-import IsMeetingMemberDialog from '@components/meeting/isMeetingMemberDialog';
+import IsMeetingMemberDialog from '@components/meeting/IsMeetingMemberDialog';
 import GetMeetingStaticMapDrawer from '@components/meeting/map/GetMeetingStaticMapDrawer';
 
 const GetMeeting = () => {
@@ -38,7 +38,6 @@ const GetMeeting = () => {
     },
     []
   );
-
 
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -98,22 +97,24 @@ const GetMeeting = () => {
       });
   }, []);
 
-  const onClickAddMember = useCallback((event) => {
-    const isUserInConfirmedMembers = confirmedMemberList.some(
-      (confirmedMember) => confirmedMember.userNo === myData?.userNo
-    );
+  const onClickAddMember = useCallback(
+    (event) => {
+      const isUserInConfirmedMembers = confirmedMemberList.some(
+        (confirmedMember) => confirmedMember.userNo === myData?.userNo
+      );
 
-    const isUserInPendingMembers = pendingMemberList.some(
-      (pendingMember) => pendingMember.userNo === myData?.userNo
-    );
-    
-    if (!isUserInConfirmedMembers && !isUserInPendingMembers ) {
-      navigate(`/meeting/member/addmember/${meetingno}`);
-    } else {
-      setIsMeetingMemberOpen(true);
-    }
-  }, [confirmedMemberList, myData?.userNo, navigate]);
+      const isUserInPendingMembers = pendingMemberList.some(
+        (pendingMember) => pendingMember.userNo === myData?.userNo
+      );
 
+      if (!isUserInConfirmedMembers && !isUserInPendingMembers) {
+        navigate(`/meeting/member/addmember/${meetingno}`);
+      } else {
+        setIsMeetingMemberOpen(true);
+      }
+    },
+    [confirmedMemberList, myData?.userNo, navigate]
+  );
 
   const [imageLoadingError, setImageLoadingError] = useState(false);
 
@@ -129,11 +130,7 @@ const GetMeeting = () => {
   }
   return (
     <>
-      {isUserLeader && !isMeetingSuccessful ? (
-        <GetMeetingTop />
-      ) : (
-        <CommonTop />
-      )}
+      {isUserLeader && !isMeetingSuccessful ? <GetMeetingTop /> : <CommonTop />}
       <Box
         sx={{
           marginTop: '50px',
@@ -207,10 +204,8 @@ const GetMeeting = () => {
         </Stack>
         <br />
         {meeting && (
-          <Box
-          onClick={onClickSettings}>
-            <GetMeetingStaticMap 
-            meeting={meeting} />
+          <Box onClick={onClickSettings}>
+            <GetMeetingStaticMap meeting={meeting} />
           </Box>
         )}
         <h5>확정 멤버</h5>
@@ -230,25 +225,27 @@ const GetMeeting = () => {
           alignItems="center"
           sx={{ position: 'fixed', bottom: 5, left: 0, right: 0 }}
         >
-        {!isUserLeader && !isMeetingSuccessful && (
-          <Button
-            variant="contained"
-            sx={{ width: '85vw', borderRadius: '50px' }}
-            onClick={onClickAddMember}
-          >
-            참여하기
-          </Button>
-        )}
+          {!isUserLeader && !isMeetingSuccessful && (
+            <Button
+              variant="contained"
+              sx={{ width: '85vw', borderRadius: '50px' }}
+              onClick={onClickAddMember}
+            >
+              참여하기
+            </Button>
+          )}
         </Stack>
       </Box>
       <IsMeetingMemberDialog
-      open={isMeetingMemberOpen}
-      setOpen={setIsMeetingMemberOpen}/>
+        open={isMeetingMemberOpen}
+        setOpen={setIsMeetingMemberOpen}
+      />
       <GetMeetingStaticMapDrawer
         meeting={meeting}
         settingsMapOpen={settingsMapOpen}
         toggleSettingsMap={toggleSettingsMap}
-        setSettingsMapOpen={setSettingsMapOpen} />
+        setSettingsMapOpen={setSettingsMapOpen}
+      />
     </>
   );
 };
