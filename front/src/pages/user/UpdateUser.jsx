@@ -18,6 +18,7 @@ import CommonTop from "@layouts/common/CommonTop";
 import useUserFormStore from "@hooks/user/useUserFormStore";
 import { useNavigate } from "react-router";
 import AddUserDate from "@components/user/AddUserDate";
+
 import Modal from "@mui/material/Modal";
 import { Update } from "@mui/icons-material";
 import useUpdateUserFormStore from "@hooks/user/useUpdateUserFormStore";
@@ -69,7 +70,7 @@ const UpdateUser = () => {
       setField("userId", myData.userId);
       setField("password", myData.password);
       setField("userName", myData.userName);
-      setField("birthday", myData.birthday);
+      setField("birthday", dayjs(myData.birthday).format("MM-DD-YYYY"));
       setField("gender", myData.gender);
       setField("nickName", myData.nickName);
       setField("phoneNo", myData.phoneNo);
@@ -91,6 +92,7 @@ const UpdateUser = () => {
       formData.append("gender", gender);
       formData.append("nickName", nickName);
       formData.append("phoneNo", phoneNo);
+      console.log("회원이 수정한 생년월일은?=" + dayjs(birthday).format("YYYY-MM-DD"));
 
       const response = await axios.post(
         `${import.meta.env.VITE_SPRING_HOST}/rest/user/updateUser`,
@@ -346,7 +348,7 @@ const UpdateUser = () => {
               maxLength: 16,
             }}
           />
-          <UpdateUserDate birthday={birthday} />
+          <UpdateUserDate birthday={birthday}/>
           <TextField
             variant="outlined"
             margin="none"

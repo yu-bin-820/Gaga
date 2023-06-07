@@ -67,13 +67,13 @@ const ListMeetingReview = () => {
             },
             []
         );
+        console.log(meetingReviewList)
 
     return (
         <Box>
             <Box>
                 {meetingReviewList?.map((meetingReview,i)=>(
                     <Box key={i}>
-                        <Stack>
                         <Stack 
                         direction="row" 
                         spacing={2}
@@ -84,9 +84,12 @@ const ListMeetingReview = () => {
                                 }/upload_images/meeting/${meetingReview?.meetingReviewImg}`}
                                 style={{ width: '100px', height: '100px' }}
                             />
+                        <Stack>
                         <Stack 
                         spacing={1}
                         direction={'row'}>
+                            <Typography variant="subtitle2">{meetingReview.meetingReviewrNickName}</Typography>
+
                             <Rating 
                             name="read-only" 
                             value={meetingReview.meetingScore} 
@@ -95,18 +98,21 @@ const ListMeetingReview = () => {
                             
                             <Typography variant="subtitle2">{meetingReview.meetingScore}</Typography>
                             </Stack>
+                            <Typography variant="caption" display="block" gutterBottom>{meetingReview.meetingReviewContent}</Typography>
                             </Stack>
-                            <Typography variant="subtitle2">{meetingReview.meetingReviewContent}</Typography>
                             </Stack>
                     {myData.userNo === meetingReview.meetingReviewerNo && (
-                    <>
+                    <Stack
+                    direction={'row'}
+                    justifyContent={'flex-end'}
+                    spacing={3}>
                     <Button 
                     id={meetingReview.meetingReviewNo}
                     onClick={onClickUpdateMeetingReview}>수정하기</Button>
                     <Button 
                     id={meetingReview.meetingReviewNo}
                     onClick={onClickDelete}>삭제하기</Button>
-                    </>
+                    </Stack>
                     )}
                     </Box>
                     

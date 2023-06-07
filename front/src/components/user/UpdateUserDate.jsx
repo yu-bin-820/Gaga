@@ -5,21 +5,24 @@ import React, { useCallback } from 'react';
 import dayjs from 'dayjs';
 import useUpdateUserFormStore from '@hooks/user/useUpdateUserFormStore';
 
-const UpdateUserDate = (value, onChange) => {
+const UpdateUserDate = () => {
   const {
     birthday,
     setField
   } = useUpdateUserFormStore();
 
+  const [value, setValue] = React.useState(birthday ? dayjs(birthday) : dayjs('1990-01-01'));
+
   const handleUserDateChange = useCallback((newValue) => {
+    setValue(newValue);
     setField('birthday', newValue);
   }, [setField]);
 
   return (
     <div>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoItem>
-          <MobileDatePicker value={birthday} onChange={handleUserDateChange} />
+        <DemoItem >
+          <MobileDatePicker value={value} onChange={handleUserDateChange}/>
         </DemoItem>
       </LocalizationProvider>
     </div>
