@@ -3,6 +3,8 @@ import { Stack } from '@mui/system';
 import axios from 'axios';
 import React, { useCallback } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router';
+import PropTypes from 'prop-types';
+
 
 const DeleteMeetingDialog = ({ open, setOpen }) => {
 
@@ -74,5 +76,11 @@ const DeleteMeetingDialog = ({ open, setOpen }) => {
     </div>
     );
 };
+
+DeleteMeetingDialog.propTypes = {
+  open: PropTypes.object.isRequired,
+  setOpen: PropTypes.object.isRequired,
+};
+
 
 export default DeleteMeetingDialog;

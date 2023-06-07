@@ -59,9 +59,9 @@ const Chat = ({ data }) => {
         >
           {!isMe && (
             <Avatar
-              src={`${
-                import.meta.env.VITE_SPRING_HOST
-              }/upload_images/user/${data?.Sender.profile_img}`}
+              src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+                data?.Sender.profile_img
+              }`}
               alt="Remy Sharp"
               sx={{ marginLeft: '10px' }}
             />

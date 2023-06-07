@@ -1,25 +1,25 @@
-import useInput from "@hooks/common/useInput";
-import { Avatar, Button, ImageListItem, TextField } from "@mui/material";
-import { Box, Stack } from "@mui/system";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import useInput from '@hooks/common/useInput';
+import { Avatar, Button, ImageListItem, TextField } from '@mui/material';
+import { Box, Stack } from '@mui/system';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import axios from 'axios';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 
 const UpdateClub = () => {
   const { clubNo } = useParams();
   const [club, onChangeClub, setClub] = useInput({
-    clubName: "",
-    clubIntro: "",
-    clubImg: "",
-    clubRegion: "",
-    filterGender: "",
-    filterMinAge: "",
-    filterMaxAge: "",
-    clubState: "",
-    clubMaxMemberNo: "",
-    filterTag: "",
-    clubNo: "",
+    clubName: '',
+    clubIntro: '',
+    clubImg: '',
+    clubRegion: '',
+    filterGender: '',
+    filterMinAge: '',
+    filterMaxAge: '',
+    clubState: '',
+    clubMaxMemberNo: '',
+    filterTag: '',
+    clubNo: '',
   });
 
   const [selectedImage, setSelectedImage] = useState(
@@ -57,17 +57,17 @@ const UpdateClub = () => {
     try {
       const formData = new FormData();
 
-      formData.append("file", selectedFile);
-      formData.append("clubName", club.clubName);
-      formData.append("clubIntro", club.clubIntro);
-      formData.append("clubRegion", club.clubRegion);
-      formData.append("filterGender", club.filterGender);
-      formData.append("filterMinAge", club.filterMinAge);
-      formData.append("filterMaxAge", club.filterMaxAge);
-      formData.append("clubMaxMemberNo", club.clubMaxMemberNo);
-      formData.append("filterTag", club.filterTag);
-      formData.append("clubState", club.clubState);
-      formData.append("clubNo", clubNo);
+      formData.append('file', selectedFile);
+      formData.append('clubName', club.clubName);
+      formData.append('clubIntro', club.clubIntro);
+      formData.append('clubRegion', club.clubRegion);
+      formData.append('filterGender', club.filterGender);
+      formData.append('filterMinAge', club.filterMinAge);
+      formData.append('filterMaxAge', club.filterMaxAge);
+      formData.append('clubMaxMemberNo', club.clubMaxMemberNo);
+      formData.append('filterTag', club.filterTag);
+      formData.append('clubState', club.clubState);
+      formData.append('clubNo', clubNo);
 
       console.log(clubNo.clubRegion);
 
@@ -85,75 +85,75 @@ const UpdateClub = () => {
   }, [club, selectedFile, clubNo, navigate]);
 
   return (
-    <Box sx={{ marginTop: "64px" }}>
+    <Box sx={{ marginTop: '64px' }}>
       <TextField
         fulWidth
-        label="clubName"
-        name="clubName"
+        label='clubName'
+        name='clubName'
         onChange={onChangeClub}
         required
         value={club.clubName}
       />
       <TextField
         fulWidth
-        label="clubIntro"
-        name="clubIntro"
+        label='clubIntro'
+        name='clubIntro'
         onChange={onChangeClub}
         required
         value={club.clubIntro}
       />
       <TextField
         fulWidth
-        label="clubRegion"
-        name="clubRegion"
+        label='clubRegion'
+        name='clubRegion'
         onChange={onChangeClub}
         required
         value={club.clubRegion}
       />
       <TextField
         fulWidth
-        label="clubImg"
-        name="clubImg"
+        label='clubImg'
+        name='clubImg'
         onChange={onChangeClub}
         required
         value={club.clubImg}
       />
       <TextField
         fulWidth
-        label="filterGender"
-        name="filterGender"
+        label='filterGender'
+        name='filterGender'
         onChange={onChangeClub}
         required
         value={club.filterGender}
       />
       <TextField
         fulWidth
-        label="filterMinAge"
-        name="filterMinAge"
+        label='filterMinAge'
+        name='filterMinAge'
         onChange={onChangeClub}
         required
         value={club.filterMinAge}
       />
       <TextField
         fulWidth
-        label="filterMaxAge"
-        name="filterMaxAge"
+        label='filterMaxAge'
+        name='filterMaxAge'
         onChange={onChangeClub}
         required
         value={club.filterMaxAge}
       />
       <TextField
         fulWidth
-        label="clubMaxMemberNo"
-        name="clubMaxMemberNo"
+        label='clubMaxMemberNo'
+        name='clubMaxMemberNo'
         onChange={onChangeClub}
         required
         value={club.clubMaxMemberNo}
       />
       <TextField
         fulWidth
-        label="clubState"
-        name="clubState"
+        label='clubState'
+        name='clubState'
         onChange={onChangeClub}
         required
         value={club.clubState}
@@ -161,39 +161,39 @@ const UpdateClub = () => {
 
       <TextField
         fulWidth
-        label="clubNo"
-        name="clubNo"
+        label='clubNo'
+        name='clubNo'
         onChange={onChangeClub}
         required
         value={club.clubNo}
       />
-      <Stack direction="row" spacing={2} alignItems={"center"} marginLeft="5px">
+      <Stack direction='row' spacing={2} alignItems={'center'} marginLeft='5px'>
         <Button
-          variant="outlined"
+          variant='outlined'
           startIcon={
             <Avatar>
               <AddPhotoAlternateIcon />
             </Avatar>
           }
-          color="primary"
-          aria-label="upload picture"
-          component="label"
+          color='primary'
+          aria-label='upload picture'
+          component='label'
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            borderColor: "grey",
-            width: "150px",
-            height: "150px",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderColor: 'grey',
+            width: '150px',
+            height: '150px',
           }}
-          size="large"
+          size='large'
         >
           <input
             hidden
-            accept="image/*"
-            type="file"
-            id="file"
-            name="file"
+            accept='image/*'
+            type='file'
+            id='file'
+            name='file'
             onChange={onChangeImg}
           />
         </Button>

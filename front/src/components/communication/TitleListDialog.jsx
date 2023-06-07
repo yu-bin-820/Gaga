@@ -16,11 +16,11 @@ import fetcher from '@utils/fetcher';
 import axios from 'axios';
 
 const TitleListDialog = ({ open, setOpen, myData, mutateMe }) => {
-  const [mainTitle, setMainTitle] = useState(myData.mainTitleNo);
+  const [mainTitle, setMainTitle] = useState(myData?.mainTitleNo);
   const { data: titleListData, mutate: mutateTitleList } = useSWR(
-    `${
-      import.meta.env.VITE_SPRING_HOST
-    }/rest/community/title/list/userno/${myData.userNo}`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/community/title/list/userno/${
+      myData?.userNo
+    }`,
     fetcher
   );
 

@@ -2,10 +2,11 @@ import {create} from 'zustand';
 
 
 const userField={
+    userNo:'',
     userId: '',
     password: '',
     userName: '',
-    birthday: '',
+    birthday: null,
     gender: 1,
     nickName: '',
     phoneNo: ''

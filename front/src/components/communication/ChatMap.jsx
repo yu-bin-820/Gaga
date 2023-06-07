@@ -136,7 +136,7 @@ const ChatMap = ({ postPath, senderNo, groupNo }) => {
         height: '100vh',
       }}
       level={3}
-      onClick={onClickMap}
+      onClick={isPost ? onClickMap : () => {}}
       onCreate={setMap}
     >
       <MapMarker position={{ lat: markerLat, lng: markerLng }} />

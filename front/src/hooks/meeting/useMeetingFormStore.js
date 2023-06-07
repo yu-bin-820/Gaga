@@ -19,7 +19,7 @@ const meetingField={
     filterMaxAge: '',
     parentClubNo: null,
     meetingMaxMemberNo: null,
-    entryFee: null,
+    entryFee: 0,
     file: null,
     image: null,
 }

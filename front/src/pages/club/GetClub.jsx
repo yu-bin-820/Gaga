@@ -1,35 +1,65 @@
-import ListMeetingParentClubNo from "@components/meeting/ListMeetingParentClubNo";
-import styled from "@emotion/styled";
-import CommonTop from "@layouts/common/CommonTop";
-import { Box, Button } from "@mui/material";
-import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
-
-const CenteredText = styled("h5")({
-  display: "flex",
-  alignItems: "center",
-});
+import SmallChip from '@components/club/SmallChip';
+import ListMeetingParentClubNo from '@components/meeting/ListMeetingParentClubNo';
+import styled from '@emotion/styled';
+import CommonTop from '@layouts/common/CommonTop';
+import { Avatar, Box, Button, Typography, Stack } from '@mui/material';
+import fetcher from '@utils/fetcher';
+import axios from 'axios';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import useSWR from 'swr';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PeopleIcon from '@mui/icons-material/People';
+import ClubMember from '@components/club/ClubMember';
+import GetClubTop from '@layouts/club/GetClubTop';
 
 const GetClub = () => {
   const { clubNo } = useParams();
+  const [clubLeader, setClubLeader] = useState();
   const [club, setClub] = useState();
   const [pendingMemberList, setPendingMemberList] = useState();
   const [confirmedMemberList, setConfirMemberList] = useState();
 
+  const { data: myData, mutate: mutateMe } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+  );
+  const isClubLeader = club?.clubLeaderNo === myData?.userNo;
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_SPRING_HOST}/rest/club/no/${clubNo}`)
       .then((response) => {
-        console.log(response.data);
+        console.log('클럽데이터 받아오지?', response.data);
         setClub(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+
+  useEffect(() => {
+    if (!club) {
+      return;
+    }
+
+    const fetchClubLeader = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_SPRING_HOST}/rest/user/userno/${
+            club.clubLeaderNo
+          }`
+        );
+        console.log(response.data);
+        setClubLeader(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchClubLeader();
+  }, [club]);
 
   useEffect(() => {
     axios
@@ -63,8 +93,21 @@ const GetClub = () => {
       });
   }, []);
 
+  const onClickProfileImg = useCallback(
+    (e) => {
+      navigate(`/community/profile/userno/${club?.clubLeaderNo}`);
+    },
+    [navigate, club]
+  );
+
   const onClickAddMember = useCallback((event) => {
     navigate(`/club/member/addmember/${clubNo}`);
+  }, []);
+
+  const [imageLoadingError, setImageLoadingError] = useState(false);
+
+  const handleImageError = useCallback(() => {
+    setImageLoadingError(true);
   }, []);
 
   const onClickUpdate = useCallback((MouseEvent) => {
@@ -95,29 +138,129 @@ const GetClub = () => {
 
   return (
     <>
-      <CommonTop />
-      <Box sx={{ marginTop: "64px" }}>
-        <h2>여기는 클럽 상세페이지입니다. </h2>
-        <br />
-        <h5>클럽이름 {club?.clubName}</h5>
-        클럽소개 {club?.clubIntro} <br />
-        클럽장 번호 {club?.clubLeaderNo} <br />
-        최대인원 {club?.clubMaxMemberNo} <br />
-        생성일 {club?.clubRegDate} <br />
-        모집상태 {club?.clubState} <br />
-        이미지 {club?.clubImg} <br />
-        지역 {club?.clubRegion} <br />
-        성별 {club?.filterGender} <br />
-        최소나이 {club?.filterMinAge} <br />
-        최대나이 {club?.filterMaxAge} <br />
-        태그 {club?.filterTag} <br />
-        메인 카테고리 번호 {club?.mainCategoryNo} <br />
-        클럽 참여 인원 {club?.memberCount}
-        <h3>클럽 내 생성 모임 목록</h3>
+      {isClubLeader ? <GetClubTop /> : <CommonTop />}
+      <Box
+        sx={{
+          marginTop: '64px',
+          marginBottom: '64px',
+          marginLeft: '10px',
+          marginRight: '10px',
+        }}
+      >
+        {club?.clubImg ? (
+          <img
+            src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/club/${
+              club?.clubImg
+            }`}
+            alt='noImg'
+            loading='lazy'
+            onError={handleImageError}
+            style={{
+              maxWidth: '100%',
+              maxHeight: '400px',
+              objectFit: 'cover',
+            }}
+          />
+        ) : (
+          <img
+            src={`https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c`}
+            alt='noImg'
+            loading='lazy'
+            style={{
+              maxWidth: '100%',
+              maxHeight: '400px',
+              objectFit: 'cover',
+            }}
+          />
+        )}
+        <Stack spacing={1}>
+          <Stack direction='row' margin={1} spacing={2}>
+            <Stack
+              direction={'row'}
+              spacing={10}
+              alignItems={'center'}
+              onClick={onClickProfileImg}
+              data-value={myData?.userNo}
+            >
+              <Box>
+                <Avatar
+                  alt={club?.nickName}
+                  src={`${
+                    import.meta.env.VITE_SPRING_HOST
+                  }/upload_images/user/${clubLeader?.profileImg}`}
+                  sx={{ width: 60, height: 60 }}
+                />
+              </Box>
+            </Stack>
+            <Stack>
+              <Stack margin={1}>
+                <Typography variant='h3' sx={{ fontSize: 16 }}>
+                  {club?.clubName}
+                </Typography>
+              </Stack>
+              <Stack margin={1}>
+                <Typography variant='h3' sx={{ fontSize: 16 }}>
+                  {clubLeader?.nickName}
+                </Typography>
+              </Stack>
+            </Stack>
+          </Stack>
+          <Stack direction='row' spacing={5}>
+            <Box direction='row' spacing={0} alignItems='left'>
+              <SmallChip label={club?.filterTag} />
+            </Box>
+
+            <Stack direction={'row'} spacing={1} alignItems={'center'}>
+              <PeopleIcon />
+              <Typography sx={{ fontSize: 13 }}>
+                {club?.memberCount}/{club?.clubMaxMemberNo}
+              </Typography>
+            </Stack>
+
+            <Box direction='row' spacing={0} alignItems='left'>
+              <SmallChip
+                label={club?.clubState === 1 ? '모집중' : '모집완료'}
+                sx={{
+                  backgroundColor:
+                    club?.clubState === 1 ? '#81BEF7' : '#F78181',
+                }}
+              />
+            </Box>
+            <Stack direction={'row'} spacing={1} alignItems={'center'}>
+              <LocationOnIcon />
+              <Typography sx={{ fontSize: 13 }}>{club?.clubRegion}</Typography>
+            </Stack>
+          </Stack>
+          <Typography sx={{ fontSize: 16 }}>클럽 소개</Typography>
+
+          <Typography sx={{ fontSize: 13 }}>{club?.clubIntro}</Typography>
+        </Stack>
+        <h5>확정 멤버</h5>
+        {confirmedMemberList?.map((confirmedMember, i) => (
+          <ClubMember key={i} member={confirmedMember} />
+        ))}
+        <h5>신청 멤버</h5>
+        {pendingMemberList?.map((pendingMember, i) => (
+          <ClubMember key={i} member={pendingMember} />
+        ))}
+
+        <h5>클럽 내 생성 모임 목록</h5>
         <ListMeetingParentClubNo />
-        <Button onClick={onClickUpdate}>수정하기</Button>
-        <Button onClick={onClickDelete}>삭제하기</Button>
-        <Button onClick={onClickAddMember}>신청하기</Button>
+
+        {isClubLeader && (
+          <>
+            <Button onClick={onClickUpdate}>수정하기</Button>
+            <Button onClick={onClickDelete}>삭제하기</Button>
+          </>
+        )}
+
+        <Button
+          variant='contained'
+          sx={{ width: '85vw', borderRadius: '50px' }}
+          onClick={onClickAddMember}
+        >
+          참여하기
+        </Button>
       </Box>
     </>
   );

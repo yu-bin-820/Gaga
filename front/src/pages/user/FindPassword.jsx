@@ -2,9 +2,9 @@ import { Button, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
 import React, { useState, useCallback } from 'react';
-import MainTop from '@layouts/common/MainTop';
 import MenuItem from '@mui/material/MenuItem';
 import { FormHelperText } from '@mui/material';
+import CommonTop from '@layouts/common/CommonTop';
 
 const FindPassword = () => {
   const passwordRegex =
@@ -119,7 +119,7 @@ const FindPassword = () => {
 
   return (
     <>
-      <MainTop />
+      <CommonTop />
       <div style={{ color: 'black', marginTop: '100px' }}>
         휴대폰 인증 완료후 비밀번호 변경
       </div>

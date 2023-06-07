@@ -1,11 +1,11 @@
-import { useParams, useNavigate } from "react-router";
-import fetcher from "@utils/fetcher";
-import useSWR from "swr";
-import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
-import { Box } from "@mui/system";
-import { Button } from "@mui/material";
-import ClubThumbnail from "./ClubThumbnail";
+import { useParams, useNavigate } from 'react-router';
+import fetcher from '@utils/fetcher';
+import useSWR from 'swr';
+import { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
+import { Box } from '@mui/system';
+import { Button } from '@mui/material';
+import ClubThumbnail from './ClubThumbnail';
 
 const ListMyClub = () => {
   const { userNo } = useParams();
@@ -48,13 +48,7 @@ const ListMyClub = () => {
       <Box>
         {clubList?.map((club, i) => (
           <Box key={i}>
-            <ClubThumbnail club={club} />
-            <Button id={club.clubNo} onClick={onClickClub}>
-              클럽정보
-            </Button>
-            <Button id={club.clubNo} onClick={onClickListClubMember}>
-              클럽멤버
-            </Button>
+            <ClubThumbnail club={club} id={club.clubNo} onClick={onClickClub} />
           </Box>
         ))}
       </Box>

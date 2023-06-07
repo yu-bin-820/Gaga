@@ -9,6 +9,8 @@ import React, { useState } from 'react';
 import SelectClubType from '@components/club/SelectClubType';
 import AddClubListCategory from '@components/club/AddClubListCategory';
 import CommonTop from '@layouts/common/CommonTop';
+import AddClubFilter from '@components/club/AddClubFilter';
+import AddClubMaxMember from '@components/club/AddClubMaxMember';
 
 const AddClub = () => {
   const theme = useTheme();
@@ -35,7 +37,9 @@ const AddClub = () => {
       case 4:
         return <AddClubImg />;
       case 5:
-        return <AddClub1 />;
+        return <AddClubFilter />;
+      case 6:
+        return <AddClubMaxMember />;
       default:
         throw new Error('Unknown step');
     }
@@ -46,16 +50,16 @@ const AddClub = () => {
       <CommonTop />
       <Box sx={{ marginTop: '64px' }}>
         <MobileStepper
-          variant="progress"
-          steps={6}
-          position="static"
+          variant='progress'
+          steps={7}
+          position='static'
           activeStep={activeStep}
           sx={{ maxWidth: 400, flexGrow: 1 }}
           nextButton={
             <Button
-              size="small"
+              size='small'
               onClick={handleNext}
-              disabled={activeStep === 5}
+              disabled={activeStep === 6}
             >
               Next
               {theme.direction === 'rtl' ? (
@@ -67,7 +71,7 @@ const AddClub = () => {
           }
           backButton={
             <Button
-              size="small"
+              size='small'
               onClick={handleBack}
               disabled={activeStep === 0}
             >
