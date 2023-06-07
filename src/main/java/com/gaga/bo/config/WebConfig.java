@@ -13,7 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
 								//반드시 WebMvcConfigurer를 구현하고 있어야한다.
 
 	public WebConfig() {
-		System.out.println("WebConfig");
+		System.out.println(this.getClass());
 	}
 	
 	//Cors설정을 위해 CorsMappings 메소드를 오버라이딩한다. 

@@ -49,7 +49,6 @@ public class ClubRestController {
 	//Constructor
 	public ClubRestController() {
 		System.out.println(this.getClass());
-		// TODO Auto-generated constructor stub
 	}
 	
 	//클럽관리
@@ -61,15 +60,13 @@ public class ClubRestController {
 		
 		System.out.println("클럽 생성 Ctrl");
 		
-		System.out.println(file.getOriginalFilename());
-		
 		System.out.println("img변경 전 : "+club);
 		
 		if (file != null) {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(fileUploadPath+"/club/"+uuidFileName));
+			file.transferTo(new File(fileUploadPath+"\\club\\"+uuidFileName));
 			
 			club.setClubImg(uuidFileName);
 		}
@@ -247,15 +244,13 @@ public class ClubRestController {
 		
 		System.out.println("클럽 정보 수정 Ctrl");
 		
-		System.out.println(file.getOriginalFilename());
-		
 		System.out.println("img변경 전 : "+club);
 		
 		if (file != null) {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(fileUploadPath+"/club/"+uuidFileName));
+			file.transferTo(new File(fileUploadPath+"\\club\\"+uuidFileName));
 			
 			club.setClubImg(uuidFileName);
 		}
