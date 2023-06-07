@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Stack, ThemeProvider, createTheme } from '@mui/system';
 import { Avatar, AvatarGroup, Chip, ImageListItem, Paper } from '@mui/material';
 import { styled } from '@mui/system';
@@ -16,12 +16,24 @@ const StyledAvatarGroup = styled(AvatarGroup)({
 
 const ClubThumbnail = ({ club }) => {
   const navigate = useNavigate();
+  const [imageLoadingError, setImageLoadingError] = useState(false);
 
   const onClickClub = useCallback((event) => {
     navigate(`/club/no/${clubNo}`);
   }, []);
 
-  const { clubName, clubRegion, clubMaxMemberNo, memberCount, clubNo } = club;
+  const handleImageError = useCallback(() => {
+    setImageLoadingError(true);
+  }, []);
+
+  const {
+    clubName,
+    clubRegion,
+    clubMaxMemberNo,
+    memberCount,
+    clubNo,
+    clubImg,
+  } = club;
   return (
     <Box
       sx={{
@@ -43,10 +55,20 @@ const ClubThumbnail = ({ club }) => {
             minHeight: '100px',
           }}
         >
-          <img
-            src={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=164&h=164&fit=crop&auto=format`}
-            style={{ borderRadius: '7px' }}
-          />
+          {club?.clubImg ? (
+            <img
+              src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/club/${
+                club?.clubImg
+              }`}
+              alt='noImg'
+              loading='lazy'
+              onError={handleImageError}
+            />
+          ) : (
+            <img
+              src={`https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c`}
+            />
+          )}
         </ImageListItem>
         <Box>
           <Chip label={club.filterTag} size='small' />
@@ -102,6 +124,8 @@ const ClubThumbnail = ({ club }) => {
 
 ClubThumbnail.propTypes = {
   club: PropTypes.shape({
+    clubNo: PropTypes.number.isRequired,
+    clubImg: PropTypes.string.isRequired,
     filterTag: PropTypes.string.isRequired,
     clubName: PropTypes.string.isRequired,
     clubRegion: PropTypes.string.isRequired,
