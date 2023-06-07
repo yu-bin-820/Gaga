@@ -45,6 +45,7 @@
     <result property="meetingReviewContent" 	column="meeting_review_content" 	jdbcType="LONGVARCHAR" />
     <result property="meetingReviewerNo" 		column="meeting_reviewer_no" 		jdbcType="INTEGER" />
     <result property="meetingReviewDate" 		column="meeting_review_date" 		jdbcType="TIMESTAMP" />
+    <result property="meetingReviewrNickName" 	column="meeting_reviewer_nick_name" jdbcType="LONGVARCHAR" />
   </resultMap>
   
  <resultMap id="mainCategoryResultMap" type="java.util.HashMap">
@@ -417,14 +418,17 @@
   
   <!-- 미팅 리뷰 리스트 조회 -->
 <select id="getMeetingReviewList" parameterType="int" resultMap="meetingReviewResultMap">
-  SELECT
-    meeting_review_no,
+  SELECT 
+  	meeting_review_no,
     meeting_no,
     meeting_score,
     meeting_review_img,
-    meeting_reviewer_no
+    meeting_review_content,
+    meeting_reviewer_no,
+    meeting_review_date,
+    (SELECT nick_name FROM users WHERE user_no = m.meeting_reviewer_no) meeting_reviewer_nick_name
   FROM
-    meeting_reviews
+    meeting_reviews AS m
   WHERE
     meeting_no = #{meetingNo}
 </select>

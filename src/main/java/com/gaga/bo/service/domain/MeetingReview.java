@@ -11,6 +11,7 @@ public class MeetingReview {
     private String meetingReviewContent;
     private int meetingReviewerNo;
     private Date meetingReviewDate;
+    private String meetingReviewrNickName;
     
     public MeetingReview() {
     	
@@ -61,12 +62,24 @@ public class MeetingReview {
 	}
 
 
+	public String getMeetingReviewrNickName() {
+		return meetingReviewrNickName;
+	}
+
+
+	public void setMeetingReviewrNickName(String meetingReviewrNickName) {
+		this.meetingReviewrNickName = meetingReviewrNickName;
+	}
+
+
 	@Override
 	public String toString() {
 		return "MeetingReview [meetingReviewNo=" + meetingReviewNo + ", meetingNo=" + meetingNo + ", meetingScore="
 				+ meetingScore + ", meetingReviewImg=" + meetingReviewImg + ", meetingReviewContent="
 				+ meetingReviewContent + ", meetingReviewerNo=" + meetingReviewerNo + ", meetingReviewDate="
-				+ meetingReviewDate + "]";
+				+ meetingReviewDate + ", meetingReviewrNickName=" + meetingReviewrNickName + "]";
 	}
+
+
 
 }
