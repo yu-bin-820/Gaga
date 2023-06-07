@@ -9,6 +9,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -35,14 +37,17 @@ public class CommunityRestController {
 	///field
 	@Autowired
 	@Qualifier("communityServiceImpl")
-	CommunityService communityService;
+	private CommunityService communityService;
 	
 	@Autowired
 	@Qualifier("userServiceImpl")
-	UserService userService;
+	private UserService userService;
+	
+	@Autowired
+	private ResourceLoader resourceLoader;
 	
 	@Value("${fileUploadPath}")
-	String fileUploadPath;
+	private String fileUploadPath;
 	
 	///Constructor()
 	public CommunityRestController() {
@@ -52,13 +57,16 @@ public class CommunityRestController {
 	//------------------------Profile Request Mapping----------------------------------------------------------
 	@PatchMapping("profileimg/userno/{userNo}")
 	public void updateProfileImg(@PathVariable int userNo, @RequestParam("file") MultipartFile file, HttpSession session) throws Exception {
+	    Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+	    File uploadDir = resource.getFile();
+	    
 		User user = userService.getUser(userNo);
 		System.out.println("profileImg 변경 전 :: " + user);
-		System.out.println(file.getOriginalFilename()+file.isEmpty());
+
 		String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 		String uuidFileName = UUID.randomUUID().toString()+ext;
 
-		file.transferTo(new File(fileUploadPath+"user/"+uuidFileName));
+		file.transferTo(new File(uploadDir, "user/"+uuidFileName));
 		
 		user.setProfileImg(uuidFileName);
 		userService.updateUser(user);
@@ -74,17 +82,19 @@ public class CommunityRestController {
 								  @RequestParam(value = "file3", required = false) MultipartFile file3, 
 								  HttpSession session
 								  											  ) throws Exception {
-		
+		Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+		File uploadDir = resource.getFile();
+		    
 		User user = userService.getUser(userNo);
 		
 		System.out.println("ActivityImg 변경 전 :: " + user);
-		System.out.println(file.getOriginalFilename());
+	
 
 		if (file != null) {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(fileUploadPath+"user/"+uuidFileName));
+			file.transferTo(new File(uploadDir,"user/"+uuidFileName));
 			
 			user.setActivityImg(uuidFileName);
 		}
@@ -93,7 +103,7 @@ public class CommunityRestController {
 			String ext = file2.getOriginalFilename().substring(file2.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file2.transferTo(new File(fileUploadPath+"user/"+uuidFileName));
+			file2.transferTo(new File(uploadDir,"user/"+uuidFileName));
 			
 			user.setActivityImg2(uuidFileName);
 		}
@@ -102,7 +112,7 @@ public class CommunityRestController {
 			String ext = file3.getOriginalFilename().substring(file3.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file3.transferTo(new File(fileUploadPath+"user/"+uuidFileName));
+			file3.transferTo(new File(uploadDir,"user/"+uuidFileName));
 			
 			user.setActivityImg3(uuidFileName);
 		}
@@ -201,13 +211,14 @@ public class CommunityRestController {
 						  @RequestParam(value = "file2", required = false) MultipartFile file2, 
 						  @RequestParam(value = "file3", required = false) MultipartFile file3
 								  											       				) throws Exception {
-		
+	    Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+	    File uploadDir = resource.getFile();
 
 		if (file != null) {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(fileUploadPath+"community/"+uuidFileName));
+			file.transferTo(new File(uploadDir, "community/"+uuidFileName));
 			
 			report.setReportImg(uuidFileName);
 		}
@@ -216,7 +227,7 @@ public class CommunityRestController {
 			String ext = file2.getOriginalFilename().substring(file2.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file2.transferTo(new File(fileUploadPath+"community/"+uuidFileName));
+			file2.transferTo(new File(uploadDir, "community/"+uuidFileName));
 			
 			report.setReportImg2(uuidFileName);
 		}
@@ -225,7 +236,7 @@ public class CommunityRestController {
 			String ext = file3.getOriginalFilename().substring(file3.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file3.transferTo(new File(fileUploadPath+"community/"+uuidFileName));
+			file3.transferTo(new File(uploadDir, "community/"+uuidFileName));
 			
 			report.setReportImg3(uuidFileName);
 		}
@@ -241,6 +252,8 @@ public class CommunityRestController {
 							 @RequestParam(value = "file2", required = false) MultipartFile file2, 
 							 @RequestParam(value = "file3", required = false) MultipartFile file3
 														  										  ) throws Exception {
+	    Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+	    File uploadDir = resource.getFile();
 		
 		System.out.println(":: updateReport() - Before Set Files :: "+ report);
 		
@@ -248,7 +261,7 @@ public class CommunityRestController {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(fileUploadPath+"community/"+uuidFileName));
+			file.transferTo(new File(uploadDir,"community/"+uuidFileName));
 			
 			report.setReportImg(uuidFileName);
 		}
@@ -257,7 +270,7 @@ public class CommunityRestController {
 			String ext = file2.getOriginalFilename().substring(file2.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file2.transferTo(new File(fileUploadPath+"community/"+uuidFileName));
+			file2.transferTo(new File(uploadDir, "community/"+uuidFileName));
 			
 			report.setReportImg2(uuidFileName);
 		}
@@ -266,7 +279,7 @@ public class CommunityRestController {
 			String ext = file3.getOriginalFilename().substring(file3.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file3.transferTo(new File(fileUploadPath+"community/"+uuidFileName));
+			file3.transferTo(new File(uploadDir, "community/"+uuidFileName));
 			
 			report.setReportImg3(uuidFileName);
 		}
