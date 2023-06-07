@@ -181,7 +181,7 @@ const GetMyProfile = () => {
             }}
           >
             <Typography>
-              {myData?.userIntro.split('\n').map((line, i) => (
+              {myData?.userIntro?.split('\n').map((line, i) => (
                 <div key={i}>{line}</div>
               ))}
             </Typography>
