@@ -8,10 +8,28 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Box } from "@mui/system";
 import PropTypes from "prop-types";
 import { useSWRConfig } from 'swr';
+import useSWR from "swr";
+import fetcher from "@utils/fetcher";
+import { useCallback } from "react";
+import axios from 'axios';
 
 const UserLogout = ({ pageName, prevPath }) => {
   const navigate = useNavigate();
   const { mutate } = useSWRConfig();
+  const { data: myData, mutate: mutateMe } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+  );
+  const onClickLogOut = useCallback(async () => {
+    await axios
+      .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/user/logout`, {
+        withCredentials: true,
+      })
+      .then(() => {
+        mutateMe();
+      });
+  }, [mutateMe]);
+  
   return (
     <>
       <AppBar
@@ -22,28 +40,7 @@ const UserLogout = ({ pageName, prevPath }) => {
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <IconButton
-              onClick={async () => {
-                // 서버에 로그아웃 요청 보내기
-                const response = await fetch(
-                  `${import.meta.env.VITE_SPRING_HOST}/rest/user/logout`,
-                  {
-                    method: "DELETE",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                  }
-                );
-                // 응답을 받았을 때의 동작을 여기에 작성하세요.
-                if (response.ok) {
-                  console.log("로그아웃 완료");
-                  mutate(`${import.meta.env.VITE_SPRING_HOST}/rest/user/login`, null, false);
-                  navigate("/");
-                } else {
-                  console.error("로그아웃 요청 실패");
-                }
-              }}
-            >
+          <IconButton onClick={onClickLogOut} navigate="/">
               <ArrowBackIosNewIcon />
             </IconButton>
             <Box

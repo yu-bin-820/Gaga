@@ -10,7 +10,7 @@ const userField={
     nickName: '',
     phoneNo: ''
 }
-const useUserFormStore=create((set=>({
+const useUpdateUserFormStore=create((set=>({
     ...userField,
 
     setField: (field, value)=> set((state)=>({[field]: value})),
@@ -21,4 +21,4 @@ const useUserFormStore=create((set=>({
 })))
 
 
-export default useUserFormStore;
+export default useUpdateUserFormStore;
