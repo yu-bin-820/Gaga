@@ -1,11 +1,12 @@
-import { Button } from "@mui/material";
-import { useCallback } from "react";
-import { Navigate, useNavigate } from "react-router";
-import useSWR from "swr";
-import fetcher from "@utils/fetcher";
-import ListMainClub from "@components/club/ListMainClub";
-import MainTop from "@layouts/common/MainTop";
+import { Button } from '@mui/material';
+import { useCallback } from 'react';
+import { Navigate, useNavigate } from 'react-router';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
+import ListMainClub from '@components/club/ListMainClub';
+import MainTop from '@layouts/common/MainTop';
 import axios from 'axios';
+import { Box } from '@mui/system';
 
 const UnauthenticatedMain = () => {
   const { data: myData, mutate: mutateMe } = useSWR(
@@ -26,12 +27,12 @@ const UnauthenticatedMain = () => {
   }, [mutateMe]);
 
   const onClickLogin = useCallback(() => {
-    navigate("/user/login");
+    navigate('/user/login');
   }, [navigate]);
 
   const onClickRegistProfile = useCallback(() => {
-    navigate(`/community/profile/${myData?.userNo}`);
-  }, [navigate, myData]);
+    navigate(`/community/profile/mine`);
+  }, [navigate]);
 
   console.log(myData);
 
@@ -43,15 +44,40 @@ const UnauthenticatedMain = () => {
   return (
     <>
       <MainTop />
-      <div style={{ marginTop: "63px" }}></div>
-      <ListMainClub />
-      {!myData && <Button onClick={onClickLogin}>LogIn</Button>}
-      {myData && !myData?.profileImg && (
-        <Button onClick={onClickRegistProfile}>profileImg등록</Button>
-      )}
-      <Button sx={{ marginLeft: "auto" }} onClick={onClickLogOut}>
-        Logout
-      </Button>
+      <Box sx={{ backgroundColor: '#ededed', minHeight: '100vh' }}>
+        <ListMainClub />
+
+        <Box
+          sx={{
+            margin: '10px',
+            display: 'flex',
+            justifyContent: 'center',
+            position: 'fixed',
+            bottom: '20px',
+            left: '48%',
+            transform: 'translateX(-50%)',
+          }}
+        >
+          {!myData && (
+            <Button
+              variant="contained"
+              onClick={onClickLogin}
+              sx={{ width: '85vw' }}
+            >
+              LogIn
+            </Button>
+          )}
+          {myData && !myData?.profileImg && (
+            <Button
+              variant="contained"
+              onClick={onClickRegistProfile}
+              sx={{ width: '85vw' }}
+            >
+              profileImg등록
+            </Button>
+          )}
+        </Box>
+      </Box>
     </>
   );
 };

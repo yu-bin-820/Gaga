@@ -5,7 +5,7 @@ const userField={
     userId: '',
     password: '',
     userName: '',
-    birthday: '',
+    birthday: null,
     gender: 1,
     nickName: '',
     phoneNo: ''

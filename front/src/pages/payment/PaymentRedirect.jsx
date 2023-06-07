@@ -1,12 +1,15 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Stack } from '@mui/system';
 import CommonTop from '@layouts/common/CommonTop';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Button, Typography } from '@mui/material';
+import fetcher from '@utils/fetcher';
+import useSWR from 'swr';
 
 const PaymentRedirect = () => {
+  const [meetingData, setMeetingData] = useState();
   const { search } = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(search);
@@ -32,8 +35,7 @@ const PaymentRedirect = () => {
 
   useEffect(() => {
     if (imp_success === false) {
-      alert('결제 실패 추후 페이지 구성 예정');
-      navigate('/payment/fail', { state: { meetingNo } });
+      navigate('/payment/fail', { state: { meetingNo, nickName } });
     } else {
       axios
         .post(`${import.meta.env.VITE_SPRING_HOST}/rest/payment`, data)
@@ -69,34 +71,34 @@ const PaymentRedirect = () => {
 
   return (
     <>
-      <CommonTop prevPath="/" />
+      <CommonTop prevPath='/' />
       {imp_success === true ? (
         <Stack sx={{ marginTop: '100px', alignItems: 'center' }}>
           <h2>결제 완료</h2>
-          <CheckCircleIcon color="success" sx={{ fontSize: '60px' }} />
+          <CheckCircleIcon color='success' sx={{ fontSize: '60px' }} />
           <h3>{data.nickName}님 결제가 정상적으로 처리되었습니다.</h3>
           <Stack sx={{ marginTop: '20px', alignItems: 'center' }}>
-            <Typography variant="h7" component="div">
+            <Typography variant='h7' component='div'>
               미팅 이름 : {data.meetingName}
             </Typography>
-            <Typography variant="h7" component="div">
+            <Typography variant='h7' component='div'>
               참가비 : {data.entryFee}원
             </Typography>
           </Stack>
-          <Stack sx={{ marginTop: '20px' }} direction="row" spacing={2}>
+          <Stack sx={{ marginTop: '20px' }} direction='row' spacing={2}>
             <Button
               onClick={onClickMeeting}
-              variant="contained"
-              color="primary"
-              size="large"
+              variant='contained'
+              color='primary'
+              size='large'
             >
               모임
             </Button>
             <Button
               onClick={onClickMain}
-              variant="contained"
-              color="primary"
-              size="large"
+              variant='contained'
+              color='primary'
+              size='large'
             >
               메인
             </Button>

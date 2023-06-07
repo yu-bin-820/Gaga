@@ -17,7 +17,7 @@ const GetUser = () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getUser/userNo/${userNo}`);
       setUser(response.data);
-      setIsBlacklisted(response.data.blacklist === 2); // 블랙리스트 상태 설정
+      setIsBlacklisted(response.data.blacklist === 1 || response.data.blacklist === 2);// 블랙리스트 상태 설정
       console.log(response.data, "나와라얍");
     } catch (error) {
       console.error(error);
@@ -45,6 +45,7 @@ const GetUser = () => {
   
   return (
     <Box sx={{ margin: '2rem' }}>
+        
       <Typography variant="h4" gutterBottom>User Details</Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>

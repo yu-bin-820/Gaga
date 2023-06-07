@@ -61,7 +61,7 @@ import ListEventPost from '@pages/admin/NoticePost/ListEventPost.jsx';
 import UpdateNoticePost from '@pages/admin/NoticePost/UpdateNoticePost.jsx';
 
 import GetBlackList from '@pages/admin/BlackList/GetBlackList.jsx';
-import SearchUser from '@pages/admin/BlackList/ListUser.jsx';
+import ListUser from '@pages/admin/BlackList/ListUser.jsx';
 import GetReportAdmin from '@pages/admin/Report/GetReportAdmin.jsx';
 import ListReportAdmin from '@pages/admin/Report/ListReportAdmin.jsx';
 import ListBlackList from '@pages/admin/BlackList/ListBlackList.jsx';
@@ -70,7 +70,6 @@ import UpdateClub from '@pages/club/UpdateClub.jsx';
 import UpdateAccount from '@pages/payment/UpdateAccount.jsx';
 import ListPayment from '@pages/payment/ListPayment.jsx';
 import ListSearchMeeting from '@pages/meeting/ListSearchMeeting.jsx';
-import ListUser from '@pages/admin/BlackList/ListUser.jsx';
 import GetUser from '@pages/admin/BlackList/GetUser.jsx';
 import ListSearchClub from '@pages/club/ListSearchClub.jsx';
 import SearchClub from '@pages/club/SearchClub.jsx';

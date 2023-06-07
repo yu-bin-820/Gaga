@@ -12,7 +12,7 @@ function GetBlackList() {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getBlackList/userNo/${userNo}`);
+      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getBlackList/${userNo}`);
       setUser(response.data);
     } catch (error) {
       console.error(error);
@@ -26,7 +26,10 @@ function GetBlackList() {
   return (
     <div>
       <h2>{user.userName}의 정보</h2>
-      <p>User ID: {user.userId}</p>
+      <p>아이디: {user.userId}</p>
+      <p>이름: {user.userName}</p>
+      <p>닉네임: {user.nickName}</p>
+      <p>온도: {user.temperature}</p>
       {/* 추가적인 유저 정보 표시 */}
     </div>
   );
