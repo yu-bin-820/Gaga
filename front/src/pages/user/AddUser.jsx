@@ -30,6 +30,7 @@ const AddUser = () => {
     gender,
     nickName,
     phoneNo,
+    setField,
     onChangeField,
     reset,
   } = useUserFormStore();
@@ -269,10 +270,13 @@ const AddUser = () => {
 
   return (
     <>
-      <CommonTop />
-      <Grid container component="main" sx={{ height: "100vh" }}>
+      <CommonTop pageName="Gaga 회원가입"/>
+      <Grid container component="main" sx={{ height: "100vh",display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center", }}>
         <CssBaseline />
-        <Box component="form" noValidate sx={{ width: "50%", mt: 8, ml: 10 }}>
+        <Box component="form" noValidate sx={{ width: "80%", mt: 5,}}>
           <FormControlLabel
             control={
               <Checkbox
