@@ -89,10 +89,7 @@
 	<!-- 정산 SQL -->
 	<!-- SQL : SELECT --> <!-- 1 :진행중 2: 성사 -->
 	<select id="getAllAdjustmentList" resultMap="meetingResultMap">
-		SELECT 
-		    meeting_date, meeting_end_time, adjustment_time, 
-		    adjustment_state, account_no, bank_name, meeting_name, 
-		    meeting_leader_no, entry_fee
+		SELECT *
 		FROM 
 		    meetings
 		WHERE 
@@ -106,9 +103,7 @@
 	<!-- SQL : SELECT -->
 	<select id="getAdjustmentList" parameterType="int" resultMap="meetingResultMap">
 	  SELECT 
-		    meeting_date, meeting_end_time, adjustment_time, 
-		    adjustment_state, account_no, bank_name, meeting_name, 
-		    meeting_leader_no,entry_fee
+		    *
 		FROM 
 		    meetings
 		WHERE 

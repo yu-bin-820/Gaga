@@ -42,7 +42,7 @@
 	    club_img, club_region, filter_gender, filter_min_age, filter_max_age, filter_tag, main_category_no)
 	  VALUES 
 	   (#{clubName:VARCHAR}, #{clubIntro:VARCHAR}, #{clubLeaderNo:INTEGER}, #{clubMaxMemberNo:INTEGER},
-	   	#{clubState:INTEGER}, NOW() ,#{clubImg:VARCHAR}, #{clubRegion:VARCHAR}, #{filterGender:INTEGER}, 
+		1, NOW() ,#{clubImg:VARCHAR}, #{clubRegion:VARCHAR}, #{filterGender:INTEGER}, 
 	   	#{filterMinAge:INTEGER}, #{filterMaxAge:INTEGER}, #{filterTag:VARCHAR}, #{mainCategoryNo:INTEGER})
 	</insert>
 	
