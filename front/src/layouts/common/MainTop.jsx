@@ -130,7 +130,10 @@ const MainTop = () => {
         setAnchorEl={setAnchorAlarmEl}
         alarmData={alarmData}
       />
-      <DefaultFilterDrawer />
+      <DefaultFilterDrawer
+        defaultFilterDrawerOpen={defaultFilterDrawerOpen}
+        setDefaultFilterDrawerOpen={setDefaultFilterDrawerOpen}
+      />
     </>
   );
 };
