@@ -11,6 +11,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,6 +42,9 @@ public class ClubRestController {
 	@Qualifier("clubServiceImpl")
 	private ClubService clubService;
 	
+	@Autowired
+	private ResourceLoader resourceLoader;
+	
 	@Value("${fileUploadPath}")
 	String fileUploadPath;
 	
@@ -55,18 +60,21 @@ public class ClubRestController {
 	
 	@PostMapping("")
 	public void addClub(@ModelAttribute Club club,
-				 		   @RequestParam(value = "file", required = false) MultipartFile file
+				 		   @RequestParam("file") MultipartFile file
 						   ) throws Exception{
 		
 		System.out.println("클럽 생성 Ctrl");
 		
+		 Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+		 File uploadDir = resource.getFile();
+				
 		System.out.println("img변경 전 : "+club);
 		
 		if (file != null) {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(fileUploadPath+"\\club\\"+uuidFileName));
+			file.transferTo(new File(uploadDir,"club/"+uuidFileName));
 			
 			club.setClubImg(uuidFileName);
 		}
@@ -239,10 +247,13 @@ public class ClubRestController {
 	
 	@PatchMapping("")
 	public void updateClub(@ModelAttribute Club club,
-	 		   				  @RequestParam(value = "file", required = false) MultipartFile file
+	 		   				  @RequestParam("file") MultipartFile file
 							  ) throws Exception{
 		
 		System.out.println("클럽 정보 수정 Ctrl");
+		
+		 Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+		 File uploadDir = resource.getFile();
 		
 		System.out.println("img변경 전 : "+club);
 		
@@ -250,7 +261,7 @@ public class ClubRestController {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(fileUploadPath+"\\club\\"+uuidFileName));
+			file.transferTo(new File(uploadDir,"club/"+uuidFileName));
 			
 			club.setClubImg(uuidFileName);
 		}
