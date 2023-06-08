@@ -66,4 +66,5 @@ public interface CommunityDao {
 	public String getTitleName(int titleNo) throws Exception;
 	
 	public List<Title> getUserEarnedTitleList(int userNo) throws Exception;
+	
 }
