@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
+
 //import { fetchGptResponse } from './gptapi';
 
 function Chatbot() {
@@ -21,7 +22,6 @@ function Chatbot() {
 
   const chatMessagesRef = useRef(null);
   const messageEndRef = useRef(null);
-  const secretKey = 'VGZDTVBiZXBBRXhBbWFsdnRManVkV3RVRlJQdmtLbFg=';
 
   const [exampleMessages, setExampleMessages] = useState([]);
 
@@ -32,20 +32,81 @@ function Chatbot() {
     } else {
       setIsVisible(true);
       if (messages.length === 0) {
-        handleOpenEvent().then((welcomeMessage) => {
-          const botMessage = {
-            type: 'bot',
-            text: welcomeMessage,
-            bubbles: welcomeMessage.bubbles,
-          };
-          setMessages([botMessage]);
-          setToggleImage('/assets/img/chatboticon/whilechatting.png');
-        }).catch((error) => {
+        handleOpenEvent().catch((error) => {
           console.error('handleOpenEvent 오류:', error);
+          setToggleImage('/assets/img/chatboticon/whilechatting.png');
         });
       }
     }
   }
+
+  const handleOpenEvent = async () => {
+    console.log("메시지 출발합니다");
+	const apiUrl = `${import.meta.env.VITE_SPRING_HOST}/rest/chatbot`;
+	const requestBodyWelcome = {
+        version: "v2",
+        userId: "nuWelcomeUserUserSuperUser",
+        timestamp: new Date().getTime(),
+        bubbles: [],
+        event: "open",
+    };
+    
+    const requestBodyStringWelcome = JSON.stringify(requestBodyWelcome);
+    
+    try {        
+        const response = await axios.post(apiUrl, requestBodyWelcome, {
+            headers: {
+              'Content-Type': 'application/json;UTF-8',
+            },
+          });
+       
+          const jsonData = JSON.stringify(response);
+      
+          const jsonObject = JSON.parse(jsonData);
+
+          if (jsonData.error) {
+            console.error('네이버 챗봇 서버 에러:', jsonData.error);
+            throw new Error(jsonData.error);
+          }
+      
+          let botMessage = jsonObject.data.bubbles[0].data.description;
+          let botMessage2 = jsonObject.data.bubbles[1].data.contentTable;
+          let botMessage3 = jsonObject.data.bubbles[1].data;
+          let contentTable = jsonObject.data.bubbles[1].data.contentTable;
+
+          contentTable.forEach((row, rowIndex) => {
+            row.forEach((item, itemIndex) => {
+            // 이제 각 아이템에 대한 데이터를 다룰 수 있습니다.
+            console.log(item.data.title); // 아이템 제목 출력
+            console.log(item.data.data.action.data.url); // 아이템 URL 출력
+        });
+    });
+         
+          if (jsonObject.data.bubbles.length > 1) {
+            if (jsonObject.data.bubbles[1].type === 'MULTILINKS') {
+              let links = jsonObject.data.bubbles[1].data.component.list;
+              botMessage += '\n다음 옵션 중 하나를 선택해주세요:\n';
+              links.forEach((link, index) => {
+                botMessage += `${index + 1}. ${link.title}\n`;
+              });
+            }
+          }
+   
+          console.log(botMessage, '@@@jsonObject.data.bubbles[0].data.description@@@');
+      
+
+          const botMessageObject = { type: 'bot', text: botMessage };
+          setMessages([...messages, botMessageObject]);
+
+          return null;
+
+          
+        } catch (error) {
+          console.error('handleOpenEvent 오류:', error);
+          throw error;
+        }
+      };
+
   const handleOutsideClick = (event) => {
     if (!event.target.closest('.chat-container') && isVisible) {
       toggleChatBot();
@@ -58,74 +119,7 @@ function Chatbot() {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
   }, [isVisible]);
-
-
-  const handleOpenEvent = async () => {
-    console.log('메시지 출발합니다');
-    //const apiUrl = 'http://192.168.0.37:8080/rest/chatbot';
-    const apiUrl = 'http://localhost:8080/rest/chatbot';
-    const requestBodyWelcome = {
-      version: 'v2',
-      userId: 'nuWelcomeUserUserSuperUser',
-      timestamp: new Date().getTime(),
-      bubbles: [],
-      event: 'open',
-    };
   
-    const requestBodyStringWelcome = JSON.stringify(requestBodyWelcome);
-    const signature = await makeSignature(requestBodyStringWelcome, secretKey);
-  
-    try {
-      const response = await axios.post(apiUrl, requestBodyWelcome, {
-        headers: { 'hmac': signature },
-      });
-  
-      console.log(response, '리스');
-      console.log(response.data, 'isthis UD?');
-      const jsonData = JSON.stringify(response);
-      console.log(jsonData, 'it is Json');
-  
-      const jsonObject = JSON.parse(jsonData);
-      console.log(jsonObject, 'hi im json');
-      console.log(jsonObject.data,'hi im json data');
-      if (jsonData.error) {
-        console.error('네이버 챗봇 서버 에러:', jsonData.error);
-        throw new Error(jsonData.error);
-      }
-  
-      let botMessage = jsonObject.data.bubbles[0].data.description;
-      let botMessage2 = jsonObject.data.bubbles[1].data.contentTable;
-      let botMessage3 = jsonObject.data.bubbles[1].data;
-      let contentTable = jsonObject.data.bubbles[1].data.contentTable;
-     
-      contentTable.forEach((row, rowIndex) => {
-        row.forEach((item, itemIndex) => {
-        // 이제 각 아이템에 대한 데이터를 다룰 수 있습니다.
-        console.log(item.data.title); // 아이템 제목 출력
-        console.log(item.data.data.action.data.url); // 아이템 URL 출력
-    });
-});
-      console.log(botMessage2, " 제발 부탁이야")
-      console.log(botMessage3, " 제발 부탁입니다 선생님")
-      if (jsonObject.data.bubbles.length > 1) {
-        if (jsonObject.data.bubbles[1].type === 'MULTILINKS') {
-          let links = jsonObject.data.bubbles[1].data.component.list;
-          botMessage += '\n다음 옵션 중 하나를 선택해주세요:\n';
-          links.forEach((link, index) => {
-            botMessage += `${index + 1}. ${link.title}\n`;
-          });
-        }
-      }
-  
-      console.log(botMessage, '@@@jsonObject.data.bubbles[0].data.description@@@');
-  
-      return botMessage;
-    } catch (error) {
-      console.error('handleOpenEvent 오류:', error);
-      throw error;
-    }
-  };
-
 //HELP버튼 >> 추후 모달창으로 수정? 
   const handleHelpClick = () => {
     console.log("메시지 출발합니다"); 
@@ -135,7 +129,6 @@ function Chatbot() {
         { type: 'bot', text: '최신 뉴스를 알려드릴 수 있습니다.' },
         //... 필요내용 추가 해야하나? 
     ];
-
     setExampleMessages(examples);
 };
 
@@ -189,68 +182,92 @@ const handleToggleGpt = () => {
     if (chatContainer && toggleChatBotBtn && normalImg && gptThemeImg) {
       if (chatContainer.classList.contains('gpt-theme')) {
         setIsGptMode(false);
+        
         chatContainer.classList.remove('gpt-theme');
         normalImg.classList.remove('hidden');
         gptThemeImg.classList.add('hidden');
         setToggleImage('/assets/img/chatboticon/reverse.png');
         toggleChatBotBtn.style.backgroundColor = '#009970';
+  
+        const gptStatusMessage = {
+          type: 'bot',
+          text: 'GPT 모드가 비활성화되었습니다.',
+        };
+        setMessages([...messages, gptStatusMessage]);
       } else {
         setIsGptMode(true);
+        console.log("gpt모드입니다 과금주의");
         chatContainer.classList.add('gpt-theme');
         normalImg.classList.add('hidden');
         gptThemeImg.classList.remove('hidden');
         setToggleImage('/assets/img/chatboticon/gpt4.png');
         toggleChatBotBtn.style.backgroundColor = '#000000';
-      }
   
-      const gptStatusMessage = {
-        type: 'bot',
-        text: !isGptMode
-          ? 'GPT 모드가 활성화되었습니다.'
-          : 'GPT 모드가 비활성화되었습니다.',
-      };
-      setMessages([...messages, gptStatusMessage]);
+        const gptStatusMessage = {
+          type: 'bot',
+          text: 'GPT 모드가 활성화되었습니다.',
+        };
+        setMessages([...messages, gptStatusMessage]);
+  
+        // GPT 모드가 활성화된 경우에만 handleSendMessage 호출
+        if (isGptMode) {
+            console.log("gpt모드데스");
+          handleSendMessage(inputText);
+        }
+      }
     }
   };
-  
 
 const handleSendMessage = async (text) => {
   document.querySelector('.toggleChatBot').addEventListener('click', async function () {
-    this.classList.toggle('active');
-    
+    this.classList.toggle('active');    
   });
   
   if (isGptMode) {
-    const gptResponse = await fetchGptResponse(text);
-    return gptResponse;
-  } else {
-    //const apiUrl = 'http://192.168.0.37:8080/rest/chatbot';
-    const apiUrl = 'http://localhost:8080/rest/chatbot';
-    const requestBody = {
-      version: 'v2',
-      userId: 'UserUserSuperUser',
-      timestamp: new Date().getTime(),
-      inputText: text,
-      bubbles: [
-        {
-          type: 'text',
-          data: {
-            description: text,
-          },
+    const response = await fetch(`${import.meta.env.VITE_SPRING_HOST}/rest/gpt`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
         },
-      ],
-      event: 'send',
-      isGptMode: isGptMode,
-    };    
+        body: JSON.stringify({
+            prompt: inputText,
+            isGptMode: isGptMode
+        })
+        
+      });
+      // 서버로부터의 응답을 받아 JSON으로 변환
+      const data = await response.json();
+      // 변환된 JSON의 'text' 필드가 응답 메시지가 될 것이다.
+      const botMessage = data.text;
+      
+      return botMessage;
+    } else {
+    //const apiUrl = 'http://192.168.0.37:8080/rest/chatbot';
+    const apiUrl = `${import.meta.env.VITE_SPRING_HOST}/rest/chatbot`;
+    const requestBody = {
+        version: 'v2',
+        userId: 'UserUserSuperUser',
+        timestamp: new Date().getTime(),
+        inputText: text,
+        bubbles: [
+          {
+            type: 'text',
+            data: {
+              description: text,
+            },
+          },
+        ],
+        event: 'send',
+        isGptMode: isGptMode,
+      };    
 
     const requestBodyString = JSON.stringify(requestBody);
-    const signature = await makeSignature(requestBodyString, secretKey);
+
 
     return axios
       .post(apiUrl, requestBodyString, {
         headers: {
           'Content-Type': 'application/json;UTF-8',
-          'X-NCP-CHATBOT_SIGNATURE': signature,
         },
       })
       .then((response) => {
@@ -267,15 +284,6 @@ const handleSendMessage = async (text) => {
       });
   }
 };
-
-//시그니쳐로 서버전송
-const makeSignature = async (message, secretKey) => {
-    const secretKeyBytes = new TextEncoder().encode(secretKey);
-    const hmac = await crypto.subtle.importKey('raw', secretKeyBytes, { name: 'HMAC', hash: 'SHA-256' }, true, ['sign']);
-  
-    const signature = await crypto.subtle.sign('HMAC', hmac, new TextEncoder().encode(message));
-    return btoa(String.fromCharCode(...new Uint8Array(signature)));
-  };
 
   return (
       <div>
@@ -295,7 +303,7 @@ const makeSignature = async (message, secretKey) => {
                   src="/assets/img/chatboticon/gpt4.png"
               />
           </button>
-
+        
           <div className={`chat-container ${isVisible ? "" : "hidden"}`}  style={{ textAlign: "right" }}>
               <div className="chat-header" >
                   {/* 챗봇 창 상단에 HELP 버튼 추가 */}
@@ -313,7 +321,11 @@ const makeSignature = async (message, secretKey) => {
                           <h4>
                               {message.type === "user" ? "당신" : "Gagabot"}
                           </h4>
-                          <p>{message.text}</p>
+                          <p>{message.text.includes("죄송합니다") ? (
+      <a href="mailto:thega4004@naver.com">{message.text}</a>
+    ) : (
+      message.text
+    )}</p>
                           {message.type === "bot" && message.bubbles && (
                               <div>
                                   {message.bubbles.map(

@@ -6,7 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 import SmartToyOutlinedIcon from '@mui/icons-material/SmartToyOutlined';
 import Chatbot from '@components/chatbot/ChatBot';
+
+
 const ChatBotButton = () => {
+    
+
   return (
     <Chatbot />
   );
