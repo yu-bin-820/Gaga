@@ -29,7 +29,7 @@ const ListCategory = ({ onMainCategoryChange, onSubCategoryClick }) => {
         `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/maincategory`
       )
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setMainCategoryList(response.data);
       })
       .catch((error) => {
@@ -43,7 +43,7 @@ const ListCategory = ({ onMainCategoryChange, onSubCategoryClick }) => {
         `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/subcategory`
       )
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setSubCategoryList(response.data);
       })
       .catch((error) => {

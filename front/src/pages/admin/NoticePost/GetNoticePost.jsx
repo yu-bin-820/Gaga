@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Box, Button, Typography, Paper, Grid } from '@mui/material';
+import { Box, Button, Typography, Paper, Grid, IconButton } from '@mui/material';
+import { Edit, Delete } from '@mui/icons-material';
+import InfoIcon from '@mui/icons-material/Info';
 
 
 function GetNoticePost() {
@@ -39,25 +41,45 @@ function GetNoticePost() {
   };
 
   return (
-    <Box sx={{ margin: '2rem', padding: '1rem' }}>
-      <Typography variant="h4" gutterBottom>공지사항 조회</Typography>
-      <Paper elevation={3} sx={{ padding: '2rem' }}>
-        <Typography variant="body1"><strong>번호:</strong> {noticePost.noticePostNo}</Typography>
-        <Typography variant="body1"><strong>제목:</strong> {noticePost.noticePostTitle}</Typography>
-        <Typography variant="body1"><strong>내용:</strong> {noticePost.noticePostText}</Typography>
-        <Typography variant="body1"><strong>이미지:</strong> {noticePost.noticePostImg}</Typography>
-        <img src={`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getImage/${noticePost.noticePostImg}`} alt="공지사항 이미지" style={{ maxWidth: '100%', maxHeight: '30vh'}} />
-      </Paper>
-      <Grid container spacing={2} sx={{ marginTop: '1rem' }}>
-        <Grid item>
-          <Button variant="contained" color="primary" onClick={handleUpdate}>수정</Button>
+    <Box sx={{ margin: '2rem', padding: '1rem', backgroundColor: '#f5f5f5', borderRadius: '10px' }}>
+    <Typography variant="h4" gutterBottom style={{ display: 'flex', alignItems: 'center' }}>
+      <InfoIcon style={{ marginRight: '0.5rem' }} />
+      <span style={{ fontWeight: 'bold' }}>공지사항 조회</span>
+    </Typography>
+    <Paper elevation={3} sx={{ padding: '2rem', backgroundColor: '#ffffff', borderRadius: '10px', marginBottom: '1rem' }}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={2}>
+          <Typography variant="body1" style={{ fontWeight: 'bold' }}>게시글 번호</Typography>
+          <Typography variant="body1">{noticePost.noticePostNo}</Typography>
         </Grid>
-        <Grid item>
-          <Button variant="contained" color="secondary" onClick={handleDelete}>삭제</Button>
+        <Grid item xs={12} md={2}>
+          <Typography variant="body1" style={{ fontWeight: 'bold' }}></Typography>
+          <Typography variant="body1">{noticePost.noticePostTitle}</Typography>
+        </Grid>
+        <Grid item xs={12} md={8}>
+          <Typography variant="body1" style={{ fontWeight: 'bold' }}></Typography>
+          <Typography variant="body1">{noticePost.noticePostText}</Typography>
+          <img
+            src={`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getImage/${noticePost.noticePostImg}`}
+            alt="공지사항 이미지"
+            style={{ maxWidth: '100%', maxHeight: '30vh', marginTop: '1rem' }}
+          />
         </Grid>
       </Grid>
-    </Box>
-  );
+    </Paper>
+    <Grid container spacing={2}>
+      <Grid item>
+        <Button variant="contained" color="primary" startIcon={<Edit />} onClick={handleUpdate} style={{ fontWeight: 'bold' }}>
+          수정
+        </Button>
+      </Grid>
+      <Grid item>
+        <Button variant="contained" color="secondary" startIcon={<Delete />} onClick={handleDelete} style={{ fontWeight: 'bold' }}>
+          삭제
+        </Button>
+      </Grid>
+    </Grid>
+  </Box>
+);
 }
-
 export default GetNoticePost;

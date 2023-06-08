@@ -1,13 +1,13 @@
-import ClubThumbnail from "@components/club/ClubThumbnail";
-import MeetingThumbnail from "@components/meeting/MeetingThumnail";
-import useSearchClubFormStore from "@hooks/club/useSearchClubFormStore";
-import useSearchMeetingFormStore from "@hooks/meeting/useSearchMeetingFormStore";
-import CommonTop from "@layouts/common/CommonTop";
-import { Button } from "@mui/material";
-import { Box } from "@mui/system";
-import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import ClubThumbnail from '@components/club/ClubThumbnail';
+import MeetingThumbnail from '@components/meeting/MeetingThumnail';
+import useSearchClubFormStore from '@hooks/club/useSearchClubFormStore';
+import useSearchMeetingFormStore from '@hooks/meeting/useSearchMeetingFormStore';
+import CommonTop from '@layouts/common/CommonTop';
+import { Button } from '@mui/material';
+import { Box } from '@mui/system';
+import axios from 'axios';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 
 const ListSearchClub = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,10 +23,10 @@ const ListSearchClub = () => {
 
   useEffect(() => {
     // 스크롤 이벤트 리스너 등록
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     return () => {
       // 컴포넌트 언마운트 시 스크롤 이벤트 리스너 해제
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -69,7 +69,7 @@ const ListSearchClub = () => {
   return (
     <div>
       <CommonTop />
-      <Box sx={{ marginTop: "64px" }}>
+      <Box sx={{ marginTop: '64px' }}>
         <Box>
           {clubList?.map((club, i) => (
             <Box key={i}>

@@ -8,30 +8,31 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 const ListSearchMeeting = () => {
-  const [currentPage, setCurrentPage] = useState(1);
   const [meetingList, setMeetingList] = useState();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const { searchKeyword } = useSearchMeetingFormStore();
+  const { searchKeyword, currentPage, setField } = useSearchMeetingFormStore();
+
+
 
   useEffect(() => {
-    fetchData();
-  }, [searchKeyword]);
-
-  useEffect(() => {
-    // 스크롤 이벤트 리스너 등록
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      // 컴포넌트 언마운트 시 스크롤 이벤트 리스너 해제
-      window.removeEventListener('scroll', handleScroll);
-    };
+    fetchData(currentPage);
   }, []);
 
-  const fetchData = async () => {
+  // useEffect(() => {
+  //   // 스크롤 이벤트 리스너 등록
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => {
+  //     // 컴포넌트 언마운트 시 스크롤 이벤트 리스너 해제
+  //     window.removeEventListener('scroll', handleScroll);
+  //   };
+  // }, [currentPage]);
+
+  const fetchData =useCallback( async (page) => {
     setLoading(true);
     const data = {
-      currentPage: currentPage,
+      currentPage: page,
       searchKeyword: searchKeyword,
     };
 
@@ -46,24 +47,28 @@ const ListSearchMeeting = () => {
     console.log(newData);
 
     setMeetingList((prevData) => [...(prevData || []), ...newData]);
-    setCurrentPage((currentPage) => currentPage + 1);
     setLoading(false);
-  };
+  },[searchKeyword]);
 
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >= document.body.offsetHeight &&
-      !loading
-    ) {
-      fetchData();
-    }
-  };
+  // const loadNextPage =useCallback(() => {
+  //   setField('currentPage', currentPage + 1);
+  //   fetchData(currentPage);
+  // },[currentPage, setField, fetchData]);
+
+  // const handleScroll =useCallback( () => {
+  //   if (
+  //     window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+  //     !loading
+  //   ) {
+  //     loadNextPage();
+  //   }
+  // },[loadNextPage, loading]);
 
   return (
     <div>
       <CommonTop />
       <Box sx={{ bgcolor: '#ededed' }}>
-        <Box sx={{ paddingTop: '66px', marginBottom: '136px', bgcolor: '#ededed' }}>
+        <Box sx={{ paddingTop: '66px', paddingBottom: '20px', marginBottom: '136px', bgcolor: '#ededed' }}>
           {meetingList?.map((meeting, i) => (
             <Box
               key={i}

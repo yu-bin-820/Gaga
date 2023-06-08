@@ -84,7 +84,8 @@ const AddClubMaxMember = () => {
 
         reset();
 
-        navigate('/');
+        //생성 완료 후 내 프로필로 이동 가능하면 클럽 상세페이지로 이동하고 싶음..
+        navigate('/community/profile/mine');
 
         console.log(response.data);
       } catch (error) {

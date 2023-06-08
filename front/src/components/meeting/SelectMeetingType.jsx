@@ -2,7 +2,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } fro
 import { Box, Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddMeetingParentsClub from './AddMeetingParentsClub';
@@ -21,8 +21,8 @@ const SelectMeetingType = () => {
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : null);
-    setField('parentMeetingNo', null);
-    setField('parentClubNo', null);
+    setField('parentMeetingNo', 0);
+    setField('parentClubNo', 0);
   };
 
   const [meetingList, setMeetingList] = useState();
@@ -31,6 +31,10 @@ const SelectMeetingType = () => {
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+
+  const handleParentMeetingNoClick = useCallback((meetingNo) => {
+    setField('parentMeetingNo', meetingNo);
+  }, [setField]);
 
 
 
@@ -62,7 +66,7 @@ const SelectMeetingType = () => {
       </Accordion>
       <AddMeetingParentsClub expanded={expanded} handleChange={handleChange} />
 
-      <AddMeetingInChatMeeting expanded={expanded} handleChange={handleChange} userNo={myData.userNo}/>
+      <AddMeetingInChatMeeting expanded={expanded} handleChange={handleChange} userNo={myData.userNo} onSubCategoryClick={handleParentMeetingNoClick}/>
       <Box>
         {meetingList?.map((meeting, i) => (
           <Box key={i}>
