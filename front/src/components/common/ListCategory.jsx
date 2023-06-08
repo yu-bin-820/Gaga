@@ -5,6 +5,7 @@ import {
   ToggleButton,
   Typography,
 } from "@mui/material";
+import PropTypes from 'prop-types';
 import { Box } from "@mui/system";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -115,6 +116,11 @@ const ListCategory = ({ onMainCategoryChange, onSubCategoryClick }) => {
       </Box>
     </Box>
   );
+};
+
+ListCategory.propTypes = {
+  onMainCategoryChange: PropTypes.object.isRequired,
+  onSubCategoryClick: PropTypes.object.isRequired,
 };
 
 export default ListCategory;

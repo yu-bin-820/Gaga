@@ -2,13 +2,18 @@ import StyledToggleButtonGroup from '@components/common/StyledToggleButtonGroup'
 import { ToggleButton } from '@mui/material';
 import { Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
+import PropTypes from 'prop-types';
 import WcIcon from '@mui/icons-material/Wc';
 
-const SelectGender = ({ onGenderClick }) => {
+const SelectGender = ({ onGenderClick, filterGender }) => {
     
-    const [selectedValue, setSelectedValue] = useState(null);
+    const [selectedValue, setSelectedValue] = useState(filterGender);
+
+    useEffect(() => {
+        setSelectedValue(`${filterGender}` );
+    }, [filterGender]);
 
     const { data: myData, mutate: mutateMe } = useSWR(
         `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -17,12 +22,12 @@ const SelectGender = ({ onGenderClick }) => {
 
     const handleChange = (event, newValue) => {
         setSelectedValue(newValue);
-      };
+    };
 
-      const onClickGender = (gender) => {
+    const onClickGender = (gender) => {
         // console.log('성별 선택', gender);
         onGenderClick(gender); // 부모 컴포넌트로 subCategoryTag 전달
-      };
+    };
 
     return (
         <div>
@@ -78,6 +83,12 @@ const SelectGender = ({ onGenderClick }) => {
         </div>
     );
 };
+
+
+SelectGender.propTypes = {
+    onGenderClick: PropTypes.object.isRequired,
+    filterGender: PropTypes.object.isRequired,
+  };
 
 export default SelectGender;
 

@@ -1,6 +1,7 @@
 import { Button, Divider, List, ListItem, SwipeableDrawer } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import ListMeetingSearchBar from './ListMeetingSearchBar';
 
@@ -65,6 +66,21 @@ const AddMeetingMapDrawer = ({settingsMenuOpen, toggleSettingsMenu, setSettingsM
         </SwipeableDrawer>
     );
 };
+
+AddMeetingMapDrawer.propTypes = {
+    settingsMenuOpen: PropTypes.object.isRequired,
+    toggleSettingsMenu: PropTypes.object.isRequired,
+    setSettingsMenuOpen: PropTypes.object.isRequired,
+    center: PropTypes.object.isRequired,
+    setMap: PropTypes.object.isRequired,
+    setPosition: PropTypes.object.isRequired,
+    setField: PropTypes.object.isRequired,
+    markerAddr: PropTypes.object.isRequired,
+    position: PropTypes.object.isRequired,
+    keyword: PropTypes.object.isRequired,
+    handleKeywordChange: PropTypes.object.isRequired,
+    handleSubmit: PropTypes.object.isRequired,
+  };
 
 
 export default AddMeetingMapDrawer;

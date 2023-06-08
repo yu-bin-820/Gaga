@@ -3,20 +3,31 @@ import { Box, Stack } from '@mui/system';
 import useUpdateMeetingFormStore from '@stores/meeting/useUpdateMeetingFormStore';
 import React from 'react';
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import CancelIcon from '@mui/icons-material/Cancel';
+
 
 const UpdateMeetingImg = () => {
 
     const {
         meetingIntro,
         image,
+        file,
+        meetingImg,
         setField,
         onChangeField,
       } =useUpdateMeetingFormStore();
 
       const onChangeImg = (event) => {
         const file = event.target.files[0];
+        setField("meetingImg", '');
         setField("file", file);
         setField("image", URL.createObjectURL(file));
+      };
+
+      const clearImage = () => {
+        setField("file", null);
+        setField("image", null);
+        setField("meetingImg", '');
       };
 
     return (
@@ -48,12 +59,32 @@ const UpdateMeetingImg = () => {
                       onChange={onChangeImg}
                   />
               </Button>
-              <ImageListItem>
-                  {image && 
-                  <img 
-                  src={image}
-                  style={{ width: '90px', height: '90px'}} /> }
-              </ImageListItem>
+              {image && (
+            <Box
+              sx={{
+                backgroundColor: '#ffffff',
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'space-between',
+                flexDirection: 'column',
+              }}
+            >
+              <CancelIcon
+                fontSize="small"
+                onClick={() => clearImage()}
+                sx={{
+                  alignSelf: 'flex-end',
+                  marginTop: '-8px',
+                  marginRight: '-8px',
+                  cursor: 'pointer',
+                }}
+              />
+              <img
+                src={image}
+                style={{ width: '90px', height: '90px' }}
+              />
+            </Box>
+          )}
               </Stack>
               <br/>
               <TextField

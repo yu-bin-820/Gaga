@@ -1,6 +1,7 @@
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import React from 'react';
+import PropTypes from 'prop-types';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const AddMeetingParentsClub = ({ expanded, handleChange }) => {
@@ -20,6 +21,11 @@ const AddMeetingParentsClub = ({ expanded, handleChange }) => {
       </AccordionDetails>
     </Accordion>
   );
+};
+
+AddMeetingParentsClub.propTypes = {
+  expanded: PropTypes.object.isRequired,
+  handleChange: PropTypes.object.isRequired,
 };
 
 export default AddMeetingParentsClub;
