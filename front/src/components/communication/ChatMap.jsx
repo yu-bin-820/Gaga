@@ -163,7 +163,7 @@ const ChatMap = ({ postPath, senderNo, groupNo }) => {
 
               <Typography sx={{ fontSize: 12 }}>{markerContent}</Typography>
             </Stack>
-            <NavigateNextIcon sx={{ marginRight: '-10px' }} />
+            {isPost && <NavigateNextIcon sx={{ marginRight: '-10px' }} />}
           </Stack>
         </Box>
       </CustomOverlayMap>
