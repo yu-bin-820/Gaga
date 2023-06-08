@@ -43,6 +43,7 @@ public class GptController {
         ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_API_URL, entity, String.class);
 
         // OpenAI의 응답을 파싱하여 GPT-3의 응답을 추출합니다.
+        System.out.println("응답은영어로response"+response);
         JSONParser parser = new JSONParser();
         JSONObject responseBody = (JSONObject) parser.parse(response.getBody());
         JSONArray choices = (JSONArray) responseBody.get("choices");
