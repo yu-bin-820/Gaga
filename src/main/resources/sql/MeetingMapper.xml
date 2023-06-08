@@ -213,6 +213,8 @@
   INNER JOIN members mb ON m.meeting_no = mb.meeting_no
   WHERE mb.user_no = #{userNo}
   AND mb.state IN (1, 2)
+  OR 
+   m.meeting_leader_no = #{userNo}
 </select>
   
   
