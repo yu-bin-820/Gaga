@@ -1,9 +1,9 @@
 import { Box, Stack } from '@mui/system';
 import React, { useCallback } from 'react';
-import SelectGender from './SelectGender';
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
-import SelectAge from '../common/SelectAge';
 import { Paper, Typography } from '@mui/material';
+import SelectGender from '@components/common/SelectGender';
+import SelectAge from '@components/common/SelectAge';
 
 const AddMeetingFilter = () => {
 
