@@ -1,10 +1,8 @@
-import { Button, ImageList, ImageListItem, Rating, Typography } from '@mui/material';
+import { Button, Rating, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import axios from 'axios';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import StarIcon from '@mui/icons-material/Star';
-import CustomedImageListItem from '@components/common/CustomedImageListItem';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 
@@ -31,7 +29,7 @@ const ListMeetingReview = () => {
         fetcher
     );
 
-        const onClickUpdateMeetingReview = React.useCallback((MouseEvent)=>{
+        const onClickUpdateMeetingReview = React.useCallback(()=>{
             const { id } = event.target;
             navigate(`/meeting/review/updatereview/reviewno/${id}`);
             },[]);

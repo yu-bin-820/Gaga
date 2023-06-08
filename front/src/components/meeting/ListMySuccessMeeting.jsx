@@ -38,11 +38,11 @@ const ListMySuccessMeeting = ({ meeting }) => {
 
     const navigate = useNavigate();
 
-    const onClickAddMeetingReview=useCallback((event)=>{
+    const onClickAddMeetingReview=useCallback(()=>{
         navigate(`/meeting/review/addreview/meetingno/${meetingNo}`);
     },[]);
 
-    const onClickUpdateMeetingReview = useCallback((event) => {
+    const onClickUpdateMeetingReview = useCallback(() => {
       const matchingMeetingReview = meetingReviewList.find(
         (meetingReview) => meetingReview.meetingReviewerNo === myData?.userNo
       );
@@ -51,9 +51,9 @@ const ListMySuccessMeeting = ({ meeting }) => {
       }
     }, [meetingReviewList, myData?.userNo, navigate]);
 
-    const onClickChatRoom=useCallback((event)=>{
+    const onClickChatRoom=useCallback(()=>{
         navigate(`/meeting/member/listmember/meetingno/${meetingNo}`);
-    },[]);
+    },[meetingNo, navigate]);
 
     console.log(isMeetingReview)
 

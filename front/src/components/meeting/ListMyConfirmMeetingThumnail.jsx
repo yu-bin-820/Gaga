@@ -31,7 +31,7 @@ const ListMyConfirmMeetingThumnail = ({ meeting }) => {
         setDeleteMemberDialogOpen(true);
     }, []);
 
-    const onClickChatRoom=useCallback((event)=>{
+    const onClickChatRoom=useCallback(()=>{
         setField('chatRoomEntryNo',meetingNo);
         setField('chatType',2);
         setField('chatRoomLeader',meeting.meetingLeaderNo)

@@ -1,36 +1,25 @@
-import { Box, Stack, ThemeProvider, createTheme } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import {
-  Avatar,
-  AvatarGroup,
-  Chip,
   ImageListItem,
-  Paper,
   Typography,
 } from '@mui/material';
-import { styled } from '@mui/system';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import PeopleIcon from '@mui/icons-material/People';
 import { useNavigate } from 'react-router';
 import SmallChip from './SmallChip';
 
-const StyledAvatarGroup = styled(AvatarGroup)({
-  '& .MuiAvatar-root': {
-    width: 24,
-    height: 24,
-    fontSize: 12,
-  },
-});
 
 const MeetingThumbnail = ({ meeting }) => {
   const navigate = useNavigate();
-
-  const onClickMeeting = useCallback((event) => {
-    navigate(`/meeting/meetingno/${meetingNo}`);
-  }, []);
-
   const { meetingName, meetingAddr, meetingMaxMemberNo, count, meetingNo } =
-    meeting;
+  meeting;
+
+  const onClickMeeting = useCallback(() => {
+    navigate(`/meeting/meetingno/${meetingNo}`);
+  }, [meetingNo, navigate]);
+
+
 
   return (
     <Stack direction='row' spacing={2}>
