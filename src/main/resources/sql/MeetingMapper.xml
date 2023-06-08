@@ -175,6 +175,7 @@
   	m.meeting_leader_no = #{userNo}
   AND
   	m.meeting_state IN (1, 2, 3)
+  ORDER BY m.meeting_success ASC, m.meeting_date ASC
 </select>
 
   
