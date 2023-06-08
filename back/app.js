@@ -36,6 +36,8 @@ app.use(
       'http://223.130.145.151:80',
       'http://223.130.144.173:80',
       'http://www.gaga.works',
+      'https://www.gaga.works',
+      'https://www.gaga.works:443',
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],

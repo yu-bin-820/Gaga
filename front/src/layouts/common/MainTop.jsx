@@ -16,6 +16,7 @@ import { Stack } from '@mui/system';
 import { Badge } from '@mui/material';
 import ListAlarmDialog from '@components/communication/ListAlarmDialog';
 import useCommonStore from '@stores/common/useCommonStore';
+import DefaultFilterDrawer from '@components/common/DefaultFilterDrawer';
 
 const MainTop = () => {
   const [anchorAlarmEl, setAnchorAlarmEl] = useState();
@@ -31,8 +32,11 @@ const MainTop = () => {
     }/rest/chat/group/message/unreads/userno/${myData?.userNo}`,
     fetcher
   );
+  const [defaultFilterDrawerOpen, setDefaultFilterDrawerOpen] = useState(false);
+
   const isAuthenticated = myData?.userNo && myData?.profileImg;
   // console.log(unreadsData);
+
   const onClickAlram = useCallback(
     (e) => {
       axios
@@ -126,6 +130,7 @@ const MainTop = () => {
         setAnchorEl={setAnchorAlarmEl}
         alarmData={alarmData}
       />
+      <DefaultFilterDrawer />
     </>
   );
 };
