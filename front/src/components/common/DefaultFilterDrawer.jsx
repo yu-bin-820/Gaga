@@ -8,13 +8,16 @@ const DefaultFilterDrawer = ({
   defaultFilterDrawerOpen,
   setDefaultFilterDrawerOpen,
 }) => {
-  const toggleDefaultFilterDrawer = useCallback((state) => {
-    setDefaultFilterDrawerOpen(state);
-  }, []);
+  const toggleDefaultFilterDrawer = useCallback(
+    (state) => {
+      setDefaultFilterDrawerOpen(state);
+    },
+    [setDefaultFilterDrawerOpen]
+  );
 
   const onClickCloseDefaultFilterDrawer = useCallback(() => {
     setDefaultFilterDrawerOpen(false);
-  }, []);
+  }, [setDefaultFilterDrawerOpen]);
   return (
     <Drawer
       anchor="right"
