@@ -34,11 +34,11 @@
 .chat-container {
     display: flex;
     flex-direction: column;
-    width: 90%;
-    height: 80%;;
+    width: 88%;
+    height: 70%;;
     position: absolute;
-    bottom: 70px;
-    right: 30px;
+    bottom: 120px;
+    right: 18px;
     z-index: 1000;
     max-width: 350px;
     margin: 0 auto;
@@ -50,6 +50,7 @@
     /* 색깔테마 바뀌는 애니메이션 효과 추가 */
     transition: all 1.3s ease;
 }
+
 
 .chat-container.hidden {
     display: none;
@@ -87,6 +88,9 @@
     border-radius: 12px;
     padding: 3px 5px;
     margin-left: 30px;
+    min-height: 50px;
+    width: 90%; 
+    word-wrap: break-word;
     padding-top: 0.1px;
     padding-bottom: 0.1px;
 }
@@ -99,9 +103,11 @@
     padding: 3px 5px;
     margin-right: 30px;
     margin-top: 10px;
-    height: 150px;
+    min-height: 50px;
+    width: 90%; 
+    word-wrap: break-word;
     padding-top: 0.1px;
-  padding-bottom: 0.1px;
+    padding-bottom: 0.1px;
 }
 
 .chat-input {
@@ -176,17 +182,20 @@
 }
 
 .gpt-theme .chat-input {
-    background-color: #121212;
+    background-color: #444343;
+    color: white;
     transition: background-color 1.3s ease;
 }
 
 .gpt-theme .chat-input button {
     background-color: #2b2f33;
+    
     transition: background-color 1.3s ease;
 }
 
 .gpt-theme .toggle-gpt {
     background-color: #000000;
+    
     transition: background-color 1.3s ease;
 }
 
@@ -205,3 +214,9 @@
 .help-button:hover {
     background-color: #007a5c;
 }
+
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

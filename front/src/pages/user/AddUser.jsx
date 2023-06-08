@@ -234,7 +234,7 @@ const AddUser = () => {
   function isValidPassword(password) {
     // 영문, 숫자, 특수문자 각각 최소 1회 이상 포함, 길이 6~14
     const re =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,14}$/;
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,14}$/;
     return re.test(password);
   }
 
@@ -243,7 +243,7 @@ const AddUser = () => {
   const handlePasswordChange = (e) => {
     onChangeField("password", e);
     const isValid = isValidPassword(e.target.value);
-    setPasswordError(isValid ? "" : "비밀번호 형식이 올바르지 않습니다.");
+  setPasswordError(isValid ? "" : "영문 숫자 특수문자조합 8~14자리 이내로 입력해주세요.");
   };
 
   // 3. 비밀번호 일치 확인
@@ -288,7 +288,7 @@ const AddUser = () => {
         container
         component="main"
         sx={{
-          height: "95vh",
+          marginTop: "80px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -337,6 +337,7 @@ const AddUser = () => {
                 maxHeight: '90vh',  // 뷰포트 높이의 90%를 최대 높이로 설정
                 overflow: 'auto',  // 컨텐츠가 Box를 벗어나면 스크롤바 표시
               }}
+              onClick={handleCloseTerms}
             >
               <TermsOfGaga />
             </Box>
@@ -436,6 +437,9 @@ const AddUser = () => {
             error={!!passwordError}
             helperText={passwordError}
             autoComplete="current-password"
+            inputProps={{
+              maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
+            }}
           />
           <TextField
             label="비밀번호 확인"
@@ -451,6 +455,9 @@ const AddUser = () => {
             error={!!passwordConfirmError}
             helperText={passwordConfirmError}
             autoComplete="new-password"
+            inputProps={{
+              maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
+            }}
           />
           <TextField
             label="회원실명"

@@ -107,7 +107,7 @@ function ListEventPost() {
           <TextField type="text" value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} onKeyPress={handleKeyPress} style={{ marginRight: '0.5rem' }} />
           <Button variant="contained" onClick={handleSearch}>검색</Button>
         </Box>
-        <Link to="/event/addNoticePost">
+        <Link to="/notice/addNoticePost">
           <Button variant="contained">이벤트 작성</Button>
         </Link>
         <List component="nav">

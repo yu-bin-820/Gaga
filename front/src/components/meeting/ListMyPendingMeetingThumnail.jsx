@@ -30,7 +30,7 @@ const ListMyPendingMeetingThumnail = ({ meeting }) => {
         setField('chatRoomEntryNo', meeting.meetingLeaderNo);
         navigate('/chat/direct/message/list');
         },
-        [navigate, setField]
+        [navigate, setField, meeting.meetingLeaderNo]
     );
 
     return (

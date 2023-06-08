@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import StyledToggleButtonGroup from '@components/common/StyledToggleButtonGroup';
 
 
-const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo, onSubCategoryClick }) => {
+const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo, onParentMeetingNoClick }) => {
 
     const [meetingList, setMeetingList] = useState();
 
@@ -29,12 +29,16 @@ const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo, onSubCategory
         setAlignment(newAlignment);
       };
 
-      const onClickSubCategory = (subCategoryTag) => {
-        console.log('서브카테고리', subCategoryTag);
-        onSubCategoryClick(subCategoryTag); // 부모 컴포넌트로 subCategoryTag 전달
+      const onClickParentMeeting = (meetingNo) => {
+        console.log('부모미팅번호', meetingNo);
+        onParentMeetingNoClick(meetingNo); 
       };
 
       console.log(userNo)
+
+      if (!meetingList) {
+        return <>로딩중</>;
+      }
 
     return (
         <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
@@ -55,16 +59,16 @@ const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo, onSubCategory
                     onChange={handleAlignment} 
                     aria-label="text alignment"
                   >
-                    {meetingList?.map((meeting, k) => {
-                          <ToggleButton
-                            key={k} 
-                            value={meeting.meetingNo} 
-                            aria-label={meeting.meetingNo} 
-                            onClick={() => onClickSubCategory(meeting.meetingNo)}
-                            >
-                            {meeting.meetingName}
-                          </ToggleButton>
-                    })}
+                    {meetingList?.map((meeting, k) => (
+                    <ToggleButton
+                        key={k} 
+                        value={meeting.meetingNo} 
+                        aria-label={meeting.meetingNo} 
+                        onClick={() => onClickParentMeeting(meeting.meetingNo)}
+                    >
+                        {meeting.meetingName}
+                    </ToggleButton>
+                ))}
                   </StyledToggleButtonGroup>
         </AccordionDetails>
       </Accordion>
@@ -75,7 +79,7 @@ AddMeetingInChatMeeting.propTypes = {
   expanded: PropTypes.object.isRequired,
   handleChange: PropTypes.object.isRequired,
   userNo: PropTypes.object.isRequired,
-  onSubCategoryClick: PropTypes.object.isRequired,
+  onParentMeetingNoClick: PropTypes.object.isRequired,
 };
 
 export default AddMeetingInChatMeeting;

@@ -5,8 +5,6 @@ import { Box } from '@mui/system';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 
-const { kakao } = window;
-
 const GetMeetingStaticMapDrawer = ({ meeting, settingsMapOpen, toggleSettingsMap, setSettingsMapOpen }) => {
     const { meetingLat, meetingLng} = meeting;
     console.log(meetingLat, meetingLng)

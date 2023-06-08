@@ -213,7 +213,7 @@ const AddKakaoUser = () => {
 
   function isValidPassword(password) {
     const re =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,14}$/;
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,14}$/;
     return re.test(password);
   }
 
@@ -221,7 +221,7 @@ const AddKakaoUser = () => {
   const handlePasswordChange = (e) => {
     onChangeField("password", e);
     const isValid = isValidPassword(e.target.value);
-    setPasswordError(isValid ? "" : "비밀번호 형식이 올바르지 않습니다.");
+    setPasswordError(isValid ? "" : "영문 숫자 특수문자조합 8~14자리 이내로 입력해주세요.");
   };
 
   // 3. 비밀번호 일치 확인
@@ -264,7 +264,7 @@ const AddKakaoUser = () => {
         container
         component="main"
         sx={{
-          height: "90vh",
+          marginTop: "65px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -356,6 +356,9 @@ const AddKakaoUser = () => {
               error={!!passwordError}
               helperText={passwordError}
               autoComplete="current-password"
+              inputProps={{
+                maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
+              }}
             />
             <TextField
               label="비밀번호 확인"
@@ -371,6 +374,9 @@ const AddKakaoUser = () => {
               error={!!passwordConfirmError}
               helperText={passwordConfirmError}
               autoComplete="new-password"
+              inputProps={{
+                maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
+              }}
             />
             <TextField
               label="회원실명"

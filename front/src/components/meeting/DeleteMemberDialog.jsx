@@ -23,8 +23,8 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
 
         try {
         const data = {
-            meetingNo: meeting.meetingNo,
-            userNo: myData.userNo,
+            meetingNo: meeting?.meetingNo,
+            userNo: myData?.userNo,
         };
 
         console.log(data);
@@ -37,11 +37,12 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
             }
             )
             .then(() => {
+                setOpen(false);
             });
         } catch (error) {
         console.error(error);
         }
-    }, []);
+    }, [meeting?.meetingNo, myData?.userNo, setOpen]);
 
     return (
         <Dialog

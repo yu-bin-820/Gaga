@@ -1,7 +1,7 @@
 import StyledToggleButtonGroup from '@components/common/StyledToggleButtonGroup';
 import useInput from '@hooks/common/useInput';
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
-import { Button, TextField, ToggleButton } from '@mui/material';
+import { Button, Modal, TextField, ToggleButton, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
@@ -13,6 +13,7 @@ import useSWR from 'swr';
 const AddMeeting1 = () => {
   const [alignment, setAlignment] = useState(null);
   const [showEntryFee, setShowEntryFee] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
@@ -56,6 +57,13 @@ const AddMeeting1 = () => {
   const handleSubmit = useCallback(async () => {
     event.preventDefault();
 
+
+    if (!filterTag || !meetingName || !meetingAddr) {
+      setIsModalOpen(true);
+      return;
+    }
+
+
     try {
       const formData = new FormData();
       formData.append('file', file);
@@ -86,10 +94,15 @@ const AddMeeting1 = () => {
       reset();
 
       console.log(response.data);
+      navigate(`/community/profile/mine`);
     } catch (error) {
       console.error(error);
     }
-  }, [meetingDate, meetingStartTime, meetingEndTime, filterGender, filterMinAge, filterMaxAge, entryFee]);
+  }, [filterTag, meetingName, meetingAddr,meetingDate, meetingStartTime, meetingEndTime, filterGender, filterMinAge, filterMaxAge, entryFee]);
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+  }, []);
 
   return (
     <Box sx={{ margin: '10px' }}>
@@ -135,6 +148,16 @@ const AddMeeting1 = () => {
       sx={{ width: "85vw", borderRadius: "50px" }}
       onClick={handleSubmit}>생성하기</Button>
       </Stack>
+
+      <Modal open={isModalOpen} onClose={handleCloseModal}>
+        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'white', p: 3 }}>
+          <Typography variant="body1" component="div" sx={{ mb: 2 }}>
+            모임 이름과 목적, 모임위치는 반드시 입력해주세요.
+          </Typography>
+          <Button variant="contained" onClick={handleCloseModal}>확인</Button>
+        </Box>
+      </Modal>
+
     </Box>
   );
 };

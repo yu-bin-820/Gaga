@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Box, Button, Typography, Paper, Grid } from '@mui/material';
+import { Box, Button, Typography, Paper, Grid, IconButton } from '@mui/material';
+import { Edit, Delete, List } from '@mui/icons-material';
+import InfoIcon from '@mui/icons-material/Info';
+import CommonTop from '@layouts/common/CommonTop';
 
 
 function GetNoticePost() {
@@ -33,31 +36,75 @@ function GetNoticePost() {
         });
     }
   };
-
+  function getCategoryText(categoryNo) {
+    switch (categoryNo) {
+      case 0:
+        return "공지사항";
+      case 1:
+        return "이벤트";
+      case 2:
+        return "Q&A";
+      default:
+        return "";
+    }
+}
   const handleUpdate = () => {
     navigate(`/notice/updateNoticePost/noticePostNo/${noticePostNo}`, { state: { noticePost } });
   };
 
   return (
-    <Box sx={{ margin: '2rem', padding: '1rem' }}>
-      <Typography variant="h4" gutterBottom>공지사항 조회</Typography>
-      <Paper elevation={3} sx={{ padding: '2rem' }}>
-        <Typography variant="body1"><strong>번호:</strong> {noticePost.noticePostNo}</Typography>
-        <Typography variant="body1"><strong>제목:</strong> {noticePost.noticePostTitle}</Typography>
-        <Typography variant="body1"><strong>내용:</strong> {noticePost.noticePostText}</Typography>
-        <Typography variant="body1"><strong>이미지:</strong> {noticePost.noticePostImg}</Typography>
-        <img src={`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getImage/${noticePost.noticePostImg}`} alt="공지사항 이미지" style={{ maxWidth: '100%', maxHeight: '30vh'}} />
-      </Paper>
-      <Grid container spacing={2} sx={{ marginTop: '1rem' }}>
-        <Grid item>
-          <Button variant="contained" color="primary" onClick={handleUpdate}>수정</Button>
+    <Box sx={{ margin: '1rem', padding: '0.1rem', paddingTop: '0.9rem',backgroundColor: '#f5f5f5', borderRadius: '10px' }}>
+    <CommonTop
+              pageName= {getCategoryText(noticePost.noticePostCategoryNo) + " 조회"}
+              prevPath="/notice/listNoticePost"
+          />
+    <Typography variant="h4" gutterBottom style={{ display: 'flex', alignItems: 'center' }}>
+      
+    </Typography>
+    <Paper elevation={3} sx={{ padding: '1rem', backgroundColor: '#ffffff', borderRadius: '10px', marginTop: '35px' , marginBottom: '1rem' }}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={2}>
+          <Typography variant="body1" >게시글 번호 {noticePost.noticePostNo}</Typography>
         </Grid>
-        <Grid item>
-          <Button variant="contained" color="secondary" onClick={handleDelete}>삭제</Button>
+        <Grid item xs={12} md={2}>
+          <Typography variant="body1" style={{ fontWeight: 'bold' }}>게시글 카테고리 :{getCategoryText(noticePost.noticePostCategoryNo)}</Typography>
+
+        </Grid>
+        <Grid item xs={12} md={2}>
+          <Typography variant="body1" style={{ fontWeight: 'bold' }}></Typography>
+          <Typography variant="body1" style={{ fontWeight: 'bold' }} >{noticePost.noticePostTitle}</Typography>
+        </Grid>
+        <Grid item xs={12} md={8}>
+          <Typography variant="body1" style={{ fontWeight: 'bold' }}></Typography>
+          <Typography variant="body1">{noticePost.noticePostText}</Typography>
+          {noticePost.noticePostImg && (
+  <img
+    src={`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getImage/${noticePost.noticePostImg}`}
+    alt="공지사항 이미지"
+    style={{ maxWidth: '100%', maxHeight: '30vh', marginTop: '1rem' }}
+  />
+)}
         </Grid>
       </Grid>
-    </Box>
-  );
+    </Paper>
+    <Grid container justifyContent="center" alignItems="center" spacing={3}>
+      <Grid item>
+        <Button variant="contained" color="primary" startIcon={<Edit />} onClick={handleUpdate} style={{ fontWeight: 'bold' }}>
+          수정
+        </Button>
+      </Grid>
+      <Grid item>
+        <Button variant="contained" color="primary" startIcon={<Delete />} onClick={handleDelete} style={{ fontWeight: 'bold' }}>
+          삭제
+        </Button>
+      </Grid>
+      <Grid item>
+        <Button variant="contained" color="primary" startIcon={<List />} onClick={handleDelete} style={{ fontWeight: 'bold' }}>
+          목록
+        </Button>
+      </Grid>
+    </Grid>
+  </Box>
+);
 }
-
 export default GetNoticePost;
