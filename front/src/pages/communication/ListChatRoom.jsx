@@ -133,11 +133,11 @@ export default function ListChatRoom() {
               marginLeft: '0px',
               marginRight: '0px',
               overflowY: 'auto',
-              maxHeight: 'calc(100vh - 70px)',
+              maxHeight: 'calc(100vh - 110px)',
               marginBottom: '64px',
             }}
           >
-            <TabPanel value="group" sx={{ margin: 0, paddingLeft: 0.5 }}>
+            <TabPanel value="group" sx={{ paddingLeft: 0.5 }}>
               {groupsData?.groups.map((group, i) => (
                 <Box
                   key={i}
