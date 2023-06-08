@@ -127,7 +127,16 @@ const AddUser = () => {
       console.error(error);
       alert("회원가입에 실패했습니다. 다시 시도해 주세요."); // 에러 발생 시 메시지 출력
     }
-  }, [userId, password, userName, birthday, gender, nickName, phoneNo,isUserIdValid]);
+  }, [
+    userId,
+    password,
+    userName,
+    birthday,
+    gender,
+    nickName,
+    phoneNo,
+    isUserIdValid,
+  ]);
 
   // 이메일 형식 검증 부분
   function isValidEmail(email) {
@@ -255,7 +264,7 @@ const AddUser = () => {
           },
         }
       );
-  
+
       // 아이디 중복 여부를 확인합니다.
       if (response.data.isDuplicate) {
         alert("이미 사용 중인 아이디입니다.");
@@ -270,13 +279,20 @@ const AddUser = () => {
 
   return (
     <>
-      <CommonTop pageName="Gaga 회원가입"/>
-      <Grid container component="main" sx={{ height: "100vh",display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center", }}>
+      <CommonTop pageName="Gaga 회원가입" />
+      <Grid
+        container
+        component="main"
+        sx={{
+          height: "90vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <CssBaseline />
-        <Box component="form" noValidate sx={{ width: "80%", mt: 5,}}>
+        <Box component="form" noValidate sx={{ width: "80%", mt: 5 }}>
           <FormControlLabel
             control={
               <Checkbox
@@ -306,47 +322,75 @@ const AddUser = () => {
             </Box>
           </Modal>
           {/* {openTerms && <TermsOfGaga onClose={handleCloseTerms} />} */}
-          <TextField
-            label="아이디 이메일형식"
-            variant="outlined"
-            margin="none"
-            required
-            fullWidth
-            id="userId"
-            name="userId"
-            type="email"
-            value={userId}
-            onChange={handleEmailChange}
-            onBlur={checkDuplicateId}
-            error={!!emailError}
-            helperText={emailError}
-            autoComplete="email"
-            autoFocus
-          />
-          <Button
-            variant="contained"
-            onClick={handleEmailAuthRequest}
-            size="small"
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            justify="space-between"
           >
-            인증 요청
-          </Button>
-          <TextField
-            variant="outlined"
-            margin="none"
-            required
-            fullWidth
-            id="emailAuthCode"
-            label="이메일 인증 코드"
-            name="emailAuthCode"
-            onChange={handleEmailVerificationCodeChange}
-          />
-          <Button
-            variant="contained"
-            onClick={handleEmailVerification}
-            size="small"
+            <Grid item xs={9} sm={8}>
+              <TextField
+                label="아이디 이메일형식"
+                variant="outlined"
+                margin="none"
+                required
+                fullWidth
+                id="userId"
+                name="userId"
+                type="email"
+                value={userId}
+                onChange={handleEmailChange}
+                onBlur={checkDuplicateId}
+                error={!!emailError}
+                helperText={emailError}
+                autoComplete="email"
+                autoFocus
+              />
+            </Grid>
+            <Grid item xs={3} sm={4}>
+              <Button
+                variant="contained"
+                onClick={handleEmailAuthRequest}
+                size="small"
+                fullWidth
+                style={{ height: '45px', width:"50px",fontSize: '0.7rem', fontWeight: 'bold' }}
+              >
+                인증
+                <br />
+                요청
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            justify="space-between"
           >
-            이메일 인증하기
-          </Button>
+            <Grid item xs={9} sm={8}>
+              <TextField
+                variant="outlined"
+                margin="none"
+                required
+                fullWidth
+                id="emailAuthCode"
+                label="이메일 인증 코드"
+                name="emailAuthCode"
+                onChange={handleEmailVerificationCodeChange}
+              />
+            </Grid>
+            <Grid item xs={3} sm={4}>
+              <Button
+                variant="contained"
+                onClick={handleEmailVerification}
+                size="small"
+                fullWidth
+                style={{ height: '45px', width:"50px",fontSize: '0.7rem', fontWeight: 'bold' }}
+              >
+                이메일 인증
+              </Button>
+            </Grid>
+          </Grid>
           <TextField
             label="비밀번호"
             variant="outlined"
@@ -429,46 +473,74 @@ const AddUser = () => {
             <MenuItem value={1}>남자</MenuItem>
             <MenuItem value={2}>여자</MenuItem>
           </TextField>
-          <TextField
-            variant="outlined"
-            margin="none"
-            required
-            fullWidth
-            type="tel"
-            id="phoneNo"
-            label="핸드폰 번호"
-            name="phoneNo"
-            value={phoneNo}
-            onChange={(e) => onChangeField("phoneNo", e)}
-            defaultValue="010"
-            inputProps={{
-              maxLength: 11, // 최대 11글자
-              pattern: "[0-9]*", // 숫자만 입력 가능
-            }}
-          />
-          <Button
-            variant="contained"
-            onClick={handlePhoneAuthRequest}
-            size="small"
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            justify="space-between"
           >
-            코드 발송
-          </Button>
-          <TextField
-            variant="outlined"
-            margin="none"
-            fullWidth
-            id="phoneVerificationCode"
-            label="핸드폰 인증 코드 입력"
-            name="phoneVerificationCode"
-            onChange={(e) => setPhoneVerificationCode(e.target.value)}
-          />
-          <Button
-            variant="contained"
-            size="small"
-            onClick={handlePhoneVerification}
+            <Grid item xs={9} sm={8}>
+              <TextField
+                variant="outlined"
+                margin="none"
+                required
+                fullWidth
+                type="tel"
+                id="phoneNo"
+                label="핸드폰 번호"
+                name="phoneNo"
+                value={phoneNo}
+                onChange={(e) => onChangeField("phoneNo", e)}
+                defaultValue="010"
+                inputProps={{
+                  maxLength: 11, // 최대 11글자
+                  pattern: "[0-9]*", // 숫자만 입력 가능
+                }}
+              />
+            </Grid>
+            <Grid item xs={3} sm={4}>
+              <Button
+                variant="contained"
+                onClick={handlePhoneAuthRequest}
+                size="small"
+                fullWidth
+                style={{ height: '45px', width:"50px",fontSize: '0.7rem', fontWeight: 'bold' }}
+              >
+                코드
+                <br />
+                발송
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            justify="space-between"
           >
-            핸드폰 인증하기
-          </Button>
+            <Grid item xs={9} sm={8}>
+              <TextField
+                variant="outlined"
+                margin="none"
+                fullWidth
+                id="phoneVerificationCode"
+                label="핸드폰 인증 코드 입력"
+                name="phoneVerificationCode"
+                onChange={(e) => setPhoneVerificationCode(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={3} sm={4}>
+              <Button
+                variant="contained"
+                size="small"
+                onClick={handlePhoneVerification}
+                fullWidth
+                style={{ height: '45px', width:"50px",fontSize: '0.7rem', fontWeight: 'bold' }}
+              >
+                핸드폰 인증
+              </Button>
+            </Grid>
+          </Grid>
 
           <Button
             type="submit"
@@ -480,7 +552,8 @@ const AddUser = () => {
               !emailVerified ||
               !phoneVerified ||
               !isNameValid ||
-              !isNicknameValid || !agreeTerms 
+              !isNicknameValid ||
+              !agreeTerms
             }
           >
             회원가입

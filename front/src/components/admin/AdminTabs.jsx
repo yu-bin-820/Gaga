@@ -1,38 +1,49 @@
-import React, { useState } from 'react';
+import * as React from 'react';
 import Box from '@mui/material/Box';
-import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import ListNoticePost from '@pages/admin/NoticePost/ListNoticePost';
-import ListEventPost from '@pages/admin/NoticePost/ListEventPost';
-import ListQnaPost from '@pages/admin/NoticePost/ListQnaPost';
-import { TabPanel } from '@mui/lab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import { Link, useLocation } from 'react-router-dom';
 
-function AdminTabs() {
-  const [value, setValue] = useState(0);
+export default function BlackListTabs() {
+  const [value, setValue] = React.useState('');
+
+
+  const location = useLocation();
+
+  React.useEffect(() => {
+    switch (location.pathname) {
+      case '/notice/listNoticePost':
+        setValue('1');
+        break;
+      case '/notice/listEventPost':
+        setValue('2');
+        break;
+      case '/notice/listQnaPost':
+        setValue('3');
+        break;
+      default:
+        setValue('2');
+        break;
+    }
+  }, [location]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Tabs value={value} onChange={handleChange} aria-label="nav tabs example">
-        <Tab label="Notice Posts" />
-        <Tab label="Event Posts" />
-        <Tab label="Q&A Posts" />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-        {value === 0 && <ListNoticePost />}
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        {value === 1 && <ListEventPost />}
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        {value === 2 && <ListQnaPost />}
-      </TabPanel>
+    <Box sx={{ width: '100%', typography: 'body1',alignItems: "center", display: "flex", justifyContent: "center"  }}>
+      <TabContext value={value}>
+        <Box sx={{ borderBottom: 2, borderColor: 'divider', width: 1000, alignItems: "center", display: "flex", justifyContent: "center"  }}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <Tab label="공지사항" value="1" component={Link} to="/notice/listNoticePost" />
+            <Tab label="이벤트" value="2" component={Link} to="/notice/listEventPost" />
+            <Tab label="Q&A" value="3" component={Link} to="/notice/listQnaPost" />
+          </TabList>
+        </Box>        
+      </TabContext>
     </Box>
   );
 }
-
-export default AdminTabs;
