@@ -165,6 +165,8 @@ export default function ListChatRoom() {
                     avatar={`${
                       import.meta.env.VITE_SPRING_HOST
                     }/upload_images/${
+                      group.meeting_name ? 'meeting' : 'club'
+                    }/${
                       group.meeting_name ? group.meeting_img : group.club_img
                     }`}
                     alt={`${
