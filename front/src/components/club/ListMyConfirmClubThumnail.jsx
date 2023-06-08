@@ -2,7 +2,6 @@ import { Button } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
-import MeetingThumbnail from './MeetingThumnail';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import useSWR from 'swr';

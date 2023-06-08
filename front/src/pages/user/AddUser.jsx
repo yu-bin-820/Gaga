@@ -153,6 +153,7 @@ const AddUser = () => {
   //이메일 인증 부분
   const [emailAuthCode, setEmailAuthCode] = useState(null);
   const [emailVerificationCode, setEmailVerificationCode] = useState("");
+  const [emailAuthCodeSent, setEmailAuthCodeSent] = useState(false);
   const handleEmailAuthRequest = async () => {
     try {
       const response = await axios.post(
@@ -170,6 +171,7 @@ const AddUser = () => {
       // 이메일 인증 코드를 받아옴
       const emailAuthCode = response.data;
       setEmailAuthCode(emailAuthCode);
+      setEmailAuthCodeSent(true);
       alert("인증 코드가 이메일로 발송되었습니다.");
     } catch (error) {
       console.error(error);
@@ -192,6 +194,7 @@ const AddUser = () => {
   // 핸드폰 인증 부분
   const [phoneAuthCode, setPhoneAuthCode] = useState(null);
   const [phoneVerificationCode, setPhoneVerificationCode] = useState("");
+  const [phoneAuthCodeSent, setPhoneAuthCodeSent] = useState(false);
 
   const handlePhoneAuthRequest = async () => {
     try {
@@ -211,6 +214,7 @@ const AddUser = () => {
       const phoneAuthCode = response.data;
       setPhoneAuthCode(phoneAuthCode);
       alert("인증 코드가 핸드폰으로 발송되었습니다.");
+      setPhoneAuthCodeSent(true);
     } catch (error) {
       console.error(error);
       alert("인증 코드 발송에 실패했습니다. 다시 시도해 주세요.");
@@ -284,7 +288,7 @@ const AddUser = () => {
         container
         component="main"
         sx={{
-          height: "90vh",
+          height: "95vh",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -292,7 +296,15 @@ const AddUser = () => {
         }}
       >
         <CssBaseline />
-        <Box component="form" noValidate sx={{ width: "80%", mt: 5 }}>
+        <Box
+          component="form"
+          noValidate
+          sx={{
+            width: "80%",
+            mt: 3,
+            "& .MuiTextField-root:not(:last-child)": { marginBottom: "7px" },
+          }}
+        >
           <FormControlLabel
             control={
               <Checkbox
@@ -312,23 +324,31 @@ const AddUser = () => {
             aria-describedby="simple-modal-description"
           >
             <Box
-              sx={
-                {
-                  /* 모달 스타일 설정 */
-                }
-              }
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: 400,
+                bgcolor: "background.paper",
+                border: "2px solid #000",
+                boxShadow: 24,
+                p: 4,
+                maxHeight: '90vh',  // 뷰포트 높이의 90%를 최대 높이로 설정
+                overflow: 'auto',  // 컨텐츠가 Box를 벗어나면 스크롤바 표시
+              }}
             >
               <TermsOfGaga />
             </Box>
           </Modal>
-          {/* {openTerms && <TermsOfGaga onClose={handleCloseTerms} />} */}
+          {openTerms && <TermsOfGaga onClose={handleCloseTerms} />}
           <Grid
             container
             spacing={2}
             alignItems="center"
             justify="space-between"
           >
-            <Grid item xs={9} sm={8}>
+            <Grid item xs={9} sm={8} >
               <TextField
                 label="아이디 이메일형식"
                 variant="outlined"
@@ -353,7 +373,12 @@ const AddUser = () => {
                 onClick={handleEmailAuthRequest}
                 size="small"
                 fullWidth
-                style={{ height: '45px', width:"50px",fontSize: '0.7rem', fontWeight: 'bold' }}
+                style={{
+                  height: "45px",
+                  width: "50px",
+                  fontSize: "0.7rem",
+                  fontWeight: "bold",
+                }}
               >
                 인증
                 <br />
@@ -385,7 +410,13 @@ const AddUser = () => {
                 onClick={handleEmailVerification}
                 size="small"
                 fullWidth
-                style={{ height: '45px', width:"50px",fontSize: '0.7rem', fontWeight: 'bold' }}
+                disabled={!emailAuthCodeSent}
+                style={{
+                  height: "45px",
+                  width: "50px",
+                  fontSize: "0.7rem",
+                  fontWeight: "bold",
+                }}
               >
                 이메일 인증
               </Button>
@@ -504,7 +535,12 @@ const AddUser = () => {
                 onClick={handlePhoneAuthRequest}
                 size="small"
                 fullWidth
-                style={{ height: '45px', width:"50px",fontSize: '0.7rem', fontWeight: 'bold' }}
+                style={{
+                  height: "45px",
+                  width: "50px",
+                  fontSize: "0.7rem",
+                  fontWeight: "bold",
+                }}
               >
                 코드
                 <br />
@@ -535,7 +571,13 @@ const AddUser = () => {
                 size="small"
                 onClick={handlePhoneVerification}
                 fullWidth
-                style={{ height: '45px', width:"50px",fontSize: '0.7rem', fontWeight: 'bold' }}
+                disabled={!phoneAuthCodeSent}
+                style={{
+                  height: "45px",
+                  width: "50px",
+                  fontSize: "0.7rem",
+                  fontWeight: "bold",
+                }}
               >
                 핸드폰 인증
               </Button>
@@ -546,7 +588,7 @@ const AddUser = () => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 1, mb: 1, marginTop: 1 }}
+            sx={{ mt: 1, mb: 1, marginTop: 3 }}
             onClick={handleSubmit}
             disabled={
               !emailVerified ||

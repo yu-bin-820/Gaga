@@ -7,7 +7,6 @@ const TermsOfGaga = () => {
     
   return (
     <>
-    <CommonTop />
     <Box
       sx={{
         padding: '20px',  // 페이지 내부의 여백
