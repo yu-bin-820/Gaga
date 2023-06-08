@@ -174,7 +174,6 @@
 	</delete>
 
 	<!-- 블랙리스트 CRUD -->
-
 	<insert id="addBlackList"
 		parameterType="com.gaga.bo.service.domain.User">
 		UPDATE users
@@ -197,29 +196,37 @@
 	</select>
 
 	<select id="getBlackListList" resultMap="userResultMap">
-		SELECT *
-		FROM users
+		SELECT * FROM
+		users
 		WHERE
-		blacklist != 0
+		user_no &lt;=
+		#{lastUserNo} and blacklist != 0
+		ORDER BY user_no DESC
+		LIMIT 10
+	</select>
+
+	<select id="searchBlackList" resultMap="userResultMap">
+		SELECT * FROM
+		users
+		WHERE (user_id LIKE CONCAT('%', #{keyword}, '%')
+		OR nick_name LIKE CONCAT('%', #{keyword}, '%')
+		OR user_name LIKE CONCAT('%', #{keyword}, '%'))
+		AND blacklist != 0
+	</select>
+
+	<select id="getLatestUserNo" resultType="Integer">
+		SELECT
+		MAX(user_no) FROM
+		users
 	</select>
 
 	<select id="searchUser" resultMap="userResultMap">
 		SELECT *
 		FROM users
 		WHERE
-		1=1
-		<if test="userNo != null">
-			AND user_no = #{userNo}
-		</if>
-		<if test="userId != null">
-			AND user_id = #{userId}
-		</if>
-		<if test="nickName != null">
-			AND nick_name = #{nickName}
-		</if>
-		<if test="userName != null">
-			AND user_name = #{userName}
-		</if>
+		user_id = #{userId}
+		or nick_name = #{nickName}
+		or user_name = #{userName}
 	</select>
 
 	<select id="getUser" parameterType="int"
@@ -230,8 +237,13 @@
 	</select>
 
 	<select id="getUserList" resultMap="userResultMap">
-		SELECT *
-		FROM users
+		SELECT * FROM
+		users
+		WHERE
+		user_no &lt;=
+		#{lastUserNo}
+		ORDER BY user_no DESC
+		LIMIT 20
 	</select>
 
 
