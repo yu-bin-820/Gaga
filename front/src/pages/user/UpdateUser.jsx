@@ -220,6 +220,7 @@ const UpdateUser = () => {
 
   const [phoneAuthCode, setPhoneAuthCode] = useState(null);
   const [phoneVerificationCode, setPhoneVerificationCode] = useState("");
+  const [phoneAuthCodeSent, setPhoneAuthCodeSent] = useState(false);
 
   const handlePhoneAuthRequest = async () => {
     try {
@@ -238,6 +239,7 @@ const UpdateUser = () => {
       const phoneAuthCode = response.data;
       setPhoneAuthCode(phoneAuthCode);
       alert("인증 코드가 핸드폰으로 발송되었습니다.");
+      setPhoneAuthCodeSent(true);
     } catch (error) {
       console.error(error);
       alert("인증 코드 발송에 실패했습니다. 다시 시도해 주세요.");
@@ -315,7 +317,7 @@ const UpdateUser = () => {
         }}
       >
         <CssBaseline />
-        <Box component="form" noValidate sx={{ width: "80%", mt: 3 }}>
+        <Box component="form" noValidate sx={{ width: "80%", mt: 3, '& .MuiTextField-root:not(:last-child)': { marginBottom: '10px' } }}>
           <TextField
             label="아이디"
             variant="outlined"
@@ -416,47 +418,85 @@ const UpdateUser = () => {
             <MenuItem value={1}>남자</MenuItem>
             <MenuItem value={2}>여자</MenuItem>
           </TextField>
-          <TextField
-            variant="outlined"
-            margin="none"
-            required
-            fullWidth
-            type="tel"
-            id="phoneNo"
-            label="핸드폰 번호"
-            name="phoneNo"
-            value={phoneNo}
-            onChange={(e) => onChangeField("phoneNo", e)}
-            defaultValue="010"
-            inputProps={{
-              maxLength: 11,
-              pattern: "[0-9]*",
-            }}
-          />
-          <Button
-            variant="contained"
-            onClick={handlePhoneAuthRequest}
-            size="small"
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            justify="space-between"
           >
-            코드 발송
-          </Button>
-          <TextField
-            variant="outlined"
-            margin="none"
-            fullWidth
-            id="phoneVerificationCode"
-            label="핸드폰 인증 코드 입력"
-            name="phoneVerificationCode"
-            onChange={(e) => setPhoneVerificationCode(e.target.value)}
-          />
-          <Button
-            variant="contained"
-            size="small"
-            onClick={handlePhoneVerification}
+            <Grid item xs={9} sm={8}>
+              <TextField
+                variant="outlined"
+                margin="none"
+                required
+                fullWidth
+                type="tel"
+                id="phoneNo"
+                label="핸드폰 번호"
+                name="phoneNo"
+                value={phoneNo}
+                onChange={(e) => onChangeField("phoneNo", e)}
+                defaultValue="010"
+                inputProps={{
+                  maxLength: 11, // 최대 11글자
+                  pattern: "[0-9]*", // 숫자만 입력 가능
+                }}
+              />
+            </Grid>
+            <Grid item xs={3} sm={4}>
+              <Button
+                variant="contained"
+                onClick={handlePhoneAuthRequest}
+                size="small"
+                fullWidth
+                style={{
+                  height: "45px",
+                  width: "50px",
+                  fontSize: "0.7rem",
+                  fontWeight: "bold",
+                }}
+              >
+                코드
+                <br />
+                발송
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            justify="space-between"
           >
-            핸드폰 인증하기
-          </Button>
-
+            <Grid item xs={9} sm={8}>
+              <TextField
+                variant="outlined"
+                margin="none"
+                fullWidth
+                id="phoneVerificationCode"
+                label="핸드폰 인증 코드 입력"
+                name="phoneVerificationCode"
+                onChange={(e) => setPhoneVerificationCode(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={3} sm={4}>
+              <Button
+                variant="contained"
+                size="small"
+                onClick={handlePhoneVerification}
+                fullWidth
+                disabled={!phoneAuthCodeSent}
+                style={{
+                  height: "45px",
+                  width: "50px",
+                  fontSize: "0.7rem",
+                  fontWeight: "bold",
+                }}
+              >
+                핸드폰 인증
+              </Button>
+            </Grid>
+          </Grid>
           <Button
             type="submit"
             fullWidth

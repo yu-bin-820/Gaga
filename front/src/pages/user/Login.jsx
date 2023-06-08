@@ -255,8 +255,8 @@ const Login = () => {
                 />
               </Button>
 
-              <Grid container>
-                <Grid item>
+              
+                
                   <Typography
                     component={Link}
                     to="/user/adduser"
@@ -264,16 +264,8 @@ const Login = () => {
                   >
                     {"회원이 아니신가요? "}
                   </Typography>
-                  {/* <br />
-                  <Typography
-                    component={Link}
-                    to="/user/addusertest"
-                    color={'Green'}
-                  >
-                    {"회원이 아니신가요? 작성완료 일단 쓰세요  "}
-
-                  </Typography> */}
-                  <br />
+              <Grid container>
+                <Grid item xs>
                   <Typography
                     component={Link}
                     to="/user/findid"
@@ -281,15 +273,19 @@ const Login = () => {
                   >
                     {"아이디찾기"}
                   </Typography>
+                </Grid>
+                <Grid item>
                   <Typography
                     component={Link}
                     to="/user/findpassword"
                     color={"Green"}
                   >
-                    <br />
+
                     {"비밀번호찾기"}
                   </Typography>
-                </Grid>
+                  </Grid>               
+
+
               </Grid>
               <Copyright sx={{ mt: 5 }} />
             </Box>

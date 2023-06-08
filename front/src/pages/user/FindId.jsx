@@ -1,8 +1,9 @@
 import { Button, TextField } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, textAlign } from "@mui/system";
 import axios from "axios";
 import React, { useState, useCallback } from "react";
 import CommonTop from "@layouts/common/CommonTop";
+import Typography from "@mui/material/Typography";
 
 const FindId = () => {
   const [phoneNo, setPhoneNo] = useState("");
@@ -64,21 +65,26 @@ const FindId = () => {
 
   return (
     <>
-      <CommonTop />
-      <div style={{ color: "black", marginTop: "100px" }}>
+      <CommonTop pageName="아이디 찾기"/>
+      <Typography
+        style={{ color: "black", marginTop: "100px", textAlign: "center" }}
+      >
         휴대폰 인증 완료후 아이디 찾기
-      </div>
+      </Typography>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          marginTop: "100px",
+          justifyContent: "center",
+          width: "80%",
+          margin: "0 auto",
         }}
       >
         <TextField
           label="휴대폰 번호"
           value={phoneNo}
+          sx={{ marginTop: "100px", marginBottom: "10px" }}
           onChange={(e) => {
             const input = e.target.value;
             const regex = /^[0-9]{0,11}$/; // 숫자로 이루어진 정규식 패턴
@@ -96,6 +102,7 @@ const FindId = () => {
         <TextField
           label="인증번호"
           value={phoneVerificationCode}
+          sx={{ marginTop: "20px", marginBottom: "10px" }}
           onChange={(e) => {
             const input = e.target.value;
             const regex = /^[0-9]{0,6}$/; // 0부터 9까지의 숫자로 이루어진 최대 6자리의 정규식 패턴
@@ -107,6 +114,7 @@ const FindId = () => {
         <Button
           onClick={handlePhoneVerification}
           disabled={!/^\d{6}$/.test(phoneVerificationCode)}
+          sx={{marginBottom: "10px" }}
         >
           인증번호 확인
         </Button>
