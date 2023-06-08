@@ -1,18 +1,18 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 const clubField = {
-  clubName: "",
-  clubIntro: "",
-  clubMaxMemberNo: "",
-  clubImg: "",
-  selectedSido: "",
-  selectedSigoon: "",
-  clubRegion: "",
-  filterGender: "",
-  filterMinAge: "",
-  filterMaxAge: "",
-  filterTag: "",
-  mainCategoryNo: "",
+  clubName: '',
+  clubIntro: '',
+  clubMaxMemberNo: null,
+  clubImg: '',
+  selectedSido: '',
+  selectedSigoon: '',
+  clubRegion: '',
+  filterGender: '',
+  filterMinAge: '',
+  filterMaxAge: '',
+  filterTag: '',
+  mainCategoryNo: '',
   file: null,
   image: null,
 };

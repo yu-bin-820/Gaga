@@ -13,6 +13,8 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
 
 const StyledAvatarGroup = styled(AvatarGroup)({
   '& .MuiAvatar-root': {
@@ -24,6 +26,11 @@ const StyledAvatarGroup = styled(AvatarGroup)({
 
 const AdjustmentThumnail = ({ meeting }) => {
   const navigate = useNavigate();
+
+  const { data: myData, mutate: mutateMe } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+  );
 
   const onClickMeeting = useCallback((event) => {
     navigate(`/meeting/meetingno/${meeting.meetingNo}`);
@@ -48,14 +55,15 @@ const AdjustmentThumnail = ({ meeting }) => {
           width: '33%',
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <ImageListItem
           sx={{
-            maxWidth: '150px',
-            maxHeight: '150px',
-            minWidth: '150px',
-            minHeight: '150px',
+            maxWidth: '100px',
+            maxHeight: '100px',
+            minWidth: '100px',
+            minHeight: '100px',
           }}
         >
           {meeting?.meetingImg ? (
@@ -91,26 +99,12 @@ const AdjustmentThumnail = ({ meeting }) => {
           <Stack
             sx={{
               color: 'text.primary',
-              fontSize: 15,
-              fontWeight: 'medium',
-              marginBottom: '2px',
-            }}
-          >
-            모임명 {meeting.meetingName}
-          </Stack>
-          <Stack
-            sx={{
-              color: 'text.primary',
               display: 'inline',
               fontSize: 12,
               marginBottom: '1px',
             }}
           >
-            모임날짜 {meeting.meetingDate}
-            <br />
-            모임시작시간 {meeting.meetingStartTime}
-            <br />
-            모임끝시간 {meeting.meetingEndTime}
+            {meeting.meetingDate} {meeting.meetingStartTime}
             <br />
           </Stack>
 

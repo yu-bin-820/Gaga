@@ -9,10 +9,12 @@ import ClubThumbnail from './ClubThumbnail';
 import Refund from '@components/payment/Refund';
 import Payment from '@pages/payment/Payment';
 import Account from '@components/payment/Account';
+import useCommonStore from '@stores/common/useCommonStore';
 
 const ListClub = () => {
   const [clubList, setClubList] = useState();
   const navigate = useNavigate();
+  const { setField } = useCommonStore();
 
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -48,6 +50,22 @@ const ListClub = () => {
     },
     [navigate]
   );
+  const onClickDirectChat = useCallback(
+    (e) => {
+      const { id } = event.target;
+      setField('chatRoomEntryNo', id);
+      navigate('/chat/direct/message/list');
+    },
+    [navigate, setField]
+  );
+
+  const onClickAddMember = useCallback(
+    (event) => {
+      const { id } = event.target;
+      navigate(`/club/member/addmember/${id}`);
+    },
+    [navigate]
+  );
 
   return (
     <>
@@ -57,7 +75,24 @@ const ListClub = () => {
             {clubList?.map((club, i) => (
               <Box key={i}>
                 <ClubThumbnail club={club} />
-                <Button id={club.clubNo} onClick={onClickClub}></Button>
+                <Stack direction={'row'} justifyContent='center' spacing={1.5}>
+                  <Button
+                    id={club.clubNo}
+                    variant='outlined'
+                    sx={{ width: '180px' }}
+                    onClick={onClickAddMember}
+                  >
+                    참여 신청
+                  </Button>
+                  <Button
+                    id={club.clubLeaderNo}
+                    variant='outlined'
+                    sx={{ width: '180px' }}
+                    onClick={onClickDirectChat}
+                  >
+                    리더에게 문의
+                  </Button>
+                </Stack>
               </Box>
             ))}
           </Box>
