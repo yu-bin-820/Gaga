@@ -185,10 +185,13 @@ const FindPassword = () => {
               value={newPassword}
               onChange={handleChangePassword}
               error={passwordError}
+              inputProps={{
+                maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
+              }}
             />
             {passwordError && (
               <FormHelperText error>
-                비밀번호는 8~14글자이며, 영문, 숫자, 특수문자 조합이어야 합니다.
+                영문 숫자 특수문자조합 8~14자리 이내로 입력해주세요.
               </FormHelperText>
             )}
             <TextField
@@ -198,6 +201,9 @@ const FindPassword = () => {
               value={passwordConfirm}
               onChange={handleChangePasswordConfirm}
               error={!passwordMatch && passwordConfirm !== ""}
+              inputProps={{
+                maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
+              }}
             />
             {!passwordMatch && passwordConfirm !== "" && (
               <FormHelperText error>

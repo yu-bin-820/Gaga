@@ -113,7 +113,7 @@ function AddNaverUser() {
   const checkPasswordValidity = (password) => {
     // 비밀번호 유효성 검사: 최소 6 ~ 최대 14자리, 영문, 숫자, 특수문자 중 최소 1개 포함
     const passwordRegExp =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,14}$/;
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,14}$/;
     return passwordRegExp.test(password);
   };
 
@@ -134,7 +134,7 @@ function AddNaverUser() {
         container
         component="main"
         sx={{
-          height: "90vh",
+          marginTop: "65px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -216,8 +216,11 @@ function AddNaverUser() {
               error={!passwordValid}
               helperText={
                 !passwordValid &&
-                "비밀번호는 최소 6자 ~ 최대 14자리, 영문, 숫자, 특수문자를 각각 최소 1개 포함해야 합니다."
+                "영문 숫자 특수문자조합 8~14자리 이내로 입력해주세요."
               }
+              inputProps={{
+                maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
+              }}
             />
             <TextField
               label="비밀번호 확인"
@@ -230,6 +233,9 @@ function AddNaverUser() {
               onChange={handlePasswordCheckChange}
               error={passwordError}
               helperText={passwordError && "비밀번호가 일치하지 않습니다."}
+              inputProps={{
+                maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
+              }}
             />
             <TextField
               label="이름"
