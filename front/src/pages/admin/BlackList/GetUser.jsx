@@ -53,43 +53,45 @@ const GetUser = () => {
   };
   
   return (
-    <Box sx={{ margin: '2rem' }}>
+    <Box sx={{ margin: '2rem', marginTop: '4.2rem' }}>
     <Typography variant="h4" gutterBottom>
-      <CommonTop pageName="회원 상세보기" prevPath="/community/profile/mine" />
+      <CommonTop pageName="회원 상세보기" prevPath="/blackList/listUser" />
     </Typography>
+    
     <Grid container spacing={2}>
       <Grid item xs={12} sm={6}>
-        <Paper elevation={3} sx={{ padding: '2rem' }}>
+        <Paper elevation={3} sx={{ padding: '0.1rem' }}>
+            
           <List>
             <ListItem>
               <ListItemIcon>
                 <PersonIcon />
               </ListItemIcon>
-              <ListItemText primary="User Name" secondary={user.userName} />
+              <ListItemText primary="회원 이름" secondary={user.userName} />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <PermIdentityIcon />
               </ListItemIcon>
-              <ListItemText primary="User NickName" secondary={user.nickName} />
+              <ListItemText primary="닉네임" secondary={user.nickName} />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <AssignmentIndIcon />
               </ListItemIcon>
-              <ListItemText primary="User Role" secondary={user.role} />
+              <ListItemText primary="회원 권한" secondary={user.role === 0 ? '회원':'관리자'} />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <PhoneIcon />
               </ListItemIcon>
-              <ListItemText primary="User PhoneNo" secondary={user.phoneNo} />
+              <ListItemText primary="전화번호" secondary={user.phoneNo} />
             </ListItem>
             <ListItem> 
               <ListItemIcon>
                 {user.blacklist ? <BlockIcon /> : <CheckCircleIcon />}
               </ListItemIcon>
-              <ListItemText primary="블랙리스트" secondary={user.blacklist ? 'Yes' : 'No'} />
+              <ListItemText primary="블랙리스트" secondary={user.blacklist ? '블랙리스트' : 'No'} />
             </ListItem>
           </List>
         </Paper>

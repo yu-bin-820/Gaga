@@ -26,19 +26,16 @@ function Chatbot() {
   const [exampleMessages, setExampleMessages] = useState([]);
 
   function toggleChatBot() {
-    if (isVisible) {
-      setIsVisible(false);
-      setToggleImage('/assets/img/chatboticon/reverse.png');
-    } else {
-      setIsVisible(true);
-      if (messages.length === 0) {
-        handleOpenEvent().catch((error) => {
-          console.error('handleOpenEvent 오류:', error);
-          setToggleImage('/assets/img/chatboticon/whilechatting.png');
-        });
+    setIsVisible((prevState) => !prevState);
+    if (!isVisible) {
+        if (messages.length === 0) {
+          handleOpenEvent().catch((error) => {
+            console.error('handleOpenEvent 오류:', error);
+            setToggleImage('/assets/img/chatboticon/whilechatting.png');
+          });
+        }
       }
     }
-  }
 
   const handleOpenEvent = async () => {
     console.log("메시지 출발합니다");
@@ -134,19 +131,9 @@ function Chatbot() {
 
 //마우스 올라갔을때 X표
 const handleMouseEnter = () => {
-  if (isVisible) {
-    setToggleImage('/assets/img/chatboticon/x.png');
-  } else {
-    setToggleImage('/assets/img/chatboticon/whilechatting.png');
-  }
 };
 //다시 원래대로 이미지 출력
 const handleMouseLeave = () => {
-    if (isVisible) {
-      setToggleImage('/assets/img/chatboticon/whilechatting.png');
-    } else {
-      setToggleImage('/assets/img/chatboticon/reverse.png');
-    }
   };
 
   useEffect(() => {
@@ -224,6 +211,7 @@ const handleSendMessage = async (text) => {
   });
   
   if (isGptMode) {
+
     const response = await fetch(`${import.meta.env.VITE_SPRING_HOST}/rest/gpt`, {
         method: 'POST',
         headers: {
@@ -236,9 +224,11 @@ const handleSendMessage = async (text) => {
         
       });
       // 서버로부터의 응답을 받아 JSON으로 변환
-      const data = await response.json();
+
       // 변환된 JSON의 'text' 필드가 응답 메시지가 될 것이다.
-      const botMessage = data.text;
+      const botMessage = await response.text();
+
+      console.log("유원? 유두", botMessage)
       
       return botMessage;
     } else {
@@ -287,21 +277,15 @@ const handleSendMessage = async (text) => {
 
   return (
       <div>
+        <div className="loader"></div>
           <button
               className="toggleChatBot"
               onClick={toggleChatBot}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
+              
           >
-              {/*<img src={toggleImage} alt="Toggle chatbot" />*/}
-              <img
-                  className="toggle-gpt-img normal"
-                  src="/assets/img/chatboticon/reverse.png"
-              />
-              <img
-                  className="toggle-gpt-img gpt-theme hidden"
-                  src="/assets/img/chatboticon/gpt4.png"
-              />
+              
           </button>
         
           <div className={`chat-container ${isVisible ? "" : "hidden"}`}  style={{ textAlign: "right" }}>

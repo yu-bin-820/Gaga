@@ -7,6 +7,7 @@ import CommonTop from '@layouts/common/CommonTop';
 import { styled } from '@mui/system';
 import Collapse from '@mui/material/Collapse';
 import BlackListTabs from '@components/admin/BlackListTabs';
+import Chatbot from '@components/chatbot/ChatBot';
 
 const AnimatedTextField = styled(TextField)`
   transition: all 600ms ease-in-out;
@@ -110,9 +111,9 @@ function ListUser() {
   return (
     <Box sx={{ marginTop: "64px", marginLeft: "10px", marginRight: "10px" }}>
       <CommonTop pageName="회원 목록" prevPath="/community/profile/mine" />
-  
+      <Chatbot />
       <BlackListTabs />
-  
+      
       <Box
         sx={{
           display: "flex",
