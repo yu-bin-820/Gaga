@@ -1,6 +1,7 @@
 import { Grid, IconButton, TextField, Tooltip } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { Stack } from "@mui/system";
+import PropTypes from 'prop-types';
 
 const ListMeetingSearchBar = ({ keyword, handleKeywordChange, handleSubmit, top }) => {
   return (
@@ -43,6 +44,13 @@ const ListMeetingSearchBar = ({ keyword, handleKeywordChange, handleSubmit, top 
       </Grid>
     </Stack>
   );
+};
+
+ListMeetingSearchBar.propTypes = {
+  keyword: PropTypes.object.isRequired,
+  handleKeywordChange: PropTypes.object.isRequired,
+  handleSubmit: PropTypes.object.isRequired,
+  top: PropTypes.object.isRequired,
 };
 
 export default ListMeetingSearchBar;
