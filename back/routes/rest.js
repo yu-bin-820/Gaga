@@ -196,6 +196,9 @@ router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
             as: 'MeetingLeader',
           },
         ],
+        where: {
+          meeting_state: [1, 2],
+        },
       }); // getOwnedClub 호출
       const joinedMeetings = await user.getMeetings({
         through: { where: { state: 2 } },
@@ -206,6 +209,9 @@ router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
             as: 'MeetingLeader',
           },
         ],
+        where: {
+          meeting_state: [1, 2],
+        },
       });
       const unsortedGroups = [
         ...ownedClubs,
