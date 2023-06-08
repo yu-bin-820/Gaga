@@ -123,12 +123,12 @@ const Login = () => {
 
   const handleNaverLogin = () => {
     window.location.href =
-      "https://nid.naver.com/oauth2.0/authorize?client_id=FzMGbETEgw2xNeSUlIIF&response_type=code&redirect_uri=http://192.168.0.159:8080/rest/user/naverLogin&state=test";
+      `https://nid.naver.com/oauth2.0/authorize?client_id=FzMGbETEgw2xNeSUlIIF&response_type=code&redirect_uri=${import.meta.env.VITE_SPRING_HOST}/rest/user/naverLogin&state=test`;
   };
 
   const handleKakaoLogin = () => {
     window.location.href =
-      "https://kauth.kakao.com/oauth/authorize?client_id=5d88ee6131a76417bcf8e0d0dc852d91&scope=profile_nickname,profile_image,account_email&redirect_uri=http://192.168.0.159:8080/rest/user/kakaoLogin&response_type=code";
+      `https://kauth.kakao.com/oauth/authorize?client_id=5d88ee6131a76417bcf8e0d0dc852d91&scope=profile_nickname,profile_image,account_email&redirect_uri=${import.meta.env.VITE_SPRING_HOST}/rest/user/kakaoLogin&response_type=code`;
   };
 
   if (myData === undefined) {

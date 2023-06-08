@@ -104,6 +104,7 @@ function ListQnaPost() {
   return (
     <Box sx={{ marginTop: '64px', marginLeft: '10px', marginRight: '10px' }}>
       <CommonTop pageName="Q&A" prevPath="/community/profile/mine" />
+      <AdminTabs />
       <Stack spacing={2.5}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem', alignItems: 'center' }}>
           <TextField type="text" value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} onKeyPress={handleKeyPress} style={{ marginRight: '0.5rem' }} />

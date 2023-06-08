@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './ChatBot.css';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import CloseIcon from '@mui/icons-material/Close';
+import SendIcon from '@mui/icons-material/Send';
 //import { fetchGptResponse } from './gptapi';
 
 function Chatbot() {
@@ -37,7 +46,20 @@ function Chatbot() {
       }
     }
   }
-  
+  const handleOutsideClick = (event) => {
+    if (!event.target.closest('.chat-container') && isVisible) {
+      toggleChatBot();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [isVisible]);
+
+
   const handleOpenEvent = async () => {
     console.log('메시지 출발합니다');
     //const apiUrl = 'http://192.168.0.37:8080/rest/chatbot';
@@ -83,8 +105,8 @@ function Chatbot() {
         console.log(item.data.data.action.data.url); // 아이템 URL 출력
     });
 });
-      console.log(botMessage2, " 제발 부탁이야씨발")
-      console.log(botMessage3, " 제발 부탁이라고씨발")
+      console.log(botMessage2, " 제발 부탁이야")
+      console.log(botMessage3, " 제발 부탁입니다 선생님")
       if (jsonObject.data.bubbles.length > 1) {
         if (jsonObject.data.bubbles[1].type === 'MULTILINKS') {
           let links = jsonObject.data.bubbles[1].data.component.list;
@@ -256,70 +278,122 @@ const makeSignature = async (message, secretKey) => {
   };
 
   return (
-	<div>
-        <button className="toggleChatBot"
-        onClick={toggleChatBot}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}>
-            {/*<img src={toggleImage} alt="Toggle chatbot" />*/}
-        <img className="toggle-gpt-img normal" src="/assets/img/chatboticon/reverse.png" />
-        <img className="toggle-gpt-img gpt-theme hidden" src="/assets/img/chatboticon/gpt4.png" />
-        </button>       
+      <div>
+          <button
+              className="toggleChatBot"
+              onClick={toggleChatBot}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+          >
+              {/*<img src={toggleImage} alt="Toggle chatbot" />*/}
+              <img
+                  className="toggle-gpt-img normal"
+                  src="/assets/img/chatboticon/reverse.png"
+              />
+              <img
+                  className="toggle-gpt-img gpt-theme hidden"
+                  src="/assets/img/chatboticon/gpt4.png"
+              />
+          </button>
 
-        <div className={`chat-container ${isVisible ? '' : 'hidden'}`}>
-                <div className="chat-header">
-                    {/* 챗봇 창 상단에 HELP 버튼 추가 */}
-                    <button className="help-button" onClick={handleHelpClick}>HELP</button>
-                    <h3>GAGABOT</h3>
-                </div>
-                <div className="chat-messages" id="chatMessages">
-  {messages.map((message, index) => (
-    <div key={index} className={`chat-message ${message.type}`}>
-      <h4>{message.type === "user" ? "당신" : "Gagabot"}</h4>
-      <p>{message.text}</p>
-      {message.type === "bot" && message.bubbles && (
-        <div>
-          {message.bubbles.map((bubble, bubbleIndex) => {
-            if (bubbleIndex === 0) {
-              // 첫 번째 버블: 웰컴 메시지
-              return <p key={bubbleIndex}>{bubble.data.description}</p>
-            } else if (bubbleIndex === 1 && bubble.component.data.contentTable) {
-              // 두 번째 버블: 멀티링크
-              return bubble.component.data.contentTable.map((contentRow, rowIndex) =>
-                contentRow.map((contentItem, itemIndex) => 
-                  <a key={`${bubbleIndex}-${rowIndex}-${itemIndex}`} href={contentItem.data.data.action.data.url}>{contentItem.data.title}</a>
-                )
-              );
-            } else {
-              // 그 외 기타 버블 (필요한 경우 추가)
-              return null;
-            }
-          })}
-        </div>
-      )}
-    </div>
-  ))}
-  <div ref={messageEndRef} />
-</div>
-	<div className="chat-input">
-        <button className="toggle-gpt" onClick={handleToggleGpt}>
+          <div className={`chat-container ${isVisible ? "" : "hidden"}`}  style={{ textAlign: "right" }}>
+              <div className="chat-header" >
+                  {/* 챗봇 창 상단에 HELP 버튼 추가 */}
+                  <IconButton className="help-button" onClick={handleHelpClick}>
+                  <HelpOutlineIcon  onClick={handleHelpClick} />
+          </IconButton>
+          <h3>GAGABOT</h3>
+              </div>
+              <div className="chat-messages" id="chatMessages">
+                  {messages.map((message, index) => (
+                      <div
+                          key={index}
+                          className={`chat-message ${message.type}`}
+                      >
+                          <h4>
+                              {message.type === "user" ? "당신" : "Gagabot"}
+                          </h4>
+                          <p>{message.text}</p>
+                          {message.type === "bot" && message.bubbles && (
+                              <div>
+                                  {message.bubbles.map(
+                                      (bubble, bubbleIndex) => {
+                                          if (bubbleIndex === 0) {
+                                              // 첫 번째 버블: 웰컴 메시지
+                                              return (
+                                                  <p key={bubbleIndex}>
+                                                      {bubble.data.description}
+                                                  </p>
+                                              );
+                                          } else if (
+                                              bubbleIndex === 1 &&
+                                              bubble.component.data.contentTable
+                                          ) {
+                                              // 두 번째 버블: 멀티링크
+                                              return bubble.component.data.contentTable.map(
+                                                  (contentRow, rowIndex) =>
+                                                      contentRow.map(
+                                                          (
+                                                              contentItem,
+                                                              itemIndex
+                                                          ) => (
+                                                              <a
+                                                                  key={`${bubbleIndex}-${rowIndex}-${itemIndex}`}
+                                                                  href={
+                                                                      contentItem
+                                                                          .data
+                                                                          .data
+                                                                          .action
+                                                                          .data
+                                                                          .url
+                                                                  }
+                                                              >
+                                                                  {
+                                                                      contentItem
+                                                                          .data
+                                                                          .title
+                                                                  }
+                                                              </a>
+                                                          )
+                                                      )
+                                              );
+                                          } else {
+                                              // 그 외 기타 버블 (필요한 경우 추가)
+                                              return null;
+                                          }
+                                      }
+                                  )}
+                              </div>
+                          )}
+                      </div>
+                  ))}
+                  <div ref={messageEndRef} />
+              </div>
+              <div className="chat-input">
+              <Button className="toggle-gpt" onClick={handleToggleGpt}>
             GPT
-        </button>
-        <form onSubmit={sendMessage}>
-            <input
-            type="text"
-            id="messageInput"
-            value={inputText}
-            onChange={handleInput}
-            placeholder="채팅을 입력해주세요~"
-            />
-            <button type="submit" id="sendButton">
-            전송
-            </button>
-        </form>
-        </div>
-	</div>
-  </div>
-); 
+          </Button>
+                  <form onSubmit={sendMessage}>
+                      <TextField
+                          type="text"
+                          id="messageInput"
+                          value={inputText}
+                          onChange={handleInput}
+                          placeholder="채팅을 입력해주세요~"
+                          fullWidth
+                      />
+                      <Button
+                          type="submit"
+                          id="sendButton"
+                          variant="contained"
+                          color="primary"
+                      >
+                          전송
+                      </Button>
+                  </form>
+              </div>
+          </div>
+      </div>
+  ); 
 }
 export default Chatbot; 

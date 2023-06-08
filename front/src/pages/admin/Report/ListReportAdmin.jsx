@@ -15,6 +15,7 @@ import Paper from '@mui/material/Paper';
 import { DateTime } from 'luxon';
 import useCommunityStore from '@stores/communication/useCommunityStore';
 import { useLocation, useNavigate } from 'react-router';
+import BlackListTabs from '@components/admin/BlackListTabs';
 
 const ListReport = () => {
   const navigate = useNavigate();
@@ -43,9 +44,12 @@ const ListReport = () => {
     [navigate, setField, location]
   );
   return (
-    <div>
-      <CommonTop pageName="신고 목록 조회" prevPath="/community/profile/mine" />
-
+    <Box sx={{ marginTop: "64px", marginLeft: "10px", marginRight: "10px" }}>
+      <CommonTop pageName="신고 목록 조회??" prevPath="/community/profile/mine" />
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <BlackListTabs />
+      </Box>
+      
       <TableContainer>
         <Table
           sx={{
@@ -57,7 +61,12 @@ const ListReport = () => {
           }}
         >
           <TableHead>
-            <TableRow>
+            <TableRow sx={{
+                                  "& th": {
+                                      color: "white",
+                                      backgroundColor: "primary.main",
+                                  },
+                              }}>
               <TableCell align="center" sx={{ fontWeight: 600 }}>
                 피신고자
               </TableCell>
@@ -89,7 +98,7 @@ const ListReport = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+      </Box>
   );
 };
 
