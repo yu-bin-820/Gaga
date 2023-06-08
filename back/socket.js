@@ -18,6 +18,8 @@ module.exports = (server, app) => {
         'http://223.130.144.173:80',
         'http://www.gaga.works',
         'http://gaga.works:80',
+        'https://www.gaga.works',
+        'https://www.gaga.works:443',
       ],
       methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
     },
