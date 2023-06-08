@@ -35,6 +35,7 @@ public class Meeting {
     private String bankName;
     private int state;
     private int count;
+    private int parentMeetingNo;
     
     public Meeting() {
     	
@@ -228,6 +229,14 @@ public class Meeting {
 		this.count = count;
 	}
 
+	public int getParentMeetingNo() {
+		return parentMeetingNo;
+	}
+
+	public void setParentMeetingNo(int parentMeetingNo) {
+		this.parentMeetingNo = parentMeetingNo;
+	}
+
 	@Override
 	public String toString() {
 		return "Meeting [meetingNo=" + meetingNo + ", entryFee=" + entryFee + ", meetingDate=" + meetingDate
@@ -240,9 +249,8 @@ public class Meeting {
 				+ ", filterMinAge=" + filterMinAge + ", filterMaxAge=" + filterMaxAge + ", mainCategoryNo="
 				+ mainCategoryNo + ", filterTag=" + filterTag + ", adjustmentTime=" + adjustmentTime
 				+ ", adjustmentState=" + adjustmentState + ", accountNo=" + accountNo + ", bankName=" + bankName
-				+ ", state=" + state + ", count=" + count + "]";
+				+ ", state=" + state + ", count=" + count + ", parentMeetingNo=" + parentMeetingNo + "]";
 	}
-
 
     
 }

@@ -9,6 +9,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -42,9 +44,13 @@ public class MeetingRestController {
 	@Qualifier("userServiceImpl")
 	private UserService userService;
 	
+	@Autowired
+	private ResourceLoader resourceLoader;
+	
 	@Value("${fileUploadPath}")
 	String fileUploadPath;
 	
+	@Autowired
 	@Value("${pageSize}")
 	int pageSize;
 	
@@ -83,7 +89,7 @@ public class MeetingRestController {
 	
 	@PostMapping("search")
 	public List<Meeting> getMeetingListByKeyword(@RequestBody Search search) throws Exception{
-		
+				
 		if(search.getCurrentPage() ==0 ){
 			search.setCurrentPage(1);
 		}
@@ -94,8 +100,11 @@ public class MeetingRestController {
 		
 		System.out.println(search.getStartRowNum());
 		
+		System.out.println("searchmeeting : " + search);
+
+		
 		List<Meeting> list = meetingService.getMeetingListByKeyword(search);
-		System.out.println(list);
+//		System.out.println(list);
 		return list;
 	}
 	
@@ -104,13 +113,16 @@ public class MeetingRestController {
 	 		   				  @RequestParam(value = "file", required = false) MultipartFile file
 							  ) throws Exception{
 		
+		Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+		File uploadDir = resource.getFile();
+		
 		System.out.println("img변경 전 : "+meeting);
 		
 		if (file != null) {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(fileUploadPath+"/meeting/"+uuidFileName));
+			file.transferTo(new File(uploadDir,"/meeting/"+uuidFileName));
 			
 			meeting.setMeetingImg(uuidFileName);
 		}
@@ -129,6 +141,9 @@ public class MeetingRestController {
 	public void addMeeting(@ModelAttribute Meeting meeting,
 				 		   @RequestParam(value = "file", required = false) MultipartFile file
 						   ) throws Exception{
+		
+		Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+		File uploadDir = resource.getFile();
 
 		System.out.println("img변경 전 : "+meeting);
 		
@@ -136,7 +151,7 @@ public class MeetingRestController {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(fileUploadPath+"/meeting/"+uuidFileName));
+			file.transferTo(new File(uploadDir,"/meeting/"+uuidFileName));
 			
 			meeting.setMeetingImg(uuidFileName);
 		}
@@ -187,6 +202,9 @@ public class MeetingRestController {
 			  					 @RequestParam(value = "file", required = false) MultipartFile file
 								) throws Exception{
 		
+		Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+		File uploadDir = resource.getFile();
+		
 		System.out.println("img변경 전 : "+meetingReview);
 
 
@@ -194,7 +212,7 @@ public class MeetingRestController {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(fileUploadPath+"/meeting/"+uuidFileName));
+			file.transferTo(new File(uploadDir,"/meeting/"+uuidFileName));
 			
 			meetingReview.setMeetingReviewImg(uuidFileName);
 		}
@@ -224,13 +242,16 @@ public class MeetingRestController {
 				 					@RequestParam(value = "file", required = false) MultipartFile file
 				 					) throws Exception {
 		
+		Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+		File uploadDir = resource.getFile();
+		
 		System.out.println("img변경 전 : "+meetingReview);
 
 		if (file != null) {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(fileUploadPath+"/meeting/"+uuidFileName));
+			file.transferTo(new File(uploadDir,"/meeting/"+uuidFileName));
 			
 			meetingReview.setMeetingReviewImg(uuidFileName);
 		}
