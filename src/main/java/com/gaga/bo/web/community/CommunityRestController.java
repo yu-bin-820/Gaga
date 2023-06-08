@@ -152,7 +152,7 @@ public class CommunityRestController {
 		
 		session.setAttribute("user", user);
 		
-	}
+	} 
 	
 	@GetMapping("title/list/userno/{userNo}")
 	public List<Title> getTitleList(
