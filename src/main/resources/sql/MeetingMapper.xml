@@ -35,6 +35,7 @@
     <result property="adjustmentState" 		column="adjustment_state" 		jdbcType="INTEGER" />
     <result property="accountNo" 			column="account_no"				jdbcType="VARCHAR" />
     <result property="bankName" 			column="bank_name" 				jdbcType="VARCHAR" />
+    <result property="count" 				column="count" 					jdbcType="INTEGER" />
   </resultMap>
   
   <resultMap id="meetingReviewResultMap" type="meetingReview">
@@ -247,6 +248,7 @@
     meetings AS m
   WHERE
     meeting_state = 1
+    
   AND
 	filter_gender = #{gender:INTEGER}
   AND
@@ -258,7 +260,7 @@
     <if test="mainCategoryNo != null and mainCategoryNo != 0">
   	AND main_category_no =  #{mainCategoryNo:INTEGER}
   </if>
-  <if test="tag != null">
+  <if test="tag != null and tag !=''">
   	AND filter_tag IN (#{tag : LONGVARCHAR}, #{tag2 : LONGVARCHAR}, #{tag3 : LONGVARCHAR})
   </if>
   AND
@@ -394,7 +396,9 @@
  <!-- 신청 멤버를 확정 멤버로 변경(updateMeetingMemberState) -->
   <update id="updateMember" parameterType="Map">
     UPDATE members
-    SET state = #{state}
+    SET 
+    	state = #{state},
+    	confirmed_time = NOW()
     WHERE meeting_no = #{meetingNo}
     AND user_no = #{userNo}
   </update>
