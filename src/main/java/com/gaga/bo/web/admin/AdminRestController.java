@@ -80,12 +80,6 @@ public class AdminRestController {
 		return ResponseEntity.ok(noticePostNo);
 	}
 
-	@GetMapping("getNoticePostList")
-	public ResponseEntity<List<NoticePost>> getNoticePostList() throws Exception {
-		List<NoticePost> noticePosts = adminService.getNoticePostList();
-		return new ResponseEntity<>(noticePosts, HttpStatus.OK);
-	}
-
 	@GetMapping("getNoticePostListByCategoryNo")
 	public ResponseEntity<List<NoticePost>> getNoticePostListByCategoryNo(
 	        @RequestParam("noticePostCategoryNo") int noticePostCategoryNo,
@@ -94,6 +88,7 @@ public class AdminRestController {
 	    List<NoticePost> noticePosts = adminService.getNoticePostListByCategoryNo(noticePostCategoryNo, lastPostId);
 	    return new ResponseEntity<>(noticePosts, HttpStatus.OK);
 	}
+	
 	@GetMapping("getLatestPostId")
 	public ResponseEntity<Integer> getLatestPostId() throws Exception {
 	    Integer latestPostId = adminService.getLatestPostId();
@@ -179,19 +174,31 @@ public class AdminRestController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("블랙리스트 추가 중 오류가 발생했습니다.");
 		}
 	}
-
+	
+	@GetMapping("searchBlackList")
+	public List<User> searchBlackList(@RequestParam("searchKeyword") String searchKeyword) throws Exception {
+	    System.out.println("서버로부터 날라온 키워드"+searchKeyword);
+	    String decodedKeyword = URLDecoder.decode(searchKeyword, "UTF-8");
+	    return adminService.searchBlackList(decodedKeyword);
+	}
+	
 	@GetMapping("searchUser")
-	public ResponseEntity<List<User>> searchUser(User user) throws Exception {
-		List<User> users = adminService.searchUser(user);
-		return ResponseEntity.ok(users);
+	public List<User> searchUser(String searchKeyword) throws Exception {
+		System.out.println("서버로부터 날라온 키워드"+searchKeyword);
+	    String decodedKeyword = URLDecoder.decode(searchKeyword, "UTF-8");
+	    return adminService.searchUser(decodedKeyword);
 	}
-
+/*
 	@GetMapping("getUserList")
-	public ResponseEntity<List<User>> getUserList() throws Exception {
-		List<User> users = adminService.getUserList();
+	public ResponseEntity<List<User>> getUserList(@RequestParam int lastUserNo) throws Exception {
+		List<User> users = adminService.getUserList(lastUserNo);
 		return ResponseEntity.ok(users);
 	}
-
+	*/
+	@GetMapping("getUserList")
+	public List<User> getUserList(@RequestParam int lastUserNo) throws Exception {
+        return adminService.getUserList(lastUserNo);
+    }
 	@GetMapping("getUser/userNo/{userNo}")
 	public ResponseEntity<User> getUser(@PathVariable int userNo) throws Exception {
 		User user = adminService.getUser(userNo);
@@ -219,12 +226,12 @@ public class AdminRestController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("블랙리스트 변경 중 오류가 발생했습니다.");
 		}
 	}
-
+/*
 	@GetMapping("getBlackListList")
-	public ResponseEntity<List<User>> getBlackListList() {
+	public ResponseEntity<List<User>> getBlackListList(@RequestParam int lastUserNo) {
 		System.out.println("hi it is blackList");
 		try {
-			List<User> blacklist = adminService.getBlackListList();
+			List<User> blacklist = adminService.getBlackListList(lastUserNo);
 			List<User> filteredBlacklist = new ArrayList<>();
 
 			for (User user : blacklist) {
@@ -238,7 +245,17 @@ public class AdminRestController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
-
+	*/
+	@GetMapping("getBlackListList")
+	public List<User> getBlackListList(@RequestParam int lastUserNo) throws Exception {
+        return adminService.getBlackListList(lastUserNo);
+    }
+	
+	@GetMapping("getLatestUserNo")
+    public int getLatestUserNo() throws Exception {
+        return adminService.getLatestUserNo();
+    }
+	
 	@GetMapping("getBlackList/{userNo}")
 	public ResponseEntity<User> getBlacklist(@PathVariable int userNo) throws Exception {
 		User user = adminService.getBlackList(userNo);

@@ -80,13 +80,13 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<User> searchUser(User user) throws Exception {
-		return adminDao.searchUser(user);
+	public List<User> searchUser(String searchKeyword) throws Exception {
+		return adminDao.searchUser(searchKeyword);
 	}
 
 	@Override
-	public List<User> getUserList() throws Exception {
-		return adminDao.getUserList();
+	public List<User> getUserList(int lastUserNo) throws Exception {
+		return adminDao.getUserList(lastUserNo);
 	}
 
 	@Override
@@ -100,8 +100,18 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<User> getBlackListList() throws Exception {
-		return adminDao.getBlackListList();
+	public List<User> getBlackListList(int lastUserNo) throws Exception {
+	    return adminDao.getBlackListList(lastUserNo);
+	}
+	
+	@Override
+	public List<User> searchBlackList(String searchKeyword) {
+	    return adminDao.searchBlackList(searchKeyword);
+	}
+	
+	@Override
+	public int getLatestUserNo() throws Exception {
+	    return adminDao.getLatestUserNo();
 	}
 
 //	@Override
