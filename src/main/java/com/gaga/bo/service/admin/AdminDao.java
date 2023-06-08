@@ -28,9 +28,9 @@ public interface AdminDao {
 	List<NoticePost> searchNoticePost(String searchKeyword) throws Exception;
 	
 	//#블랙리스트 
-	List<User> searchUser(User user) throws Exception;
+	List<User> searchUser(String searchKeyword) throws Exception;
 	
-	List<User> getUserList() throws Exception;
+	List<User> getUserList(int lastUserNo) throws Exception;
 	
 	User getUser(int userNo) throws Exception;
 	
@@ -40,7 +40,11 @@ public interface AdminDao {
 	
 	User getBlackList(int userNo) throws Exception;
 
-	List<User> getBlackListList() throws Exception;
+	List<User> getBlackListList(int lastUserNo) throws Exception;
+	
+	int getLatestUserNo() throws Exception;
+	
+	public List<User> searchBlackList(String searchKeyword);
 	
 	//#신고게시판
 	//List<Report> getReportAdmin(int reportingNo) throws Exception;
