@@ -46,7 +46,7 @@ const ListSearchMeeting = () => {
     console.log(newData);
 
     setMeetingList((prevData) => [...(prevData || []), ...newData]);
-    setCurrentPage((prevPage) => prevPage + 1);
+    setCurrentPage((currentPage) => currentPage + 1);
     setLoading(false);
   };
 
@@ -63,20 +63,20 @@ const ListSearchMeeting = () => {
     <div>
       <CommonTop />
       <Box sx={{ bgcolor: '#ededed' }}>
-        <Box sx={{ marginTop: '70px', marginBottom: '136px' }}>
+        <Box sx={{ paddingTop: '66px', marginBottom: '136px', bgcolor: '#ededed' }}>
           {meetingList?.map((meeting, i) => (
             <Box
               key={i}
               sx={{
-                margin: 0.3,
+                marginLeft: 1.5,
+                marginRight: 1.5,
+                marginTop: 0.5,
+                marginBottom: 2,
                 borderRadius: 3,
                 p: 2,
                 minWidth: 300,
-                padding: 1,
+                padding: 1.3,
                 backgroundColor: '#ffffff',
-                marginLeft: '5px',
-                marginRight: '5px',
-                marginTop: '7px',
               }}
             >
               <MeetingThumbnail meeting={meeting} />

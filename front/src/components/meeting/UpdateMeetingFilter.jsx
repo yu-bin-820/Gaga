@@ -1,7 +1,7 @@
 import { Box, Stack } from '@mui/system';
 import React, { useCallback } from 'react';
 import SelectGender from './SelectGender';
-import SelectAge from './SelectAge';
+import SelectAge from '../common/SelectAge';
 import { Paper, Typography } from '@mui/material';
 import useUpdateMeetingFormStore from '@stores/meeting/useUpdateMeetingFormStore';
 
@@ -11,7 +11,6 @@ const UpdateMeetingFilter = () => {
         filterMinAge,
         filterMaxAge,
         setField,
-        onChangeField,
       } =useUpdateMeetingFormStore();
 
     const handleGenderChange = useCallback((gender) => {
@@ -32,10 +31,13 @@ const UpdateMeetingFilter = () => {
           spacing={2}>
           <SelectGender
               onGenderClick={handleGenderChange}
+              filterGender={filterGender}
           />
   
           <SelectAge
               onAgeSlider={handleAgeChange}
+              filterMinAge={filterMinAge}
+              filterMaxAge={filterMaxAge}
           ></SelectAge>
               
           </Stack>

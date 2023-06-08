@@ -8,6 +8,7 @@ import useSWR from "swr";
 import EventMarkerContainer from "./EventMarkerContainer";
 import ListMeetingChip from "./ListMeetingChip";
 import ListMeetingSearchBar from "./ListMeetingSearchBar";
+const { kakao } = window;
 
 
 const ListMeeting = () => {

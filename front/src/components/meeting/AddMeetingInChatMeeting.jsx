@@ -3,10 +3,11 @@ import { Box, Stack } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import StyledToggleButtonGroup from '@components/common/StyledToggleButtonGroup';
 
 
-const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo }) => {
+const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo, onSubCategoryClick }) => {
 
     const [meetingList, setMeetingList] = useState();
 
@@ -30,7 +31,7 @@ const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo }) => {
 
       const onClickSubCategory = (subCategoryTag) => {
         console.log('서브카테고리', subCategoryTag);
-        //onSubCategoryClick(subCategoryTag); // 부모 컴포넌트로 subCategoryTag 전달
+        onSubCategoryClick(subCategoryTag); // 부모 컴포넌트로 subCategoryTag 전달
       };
 
       console.log(userNo)
@@ -68,6 +69,13 @@ const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo }) => {
         </AccordionDetails>
       </Accordion>
     );
+};
+
+AddMeetingInChatMeeting.propTypes = {
+  expanded: PropTypes.object.isRequired,
+  handleChange: PropTypes.object.isRequired,
+  userNo: PropTypes.object.isRequired,
+  onSubCategoryClick: PropTypes.object.isRequired,
 };
 
 export default AddMeetingInChatMeeting;
