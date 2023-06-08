@@ -38,13 +38,15 @@ const ListPayment = () => {
   return (
     <>
       <CommonTop />
-      <Stack sx={{ marginTop: '100px' }}>
-        <Stack>
-          {paymentList?.map((payment, i) => (
-            <Stack key={i} sx={{ marginBottom: '30px' }}>
-              <PaymentThumnail payment={payment} />
-            </Stack>
-          ))}
+      <Stack sx={{ margin: '10px' }}>
+        <Stack sx={{ marginTop: '64px' }}>
+          <Stack>
+            {paymentList?.map((payment, i) => (
+              <Stack key={i} sx={{ marginBottom: '30px' }}>
+                <PaymentThumnail payment={payment} />
+              </Stack>
+            ))}
+          </Stack>
         </Stack>
       </Stack>
     </>

@@ -41,11 +41,7 @@ const Payment = ({ meeting }) => {
       buyer_tel: myData?.phoneNo, // 구매자 전화번호
       buyer_email: myData?.userId, // 구매자 이메일
       entryFee: entryFee,
-      m_redirect_url: `${
-        import.meta.env.VITE_REACT_HOST
-      }/payment/redirect?payNo=${orderId}&userNo=${myData?.userNo}&nickName=${
-        myData?.nickName
-      }&meetingNo=${meetingNo}&meetingName=${meetingName}&entryFee=${entryFee}`,
+      m_redirect_url: `https://www.gaga.works/payment/redirect?payNo=${orderId}&userNo=${myData?.userNo}&nickName=${myData?.nickName}&meetingNo=${meetingNo}&meetingName=${meetingName}&entryFee=${entryFee}`,
     };
 
     const callback = (response) => {
@@ -97,7 +93,7 @@ const Payment = ({ meeting }) => {
   return (
     <Button
       onClick={onClickPayment}
-      variant="contained"
+      variant='contained'
       sx={{ width: '85vw', borderRadius: '50px' }}
     >
       결제하기

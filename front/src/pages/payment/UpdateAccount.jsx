@@ -6,16 +6,23 @@ import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
 import useInput from '@hooks/common/useInput';
 import axios from 'axios';
-import { Button, TextField } from '@mui/material';
+import { Button, Modal, TextField, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const UpdateAccount = () => {
   const [bankName, setBankName] = useState('');
   const [accountNo, setAccountNo] = useState('');
+  const [openModal, setOpenModal] = useState(false);
+  const navigate = useNavigate();
 
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+
+  const closeModal = () => {
+    setOpenModal(false);
+  };
 
   const handleBankInfoChange = (bankName, accountNo) => {
     setBankName(bankName);
@@ -37,36 +44,84 @@ const UpdateAccount = () => {
       .catch((error) => {
         console.log(error);
       });
+
+    alert('계좌가 업데이트 되었습니다');
+
+    navigate('/community/profile/mine');
   };
+
+  useEffect(() => {
+    if (myData) {
+      setBankName(myData.bankName);
+      setAccountNo(myData.accountNo);
+    }
+  }, [myData]);
 
   return (
     <>
       <CommonTop />
-      <Stack sx={{ marginTop: '64px' }}>
-        등록된 계좌 정보
-        <br />
-        <TextField
-          sx={{ marginTop: '16px' }}
-          label='bankName'
-          value={myData.bankName}
-        />
-        <TextField
-          sx={{ marginTop: '16px' }}
-          label='accountNo'
-          value={myData.accountNo}
-        />
+      <Stack sx={{ margin: '10px' }}>
+        <Stack sx={{ marginTop: '64px' }}>
+          등록된 계좌 정보
+          <br />
+          <TextField
+            sx={{ marginTop: '16px' }}
+            label='은행명'
+            value={bankName}
+          />
+          <TextField
+            sx={{ marginTop: '16px' }}
+            label='계좌번호'
+            value={accountNo}
+          />
+        </Stack>
+        <Stack sx={{ marginTop: '8px', marginBottom: '8px' }}>
+          새로 등록할 계좌 정보 조회
+          <Account onBankInfoChange={handleBankInfoChange} />
+        </Stack>
+        <Button
+          onClick={onButtonClick}
+          variant='contained'
+          sx={{ marginTop: '16px', width: '100%' }}
+        >
+          계좌 등록
+        </Button>
+        <Stack>
+          <Modal
+            open={openModal}
+            onClose={closeModal}
+            aria-labelledby='modal-title'
+            aria-describedby='modal-description'
+          >
+            <Box
+              sx={{
+                p: 4,
+                backgroundColor: 'white',
+                borderRadius: 2,
+                mx: 'auto',
+                my: '20%',
+                width: '50%',
+              }}
+            >
+              <Typography id='modal-title' variant='h6' component='h2'>
+                알림
+              </Typography>
+              <Typography id='modal-description' sx={{ mt: 2 }}>
+                계좌 정보를 업데이트했습니다.
+              </Typography>
+              <Button
+                onClick={() => {
+                  closeModal();
+                }}
+                style={{ alignSelf: 'flex-end', marginTop: 16 }}
+                variant='contained'
+              >
+                확인
+              </Button>
+            </Box>
+          </Modal>
+        </Stack>
       </Stack>
-      <Stack sx={{ marginTop: '8px', marginBottom: '8px' }}>
-        새로 등록할 계좌 정보
-        <Account onBankInfoChange={handleBankInfoChange} />
-      </Stack>
-      <Button
-        onClick={onButtonClick}
-        variant='contained'
-        sx={{ marginTop: '16px', width: '100%' }}
-      >
-        계좌 등록
-      </Button>
     </>
   );
 };
