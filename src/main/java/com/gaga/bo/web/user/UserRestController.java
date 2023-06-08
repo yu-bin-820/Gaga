@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,9 @@ public class UserRestController {
 	@Autowired
 	@Qualifier("userServiceImpl")
     private UserService userService;
+	
+	@Value("${redirectUrl}")
+    private String redirectUrl;
 	
 	public UserRestController(){
 		System.out.println(this.getClass());
@@ -159,6 +163,7 @@ public class UserRestController {
 		System.out.println("/rest/user/updateUser : POST");
 
 		userService.updateUser(user);
+		System.out.println();
 
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
@@ -193,7 +198,7 @@ public class UserRestController {
 	        User user = userService.getUserById(userId);
 	        session.setAttribute("user", user);
 	        System.out.println("네이버 로그인 유저 정보: " + user);
-	        response.sendRedirect("http://192.168.0.159:5173/"); 
+	        response.sendRedirect(redirectUrl); 
 	    } else {		// 존재하지 않는 아이디인 경우, 유저 객체에 정보 담기
 	        User user = new User();
 	        user.setUserId(userId);
@@ -207,7 +212,7 @@ public class UserRestController {
 
 	        session.setAttribute("user", user);
 	        System.out.println("네이버 로그인 유저 정보: " + user);
-	        response.sendRedirect("http://192.168.0.159:5173/user/addnaveruser"); 
+	        response.sendRedirect(redirectUrl+"/user/addnaveruser"); 
 	    }
 	}
 	
@@ -227,7 +232,7 @@ public class UserRestController {
 	        User user = userService.getUserById(userId);
 	        session.setAttribute("user", user);
 	        System.out.println("카카오 로그인 유저 정보: " + user);
-	        response.sendRedirect("http://192.168.0.159:5173/"); 
+	        response.sendRedirect(redirectUrl); 
 	    } else {
 	        // 존재하지 않는 아이디인 경우, 유저 객체에 정보 담기, 카카오는 id 닉네임 2개만 우리가 사용함
 	        User user = new User();
@@ -236,7 +241,7 @@ public class UserRestController {
 
 	        session.setAttribute("user", user);
 	        System.out.println("카카오 로그인 유저 정보: " + user);
-	        response.sendRedirect("http://192.168.0.159:5173/user/addkakaouser");
+	        response.sendRedirect(redirectUrl+"/user/addkakaouser");
 	    }
 	}
 

@@ -95,7 +95,7 @@ class AdminTest {
         assertEquals(1, user.getBlacklist());
     }
 
-//    @Test
+/*    @Test
     public void testListBlackList() throws Exception {
         // Retrieve the list of blacklisted users
         List<User> blacklistedUsers = adminService.getBlackListList();
@@ -103,7 +103,8 @@ class AdminTest {
         // Verify if the list is not empty
         assertTrue(blacklistedUsers.size() > 0);
     }
-
+*/
+    
     //@Test
     public void testGetBlackList() throws Exception {
         int userNo = 6;
