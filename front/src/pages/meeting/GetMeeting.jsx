@@ -147,10 +147,20 @@ const GetMeeting = () => {
             alt="noImg"
             loading="lazy"
             onError={handleImageError}
+            style={{            
+            maxWidth: '100%',
+            maxHeight: '300px',
+            minWidth: '100%',
+            minHeight: '300px'}}
           />
         ) : (
           <img
             src={`https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c`}
+            style={{            
+              maxWidth: '100%',
+              maxHeight: '300px',
+              minWidth: '100%',
+              minHeight: '300px'}}
           />
         )}
 
@@ -187,7 +197,11 @@ const GetMeeting = () => {
 
           <Typography sx={{ fontSize: 16 }}>모임 소개</Typography>
 
-          <Typography sx={{ fontSize: 13 }}>{meeting?.meetingIntro}</Typography>
+          <Typography sx={{ fontSize: 13 }}>
+            {meeting?.meetingIntro?.split('\n').map((line, i) => (
+                <div key={i}>{line}</div>
+              ))}
+            </Typography>
 
           <Stack direction={'row'} spacing={1} alignItems={'center'}>
             <LocationOnIcon />

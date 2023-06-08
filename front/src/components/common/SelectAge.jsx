@@ -1,6 +1,7 @@
 import { Slider } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import React from 'react';
+import PropTypes from 'prop-types';
 import LinearScaleIcon from '@mui/icons-material/LinearScale';
 
 
@@ -28,9 +29,9 @@ const marks = [
 ];
 
 
-const SelectAge = ({onAgeSlider}) => {
+const SelectAge = ({onAgeSlider, filterMinAge, filterMaxAge}) => {
 
-  const [value, setValue] = React.useState([20, 37]);
+  const [value, setValue] = React.useState([filterMinAge, filterMaxAge]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -73,6 +74,12 @@ const SelectAge = ({onAgeSlider}) => {
       </Stack>
       </Stack>
     );
+};
+
+SelectAge.propTypes = {
+  onAgeSlider: PropTypes.object.isRequired,
+  filterMinAge: PropTypes.object.isRequired,
+  filterMaxAge: PropTypes.object.isRequired,
 };
 
 export default SelectAge;

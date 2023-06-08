@@ -6,11 +6,17 @@ import axios from 'axios';
 import { Box } from '@mui/system';
 import { Button } from '@mui/material';
 import ClubThumbnail from './ClubThumbnail';
+import ListMyConfirmClubThumnail from './ListMyConfirmClubThumnail';
+import ListMyPendingClubThumnail from './ListMyPendingClubThumnail';
+import ListMyClubThumnail from './ListMyClubThumnail';
+import ListClubProfile from './ListClubProfile';
+import ListCreateClub from './ListCreateClub';
 
 const ListMyClub = () => {
   const { userNo } = useParams();
   const [clubList, setClubList] = useState();
   const navigate = useNavigate();
+  const isMyProfile = !userNo;
 
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -44,14 +50,40 @@ const ListMyClub = () => {
   }, []);
 
   return (
-    <Box>
-      <Box>
-        {clubList?.map((club, i) => (
-          <Box key={i}>
-            <ClubThumbnail club={club} id={club.clubNo} onClick={onClickClub} />
-          </Box>
-        ))}
-      </Box>
+    <Box sx={{ marginBottom: '170px', backgroundColor: '#ededed' }}>
+      <h5 style={{ margin: '1px' }}>참여 확정 클럽</h5>
+      {clubList?.map((club, i) => {
+        if (club.state === 2) {
+          return (
+            <Box key={i} sx={{ margin: '3px' }}>
+              {!isMyProfile && <ListClubProfile club={club} />}
+              {isMyProfile && <ListMyConfirmClubThumnail club={club} />}
+            </Box>
+          );
+        }
+      })}
+      <h5 style={{ margin: '1px' }}>참여 신청 클럽</h5>
+      {clubList?.map((club, i) => {
+        if (club.state === 1) {
+          return (
+            <Box key={i} sx={{ margin: '3px' }}>
+              {!isMyProfile && <ListClubProfile club={club} />}
+              <ListMyPendingClubThumnail club={club} />
+            </Box>
+          );
+        }
+      })}
+      <h5 style={{ margin: '1px' }}>주최한 모임</h5>
+      {clubList?.map((club, i) => {
+        if (club.state === 0) {
+          return (
+            <Box key={i} sx={{ margin: '3px' }}>
+              {!isMyProfile && <ListClubProfile club={club} />}
+              {isMyProfile && <ListMyClubThumnail club={club} />}
+            </Box>
+          );
+        }
+      })}
     </Box>
   );
 };

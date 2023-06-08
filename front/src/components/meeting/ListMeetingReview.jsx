@@ -12,7 +12,6 @@ import fetcher from '@utils/fetcher';
 
 const ListMeetingReview = () => {
     const { meetingno } = useParams();
-    const [meetingReviewList, setMeetingReviewList] = useState();
     const navigate = useNavigate();
 
     const { data: myData, mutate: mutateMe } = useSWR(
@@ -27,17 +26,10 @@ const ListMeetingReview = () => {
     }, []);
 
 
-    useEffect(()=>{
-        axios
-            .get(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/${meetingno}`)
-            .then((response)=>{
-                console.log(response.data);
-                setMeetingReviewList(response.data);
-            })
-            .catch((error)=>{
-                console.log(error);
-            });
-        },[meetingno]);
+    const {data : meetingReviewList, mutate: mutateMeetingReviewList } = useSWR(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/${meetingno}`,
+        fetcher
+    );
 
         const onClickUpdateMeetingReview = React.useCallback((MouseEvent)=>{
             const { id } = event.target;
@@ -98,7 +90,11 @@ const ListMeetingReview = () => {
                             
                             <Typography variant="subtitle2">{meetingReview.meetingScore}</Typography>
                             </Stack>
-                            <Typography variant="caption" display="block" gutterBottom>{meetingReview.meetingReviewContent}</Typography>
+                            <Typography variant="caption" display="block" gutterBottom>
+                                {meetingReview?.meetingReviewContent?.split('\n').map((line, i) => (
+                                    <div key={i}>{line}</div>
+                                ))}
+                                </Typography>
                             </Stack>
                             </Stack>
                     {myData.userNo === meetingReview.meetingReviewerNo && (

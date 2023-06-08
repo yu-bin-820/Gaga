@@ -38,8 +38,10 @@ const AddMeeting1 = () => {
     filterMinAge,
     filterMaxAge,
     meetingMaxMemberNo,
+    parentClubNo,
     entryFee,
     file,
+    parentMeetingNo,
     setField,
     onChangeField,
     reset
@@ -74,15 +76,17 @@ const AddMeeting1 = () => {
       formData.append('meetingMaxMemberNo', meetingMaxMemberNo);
       formData.append('entryFee', parseInt(entryFee));
       formData.append('meetingLeaderNo', myData.userNo);
+      formData.append('parentClubNo', parentClubNo);
+      formData.append('parentMeetingNo', parentMeetingNo);
 
       const response = await axios.post(
         `${import.meta.env.VITE_SPRING_HOST}/rest/meeting`,
         formData
       );
-
       reset();
 
       console.log(response.data);
+      navigate(`/community/profile/mine`);
     } catch (error) {
       console.error(error);
     }

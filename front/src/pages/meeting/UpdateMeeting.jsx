@@ -69,6 +69,11 @@ const UpdateMeeting = () => {
         setField('filterMaxAge', response.data.filterMaxAge);
         setField('meetingMaxMemberNo', response.data.meetingMaxMemberNo);
         setField('meetingState', response.data.meetingState);
+        setField('image', response.data.meetingImg
+        ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
+          response.data?.meetingReviewImg
+        }`
+      : null)
       })
       .catch((error) => {
         console.log(error);
@@ -146,7 +151,7 @@ const UpdateMeeting = () => {
       <Box sx={{ marginTop: '64px'}}>
         <MobileStepper
           variant="progress"
-          steps={9}
+          steps={6}
           position="static"
           activeStep={activeStep}
           sx={{ maxWidth: 500, flexGrow: 1 }}
@@ -154,7 +159,7 @@ const UpdateMeeting = () => {
             <Button
               size="small"
               onClick={handleNext}
-              disabled={activeStep === 6}
+              disabled={activeStep === 5}
             >
               Next
               {theme.direction === 'rtl' ? (
@@ -281,40 +286,6 @@ const UpdateMeeting = () => {
         required
         value={meetingno}
       />
-      <Stack direction="row" spacing={2} alignItems={'center'} marginLeft="5px">
-        <Button
-          variant="outlined"
-          startIcon={
-            <Avatar>
-              <AddPhotoAlternateIcon />
-            </Avatar>
-          }
-          color="primary"
-          aria-label="upload picture"
-          component="label"
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderColor: 'grey',
-            width: '150px',
-            height: '150px',
-          }}
-          size="large"
-        >
-          <input
-            hidden
-            accept="image/*"
-            type="file"
-            id="file"
-            name="file"
-            onChange={onChangeImg}
-          />
-        </Button>
-        <ImageListItem>
-          {selectedImage && <img src={selectedImage} />}
-        </ImageListItem>
-      </Stack>
       <Button onClick={handleSubmit}>수정하기</Button>
     </Box>
     </>
