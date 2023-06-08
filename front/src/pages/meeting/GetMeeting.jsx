@@ -8,7 +8,7 @@ import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import GetMeetingStaticMap from '@components/meeting/map/GetMeetingStaticMap';
-import { Stack, styled } from '@mui/system';
+import { Stack } from '@mui/system';
 import MeetingMember from '@components/meeting/MeetingMember';
 import GetMeetingTop from '@layouts/meeting/GetMeetingTop';
 import CommonTop from '@layouts/common/CommonTop';
@@ -63,7 +63,7 @@ const GetMeeting = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [meetingno]);
 
   useEffect(() => {
     axios
@@ -79,7 +79,7 @@ const GetMeeting = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [meetingno]);
 
   useEffect(() => {
     axios
@@ -95,15 +95,15 @@ const GetMeeting = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [meetingno]);
 
   const onClickAddMember = useCallback(
     (event) => {
-      const isUserInConfirmedMembers = confirmedMemberList.some(
+      const isUserInConfirmedMembers = confirmedMemberList?.some(
         (confirmedMember) => confirmedMember.userNo === myData?.userNo
       );
 
-      const isUserInPendingMembers = pendingMemberList.some(
+      const isUserInPendingMembers = pendingMemberList?.some(
         (pendingMember) => pendingMember.userNo === myData?.userNo
       );
 
@@ -113,7 +113,7 @@ const GetMeeting = () => {
         setIsMeetingMemberOpen(true);
       }
     },
-    [confirmedMemberList, myData?.userNo, navigate]
+    [confirmedMemberList, myData?.userNo, navigate, meetingno, pendingMemberList]
   );
 
   const [imageLoadingError, setImageLoadingError] = useState(false);

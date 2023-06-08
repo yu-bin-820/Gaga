@@ -20,21 +20,20 @@ const ListMyMeetingThumnail = ({ meeting }) => {
     
     const navigate = useNavigate();
 
-    const onClickListMeetingMember=useCallback((event)=>{
-        const { id } = event.target;
+    const onClickListMeetingMember=useCallback(()=>{
         navigate(`/meeting/member/listmember/meetingno/${meeting.meetingNo}`);
-    },[]);
+    },[meeting.meetingNo, navigate]);
 
-    const onClickMeetingSuccess = React.useCallback((MouseEvent)=>{
+    const onClickMeetingSuccess = React.useCallback(()=>{
         navigate(`/meeting/updatemeetingsuccess/meetingno/${meeting.meetingNo}`);
-        },[]);
+        },[meeting.meetingNo, navigate]);
 
-        const onClickChatRoom=useCallback((event)=>{
+        const onClickChatRoom=useCallback(()=>{
             setField('chatRoomEntryNo',meeting.meetingNo);
             setField('chatType',2);
             setField('chatRoomLeader',meeting.meetingLeaderNo)
             navigate(`/chat/group/message/list`);
-        },[]);
+        },[meeting.meetingLeaderNo, meeting.meetingNo, navigate, setField]);
 
     return (
         <div>
