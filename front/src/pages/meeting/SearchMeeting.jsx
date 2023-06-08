@@ -9,11 +9,12 @@ import useSearchMeetingFormStore from '@hooks/meeting/useSearchMeetingFormStore'
 const SearchMeeting = () => {
   const navigate = useNavigate();
 
-  const { searchKeyword, setField } = useSearchMeetingFormStore();
+  const { searchKeyword, currentPage, setField } = useSearchMeetingFormStore();
 
   const onClickSearch = useCallback(() => {
     navigate(`/meeting/meetinglist`);
     console.log(searchKeyword);
+    setField('currentPage', 1);
   }, [navigate, searchKeyword]);
 
   return (

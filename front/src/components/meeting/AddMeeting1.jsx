@@ -86,6 +86,7 @@ const AddMeeting1 = () => {
       reset();
 
       console.log(response.data);
+      navigate(`/community/profile/mine`);
     } catch (error) {
       console.error(error);
     }

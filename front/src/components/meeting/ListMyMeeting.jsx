@@ -74,7 +74,7 @@ const ListMyMeeting = () => {
 
             <h5>성사된 모임</h5>
             {meetingList?.map((meeting, i) => {
-                if (meeting.state === ( 0|| 2 || 3) && meeting.meetingSuccess === 2) {
+                if (meeting?.state === ( 0|| 2 || 3) && meeting?.meetingSuccess === 2) {
                 return (
                     <Box key={i} sx={{ margin: '3px' }}>
                     {!isMyProfile&&(<ListMeetingProfile />)}

@@ -29,12 +29,16 @@ const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo, onSubCategory
         setAlignment(newAlignment);
       };
 
-      const onClickSubCategory = (subCategoryTag) => {
-        console.log('서브카테고리', subCategoryTag);
-        onSubCategoryClick(subCategoryTag); // 부모 컴포넌트로 subCategoryTag 전달
+      const onClickParentMeeting = (meetingNo) => {
+        console.log('부모미팅번호', meetingNo);
+        onSubCategoryClick(meetingNo); // 부모 컴포넌트로 subCategoryTag 전달
       };
 
       console.log(userNo)
+
+      if (!meetingList) {
+        return <>로딩중</>;
+      }
 
     return (
         <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
@@ -55,16 +59,17 @@ const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo, onSubCategory
                     onChange={handleAlignment} 
                     aria-label="text alignment"
                   >
-                    {meetingList?.map((meeting, k) => {
-                          <ToggleButton
-                            key={k} 
-                            value={meeting.meetingNo} 
-                            aria-label={meeting.meetingNo} 
-                            onClick={() => onClickSubCategory(meeting.meetingNo)}
-                            >
-                            {meeting.meetingName}
-                          </ToggleButton>
-                    })}
+                    <ToggleButton>버튼</ToggleButton>
+                    {meetingList?.map((meeting, k) => (
+                    <ToggleButton
+                        key={k} 
+                        value={meeting.meetingNo} 
+                        aria-label={meeting.meetingNo} 
+                        onClick={() => onClickParentMeeting(meeting.meetingNo)}
+                    >
+                        {meeting.meetingName}
+                    </ToggleButton>
+                ))}
                   </StyledToggleButtonGroup>
         </AccordionDetails>
       </Accordion>
