@@ -37,11 +37,12 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
             }
             )
             .then(() => {
+                setOpen(false);
             });
         } catch (error) {
         console.error(error);
         }
-    }, []);
+    }, [meeting?.meetingNo, myData?.userNo, setOpen]);
 
     return (
         <Dialog

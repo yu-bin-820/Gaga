@@ -1,10 +1,12 @@
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
-import { Button, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { useState } from 'react';
 import { useCallback } from 'react';
 import AddMeetingMapDrawer from './AddMeetingMapDrawer';
 import MapIcon from '@mui/icons-material/Map';
+const { kakao } = window;
+
 
 const AddMeetingMap = () => {
 
@@ -87,7 +89,7 @@ const AddMeetingMap = () => {
           // address 값을 어디에 저장할지 정해야 합니다.
           // setField('meetingAddr', address);
         });
-      });
+      },[setField]);
 
 
 

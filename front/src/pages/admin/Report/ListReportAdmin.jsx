@@ -45,7 +45,7 @@ const ListReport = () => {
   );
   return (
     <Box sx={{ marginTop: "64px", marginLeft: "10px", marginRight: "10px" }}>
-      <CommonTop pageName="신고 목록 조회??" prevPath="/community/profile/mine" />
+      <CommonTop pageName="신고 목록 조회" prevPath="/community/profile/mine" />
       <Box sx={{ display: "flex", justifyContent: "center" }}>
       <BlackListTabs />
       </Box>

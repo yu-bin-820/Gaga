@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import StyledToggleButtonGroup from '@components/common/StyledToggleButtonGroup';
 
 
-const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo, onSubCategoryClick }) => {
+const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo, onParentMeetingNoClick }) => {
 
     const [meetingList, setMeetingList] = useState();
 
@@ -31,7 +31,7 @@ const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo, onSubCategory
 
       const onClickParentMeeting = (meetingNo) => {
         console.log('부모미팅번호', meetingNo);
-        onSubCategoryClick(meetingNo); // 부모 컴포넌트로 subCategoryTag 전달
+        onParentMeetingNoClick(meetingNo); 
       };
 
       console.log(userNo)
@@ -59,7 +59,6 @@ const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo, onSubCategory
                     onChange={handleAlignment} 
                     aria-label="text alignment"
                   >
-                    <ToggleButton>버튼</ToggleButton>
                     {meetingList?.map((meeting, k) => (
                     <ToggleButton
                         key={k} 
@@ -80,7 +79,7 @@ AddMeetingInChatMeeting.propTypes = {
   expanded: PropTypes.object.isRequired,
   handleChange: PropTypes.object.isRequired,
   userNo: PropTypes.object.isRequired,
-  onSubCategoryClick: PropTypes.object.isRequired,
+  onParentMeetingNoClick: PropTypes.object.isRequired,
 };
 
 export default AddMeetingInChatMeeting;

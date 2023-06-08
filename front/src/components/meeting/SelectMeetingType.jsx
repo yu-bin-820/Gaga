@@ -36,6 +36,10 @@ const SelectMeetingType = () => {
     setField('parentMeetingNo', meetingNo);
   }, [setField]);
 
+  const handleParentClubgNoClick = useCallback((clubNo) => {
+    setField('parentClubNo', clubNo);
+  }, [setField]);
+
 
 
   return (
@@ -64,9 +68,9 @@ const SelectMeetingType = () => {
         <AccordionDetails>
         </AccordionDetails>
       </Accordion>
-      <AddMeetingParentsClub expanded={expanded} handleChange={handleChange} />
+      <AddMeetingParentsClub expanded={expanded} handleChange={handleChange} userNo={myData.userNo} onParentClubNoClick={handleParentClubgNoClick}/>
 
-      <AddMeetingInChatMeeting expanded={expanded} handleChange={handleChange} userNo={myData.userNo} onSubCategoryClick={handleParentMeetingNoClick}/>
+      <AddMeetingInChatMeeting expanded={expanded} handleChange={handleChange} userNo={myData.userNo} onParentMeetingNoClick={handleParentMeetingNoClick}/>
       <Box>
         {meetingList?.map((meeting, i) => (
           <Box key={i}>
