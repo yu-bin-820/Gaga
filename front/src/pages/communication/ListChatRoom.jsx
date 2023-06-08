@@ -162,8 +162,10 @@ export default function ListChatRoom() {
                   onClick={onClickGroupChatOne}
                 >
                   <ChatItem
-                    avatar={`${import.meta.env.VITE_EXPRESS_HOST}/uploads/${
-                      group.meeting_img
+                    avatar={`${
+                      import.meta.env.VITE_SPRING_HOST
+                    }/upload_images/${
+                      group.meeting_name ? group.meeting_img : group.club_img
                     }`}
                     alt={`${
                       import.meta.env.VITE_EXPRESS_HOST
