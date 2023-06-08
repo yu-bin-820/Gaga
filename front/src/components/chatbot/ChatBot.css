@@ -35,9 +35,9 @@
     display: flex;
     flex-direction: column;
     width: 90%;
-    height: 80%;;
+    height: 70%;;
     position: absolute;
-    bottom: 70px;
+    bottom: 120px;
     right: 30px;
     z-index: 1000;
     max-width: 350px;
@@ -176,17 +176,20 @@
 }
 
 .gpt-theme .chat-input {
-    background-color: #121212;
+    background-color: #444343;
+    color: white;
     transition: background-color 1.3s ease;
 }
 
 .gpt-theme .chat-input button {
     background-color: #2b2f33;
+    
     transition: background-color 1.3s ease;
 }
 
 .gpt-theme .toggle-gpt {
     background-color: #000000;
+    
     transition: background-color 1.3s ease;
 }
 
