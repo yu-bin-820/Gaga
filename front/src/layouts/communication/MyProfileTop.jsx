@@ -83,18 +83,22 @@ const MyProfileTop = () => {
     navigate(`/payment/listpayment/${myData?.userNo}`);
   }, [myData, navigate]);
 
+  const onClickListAdjustment = useCallback(() => {
+    navigate(`/payment/listadjustment/${myData?.userNo}`);
+  }, [myData, navigate]);
+
   if (!myData) {
-    return <Navigate replace to="/" />;
+    return <Navigate replace to='/' />;
   }
   return (
     <Box>
       <AppBar
-        position="fixed"
-        color="secondary"
+        position='fixed'
+        color='secondary'
         elevation={0}
         sx={{ height: '58px', borderBottom: '1px solid #ccc' }}
       >
-        <Container maxWidth="xl">
+        <Container maxWidth='xl'>
           <Toolbar
             disableGutters
             sx={{ display: 'flex', justifyContent: 'space-between' }}
@@ -107,7 +111,7 @@ const MyProfileTop = () => {
       </AppBar>
       {/* --------------------------------Drawer----------------------------------------------------- */}
       <SwipeableDrawer
-        anchor="right"
+        anchor='right'
         open={settingsMenuOpen}
         onClose={toggleSettingsMenu(false)}
         onOpen={toggleSettingsMenu(true)}
@@ -147,7 +151,7 @@ const MyProfileTop = () => {
             >
               <ListItemText
                 sx={{ display: 'flex', justifyContent: 'center' }}
-                primary="개인 정보 수정"
+                primary='개인 정보 수정'
               />
             </ListItem>
             <Divider />
@@ -158,7 +162,7 @@ const MyProfileTop = () => {
             >
               <ListItemText
                 sx={{ display: 'flex', justifyContent: 'center' }}
-                primary="신고 내역 조회"
+                primary='신고 내역 조회'
               />
             </ListItem>
             <Divider />
@@ -168,7 +172,7 @@ const MyProfileTop = () => {
             >
               <ListItemText
                 sx={{ display: 'flex', justifyContent: 'center' }}
-                primary="회원 탈퇴"
+                primary='회원 탈퇴'
               />
             </ListItem>
             <Divider />
@@ -177,7 +181,7 @@ const MyProfileTop = () => {
               <ListItemText
                 sx={{ display: 'flex', justifyContent: 'center' }}
                 onClick={onClickUpdateAccount}
-                primary="계좌 관리"
+                primary='계좌 관리'
               />
             </ListItem>
             <Divider />
@@ -186,7 +190,16 @@ const MyProfileTop = () => {
               <ListItemText
                 sx={{ display: 'flex', justifyContent: 'center' }}
                 onClick={onClickListPayment}
-                primary="결제 정보 조회"
+                primary='결제 정보 조회'
+              />
+            </ListItem>
+            <Divider />
+
+            <ListItem sx={{ marginTop: '10px', marginBottom: '10px' }}>
+              <ListItemText
+                sx={{ display: 'flex', justifyContent: 'center' }}
+                onClick={onClickListAdjustment}
+                primary='정산 내역 조회'
               />
             </ListItem>
             <Divider />
@@ -197,7 +210,7 @@ const MyProfileTop = () => {
             >
               <ListItemText
                 sx={{ display: 'flex', justifyContent: 'center' }}
-                primary="공지사항"
+                primary='공지사항'
               />
             </ListItem>
             <Divider />
@@ -209,7 +222,7 @@ const MyProfileTop = () => {
                 >
                   <ListItemText
                     sx={{ display: 'flex', justifyContent: 'center' }}
-                    primary="블랙리스트"
+                    primary='블랙리스트'
                   />
                 </ListItem>
 
@@ -223,7 +236,7 @@ const MyProfileTop = () => {
             >
               <ListItemText
                 sx={{ display: 'flex', justifyContent: 'center' }}
-                primary="로그아웃"
+                primary='로그아웃'
               />
             </ListItem>
             <Divider />
