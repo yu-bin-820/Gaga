@@ -1,15 +1,18 @@
-import { AppBar, Button, Divider, Grid, IconButton, List, ListItem, SwipeableDrawer, Toolbar, Typography } from '@mui/material';
+import { AppBar, Button, Divider, Grid, IconButton, List, ListItem, SwipeableDrawer, Toolbar} from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import React, { useCallback, useState } from 'react';
 import Container from '@mui/material/Container';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 import { useNavigate, useParams } from 'react-router';
-import { Box, Stack } from '@mui/system';
+import { Box } from '@mui/system';
 import DeleteMeetingDialog from '@components/meeting/DeleteMeetingDialog';
+import useUpdateMeetingFormStore from '@stores/meeting/useUpdateMeetingFormStore';
 
 const GetMeetingTop = () => {
     const { meetingno } = useParams();
+
+    const { reset } = useUpdateMeetingFormStore();
 
   const navigate = useNavigate();
 
@@ -28,9 +31,10 @@ const toggleLeaderMenuOpen = useCallback(
     []
   );
 
-const onClickUpdate = useCallback((MouseEvent)=>{
+const onClickUpdate = useCallback(()=>{
+  reset();
   navigate(`/meeting/updatemeeting/${ meetingno }`);
-},[]);
+},[navigate, reset, meetingno]);
 
 const [deleteMeetingDialogOpen, setDeleteMeetingDialogOpen] =
 useState(false);

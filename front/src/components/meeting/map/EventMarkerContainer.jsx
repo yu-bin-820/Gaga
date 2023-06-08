@@ -1,6 +1,7 @@
 import { Button, Chip } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { CustomOverlayMap, MapMarker, useMap } from 'react-kakao-maps-sdk';
 import CancelIcon from '@mui/icons-material/Cancel';
 import MeetingThumbnail from '../MeetingThumnail';
@@ -62,6 +63,12 @@ const EventMarkerContainer = ({ meetingLat, meetingLng, meeting }) => {
       {isOpen && content}
     </>
   );
+};
+
+EventMarkerContainer.propTypes = {
+  meetingLat: PropTypes.object.isRequired,
+  meetingLng: PropTypes.object.isRequired,
+  meeting : PropTypes.object.isRequired,
 };
 
 export default EventMarkerContainer;

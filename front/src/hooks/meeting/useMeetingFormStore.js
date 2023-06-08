@@ -15,13 +15,14 @@ const meetingField={
     meetingLat: '',
     meetingLng: '',
     filterGender: '',
-    filterMinAge: '',
-    filterMaxAge: '',
+    filterMinAge: 14,
+    filterMaxAge: 50,
     parentClubNo: null,
     meetingMaxMemberNo: null,
     entryFee: 0,
     file: null,
     image: null,
+    parentMeetingNo: null,
 }
 const useMeetingFormStore=create((set=>({
     ...meetingField,

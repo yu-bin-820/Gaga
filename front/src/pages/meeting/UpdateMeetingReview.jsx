@@ -12,6 +12,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CancelIcon from '@mui/icons-material/Cancel';
+import fetcher from '@utils/fetcher';
+import useSWR from 'swr';
 
 const UpdateMeetingReview = () => {
   const { reviewno } = useParams();
@@ -19,7 +21,13 @@ const UpdateMeetingReview = () => {
     meetingScore: '',
     meetingReviewImg: '',
     meetingReviewContent: '',
+    meetingNo: '',
   });
+
+  const {data : meetingReviewList, mutate: mutateMeetingReviewList } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/${meetingReview?.meetingNo}`,
+    fetcher
+);
 
   const [selectedImage, setSelectedImage] = useState(
     meetingReview?.meetingReviewImg
@@ -74,10 +82,14 @@ const UpdateMeetingReview = () => {
       formData.append('meetingReviewNo', reviewno);
 
       console.log(formData);
-      const response = axios.patch(
+      const response = 
+      axios
+      .patch(
         `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`,
-        formData
-      );
+        formData )
+        .then(()=>{
+          mutateMeetingReviewList()
+        });
 
       navigate(`/meeting/meetingno/${meetingReview.meetingNo}`);
 

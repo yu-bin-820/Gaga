@@ -63,11 +63,15 @@ const GetMeetingStaticMapDrawer = ({ meeting, settingsMapOpen, toggleSettingsMap
         </SwipeableDrawer>
     );
 };
+
 GetMeetingStaticMapDrawer.propTypes = {
     meeting: PropTypes.shape({
       meetingLat: PropTypes.number.isRequired,
       meetingLng: PropTypes.number.isRequired,
     }).isRequired,
+    settingsMapOpen: PropTypes.object.isRequired,
+    toggleSettingsMap: PropTypes.object.isRequired,
+    setSettingsMapOpen: PropTypes.object.isRequired,
   };
 
 export default GetMeetingStaticMapDrawer;

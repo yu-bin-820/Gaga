@@ -7,12 +7,22 @@ import useSWR from 'swr';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddMeetingParentsClub from './AddMeetingParentsClub';
 import AddMeetingInChatMeeting from './AddMeetingInChatMeeting';
+import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
 
 const SelectMeetingType = () => {
   const [expanded, setExpanded] = React.useState(null);
 
+  const {
+    parentMeetingNo,
+    parentClubNo,
+    setField,
+    onChangeField,
+  } = useMeetingFormStore();
+
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : null);
+    setField('parentMeetingNo', null);
+    setField('parentClubNo', null);
   };
 
   const [meetingList, setMeetingList] = useState();

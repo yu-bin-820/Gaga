@@ -1,63 +1,209 @@
-import React, { useState, useEffect } from 'react';
-import { Link, Router } from 'react-router-dom';
-import { Button, Container, Grid, TextField, Typography,  List, ListItem, ListItemText } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
+import { Button, TextField, Box, Stack, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 import CommonTop from '@layouts/common/CommonTop';
+import { styled } from '@mui/system';
+import Collapse from '@mui/material/Collapse';
+import BlackListTabs from '@components/admin/BlackListTabs';
+
+const AnimatedTextField = styled(TextField)`
+  transition: all 600ms ease-in-out;
+  width: 200px;
+`;
 
 function ListUser() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
   const [userList, setUserList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [lastUserNo, setLastUserNo] = useState(null);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [isSearchOpen, setSearchOpen] = useState(false);
+  const navigate = useNavigate();
+  const [value, setValue] = React.useState('2');
+  const handleUserClick = (userNo) => {
+    navigate(`/blackList/getUser/userNo/${userNo}`);
+  };
 
   useEffect(() => {
-    fetchUserList();
+    if (lastUserNo !== null) {
+      fetchUserList(lastUserNo);
+    }
+  }, [lastUserNo]);
+
+  useEffect(() => {
+    const fetchLastUserNo = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getLatestUserNo`);
+        const lastUserNo = response.data;
+        setLastUserNo(lastUserNo);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchLastUserNo();
   }, []);
 
-  const fetchUserList = async () => {
+  const fetchUserList = async (lastUserNo = null) => {
+    if (isLoading) return;
+
+    setIsLoading(true);
+
     try {
-      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getUserList`);
-      setUserList(response.data);
+      const params = {
+        lastUserNo: lastUserNo === null ? undefined : String(lastUserNo),
+      };
+      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getUserList`, { params });
+
+      const newUserlist = response.data;
+      setUserList((prevList) => [...prevList, ...newUserlist]);
+
+      if (newUserlist.length === 0) {
+        setHasMore(false);
+      } else {
+        setLastUserNo(newUserlist[newUserlist.length - 1].userNo);
+      }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleSearch = async () => {
-    try {
-      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/searchUser`);
-      setUserList(response.data);
+  const handleScroll = () => {
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 200 && hasMore && !isLoading) {
+      fetchUserList(lastUserNo);
+    }
+  };
 
-    } catch (error) {
-      console.error(error);
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasMore, isLoading, lastUserNo]);
+
+  const handleSearchIconClick = () => {
+    setSearchOpen(true);
+  };
+
+  const handleSearch = async () => {
+    if (searchKeyword.length > 0) {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/searchUser`, {
+          params: {
+            searchKeyword: searchKeyword,
+          },
+        });
+        setUserList(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch();
     }
   };
 
   return (
-    <>
-    <Container maxWidth="md">        
-    <CommonTop pageName="블랙리스트" prevPath="/community/profile/mine" />
-
-      <Typography variant="h2" align="center">회원 검색 (관리자 전용)</Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={9}>
-          <TextField fullWidth variant="outlined" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-        </Grid>
-        <Grid item xs={3}> 
-          <Button fullWidth variant="contained" color="primary" onClick={handleSearch}>검색</Button>
-        </Grid>
-      </Grid>
-      <List>
-        {userList.map((user) => (
-          <ListItem key={user.userNo}>
-            <ListItemText>
-              <Link component={Router} to={`/blackList/getUser/userNo/${user.userNo}`}>{user.userName}</Link>
-            </ListItemText>
-          </ListItem>
-        ))}
-      </List>
-    </Container>
-    </>    
+    <Box sx={{ marginTop: "64px", marginLeft: "10px", marginRight: "10px" }}>
+      <CommonTop pageName="회원 목록" prevPath="/community/profile/mine" />
+  
+      <BlackListTabs />
+  
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginBottom: "1rem",
+          alignItems: "center",
+        }}
+      >
+        <Box sx={{ flexGrow: 1 }} />
+        <IconButton onClick={() => setSearchOpen(!isSearchOpen)}>
+          <SearchIcon />
+        </IconButton>
+      </Box>
+      <Collapse in={isSearchOpen}>
+        <AnimatedTextField
+          type="text"
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+          onKeyPress={handleKeyPress}
+          style={{ marginRight: "0.5rem", width: "11rem", height: "5rem" }}
+          InputProps={{
+            endAdornment: (
+              <Button
+                variant="contained"
+                onClick={handleSearch}
+                sx={{ fontSize: '0.75rem', minWidth: '4rem' }}
+              >
+                검색
+              </Button>
+            ),
+          }}
+        />
+      </Collapse>
+  
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow
+              sx={{
+                "& th": {
+                  color: "white",
+                  backgroundColor: "primary.main",
+                },
+              }}
+            >
+              <TableCell
+                style={{ minWidth: 20, fontWeight: "bold" }}
+              >
+                No
+              </TableCell>
+              <TableCell
+                style={{ minWidth: 65, fontWeight: "bold" }}
+              >
+                Name
+              </TableCell>
+              <TableCell
+                style={{ minWidth: 120, fontWeight: "bold" }}
+              >
+                JoinDay
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {userList.map((user, index) => (
+              <TableRow
+                hover
+                role="checkbox"
+                tabIndex={-1}
+                key={user.userNo}
+                onClick={() => handleUserClick(user.userNo)}
+              >
+                <TableCell style={{ minWidth: 20 }}>
+                  {index + 1}
+                </TableCell>
+                <TableCell style={{ minWidth: 65 }}>
+                  {user.userName}
+                </TableCell>
+                <TableCell style={{ minWidth: 120 }}>
+                  {new Date(user.joinDay).toLocaleDateString("ko-KR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {isLoading && <Typography align="center">Loading...</Typography>}
+    </Box>
   );
 }
 

@@ -76,6 +76,7 @@ import SearchClub from '@pages/club/SearchClub.jsx';
 import Payment from '@pages/payment/Payment.jsx';
 import PaymentRedirect from '@pages/payment/PaymentRedirect.jsx';
 import PaymentFail from '@pages/payment/PaymentFail.jsx';
+import ListAdjustment from '@pages/payment/ListAdjustment.jsx';
 
 const router = createBrowserRouter([
   {
@@ -384,6 +385,10 @@ const router = createBrowserRouter([
           {
             path: 'listpayment/:userNo',
             element: <ListPayment />,
+          },
+          {
+            path: 'listadjustment/:userNo',
+            element: <ListAdjustment />,
           },
         ],
       },

@@ -1,4 +1,5 @@
 import { Chip } from '@mui/material';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const ListMeetingChip = ({ onClick }) => (
@@ -16,5 +17,9 @@ const ListMeetingChip = ({ onClick }) => (
       }}
     />
   );
+
+  ListMeetingChip.propTypes = {
+    onClick: PropTypes.object.isRequired,
+  };
 
 export default ListMeetingChip;
