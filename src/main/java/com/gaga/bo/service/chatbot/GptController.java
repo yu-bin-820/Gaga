@@ -1,24 +1,30 @@
 package com.gaga.bo.service.chatbot;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
+@RequestMapping("/rest/*")
 public class GptController {
     private String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
     private String OPENAI_API_KEY = "Bearer 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";
-
-    @PostMapping("/rest/gpt")
+    
+    @Autowired
+    private RestTemplate restTemplate;
+    
+    @RequestMapping("gpt")
     public String generateResponse(@RequestBody String prompt) throws ParseException {
         System.out.println("이러기싫어서 나눈 gpt로 왔다.");
         System.out.println(prompt + "프롬프트프롬프트");
