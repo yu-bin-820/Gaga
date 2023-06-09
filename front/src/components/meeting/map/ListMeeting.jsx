@@ -1,4 +1,4 @@
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Skeleton } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import fetcher from "@utils/fetcher";
 import axios from "axios";
@@ -130,9 +130,8 @@ const ListMeeting = () => {
 
   if (!latitude || !longtitude) {
     return (
-      <Stack sx={{ color: "grey.500" }} spacing={2} direction="row">
-        <CircularProgress color="success" />
-      </Stack>
+      <Skeleton variant="rectangular" width={'100vw'} height={'100vh'} />
+
     );
   }
   

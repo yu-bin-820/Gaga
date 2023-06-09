@@ -17,6 +17,7 @@ import fetcher from '@utils/fetcher';
 import SmallChip from '@components/meeting/SmallChip';
 import IsMeetingMemberDialog from '@components/meeting/IsMeetingMemberDialog';
 import GetMeetingStaticMapDrawer from '@components/meeting/map/GetMeetingStaticMapDrawer';
+import PaymentIcon from '@mui/icons-material/Payment';
 
 const GetMeeting = () => {
   const { meetingno } = useParams();
@@ -178,6 +179,13 @@ const GetMeeting = () => {
             <PeopleIcon />
             <Typography sx={{ fontSize: 13 }}>
               {meeting?.count}/{meeting?.meetingMaxMemberNo}
+            </Typography>
+          </Stack>
+
+          <Stack direction={'row'} spacing={1} alignItems={'center'}>
+            <PaymentIcon />
+            <Typography sx={{ fontSize: 13 }}>
+              {meeting?.enttyFee}원
             </Typography>
           </Stack>
 
