@@ -35,7 +35,7 @@ public interface PaymentService {
 	public List<Meeting> getAdjustmentIngList() throws Exception;
 
 	//정산상태 변경  state 정산대기1->정산성공2
-	public void updateAdjustmentState(Meeting meeting) throws Exception;
+	public void updateAdjustmentState(int meetingNo) throws Exception;
 	
 	//아임포트 토큰 발급
 	public String getAccessToken() throws Exception;
