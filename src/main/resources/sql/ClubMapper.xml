@@ -41,8 +41,8 @@
 	  INTO clubs (club_name, club_intro, club_leader_no, club_max_member_no, club_state, club_reg_date,
 	    club_img, club_region, filter_gender, filter_min_age, filter_max_age, filter_tag, main_category_no)
 	  VALUES 
-	   (#{clubName:VARCHAR}, #{clubIntro:VARCHAR}, #{clubLeaderNo:INTEGER}, #{clubMaxMemberNo:INTEGER},
-		1, NOW() ,#{clubImg:VARCHAR}, #{clubRegion:VARCHAR}, #{filterGender:INTEGER}, 
+	   (#{clubName:VARCHAR}, #{clubIntro}, #{clubLeaderNo:INTEGER}, #{clubMaxMemberNo:INTEGER},
+		1, NOW() ,#{clubImg}, #{clubRegion:VARCHAR}, #{filterGender:INTEGER}, 
 	   	#{filterMinAge:INTEGER}, #{filterMaxAge:INTEGER}, #{filterTag:VARCHAR}, #{mainCategoryNo:INTEGER})
 	</insert>
 	
@@ -97,7 +97,7 @@
     <if test="mainCategoryNo != null and mainCategoryNo != 0">
         AND main_category_no =  #{mainCategoryNo}
     </if>
-  	<if test="tag != null">
+  	<if test="tag != null and tag !=''">
   			AND filter_tag IN (#{tag : LONGVARCHAR}, #{tag2 : LONGVARCHAR}, #{tag3 : LONGVARCHAR})
   	</if>
 	</select>

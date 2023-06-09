@@ -112,11 +112,11 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public void updateAdjustmentState(Meeting meeting) throws Exception {
+	public void updateAdjustmentState(int meetingNo) throws Exception {
 		
 		System.out.println("정산 상태 변경 서비스");
 		
-		paymentDao.updateAdjustmentState(meeting);
+		paymentDao.updateAdjustmentState(meetingNo);
 		// TODO Auto-generated method stub 	
 	}
 
