@@ -15,8 +15,8 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class GptController {
-    private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
-    private static final String OPENAI_API_KEY = "Bearer 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";
+    private String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
+    private String OPENAI_API_KEY = "Bearer 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";
 
     @PostMapping("/rest/gpt")
     public String generateResponse(@RequestBody String prompt) throws ParseException {
