@@ -157,7 +157,7 @@ function ListBlackList() {
       <CommonTop pageName="블랙리스트" prevPath="/community/profile/mine" />
       <BlackListTabs />
       <Chatbot />
-      <Stack spacing={2.5}>
+      <Stack >
         <Box
           sx={{
             display: "flex",

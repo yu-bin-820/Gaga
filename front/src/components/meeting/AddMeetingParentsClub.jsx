@@ -1,10 +1,44 @@
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, ToggleButton, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import axios from 'axios';
+import StyledToggleButtonGroup from '@components/common/StyledToggleButtonGroup';
 
-const AddMeetingParentsClub = ({ expanded, handleChange }) => {
+const AddMeetingParentsClub = ({ expanded, handleChange, userNo, onParentClubNoClick }) => {
+
+  const [clubListList, setClubList] = useState();
+
+  
+  useEffect(() => {
+    axios
+      .get(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/club/list/join/${
+          userNo
+        }`
+      )
+      .then((response) => {
+        console.log(response.data);
+        setClubList(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [userNo]);
+
+  const [alignment, setAlignment] = React.useState('left');
+
+  const handleAlignment = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
+
+  const onClickParentClub = (clubNo) => {
+    console.log('부모클럽번호', clubNo);
+    onParentClubNoClick(clubNo); 
+  };
+
+
   return (
     <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2bh-content" id="panel2bh-header">
@@ -14,10 +48,24 @@ const AddMeetingParentsClub = ({ expanded, handleChange }) => {
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography>
-          Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus, varius pulvinar diam eros in elit.
-          Pellentesque convallis laoreet laoreet.
-        </Typography>
+      <StyledToggleButtonGroup
+                    size="small" 
+                    value={alignment} 
+                    exclusive 
+                    onChange={handleAlignment} 
+                    aria-label="text alignment"
+                  >
+                    {clubListList?.map((club, k) => (
+                    <ToggleButton
+                        key={k} 
+                        value={club.clubNo} 
+                        aria-label={club.clubNo} 
+                        onClick={() => onClickParentClub(club.clubNo)}
+                    >
+                        {club.clubName}
+                    </ToggleButton>
+                ))}
+                  </StyledToggleButtonGroup>
       </AccordionDetails>
     </Accordion>
   );
@@ -26,6 +74,8 @@ const AddMeetingParentsClub = ({ expanded, handleChange }) => {
 AddMeetingParentsClub.propTypes = {
   expanded: PropTypes.object.isRequired,
   handleChange: PropTypes.object.isRequired,
+  userNo: PropTypes.object.isRequired,
+  onParentClubNoClick: PropTypes.object.isRequired,
 };
 
 export default AddMeetingParentsClub;

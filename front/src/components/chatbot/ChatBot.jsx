@@ -10,7 +10,6 @@ import IconButton from '@mui/material/IconButton';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
-
 //import { fetchGptResponse } from './gptapi';
 
 function Chatbot() {
@@ -18,7 +17,7 @@ function Chatbot() {
   const [messages, setMessages] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const [isGptMode, setIsGptMode] = useState(false);
-  const [toggleImage, setToggleImage] = useState('/assets/img/chatboticon/reverse.png');
+  const [toggleImage, setToggleImage] = useState('@assets/img/chatboticon/reverse.png');
 
   const chatMessagesRef = useRef(null);
   const messageEndRef = useRef(null);
@@ -224,6 +223,7 @@ const handleSendMessage = async (text) => {
   });
   
   if (isGptMode) {
+
     const response = await fetch(`${import.meta.env.VITE_SPRING_HOST}/rest/gpt`, {
         method: 'POST',
         headers: {
@@ -236,9 +236,11 @@ const handleSendMessage = async (text) => {
         
       });
       // 서버로부터의 응답을 받아 JSON으로 변환
-      const data = await response.json();
+
       // 변환된 JSON의 'text' 필드가 응답 메시지가 될 것이다.
-      const botMessage = data.text;
+      const botMessage = await response.text();
+
+      console.log("유원? 유두", botMessage)
       
       return botMessage;
     } else {
@@ -303,7 +305,7 @@ const handleSendMessage = async (text) => {
                   src="/assets/img/chatboticon/gpt4.png"
               />
           </button>
-        
+
           <div className={`chat-container ${isVisible ? "" : "hidden"}`}  style={{ textAlign: "right" }}>
               <div className="chat-header" >
                   {/* 챗봇 창 상단에 HELP 버튼 추가 */}

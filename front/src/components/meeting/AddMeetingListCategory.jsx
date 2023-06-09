@@ -1,6 +1,6 @@
 import { Box } from '@mui/system';
 import axios from 'axios';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
 import ListCategory from '../common/ListCategory';
 

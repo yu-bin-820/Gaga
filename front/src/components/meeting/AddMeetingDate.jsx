@@ -2,14 +2,11 @@ import { LocalizationProvider, MobileDatePicker, MobileTimePicker, TimePicker } 
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React, { useCallback } from 'react';
-import dayjs from 'dayjs';
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
 import { Box, Stack } from '@mui/system';
 import { Paper, Typography } from '@mui/material';
 
 const AddMeetingDate = () => {
-    const [value, setValue] = React.useState(dayjs('2022-04-17'));
-
     const {
         meetingDate,
         meetingStartTime,

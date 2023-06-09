@@ -74,10 +74,10 @@ const PaymentThumnail = ({ payment }) => {
       >
         <ImageListItem
           sx={{
-            maxWidth: '150px',
-            maxHeight: '150px',
-            minWidth: '150px',
-            minHeight: '150px',
+            maxWidth: '100px',
+            maxHeight: '100px',
+            minWidth: '100px',
+            minHeight: '100px',
           }}
         >
           {meeting?.meetingImg ? (

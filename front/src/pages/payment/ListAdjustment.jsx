@@ -42,13 +42,15 @@ const ListAdjustment = () => {
   return (
     <>
       <CommonTop />
-      <Stack sx={{ marginTop: '100px' }}>
-        <Stack>
-          {adjustmentList?.map((meeting, i) => (
-            <Stack key={i} sx={{ marginBottom: '30px' }}>
-              <AdjustmentThumnail meeting={meeting} />
-            </Stack>
-          ))}
+      <Stack sx={{ margin: '10px' }}>
+        <Stack sx={{ marginTop: '64px' }}>
+          <Stack>
+            {adjustmentList?.map((meeting, i) => (
+              <Stack key={i} sx={{ marginBottom: '30px' }}>
+                <AdjustmentThumnail meeting={meeting} />
+              </Stack>
+            ))}
+          </Stack>
         </Stack>
       </Stack>
     </>

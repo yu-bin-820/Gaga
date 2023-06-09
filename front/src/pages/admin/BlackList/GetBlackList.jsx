@@ -48,13 +48,13 @@ const toggleBlacklist = async () => {
   }
 
   return (
-      <Paper style={{ padding: "1rem", marginTop: "1rem" }}>
+      <Paper style={{ padding: "1rem", marginTop: "4.2rem" }}>
           <CommonTop
               pageName="블랙리스트 상세조회"
-              prevPath="/community/profile/mine"
+              prevPath="/blackList/listBlackList"
           />
           <Typography variant="h5" component="h2">
-              블랙리스트 {user.userName}의 정보
+              블랙리스트 {user.userName} 의 정보
           </Typography>
           <Typography>
               {user.userName} 님은

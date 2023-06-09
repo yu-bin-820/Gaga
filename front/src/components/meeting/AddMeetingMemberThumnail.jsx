@@ -33,19 +33,30 @@ const AddMeetingMemberThumnail = ({ meeting }) => {
       }}
     >
       <Stack direction="row" spacing={2}>
-        <ImageListItem
-          sx={{
-            maxWidth: '95px',
-            maxHeight: '95px',
-            minWidth: '95px',
-            minHeight: '95px',
-          }}
-        >
+      <ImageListItem
+        sx={{
+          maxWidth: '95px',
+          maxHeight: '95px',
+          minWidth: '95px',
+          minHeight: '95px',
+        }}
+      >
+        {meeting?.meetingImg ? (
+          <img
+            src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
+              meeting?.meetingImg
+            }`}
+            alt='noImg'
+            loading='lazy'
+            style={{ borderRadius: '7px' }}
+          />
+        ) : (
           <img
             src={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=164&h=164&fit=crop&auto=format`}
             style={{ borderRadius: '3px' }}
           />
-        </ImageListItem>
+        )}
+      </ImageListItem>
         <Box>
           <Box
             sx={{ color: 'text.primary', fontSize: 16, fontWeight: 'medium' }}
@@ -87,15 +98,7 @@ const AddMeetingMemberThumnail = ({ meeting }) => {
 };
 
 AddMeetingMemberThumnail.propTypes = {
-  meeting: PropTypes.shape({
-    filterTag: PropTypes.string.isRequired,
-    meetingName: PropTypes.string.isRequired,
-    meetingAddr: PropTypes.string.isRequired,
-    meetingMaxMemberNo: PropTypes.number.isRequired,
-    meetingDate: PropTypes.string.isRequired,
-    meetingStartTime: PropTypes.number.isRequired,
-    meetingEndTime: PropTypes.number.isRequired,
-  }).isRequired,
+  meeting: PropTypes.object.isRequired,
 };
 
 export default AddMeetingMemberThumnail;
