@@ -337,16 +337,16 @@ public class UserServiceImpl implements UserService {
 
         String msgg = "";
         // msgg += "<img src=../resources/static/image/emailheader.jpg />"; // header image
-        msgg += "<h1>안녕하세요</h1>";
-        msgg += "<h1>Gaga 서비스 입니다.</h1>";
+        msgg += "<h1 align='center'>안녕하세요</h1>";
+        msgg += "<h1 align='center'>Gaga 서비스 입니다.</h1>";
         msgg += "<br>";
-        msgg += "<p>아래 인증코드를 이메일 인증에 입력해주세요</p>";
+        msgg += "<p align='center'>아래 인증코드를 이메일 인증에 입력해주세요</p>";
         msgg += "<br>";
         msgg += "<br>";
-        msgg += "<div align='left' style='border:1px solid black'>";
+        msgg += "<div align='center' style='border:1px solid black'>";
         msgg += "<h3 style='color:blue'>  이메일 인증코드 입니다</h3>";
         msgg += "<div style='font-size:130%'>";
-        msgg += "<strong>     " +"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+ emailVerificationCode + "</strong></div><br/>" ; // 메일에 인증번호 ePw 넣기
+        msgg += "<strong>     " + emailVerificationCode + "</strong></div><br/>" ; // 메일에 인증번호 ePw 넣기
         msgg += "</div>";
         // msgg += "<img src=../resources/static/image/emailfooter.jpg />"; // footer image
 

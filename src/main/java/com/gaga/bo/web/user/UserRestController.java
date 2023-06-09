@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -69,6 +70,12 @@ public class UserRestController {
 		return (User)session.getAttribute("user");
 	}
 	
+	@GetMapping("/snsLogin")
+	public User getSnsLoginUser(HttpSession session) throws Exception {
+		System.out.println("sns 로그인 유저"+(User)session.getAttribute("snsUser"));
+		
+		return (User)session.getAttribute("snsUser");
+	}
 	
 	@PostMapping("/login")
 	public User login(	@RequestBody User user,
@@ -142,7 +149,7 @@ public class UserRestController {
 		System.out.println("/resr/user/addUser : POST");
 		String userId = user.getUserId();
 		System.out.println("회원가입 요청온 유저정보: "+user);
-		// 아이디 중복 확인
+		// 아이디 중복 확인 화면단에서 처리로 변경 주석처리
 //	    boolean isDuplicate = userService.checkDuplication(user.getUserId());
 //	    if (isDuplicate) {
 //	    	System.out.println("아이디 중복임");
@@ -182,9 +189,10 @@ public class UserRestController {
         }
         
     }
-
+	
 	@GetMapping("/naverLogin")
-	public void naverLogin(@RequestParam(value = "code", required = false) String code, HttpSession session, HttpServletResponse response) throws Exception {
+	public void naverLogin(@RequestParam(value = "code", required = false) String code, HttpSession session, 
+							HttpServletResponse response) throws Exception {
 	    String access_Token = userService.getAccessNaverToken(code);
 	    Map<String, Object> userInfoMap = userService.getNaverUserInfo(access_Token);
 	    System.out.println("usercontroller nlogin= " + userInfoMap);
@@ -210,7 +218,7 @@ public class UserRestController {
 	        user.setBirthday(birthday);
 	        user.setGender((Integer) userInfoMap.get("gender"));
 
-	        session.setAttribute("user", user);
+	        session.setAttribute("snsUser", user);
 	        System.out.println("네이버 로그인 유저 정보: " + user);
 	        response.sendRedirect(redirectUrl+"/user/addnaveruser"); 
 	    }
@@ -239,7 +247,7 @@ public class UserRestController {
 	        user.setUserId(userId);
 	        user.setNickName((String) userInfoMap.get("nickname"));
 
-	        session.setAttribute("user", user);
+	        session.setAttribute("snsUser", user);
 	        System.out.println("카카오 로그인 유저 정보: " + user);
 	        response.sendRedirect(redirectUrl+"/user/addkakaouser");
 	    }
@@ -259,7 +267,7 @@ public class UserRestController {
 	    
 		return userService.getGroupMemberList(map);
 	} 
-
+// 핸드폰 인증 과정을 메소드 하나로 통합 기록으로 남겨둠
 //	//회원,비회원이 핸드폰 인증을 요청하면 회원핸드폰번호에 인증코드 발송하여 요청 처리
 //	@PostMapping("/phoneAuth")
 //	public Boolean phoneAuth(@RequestBody String userPhoneNo, HttpSession session) {
