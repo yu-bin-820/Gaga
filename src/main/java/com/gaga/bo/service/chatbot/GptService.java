@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 @Service
 public class GptService {
-	
+	/*
 	private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
-    private static final String OPENAI_API_KEY = "Bearer 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";
+    private static final String OPENAI_API_KEY = "Bearer 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";
 
     public String generateResponse(String prompt) {
-        RestTemplate restTemplate = new RestTemplate();
+    	RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", OPENAI_API_KEY);
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -33,6 +33,13 @@ public class GptService {
         
         HttpEntity<String> entity = new HttpEntity<>(body.toString(), headers);
         ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_API_URL, entity, String.class);
-        return response.getBody();
+
+        // OpenAI의 응답을 파싱하여 GPT-3의 응답을 추출합니다.
+        JSONObject responseBody = new JSONObject(response.getBody());
+        JSONArray choices = responseBody.getJSONArray("choices");
+        String gptResponse = choices.getJSONObject(0).getJSONObject("message").getString("content");
+
+        return gptResponse;
     }
+    */
 }

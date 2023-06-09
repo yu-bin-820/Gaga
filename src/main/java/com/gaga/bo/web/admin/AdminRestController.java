@@ -1,12 +1,12 @@
 package com.gaga.bo.web.admin;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,9 @@ public class AdminRestController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ResourceLoader resourceLoader;
 
 	@Value("${fileUploadPath}")
 	String fileUploadPath;
@@ -122,36 +126,36 @@ public class AdminRestController {
 
 	@PutMapping(value = "updateNoticePost/noticePostNo/{noticePostNo}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<NoticePost> updateNoticePost(@PathVariable int noticePostNo,
-			@RequestParam(value = "file", required = false) MultipartFile file,
-			@RequestParam("noticePostTitle") String noticePostTitle,
-			@RequestParam("noticePostText") String noticePostText,
-			@RequestParam("noticePostCategory") int noticePostCategoryNo) throws Exception {
-		NoticePost noticePost = adminService.getNoticePost(noticePostNo);
-		if (noticePost == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+	        @RequestParam(value = "file", required = false) MultipartFile file,
+	        @RequestParam("noticePostTitle") String noticePostTitle,
+	        @RequestParam("noticePostText") String noticePostText,
+	        @RequestParam("noticePostCategory") int noticePostCategoryNo) throws Exception {
+	    NoticePost noticePost = adminService.getNoticePost(noticePostNo);
+	    if (noticePost == null) {
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
 
-		String noticePostImg = noticePost.getNoticePostImg();
-		if (file != null) {
-			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-			String uuidFileName = UUID.randomUUID().toString() + "." + ext;
+	    String noticePostImg = noticePost.getNoticePostImg();
+	    if (file != null) {
+	        String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+	        String uuidFileName = UUID.randomUUID().toString()+ext;
 
-			Path filePath = Path.of(fileUploadPath + uuidFileName);
+	        Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+	        File uploadDir = resource.getFile();
 
-			try (InputStream inputStream = file.getInputStream()) {
-				Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-			}
+	        file.transferTo(new File(uploadDir, "noticePost/"+uuidFileName));
 
-			noticePostImg = uuidFileName;
-		}
+	        
+	        noticePostImg = uuidFileName;
+	    }
 
-		noticePost.setNoticePostTitle(noticePostTitle);
-		noticePost.setNoticePostText(noticePostText);
-		noticePost.setNoticePostImg(noticePostImg);
-		noticePost.setNoticePostCategoryNo(noticePostCategoryNo);
-		adminService.updateNoticePost(noticePost);
+	    noticePost.setNoticePostTitle(noticePostTitle);
+	    noticePost.setNoticePostText(noticePostText);
+	    noticePost.setNoticePostImg(noticePostImg);
+	    noticePost.setNoticePostCategoryNo(noticePostCategoryNo);
+	    adminService.updateNoticePost(noticePost);
 
-		return new ResponseEntity<>(noticePost, HttpStatus.OK);
+	    return new ResponseEntity<>(noticePost, HttpStatus.OK);
 	}
 
 	@DeleteMapping("deleteNoticePost/noticePostNo/{noticePostNo}")
