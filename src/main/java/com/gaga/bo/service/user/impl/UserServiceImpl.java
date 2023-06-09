@@ -25,6 +25,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	@Qualifier("userDao")
 	UserDao userDao;
+	
+	@Value("${redirectUrl}")
+    private String redirectUrl;
 	
 	 @Autowired
 	 JavaMailSender emailSender; // MailConfig에서 등록해둔 Bean을 autowired하여 사용하기
@@ -101,7 +105,7 @@ public class UserServiceImpl implements UserService {
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
 			sb.append("&client_id=FzMGbETEgw2xNeSUlIIF"); 
-			sb.append("&redirect_uri=http://192.168.0.159:8080/rest/user/naverLogin"); 
+			sb.append("&redirect_uri="+redirectUrl+"/rest/user/naverLogin"); 
 			sb.append("&code=" + authorize_code);
 			sb.append("&client_secret=voluTpxuLM");
 //			sb.append("&state=test"); 
@@ -214,7 +218,7 @@ public class UserServiceImpl implements UserService {
 			sb.append("grant_type=authorization_code");
             
 			sb.append("&client_id=3d89a9ef169b204afc54cc08fa20632d"); 
-			sb.append("&redirect_uri=http://192.168.0.159:8080/rest/user/kakaoLogin");
+			sb.append("&redirect_uri="+redirectUrl+"/rest/user/kakaoLogin");
 
 			sb.append("&code=" + authorize_code);
 			bw.write(sb.toString());

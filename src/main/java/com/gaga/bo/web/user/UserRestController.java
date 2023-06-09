@@ -171,6 +171,7 @@ public class UserRestController {
 
 		userService.updateUser(user);
 		System.out.println();
+		session.setAttribute("user", user);
 
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
