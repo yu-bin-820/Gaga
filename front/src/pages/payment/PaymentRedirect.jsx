@@ -7,6 +7,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Button, Typography } from '@mui/material';
 import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
+import PendingIcon from '@mui/icons-material/Pending';
 
 const PaymentRedirect = () => {
   const [meetingData, setMeetingData] = useState();
@@ -41,7 +42,6 @@ const PaymentRedirect = () => {
         .post(`${import.meta.env.VITE_SPRING_HOST}/rest/payment`, data)
         .then((paymentData) => {
           console.log('결제 Data received:', paymentData);
-          alert('결제 성공');
 
           axios
             .post(
@@ -75,20 +75,22 @@ const PaymentRedirect = () => {
       {imp_success === true ? (
         <Stack sx={{ marginTop: '100px', alignItems: 'center' }}>
           <h2>결제 완료</h2>
-          <CheckCircleIcon color='success' sx={{ fontSize: '60px' }} />
+          <CheckCircleIcon color='primary' sx={{ fontSize: '60px' }} />
           <h3>{data.nickName}님 결제가 정상적으로 처리되었습니다.</h3>
           <Stack sx={{ marginTop: '20px', alignItems: 'center' }}>
-            <Typography variant='h7' component='div'>
-              미팅 이름 : {data.meetingName}
-            </Typography>
-            <Typography variant='h7' component='div'>
-              참가비 : {data.entryFee}원
-            </Typography>
+            <Box alignItems='center'>
+              <Typography variant='h7' component='div'>
+                모 임 명 : {data.meetingName}
+              </Typography>
+              <Typography variant='h7' component='div'>
+                참 가 비 : {data.entryFee}원
+              </Typography>
+            </Box>
           </Stack>
           <Stack sx={{ marginTop: '20px' }} direction='row' spacing={2}>
             <Button
               onClick={onClickMeeting}
-              variant='contained'
+              variant='outlined'
               color='primary'
               size='large'
             >
@@ -105,7 +107,12 @@ const PaymentRedirect = () => {
           </Stack>
         </Stack>
       ) : (
-        <Stack>결제 중입니다</Stack>
+        <Stack>
+          <Stack sx={{ marginTop: '100px', alignItems: 'center' }}>
+            <h3>결제중입니다.</h3>
+            <PendingIcon sx={{ fontSize: '60px' }} color='action' />
+          </Stack>
+        </Stack>
       )}
     </>
   );

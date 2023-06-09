@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import useSWR, { mutate } from "swr";
 import fetcher from "@utils/fetcher";
-import MainTop from "@layouts/common/MainTop";
-import UserLogout from "@layouts/user/UserLogout";
-import CommonTop from "@layouts/common/CommonTop";
+import useSWR from "swr";
+import axios from "axios";
+import React, { useCallback, useState, useEffect } from "react";
+import dayjs from "dayjs";
 import MenuItem from "@mui/material/MenuItem";
 import {
   Button,
@@ -13,27 +11,45 @@ import {
   TextField,
   Checkbox,
   FormControlLabel,
+  Modal,
 } from "@mui/material";
-import TermsOfGaga from "./TermsOfGaga";
-import Modal from "@mui/material/Modal";
 import CssBaseline from "@mui/material/CssBaseline";
+import { Link } from "react-router-dom";
+import CommonTop from "@layouts/common/CommonTop";
 import { useNavigate } from "react-router";
-import Alert from "@mui/material/Alert";
+import TermsOfGaga from "./TermsOfGaga";
+import useNaverFormStore from "@hooks/user/useNaverFormStore";
+import AddNaverUserDate from "@components/user/AddNaverUserDate";
 
-function AddNaverUser() {
-  const [user, setUser] = useState({
-    userId: "",
-    password: "",
-    userName: "",
-    birthday: "",
-    gender: 1,
-    nickName: "",
-    phoneNo: "",
-  });
-  const navigate = useNavigate();
+const AddNaverUser = () => {
+  const {
+    userId,
+    password,
+    userName,
+    birthday,
+    gender = 1,
+    nickName,
+    phoneNo,
+    setField,
+    onChangeField,
+    reset,
+  } = useNaverFormStore();
+
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [phoneVerified, setPhoneVerified] = useState(false);
+  const [isNameValid, setIsNameValid] = useState(false);
+  const [isNicknameValid, setIsNicknameValid] = useState(false);
+  const [isGenderValid, setIsGenderValid] = useState(false);
+  const [isBirthdayValid, setIsBirthdayValid] = useState(false);
+  const [isUserIdValid, setIsUserIdValid] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const handleAgreeTermsChange = (event) => {
     setAgreeTerms(event.target.checked);
+  };
+
+  const handleBirthdayChange = (e) => {
+    onChangeField("birthday", e);
+    setIsBirthdayValid(e.target.value.trim() !== "");
   };
 
   const [openTerms, setOpenTerms] = useState(false);
@@ -46,85 +62,210 @@ function AddNaverUser() {
     setOpenTerms(false);
   };
 
+  const handleNameChange = (e) => {
+    onChangeField("userName", e);
+    setIsNameValid(e.target.value.trim() !== "");
+  };
+  const handleNicknameChange = (e) => {
+    onChangeField("nickName", e);
+    setIsNicknameValid(e.target.value.trim() !== "");
+  };
+
+  const handleGenderChange = (e) => {
+    onChangeField("gender", e);
+    setIsGenderValid(e.target.value !== "");
+  };
+
   const { data: myData, mutate: mutateMe } = useSWR(
-    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/snsLogin`,
     fetcher
   );
-
-  console.log("swr로 가져온 유저정보" + myData);
-
   useEffect(() => {
     if (myData) {
-      setUser(myData);
+      setField("userId", myData.userId);
+      setField("password", myData.password);
+      setField("userName", myData.userName);
+      setField("birthday", myData.birthday);
+      setField("gender", myData.gender);
+      setField("nickName", myData.nickName);
+      setField("phoneNo", myData.phoneNo);
     }
+    // return () => {
+    //   reset();
+    // }
   }, [myData]);
+  console.dir(myData);
+  console.log(birthday);
 
-  // 서버에 GET 요청하여 유저 정보를 가져오는 함수
-  const getUserInfo = async () => {
+  const navigate = useNavigate();
+  const handleSubmit = useCallback(async () => {
+    event.preventDefault();
+    console.log("요청할때정보는?" + birthday);
+
+    let filterMinAge =14;
+    let filterMaxAge = 100;
+
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${myData.userId}`
-      );
-      const data = await response.json();
-      setUser(data);
-      mutate(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${myData.userId}`,
-        data
-      ); // 캐시 갱신을 위해 mutate 함수 호출
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  // 유저 정보 업데이트 함수
-  const addNaverUser = async () => {
-    console.log("addNaverUser 함수 실행" + JSON.stringify(user));
-    try {
-      const response = await fetch(
+      const response = await axios.post(
         `${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
         {
-          method: "POST", // PUT 요청
+          userId,
+          password,
+          userName,
+          birthday: dayjs(birthday).format("YYYY-MM-DD"),
+          gender,
+          nickName,
+          phoneNo,
+          filterMinAge,
+          filterMaxAge,
+        },
+        {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(user), // 유저 정보를 JSON 형태로 변환
+        }
+      );
+      console.log("요청할때정보는?" + birthday);
+      console.log("요청할때정보는?" + nickName);
+      console.log("요청할때정보는?" + dayjs(birthday).format("YYYY-MM-DD"));
+      alert("네이버 회원가입 완료되었습니다.");
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      alert("오류가 발생했습니다. 다시 시도해 주세요.");
+    }
+  }, [userId, password, userName, birthday, gender, nickName, phoneNo]);
+
+  function isValidEmail(email) {
+    const re =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    return re.test(email);
+  }
+  const [emailError, setEmailError] = useState("");
+  const handleEmailChange = (e) => {
+    onChangeField("userId", e);
+    const isValid = isValidEmail(e.target.value);
+    setEmailError(isValid ? "" : "이메일 형식이 올바르지 않습니다.");
+  };
+
+  const [emailAuthCode, setEmailAuthCode] = useState(null);
+  const [emailVerificationCode, setEmailVerificationCode] = useState("");
+  const handleEmailAuthRequest = async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/mailAuth`,
+        {
+          email: userId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
       );
 
-      if (!response.ok) {
-        throw new Error("서버 에러");
-      }
-      alert("회원가입이 완료되었습니다.");
-      navigate("/user/login");
-      const data = await response.json();
-      setUser(data);
-      mutate(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/user/userid/${myData.userId}`,
-        data
-      );
+      const emailAuthCode = response.data;
+      setEmailAuthCode(emailAuthCode);
+      alert("인증 코드가 이메일로 발송되었습니다.");
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      alert("인증 코드 발송에 실패했습니다. 다시 시도해 주세요.");
+    }
+  };
+  const handleEmailVerificationCodeChange = (e) => {
+    setEmailVerificationCode(e.target.value);
+  };
+
+  const handleEmailVerification = () => {
+    if (emailVerificationCode === emailAuthCode) {
+      alert("인증이 완료되었습니다!");
+      setEmailVerified(true);
+    } else {
+      alert("인증 코드가 올바르지 않습니다. 다시 확인해 주세요.");
     }
   };
 
-  const [passwordCheck, setPasswordCheck] = useState("");
-  const [passwordError, setPasswordError] = useState(false);
-  const [passwordValid, setPasswordValid] = useState(false);
+  const [phoneAuthCode, setPhoneAuthCode] = useState(null);
+  const [phoneVerificationCode, setPhoneVerificationCode] = useState("");
+  const [phoneAuthCodeSent, setPhoneAuthCodeSent] = useState(false);
 
-  const checkPasswordValidity = (password) => {
-    // 비밀번호 유효성 검사: 최소 6 ~ 최대 14자리, 영문, 숫자, 특수문자 중 최소 1개 포함
-    const passwordRegExp =
+  const handlePhoneAuthRequest = async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneNo`,
+        {
+          phoneNo: phoneNo,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const phoneAuthCode = response.data;
+      setPhoneAuthCode(phoneAuthCode);
+      alert("인증 코드가 핸드폰으로 발송되었습니다.");
+      setPhoneAuthCodeSent(true);
+    } catch (error) {
+      console.error(error);
+      alert("인증 코드 발송에 실패했습니다. 다시 시도해 주세요.");
+    }
+  };
+
+  const handlePhoneVerification = () => {
+    if (phoneVerificationCode === String(phoneAuthCode)) {
+      alert("인증이 완료되었습니다!");
+      setPhoneVerified(true);
+    } else {
+      alert("인증 코드가 올바르지 않습니다. 다시 확인해 주세요.");
+    }
+  };
+
+  function isValidPassword(password) {
+    const re =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,14}$/;
-    return passwordRegExp.test(password);
-  };
+    return re.test(password);
+  }
 
+  const [passwordError, setPasswordError] = useState("");
   const handlePasswordChange = (e) => {
-    setUser({ ...user, password: e.target.value });
-    setPasswordValid(checkPasswordValidity(e.target.value));
+    onChangeField("password", e);
+    const isValid = isValidPassword(e.target.value);
+    setPasswordError(isValid ? "" : "영문 숫자 특수문자조합 8~14자리 이내로 입력해주세요.");
   };
 
-  const handlePasswordCheckChange = (e) => {
-    setPasswordCheck(e.target.value);
-    setPasswordError(e.target.value !== user.password);
+  // 3. 비밀번호 일치 확인
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [passwordConfirmError, setPasswordConfirmError] = useState("");
+  const handlePasswordConfirmChange = (e) => {
+    setPasswordConfirm(e.target.value);
+    setPasswordConfirmError(
+      e.target.value === password ? "" : "비밀번호가 일치하지 않습니다."
+    );
+  };
+  const checkDuplicateId = async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/checkDuplicateId`,
+        {
+          userId: userId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.isDuplicate) {
+        alert("이미 사용 중인 아이디입니다.");
+        setIsUserIdValid(false);
+      } else {
+        setIsUserIdValid(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -200,95 +341,141 @@ function AddNaverUser() {
               margin="none"
               required
               fullWidth
-              value={user.userId}
+              id="userId"
+              name="userId"
+              type="email"
+              value={userId}
+              onChange={handleEmailChange}
+              onBlur={checkDuplicateId}
+              error={!!emailError}
+              helperText={emailError}
+              autoComplete="email"
+              autoFocus
               disabled
             />
-
             <TextField
               label="비밀번호"
-              value={user.password}
-              type="password"
               variant="outlined"
               margin="none"
               required
               fullWidth
+              id="password"
+              name="password"
+              type="password"
+              value={password}
               onChange={handlePasswordChange}
-              error={!passwordValid}
-              helperText={
-                !passwordValid &&
-                "영문 숫자 특수문자조합 8~14자리 이내로 입력해주세요."
-              }
+              error={!!passwordError}
+              helperText={passwordError}
+              autoComplete="current-password"
               inputProps={{
                 maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
               }}
             />
             <TextField
               label="비밀번호 확인"
-              value={passwordCheck}
-              type="password"
               variant="outlined"
               margin="none"
               required
               fullWidth
-              onChange={handlePasswordCheckChange}
-              error={passwordError}
-              helperText={passwordError && "비밀번호가 일치하지 않습니다."}
+              id="passwordConfirm"
+              name="passwordConfirm"
+              type="password"
+              value={passwordConfirm}
+              onChange={handlePasswordConfirmChange}
+              error={!!passwordConfirmError}
+              helperText={passwordConfirmError}
+              autoComplete="new-password"
               inputProps={{
                 maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
               }}
             />
             <TextField
-              label="이름"
+              label="회원실명"
               variant="outlined"
               margin="none"
               required
               fullWidth
-              value={user.userName}
+              id="userName"
+              name="userName"
+              type="text"
+              value={userName}
+              onChange={handleNameChange}
+              autoComplete="userName"
               disabled
             />
             <TextField
-              label="생년월일"
               variant="outlined"
               margin="none"
               required
               fullWidth
-              value={user.birthday}
-              disabled
-            />
-            <TextField
-              label="성별"
-              variant="outlined"
-              margin="none"
-              required
-              fullWidth
-              value={user.gender === 1 ? "남자" : "여자"}
-              disabled
-            />
-            <TextField
+              id="nickName"
               label="닉네임"
-              variant="outlined"
-              margin="none"
-              required
-              fullWidth
-              value={user.nickName}
-              onChange={(e) => setUser({ ...user, nickName: e.target.value })}
+              name="nickName"
+              value={nickName}
+              onChange={handleNicknameChange}
+              autoComplete="nickName"
+              inputProps={{
+                minLength: 2,
+                maxLength: 16,
+              }}
             />
             <TextField
-              label="전화번호"
               variant="outlined"
               margin="none"
               required
               fullWidth
-              value={user.phoneNo}
+              // type="date"
+              id="birthday"
+              label="생년월일"
+              name="birthday"
+              value={birthday}
+              onChange={handleBirthdayChange}
               disabled
-            />
+            /> 
+
+            <TextField
+              variant="outlined"
+              margin="none"
+              required
+              fullWidth
+              id="gender"
+              label="성별"
+              name="gender"
+              value={gender}
+              onChange={handleGenderChange}
+              autoComplete="gender"
+              select
+              disabled
+            >
+              <MenuItem value={1}>남자</MenuItem>
+              <MenuItem value={2}>여자</MenuItem>
+            </TextField>
+                <TextField
+                  variant="outlined"
+                  margin="none"
+                  required
+                  fullWidth
+                  type="tel"
+                  id="phoneNo"
+                  label="핸드폰 번호"
+                  name="phoneNo"
+                  value={phoneNo}
+                  onChange={(e) => onChangeField("phoneNo", e)}
+                  disabled
+                />
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 1, mb: 1, marginTop: 1 }}
-              onClick={addNaverUser}
-              disabled={passwordError || !passwordValid || !agreeTerms}
+              onClick={handleSubmit}
+              disabled={
+                passwordError ||
+                passwordConfirmError ||
+                password !== passwordConfirm ||
+                !agreeTerms
+              }
             >
               네이버 회원가입
             </Button>
@@ -297,6 +484,6 @@ function AddNaverUser() {
       </Grid>
     </>
   );
-}
+};
 
 export default AddNaverUser;

@@ -53,35 +53,40 @@ const UpdateMeetingSuccess = () => {
     } catch (error) {
       console.error(error);
     }
+    alert('모임이 성사되었습니다');
+
+    navigate('/community/profile/mine');
   }, [accountNo, bankName, meetingno]);
 
   return (
     <>
       <CommonTop />
       <Stack sx={{ marginTop: '64px' }}>
-        등록된 계좌 정보
-        <br />
-        <TextField
-          sx={{ marginTop: '8px' }}
-          label='bankName'
-          value={bankName}
-        />
-        <TextField
-          sx={{ marginTop: '8px' }}
-          label='accountNo'
-          value={accountNo}
-        />
-      </Stack>
-      *기존 계좌와 다른 계좌를 등록하고 싶은 경우*
-      <Stack sx={{ marginTop: '8px' }}>
-        <Account onBankInfoChange={handleBankInfoChange} />
-        <Button
-          onClick={onClickMeetingSuccess}
-          variant='contained'
-          sx={{ marginTop: '16px', width: '100%' }}
-        >
-          성사하기{' '}
-        </Button>
+        <Stack sx={{ margin: '10px' }}>
+          정산받을 계좌 정보
+          <br />
+          <TextField
+            sx={{ marginTop: '8px' }}
+            label='은행명'
+            value={bankName}
+          />
+          <TextField
+            sx={{ marginTop: '8px' }}
+            label='계좌번호'
+            value={accountNo}
+          />
+          *기존 계좌와 다른 계좌를 등록하고 싶은 경우*
+          <Stack>
+            <Account onBankInfoChange={handleBankInfoChange} />
+            <Button
+              onClick={onClickMeetingSuccess}
+              variant='contained'
+              sx={{ marginTop: '16px', width: '100%' }}
+            >
+              성사하기{' '}
+            </Button>
+          </Stack>
+        </Stack>
       </Stack>
     </>
   );

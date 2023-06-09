@@ -97,7 +97,7 @@ const Payment = ({ meeting }) => {
   return (
     <Button
       onClick={onClickPayment}
-      variant="contained"
+      variant='contained'
       sx={{ width: '85vw', borderRadius: '50px' }}
     >
       결제하기

@@ -72,7 +72,7 @@ const AddKakaoUser = () => {
   };
 
   const { data: myData, mutate: mutateMe } = useSWR(
-    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/snsLogin`,
     fetcher
   );
   useEffect(() => {
@@ -97,6 +97,9 @@ const AddKakaoUser = () => {
     event.preventDefault();
     console.log("요청할때정보는?" + birthday);
 
+    let filterMinAge =14;
+    let filterMaxAge = 100;
+
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_SPRING_HOST}/rest/user/addUser`,
@@ -108,6 +111,8 @@ const AddKakaoUser = () => {
           gender,
           nickName,
           phoneNo,
+          filterMinAge,
+          filterMaxAge,
         },
         {
           headers: {
@@ -119,6 +124,7 @@ const AddKakaoUser = () => {
       console.log("요청할때정보는?" + nickName);
       console.log("요청할때정보는?" + dayjs(birthday).format("YYYY-MM-DD"));
       alert("카카오 회원가입 완료되었습니다.");
+      navigate("/");
     } catch (error) {
       console.error(error);
       alert("오류가 발생했습니다. 다시 시도해 주세요.");
@@ -517,6 +523,8 @@ const AddKakaoUser = () => {
               onClick={handleSubmit}
               disabled={
                 passwordError ||
+                passwordConfirmError ||
+                password !== passwordConfirm ||
                 !agreeTerms ||
                 !phoneVerified
               }
