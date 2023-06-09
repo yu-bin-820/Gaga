@@ -222,10 +222,9 @@ const handleSendMessage = async (text) => {
   });
   
   if (isGptMode) {
-
-    const response = await axios.post(`${import.meta.env.VITE_SPRING_HOST}/rest/gpt`, {
-        prompt: inputText,
-        isGptMode: isGptMode
+    const apiUrl =`${import.meta.env.VITE_SPRING_HOST}/rest/gpt`;
+    const response = await axios.post(apiUrl, {
+        prompt: inputText
       }, {
         headers: {
           'Content-Type': 'application/json'
@@ -235,7 +234,7 @@ const handleSendMessage = async (text) => {
 
       // 변환된 JSON의 'text' 필드가 응답 메시지가 될 것이다.
       const botMessage = response.data;
-      console.log("유원?", botMessage)
+      console.log("유원? u Do", botMessage)
       
       return botMessage;
     } else {
@@ -306,29 +305,7 @@ const handleSendMessage = async (text) => {
                   <IconButton className="help-button" onClick={handleHelpClick} sx={{color : 'white'}}>
                       <HelpOutlineIcon onClick={handleHelpClick} />
                   </IconButton>
-                  <Modal
-        open={isModalOpen}
-        onClose={handleCloseModal}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-        style={modalStyle}
-      >
-        <Fade in={isModalOpen} >
-        <div className="modal" style={{ fontSize: '14px', color: 'blue', width: '50%', height: '50%' }} >
-            {/* 모달 내용 */}
-            <h2>챗봇 도움말</h2>
-            이 페이지에는 챗봇 이용에 대한 도움말을 담습니다.
-            현재 챗봇은 네이버챗봇,  GPT 두개의 갈래로 나뉘어 구성되있습니다. 
-            <Button className="modal-close-button" onClick={handleCloseModal}>
-             <CloseRoundedIcon />
-      </Button>
-           
-          </div>
-        </Fade>
-      </Modal>
+                  
                   <div style={{ textAlign: "left", color: "white", marginRight: "119px" }} >
                   <h3>GAGABOT</h3>
                   </div>
