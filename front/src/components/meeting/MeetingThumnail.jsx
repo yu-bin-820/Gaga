@@ -19,8 +19,6 @@ const MeetingThumbnail = ({ meeting }) => {
     navigate(`/meeting/meetingno/${meetingNo}`);
   }, [meetingNo, navigate]);
 
-
-
   return (
     <Stack direction='row' spacing={2}>
       <ImageListItem
@@ -71,15 +69,7 @@ const MeetingThumbnail = ({ meeting }) => {
 };
 
 MeetingThumbnail.propTypes = {
-  meeting: PropTypes.shape({
-    filterTag: PropTypes.string.isRequired,
-    meetingName: PropTypes.string.isRequired,
-    meetingAddr: PropTypes.string.isRequired,
-    meetingImg: PropTypes.string.isRequired,
-    meetingMaxMemberNo: PropTypes.number.isRequired,
-    count: PropTypes.number.isRequired,
-    meetingNo: PropTypes.number.isRequired,
-  }).isRequired,
+  meeting: PropTypes.object.isRequired,
 };
 
 export default MeetingThumbnail;
