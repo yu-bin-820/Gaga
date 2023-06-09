@@ -142,12 +142,13 @@ const ChatMap = ({ postPath, senderNo, groupNo }) => {
       <MapMarker position={{ lat: markerLat, lng: markerLng }} />
 
       <CustomOverlayMap
+        clickable
         position={{ lat: markerLat, lng: markerLng }}
-        yAnchor={1.7}
+        yAnchor={2.2}
+        xAnchor={0.6}
       >
         <Box
           onClick={onClickLocationSubmit}
-          onTouchStart={onClickLocationSubmit}
           sx={{
             backgroundColor: 'white',
             padding: '10px',
@@ -163,7 +164,7 @@ const ChatMap = ({ postPath, senderNo, groupNo }) => {
 
               <Typography sx={{ fontSize: 12 }}>{markerContent}</Typography>
             </Stack>
-            <NavigateNextIcon sx={{ marginRight: '-10px' }} />
+            {isPost && <NavigateNextIcon sx={{ marginRight: '-10px' }} />}
           </Stack>
         </Box>
       </CustomOverlayMap>
