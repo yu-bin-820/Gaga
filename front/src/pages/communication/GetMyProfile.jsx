@@ -54,6 +54,12 @@ const GetMyProfile = () => {
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+  const { mutate: mutateTitleList } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/community/title/list/userno/${
+      myData?.userNo
+    }`,
+    fetcher
+  );
 
   const boxRef = useRef();
 
@@ -88,8 +94,20 @@ const GetMyProfile = () => {
   }, [isUpdateNickName]);
 
   const onClickUpdateMainTitle = useCallback(() => {
+    axios
+      .post(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/community/title/userno/${
+          myData?.userNo
+        }`
+      )
+      .then(() => {
+        mutateTitleList();
+      })
+      .catch((error) => {
+        console.dir(error);
+      });
     setUpdateMainTitleOpen(true);
-  }, []);
+  }, [mutateTitleList, myData]);
 
   return (
     <>

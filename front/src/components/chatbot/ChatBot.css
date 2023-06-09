@@ -34,11 +34,11 @@
 .chat-container {
     display: flex;
     flex-direction: column;
-    width: 90%;
+    width: 88%;
     height: 70%;;
     position: absolute;
     bottom: 120px;
-    right: 30px;
+    right: 18px;
     z-index: 1000;
     max-width: 350px;
     margin: 0 auto;
@@ -51,10 +51,7 @@
     transition: all 1.3s ease;
 }
 
-.hidden {
-    display: none;
-  }
-  
+
 .chat-container.hidden {
     display: none;
 }

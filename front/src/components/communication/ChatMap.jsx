@@ -142,30 +142,31 @@ const ChatMap = ({ postPath, senderNo, groupNo }) => {
       <MapMarker position={{ lat: markerLat, lng: markerLng }} />
 
       <CustomOverlayMap
+        clickable
         position={{ lat: markerLat, lng: markerLng }}
-        yAnchor={1.7}
+        yAnchor={2.2}
+        xAnchor={0.6}
       >
-        <div onClick={onClickLocationSubmit}>
-          <Box
-            sx={{
-              backgroundColor: 'white',
-              padding: '10px',
-              border: '1px solid #ededed',
-              borderRadius: '10px',
-            }}
-          >
-            <Stack direction={'row'} alignItems={'center'} spacing={1}>
-              <Stack>
-                <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
-                  위치정보 {isPost ? '보내기' : ''}
-                </Typography>
+        <Box
+          onClick={onClickLocationSubmit}
+          sx={{
+            backgroundColor: 'white',
+            padding: '10px',
+            border: '1px solid #ededed',
+            borderRadius: '10px',
+          }}
+        >
+          <Stack direction={'row'} alignItems={'center'} spacing={1}>
+            <Stack>
+              <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
+                위치정보 {isPost ? '보내기' : ''}
+              </Typography>
 
-                <Typography sx={{ fontSize: 12 }}>{markerContent}</Typography>
-              </Stack>
-              <NavigateNextIcon sx={{ marginRight: '-10px' }} />
+              <Typography sx={{ fontSize: 12 }}>{markerContent}</Typography>
             </Stack>
-          </Box>
-        </div>
+            {isPost && <NavigateNextIcon sx={{ marginRight: '-10px' }} />}
+          </Stack>
+        </Box>
       </CustomOverlayMap>
     </Map>
   );

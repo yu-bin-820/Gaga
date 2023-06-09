@@ -7,6 +7,10 @@ import {
   Grid,
   Modal,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
@@ -21,12 +25,18 @@ const Account = (props) => {
   const [bankHolder, setBankHolder] = useState('');
   const [bankHolderCheck, setBankHolderCheck] = useState('');
   const [bankList, setBankList] = useState([]);
+  const [openAccountModal, setOpenAccountModal] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [formData, setFormData] = useState([]);
 
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+
+  const resetFormData = () => {
+    setFormData({ bankCode: '', accountNo: '', bankHolderCheck: '' });
+  };
 
   useEffect(() => {
     if (bankHolder === bankHolderCheck && bankHolder !== '') {
@@ -38,6 +48,15 @@ const Account = (props) => {
 
   const closeModal = () => {
     setOpenModal(false);
+  };
+
+  const handleClickOpen = () => {
+    setOpenAccountModal(true);
+  };
+
+  const handleClose = () => {
+    setOpenAccountModal(false);
+    resetFormData();
   };
 
   useEffect(() => {
@@ -92,47 +111,55 @@ const Account = (props) => {
 
   return (
     <>
-      <Stack spacing={2} sx={{ width: '100%' }}>
-        <Stack sx={{ marginBottom: '8px' }} />
-        <TextField
-          select
-          fullWidth
-          label='bankName'
-          value={bankCode}
-          onChange={(e) => setBankCode(e.target.value)}
-        >
-          {bankList.map((bank) => (
-            <MenuItem key={bank.code} value={bank.code}>
-              {bank.name}
-            </MenuItem>
-          ))}
-        </TextField>
-
-        <Stack sx={{ marginBottom: '8px' }} />
-        <TextField
-          fullWidth
-          label='accountNo'
-          type='text'
-          value={accountNo}
-          onChange={(e) => setAccountNo(e.target.value)}
-        />
-        <Stack sx={{ marginBottom: '8px' }} />
-        <TextField
-          fullWidth
-          label='bankHolderCheck'
-          type='text'
-          value={bankHolderCheck}
-          onChange={(e) => setBankHolderCheck(e.target.value)}
-        />
-        <Stack sx={{ marginBottom: '16px' }} />
-        <Button
-          onClick={onClickAccount}
-          variant='contained'
-          sx={{ marginTop: '16px', width: '100%' }}
-        >
-          조회
-        </Button>
-
+      <Button variant='outlined' onClick={handleClickOpen}>
+        계좌 조회하기
+      </Button>
+      <Dialog open={openAccountModal} onClose={handleClose}>
+        <DialogTitle>계좌 조회</DialogTitle>
+        <Stack />
+        <DialogContent>
+          <TextField
+            select
+            fullWidth
+            label='은행명'
+            value={bankCode}
+            onChange={(e) => setBankCode(e.target.value)}
+          >
+            {bankList.map((bank) => (
+              <MenuItem key={bank.code} value={bank.code}>
+                {bank.name}
+              </MenuItem>
+            ))}
+          </TextField>
+          <Stack sx={{ marginBottom: '16px' }} />
+          <TextField
+            fullWidth
+            label='계좌번호'
+            type='text'
+            value={accountNo}
+            onChange={(e) => setAccountNo(e.target.value)}
+          />
+          <Stack sx={{ marginBottom: '16px' }} />
+          <TextField
+            fullWidth
+            label='계좌주'
+            type='text'
+            value={bankHolderCheck}
+            onChange={(e) => setBankHolderCheck(e.target.value)}
+          />
+          <Stack sx={{ marginBottom: '8px' }} />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={onClickAccount}
+            variant='contained'
+            sx={{ marginTop: '16px', width: '100%' }}
+          >
+            조회
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Stack>
         <Modal
           open={openModal}
           onClose={closeModal}
@@ -153,10 +180,14 @@ const Account = (props) => {
               알림
             </Typography>
             <Typography id='modal-description' sx={{ mt: 2 }}>
-              {bankHolderCheck}의 계좌 정보를 조회하였습니다.
+              {bankHolderCheck}님의 계좌 정보를 <br />
+              조회하였습니다.
             </Typography>
             <Button
-              onClick={closeModal}
+              onClick={() => {
+                closeModal();
+                handleClose();
+              }}
               style={{ alignSelf: 'flex-end', marginTop: 16 }}
               variant='contained'
             >

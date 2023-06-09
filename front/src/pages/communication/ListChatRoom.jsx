@@ -133,11 +133,11 @@ export default function ListChatRoom() {
               marginLeft: '0px',
               marginRight: '0px',
               overflowY: 'auto',
-              maxHeight: 'calc(100vh - 70px)',
+              maxHeight: 'calc(100vh - 110px)',
               marginBottom: '64px',
             }}
           >
-            <TabPanel value="group" sx={{ margin: 0, paddingLeft: 0.5 }}>
+            <TabPanel value="group" sx={{ paddingLeft: 0.5 }}>
               {groupsData?.groups.map((group, i) => (
                 <Box
                   key={i}
@@ -162,8 +162,12 @@ export default function ListChatRoom() {
                   onClick={onClickGroupChatOne}
                 >
                   <ChatItem
-                    avatar={`${import.meta.env.VITE_EXPRESS_HOST}/uploads/${
-                      group.meeting_img
+                    avatar={`${
+                      import.meta.env.VITE_SPRING_HOST
+                    }/upload_images/${
+                      group.meeting_name ? 'meeting' : 'club'
+                    }/${
+                      group.meeting_name ? group.meeting_img : group.club_img
                     }`}
                     alt={`${
                       import.meta.env.VITE_EXPRESS_HOST

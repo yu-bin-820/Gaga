@@ -49,7 +49,7 @@ const TitleListDialog = ({ open, setOpen, myData, mutateMe }) => {
         console.dir(error);
       });
   }, [myData, mutateMe, mainTitle, setOpen]);
-
+  console.log(titleListData);
   return (
     <div>
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
@@ -64,11 +64,12 @@ const TitleListDialog = ({ open, setOpen, myData, mutateMe }) => {
                 onChange={handleChange}
                 input={<OutlinedInput label="Age" id="demo-dialog-native" />}
               >
+                {titleListData?.length === 0 && <option>타이틀 없음</option>}
                 {titleListData?.map((title, i) => (
                   <option
                     key={i}
                     value={title.titleNo}
-                    selected={myData.mainTitleNo == title.titleNo}
+                    // selected={myData.mainTitleNo == title.titleNo}
                   >
                     {title.titleName}
                   </option>

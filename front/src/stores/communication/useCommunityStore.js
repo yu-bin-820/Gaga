@@ -19,8 +19,8 @@ const useCommunityStore = create((set) => ({
   prevProfilePath: '',
   prevPath: '',
 
-  setChatRoomEntryNo: (chatRoomEntryNo) =>
-    set(() => ({ chatRoomEntryNo: chatRoomEntryNo })),
+  // setChatRoomEntryNo: (chatRoomEntryNo) =>
+  //   set(() => ({ chatRoomEntryNo: chatRoomEntryNo })),
   setField: (field, value) => set(() => ({ [field]: value })),
   onChangeField: (field, event) => set(() => ({ [field]: event.target.value })),
 }));
