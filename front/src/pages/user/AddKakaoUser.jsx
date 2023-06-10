@@ -97,7 +97,7 @@ const AddKakaoUser = () => {
     event.preventDefault();
     console.log("요청할때정보는?" + birthday);
 
-    let filterMinAge =14;
+    let filterMinAge = 14;
     let filterMaxAge = 100;
 
     try {
@@ -186,22 +186,32 @@ const AddKakaoUser = () => {
 
   const handlePhoneAuthRequest = async () => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneNo`,
-        {
-          phoneNo: phoneNo,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+      const response = await axios.get(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneno/${phoneNo}`
       );
 
-      const phoneAuthCode = response.data;
-      setPhoneAuthCode(phoneAuthCode);
-      alert("인증 코드가 핸드폰으로 발송되었습니다.");
-      setPhoneAuthCodeSent(true);
+      if (response.data) {
+        alert("이미 가입된 핸드폰 번호입니다.");
+      } else {
+        // 핸드폰 인증 코드를 발송하는 부분은 이곳으로 옮깁니다.
+        const response = await axios.post(
+          `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneNo`,
+          {
+            phoneNo: phoneNo,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        // 핸드폰 인증 코드를 받아옴
+        const phoneAuthCode = response.data;
+        setPhoneAuthCode(phoneAuthCode);
+        alert("인증 코드가 핸드폰으로 발송되었습니다.");
+        setPhoneAuthCodeSent(true);
+      }
     } catch (error) {
       console.error(error);
       alert("인증 코드 발송에 실패했습니다. 다시 시도해 주세요.");
@@ -227,7 +237,9 @@ const AddKakaoUser = () => {
   const handlePasswordChange = (e) => {
     onChangeField("password", e);
     const isValid = isValidPassword(e.target.value);
-    setPasswordError(isValid ? "" : "영문 숫자 특수문자조합 8~14자리 이내로 입력해주세요.");
+    setPasswordError(
+      isValid ? "" : "영문 숫자 특수문자조합 8~14자리 이내로 입력해주세요."
+    );
   };
 
   // 3. 비밀번호 일치 확인
@@ -363,7 +375,7 @@ const AddKakaoUser = () => {
               helperText={passwordError}
               autoComplete="current-password"
               inputProps={{
-                maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
+                maxLength: 14, // 최대 입력 가능한 문자 수를 14개로 제한
               }}
             />
             <TextField
@@ -381,7 +393,7 @@ const AddKakaoUser = () => {
               helperText={passwordConfirmError}
               autoComplete="new-password"
               inputProps={{
-                maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
+                maxLength: 14, // 최대 입력 가능한 문자 수를 14개로 제한
               }}
             />
             <TextField

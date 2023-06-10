@@ -71,7 +71,9 @@ const UpdateUser = () => {
     onChangeField("nickName", e);
     setIsNicknameValid(e.target.value.trim() !== "");
   };
-
+  const handleFindPasswordChange = (e) => {
+    navigate("/user/findpassword");
+  }
   const handleGenderChange = (e) => {
     onChangeField("gender", e);
     setIsGenderValid(e.target.value !== "");
@@ -89,7 +91,7 @@ const UpdateUser = () => {
       setField("userId", myData.userId);
       setField("password", myData.password);
       setField("userName", myData.userName);
-      setField("birthday", dayjs(myData.birthday).format("MM-DD-YYYY"));
+      setField("birthday", dayjs(myData.birthday).format("YYYY-MM-DD"));
       setField("gender", myData.gender);
       setField("nickName", myData.nickName);
       setField("phoneNo", myData.phoneNo);
@@ -162,6 +164,7 @@ const UpdateUser = () => {
         console.log("요청할때정보는?"+nickName);
         console.log("요청할때정보는?"+dayjs(birthday).format('YYYY-MM-DD'));
         alert('정보수정 완료되었습니다.');
+        mutateMe();
       } catch (error) {
         console.error(error);
         alert("오류가 발생했습니다. 다시 시도해 주세요.");
@@ -336,6 +339,9 @@ const UpdateUser = () => {
             autoFocus
             disabled
           />
+          <Button onClick={handleFindPasswordChange}>
+            비밀번호 변경하기
+          </Button>
           <TextField
             label="비밀번호"
             variant="outlined"
@@ -419,7 +425,7 @@ const UpdateUser = () => {
             onChange={handleGenderChange}
             autoComplete="gender"
             select
-            defaultValue={1}
+            disabled
           >
             <MenuItem value={1}>남자</MenuItem>
             <MenuItem value={2}>여자</MenuItem>
