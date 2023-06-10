@@ -4,7 +4,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +19,18 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/rest/*")
 public class GptController {
 	
+	@Autowired
+    private Environment env;
+	
 	@Value("${openai.apiUrl}")
     private String openAIApiUrl;
-    @Value("${openai.apiKey}")
-    private String openAIApiKey;
 
     @PostMapping("gpt")
     public String generateResponse(@org.springframework.web.bind.annotation.RequestBody String prompt) throws ParseException {
         System.out.println("이러기싫어서 나눈 gpt로 왔다.");
         System.out.println(prompt + "프롬프트프롬프트");
-
+        
+        String openAIApiKey = "Bearer " + env.getProperty("GPT_KEY");
         RestTemplate restTemplate = new RestTemplate();
         System.out.println("어디에서");
         HttpHeaders headers = new HttpHeaders();
