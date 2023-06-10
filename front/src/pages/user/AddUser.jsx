@@ -79,9 +79,11 @@ const AddUser = () => {
   const navigate = useNavigate();
   const handleSubmit = useCallback(async () => {
     event.preventDefault();
+    let filterMinAge = 14;
+    let filterMaxAge = 100;
     if (!isUserIdValid) {
-      alert("중복된 아이디입니다. 아이디찾기로 이동합니다.");
-      navigate("/user/findid");
+      alert("중복된 아이디입니다. 기존 아이디로 로그인해주세요.");
+      // navigate("/user/findid");
       reset();
       return;
     }
@@ -105,6 +107,9 @@ const AddUser = () => {
           gender: gender,
           nickName: nickName,
           phoneNo: phoneNo,
+          filterMaxAge: filterMaxAge,
+          filterMinAge: filterMinAge,
+          
         },
         {
           headers: {

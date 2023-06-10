@@ -4,7 +4,8 @@ import fetcher from '@utils/fetcher';
 const useLoginData = () => {
   const { data, mutate } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
-    fetcher
+    fetcher,
+    { revalidateOnFocus: false }
   );
 
   return { data, mutate };
