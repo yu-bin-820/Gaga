@@ -34,10 +34,10 @@ public class GptController {
         headers.set("Authorization", openAIApiKey);
         System.out.println("뜨는거지?"+headers);
         headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
-
+        System.out.println("좀 알려줘라?"+headers);
         JSONObject body = new JSONObject();
         body.put("model", "gpt-3.5-turbo");
-
+        System.out.println("좀 알려줘라? 좀?"+headers+body);
         JSONArray messages = new JSONArray();
         JSONObject messageContent = new JSONObject();
         messageContent.put("role", "user");
