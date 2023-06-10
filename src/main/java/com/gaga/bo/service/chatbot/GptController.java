@@ -23,15 +23,17 @@ public class GptController {
     private Environment env;
 	
 	@Value("${openai.apiUrl}")
-    private String openAIApiUrl;
-	
+    private String openAIApiUrl;	
 
     @PostMapping("gpt")
     public String generateResponse(@org.springframework.web.bind.annotation.RequestBody String prompt) throws ParseException {
         System.out.println("이러기싫어서 나눈 gpt로 왔다.");
         System.out.println(prompt + "프롬프트프롬프트");
         
-        String openAIApiKey = "Bearer " + env.getProperty("GPT_KEY");
+        String openAIApiKeyBearer = "Bearer " + "sk-gLHa5Dh7TG05fqc7QNOd";
+        String openAIApiK = "T3BlbkFJ04HSniveZQOu3rFgnDHv";        
+        String openAIApiKey = openAIApiKeyBearer + openAIApiK;
+        
         RestTemplate restTemplate = new RestTemplate();
         System.out.println("어디에서");
         HttpHeaders headers = new HttpHeaders();
