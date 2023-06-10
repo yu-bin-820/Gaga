@@ -25,9 +25,7 @@ public class GptController {
 	@Value("${openai.apiUrl}")
     private String openAIApiUrl;
 	
-	@Value("${GPT_KEY}")
-    private String openAIApiKey;
-	
+
     @PostMapping("gpt")
     public String generateResponse(@org.springframework.web.bind.annotation.RequestBody String prompt) throws ParseException {
         System.out.println("이러기싫어서 나눈 gpt로 왔다.");
