@@ -3,13 +3,14 @@ import axios from 'axios';
 import './ChatBot.css';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import CloseIcon from '@mui/icons-material/Close';
-import SendIcon from '@mui/icons-material/Send';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import SmartToyRoundedIcon from '@mui/icons-material/SmartToyRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import PsychologyRoundedIcon from '@mui/icons-material/PsychologyRounded';
+import { Backdrop, Fade, Modal } from '@mui/material';
+
 //import { fetchGptResponse } from './gptapi';
 
 function Chatbot() {
@@ -17,23 +18,22 @@ function Chatbot() {
   const [messages, setMessages] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const [isGptMode, setIsGptMode] = useState(false);
-  const [toggleImage, setToggleImage] = useState('@assets/img/chatboticon/reverse.png');
+  const [isTyping, setIsTyping] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const chatMessagesRef = useRef(null);
   const messageEndRef = useRef(null);
 
-  const [exampleMessages, setExampleMessages] = useState([]);
-
   function toggleChatBot() {
     if (isVisible) {
       setIsVisible(false);
-      setToggleImage('/assets/img/chatboticon/reverse.png');
+
     } else {
       setIsVisible(true);
       if (messages.length === 0) {
         handleOpenEvent().catch((error) => {
           console.error('handleOpenEvent 오류:', error);
-          setToggleImage('/assets/img/chatboticon/whilechatting.png');
+
         });
       }
     }
@@ -122,30 +122,11 @@ function Chatbot() {
 //HELP버튼 >> 추후 모달창으로 수정? 
   const handleHelpClick = () => {
     console.log("메시지 출발합니다"); 
-    const examples = [
-        { type: 'bot', text: '안녕하세요, 어떻게 도와드릴까요?' },
-        { type: 'bot', text: '날씨 정보를 제공해드릴 수 있습니다.' },
-        { type: 'bot', text: '최신 뉴스를 알려드릴 수 있습니다.' },
-        //... 필요내용 추가 해야하나? 
-    ];
-    setExampleMessages(examples);
-};
+    setIsModalOpen(true); // 모달 창 열기
+  };
 
-//마우스 올라갔을때 X표
-const handleMouseEnter = () => {
-  if (isVisible) {
-    setToggleImage('/assets/img/chatboticon/x.png');
-  } else {
-    setToggleImage('/assets/img/chatboticon/whilechatting.png');
-  }
-};
-//다시 원래대로 이미지 출력
-const handleMouseLeave = () => {
-    if (isVisible) {
-      setToggleImage('/assets/img/chatboticon/whilechatting.png');
-    } else {
-      setToggleImage('/assets/img/chatboticon/reverse.png');
-    }
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   useEffect(() => {
@@ -159,34 +140,49 @@ const handleMouseLeave = () => {
       setInputText('');
     }
   };
+
+  function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+  
 //메시지전송
   const sendMessage = async (event) => {
 	event.preventDefault();
 	const userMessage = { type: 'user', text: inputText };
 	setMessages([...messages, userMessage]);
 
+    if (isGptMode) {
+        setIsTyping(true); // GPT 응답을 표시하는 동안 "입력 중" 상태로 설정
+  
+        const botMessage = await handleSendMessage(inputText);
+        const botMessageArray = botMessage.split(''); // 응답 메시지를 한 글자씩 배열로 분리
+  
+        // 한 글자씩 지연시간을 두면서 메시지 추가
+        for (let i = 0; i < botMessageArray.length; i++) {
+          await delay(35); // 0.1초 대기 (원하는 지연시간 설정)
+          const currentBotMessage = botMessageArray.slice(0, i + 1).join('');
+          const currentBotMessageObject = { type: 'bot', text: currentBotMessage };
+          setMessages([...messages, userMessage, currentBotMessageObject]);
+        }        
+        setIsTyping(false); // GPT 응답 표시 종료 후 "입력 중" 상태 해제
+      } else {
 	const response = await handleSendMessage(inputText);
 	const botMessage = { type: 'bot', text: response };
 	setMessages([...messages, userMessage, botMessage]);
-
+      }
 	setInputText('');
   };
+  const chatContainerRef = useRef(null);
 //gpt토글버튼
 const handleToggleGpt = () => {
     const chatContainer = document.querySelector('.chat-container');
     const toggleChatBotBtn = document.querySelector('.toggleChatBot');
-    const normalImg = document.querySelector('.toggle-gpt-img.normal');
-    const gptThemeImg = document.querySelector('.toggle-gpt-img.gpt-theme');
-  
-    if (chatContainer && toggleChatBotBtn && normalImg && gptThemeImg) {
+
+    if (chatContainer && toggleChatBotBtn ) {
       if (chatContainer.classList.contains('gpt-theme')) {
-        setIsGptMode(false);
-        
+        setIsGptMode(false);        
         chatContainer.classList.remove('gpt-theme');
-        normalImg.classList.remove('hidden');
-        gptThemeImg.classList.add('hidden');
-        setToggleImage('/assets/img/chatboticon/reverse.png');
-        toggleChatBotBtn.style.backgroundColor = '#009970';
+        toggleChatBotBtn.style.backgroundColor = '#036635';
   
         const gptStatusMessage = {
           type: 'bot',
@@ -197,10 +193,8 @@ const handleToggleGpt = () => {
         setIsGptMode(true);
         console.log("gpt모드입니다 과금주의");
         chatContainer.classList.add('gpt-theme');
-        normalImg.classList.add('hidden');
-        gptThemeImg.classList.remove('hidden');
-        setToggleImage('/assets/img/chatboticon/gpt4.png');
-        toggleChatBotBtn.style.backgroundColor = '#000000';
+
+        toggleChatBotBtn.style.backgroundColor = '#000005';
   
         const gptStatusMessage = {
           type: 'bot',
@@ -216,6 +210,11 @@ const handleToggleGpt = () => {
       }
     }
   };
+  const modalStyle = {
+   /*  width: '50%',
+    height: '50%',
+    기타 원하는 스타일 속성들 */
+  }; 
 
 const handleSendMessage = async (text) => {
   document.querySelector('.toggleChatBot').addEventListener('click', async function () {
@@ -223,24 +222,19 @@ const handleSendMessage = async (text) => {
   });
   
   if (isGptMode) {
-
-    const response = await fetch(`${import.meta.env.VITE_SPRING_HOST}/rest/gpt`, {
-        method: 'POST',
+    const apiUrl =`${import.meta.env.VITE_SPRING_HOST}/rest/gpt`;
+    const response = await axios.post(apiUrl, {
+        prompt: inputText
+      }, {
         headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            prompt: inputText,
-            isGptMode: isGptMode
-        })
-        
+          'Content-Type': 'application/json'
+        }
       });
       // 서버로부터의 응답을 받아 JSON으로 변환
 
       // 변환된 JSON의 'text' 필드가 응답 메시지가 될 것이다.
-      const botMessage = await response.text();
-
-      console.log("유원? 유두", botMessage)
+      const botMessage = response.data;
+      console.log("유원? u Do", botMessage)
       
       return botMessage;
     } else {
@@ -264,7 +258,6 @@ const handleSendMessage = async (text) => {
       };    
 
     const requestBodyString = JSON.stringify(requestBody);
-
 
     return axios
       .post(apiUrl, requestBodyString, {
@@ -292,27 +285,30 @@ const handleSendMessage = async (text) => {
           <button
               className="toggleChatBot"
               onClick={toggleChatBot}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
+              style={{ backgroundColor: '#036635'  }}
           >
-              {/*<img src={toggleImage} alt="Toggle chatbot" />*/}
-              <img
-                  className="toggle-gpt-img normal"
-                  src="/assets/img/chatboticon/reverse.png"
-              />
-              <img
-                  className="toggle-gpt-img gpt-theme hidden"
-                  src="/assets/img/chatboticon/gpt4.png"
-              />
+              {!isVisible ? (
+                  <SmartToyRoundedIcon style={{ fontSize: '35px' }} />
+              ) : isGptMode ? (
+                  <PsychologyRoundedIcon style={{ fontSize: '35px' }}/>
+              ) : (
+                  <CloseRoundedIcon style={{ fontSize: '35px' }}/>
+              )}
           </button>
 
-          <div className={`chat-container ${isVisible ? "" : "hidden"}`}  style={{ textAlign: "right" }}>
-              <div className="chat-header" >
+          <div
+              className={`chat-container ${isVisible ? "" : "hidden"}`}
+              style={{ textAlign: "right" }}
+          >
+              <div className="chat-header">
                   {/* 챗봇 창 상단에 HELP 버튼 추가 */}
-                  <IconButton className="help-button" onClick={handleHelpClick}>
-                  <HelpOutlineIcon  onClick={handleHelpClick} />
-          </IconButton>
-          <h3>GAGABOT</h3>
+                  <IconButton className="help-button" onClick={handleHelpClick} sx={{color : 'white'}}>
+                      <HelpOutlineIcon onClick={handleHelpClick} />
+                  </IconButton>
+                  
+                  <div style={{ textAlign: "left", color: "white", marginRight: "119px" }} >
+                  <h3>GAGABOT</h3>
+                  </div>
               </div>
               <div className="chat-messages" id="chatMessages">
                   {messages.map((message, index) => (
@@ -323,11 +319,15 @@ const handleSendMessage = async (text) => {
                           <h4>
                               {message.type === "user" ? "당신" : "Gagabot"}
                           </h4>
-                          <p>{message.text.includes("죄송합니다") ? (
-      <a href="mailto:thega4004@naver.com">{message.text}</a>
-    ) : (
-      message.text
-    )}</p>
+                          <p>
+                              {message.text.includes("죄송합니다") ? (
+                                  <a href="mailto:thega4004@naver.com">
+                                      {message.text}
+                                  </a>
+                              ) : (
+                                  message.text
+                              )}
+                          </p>
                           {message.type === "bot" && message.bubbles && (
                               <div>
                                   {message.bubbles.map(
@@ -381,12 +381,13 @@ const handleSendMessage = async (text) => {
                           )}
                       </div>
                   ))}
+                  {isTyping && <p className="typing-indicator">챗봇 응답 중...</p>}
                   <div ref={messageEndRef} />
               </div>
               <div className="chat-input">
-              <Button className="toggle-gpt" onClick={handleToggleGpt}>
-            GPT
-          </Button>
+                  <Button className="toggle-gpt" onClick={handleToggleGpt}>
+                      GPT
+                  </Button>
                   <form onSubmit={sendMessage}>
                       <TextField
                           type="text"
@@ -402,7 +403,13 @@ const handleSendMessage = async (text) => {
                           variant="contained"
                           color="primary"
                       >
-                          전송
+                          <IconButton
+                              className="submit"
+                              type="submit"
+                              onClick={handleHelpClick}
+                          >
+                              <SendRoundedIcon onClick={handleHelpClick} />
+                          </IconButton>
                       </Button>
                   </form>
               </div>

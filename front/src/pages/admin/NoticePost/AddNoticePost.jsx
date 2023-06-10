@@ -111,10 +111,10 @@ const AddNoticePost = () => {
                 {selectedImage ? (
                   <img
                     style={{
-                      minWidth: '100px',
-                      minHeight: '100px',
-                      maxWidth: '100px',
-                      maxHeight: '100px',
+                      minWidth: '150px',
+                      minHeight: '150px',
+                      maxWidth: '150px',
+                      maxHeight: '150px',
                     }}
                     src={selectedImage}
                   />

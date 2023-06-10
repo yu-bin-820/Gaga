@@ -32,6 +32,8 @@ const AdjustmentThumnail = ({ meeting }) => {
     fetcher
   );
 
+  const isAdmin = myData?.role === 1;
+
   const onClickMeeting = useCallback((event) => {
     navigate(`/meeting/meetingno/${meeting.meetingNo}`);
   }, []);
@@ -112,7 +114,9 @@ const AdjustmentThumnail = ({ meeting }) => {
             <Stack>모 임 명 {meeting.meetingName}</Stack>
           </Stack>
           <Stack direction='row' spacing={1}>
-            <Stack>정산금액 {meeting.entryFee * meeting.count}원</Stack>
+            <Stack>
+              정산금액 {(meeting.entryFee * meeting.count).toLocaleString()}원
+            </Stack>
           </Stack>
           <Stack direction='row' spacing={1}>
             <Stack>은 행 명 {meeting.bankName}</Stack>
