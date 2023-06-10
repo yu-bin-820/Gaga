@@ -12,7 +12,7 @@ import { StaticMap } from 'react-kakao-maps-sdk';
 import ChatStaticMap from './ChatStaticMap';
 import useChatMapStore from '@stores/communication/useChatMapStore';
 
-const Chat = ({ data, prevMinute, nextMinute, nextUserNo }) => {
+const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
   const { setField } = useChatMapStore();
   const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -23,6 +23,7 @@ const Chat = ({ data, prevMinute, nextMinute, nextUserNo }) => {
   const minute = DateTime.fromISO(data.created_at).minute;
   const isNotice = data.content_type_no === 101;
   const isMe = myData?.userNo === data.sender_no;
+  const isShowProfile = data.sender_no != prevUserNo;
   const isShowTime = minute !== nextMinute || data.sender_no != nextUserNo;
 
   const messageColor = isMe ? 'black' : 'gray';
@@ -60,7 +61,7 @@ const Chat = ({ data, prevMinute, nextMinute, nextUserNo }) => {
           spacing={1.5}
           sx={{ marginBottom: '10px' }}
         >
-          {!isMe && minute !== prevMinute && (
+          {!isMe && isShowProfile && (
             <Avatar
               src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
                 data?.Sender.profile_img
@@ -70,10 +71,10 @@ const Chat = ({ data, prevMinute, nextMinute, nextUserNo }) => {
             />
           )}
 
-          {!isMe && minute === prevMinute && <Box sx={{ minWidth: '50px' }} />}
+          {!isMe && !isShowProfile && <Box sx={{ minWidth: '50px' }} />}
 
           <Stack>
-            {!isMe && minute !== prevMinute && data.Sender.nick_name}
+            {!isMe && isShowProfile && data.Sender.nick_name}
 
             <Stack direction={'row'} sx={{ maxWidth: '78vw' }}>
               {isMe && (
@@ -187,6 +188,7 @@ Chat.propTypes = {
   data: PropTypes.object,
   prevMinute: PropTypes.number,
   nextMinute: PropTypes.number,
+  prevUserNo: PropTypes.number,
   nextUserNo: PropTypes.number,
 };
 export default Chat;
