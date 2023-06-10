@@ -25,6 +25,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	@Qualifier("userDao")
 	UserDao userDao;
+	
+	@Value("${redirectUrl}")
+    private String redirectUrl;
 	
 	 @Autowired
 	 JavaMailSender emailSender; // MailConfig에서 등록해둔 Bean을 autowired하여 사용하기
@@ -101,7 +105,7 @@ public class UserServiceImpl implements UserService {
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
 			sb.append("&client_id=FzMGbETEgw2xNeSUlIIF"); 
-			sb.append("&redirect_uri=http://192.168.0.159:8080/rest/user/naverLogin"); 
+			sb.append("&redirect_uri="+redirectUrl+"/rest/user/naverLogin"); 
 			sb.append("&code=" + authorize_code);
 			sb.append("&client_secret=voluTpxuLM");
 //			sb.append("&state=test"); 
@@ -214,7 +218,7 @@ public class UserServiceImpl implements UserService {
 			sb.append("grant_type=authorization_code");
             
 			sb.append("&client_id=3d89a9ef169b204afc54cc08fa20632d"); 
-			sb.append("&redirect_uri=http://192.168.0.159:8080/rest/user/kakaoLogin");
+			sb.append("&redirect_uri="+redirectUrl+"/rest/user/kakaoLogin");
 
 			sb.append("&code=" + authorize_code);
 			bw.write(sb.toString());
@@ -337,16 +341,16 @@ public class UserServiceImpl implements UserService {
 
         String msgg = "";
         // msgg += "<img src=../resources/static/image/emailheader.jpg />"; // header image
-        msgg += "<h1>안녕하세요</h1>";
-        msgg += "<h1>Gaga 서비스 입니다.</h1>";
+        msgg += "<h1 align='center'>안녕하세요</h1>";
+        msgg += "<h1 align='center'>Gaga 서비스 입니다.</h1>";
         msgg += "<br>";
-        msgg += "<p>아래 인증코드를 이메일 인증에 입력해주세요</p>";
+        msgg += "<p align='center'>아래 인증코드를 이메일 인증에 입력해주세요</p>";
         msgg += "<br>";
         msgg += "<br>";
-        msgg += "<div align='left' style='border:1px solid black'>";
+        msgg += "<div align='center' style='border:1px solid black'>";
         msgg += "<h3 style='color:blue'>  이메일 인증코드 입니다</h3>";
         msgg += "<div style='font-size:130%'>";
-        msgg += "<strong>     " +"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+ emailVerificationCode + "</strong></div><br/>" ; // 메일에 인증번호 ePw 넣기
+        msgg += "<strong>     " + emailVerificationCode + "</strong></div><br/>" ; // 메일에 인증번호 ePw 넣기
         msgg += "</div>";
         // msgg += "<img src=../resources/static/image/emailfooter.jpg />"; // footer image
 

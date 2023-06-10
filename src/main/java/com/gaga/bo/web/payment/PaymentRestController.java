@@ -133,7 +133,7 @@ public class PaymentRestController {
 		
 		System.out.println("정산 상태 변경 Ctrl");
 		
-		paymentService.updateAdjustmentState(meeting);
+		paymentService.updateAdjustmentState(meeting.getMeetingNo());
 	}
 	
 	@PostMapping("refund")

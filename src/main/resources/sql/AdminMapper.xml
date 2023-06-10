@@ -132,7 +132,7 @@
 	<select id="getNoticePostListByCategoryNo"
 		resultMap="noticePostResult">
 		SELECT * FROM notice_posts
-		WHERE notice_post_no &lt;=
+		WHERE notice_post_no &lt;
 		#{lastPostId} AND notice_post_Category_no =
 		#{noticePostCategoryNo}
 		ORDER BY notice_post_no DESC
@@ -164,7 +164,8 @@
 		notice_post_title = #{noticePostTitle},
 		notice_post_text = #{noticePostText},
 		notice_post_img =
-		#{noticePostImg}
+		#{notic
+		ePostImg}
 		WHERE notice_post_no = #{noticePostNo}
 	</update>
 
@@ -243,7 +244,7 @@
 		user_no &lt;=
 		#{lastUserNo}
 		ORDER BY user_no DESC
-		LIMIT 20
+		LIMIT 12
 	</select>
 
 

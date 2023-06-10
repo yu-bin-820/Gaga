@@ -39,7 +39,7 @@ public interface PaymentDao {
 	public List<Meeting> getAdjustmentList(int userNo) throws Exception;
 
 	//UPDATE 정산상태 변경 1:정산대기 2:정산성공 3:정산실패
-	public void updateAdjustmentState(Meeting meeting) throws Exception;
+	public void updateAdjustmentState(int meetingNo) throws Exception;
 	
 	//멤버 수 출력
 	//SELECT 

@@ -89,9 +89,11 @@
 	<!-- 정산 SQL -->
 	<!-- SQL : SELECT --> <!-- 1 :진행중 2: 성사 -->
 	<select id="getAllAdjustmentList" resultMap="meetingResultMap">
-		SELECT *
+		SELECT meeting_no, entry_fee, meeting_success, meeting_name,meeting_date,
+   			   meeting_start_time, meeting_leader_no, meeting_reg_date, meeting_state,
+			   (SELECT COUNT(*) FROM members WHERE state = 2 AND meeting_no = m.meeting_no) AS count
 		FROM 
-		    meetings
+		    meetings m
 		WHERE 
 		    entry_fee != 0 AND meeting_success = 2 
 		ORDER BY 
@@ -102,10 +104,11 @@
 	
 	<!-- SQL : SELECT -->
 	<select id="getAdjustmentList" parameterType="int" resultMap="meetingResultMap">
-	  SELECT 
-		    *
+	  SELECT meeting_no, entry_fee, meeting_success, meeting_name,meeting_date,
+   			 meeting_start_time, meeting_leader_no, meeting_reg_date, meeting_state,
+			 (SELECT COUNT(*) FROM members WHERE state = 2 AND meeting_no = m.meeting_no) AS count
 		FROM 
-		    meetings
+		    meetings m
 		WHERE 
 		    entry_fee != 0 AND meeting_success = 2 AND meeting_leader_no = #{userNo}		    
 		ORDER BY 
@@ -115,7 +118,7 @@
 	
 	
 	<!-- SQL : UPDATE -->
-	<update id="updateAdjustmentState" parameterType="meeting">
+	<update id="updateAdjustmentState" parameterType="int">
 	  UPDATE meetings
 	  <set>
 		  adjustment_time = NOW(),
