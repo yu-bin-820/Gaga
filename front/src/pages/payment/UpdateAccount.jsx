@@ -37,7 +37,8 @@ const UpdateAccount = () => {
           ...myData,
           bankName,
           accountNo,
-        }
+        },
+        { withCredentials: true }
       );
 
       console.log(response.data);
@@ -61,7 +62,7 @@ const UpdateAccount = () => {
 
   return (
     <>
-      <CommonTop />
+      <CommonTop pageName='계좌 관리' prevPath='/community/profile/mine' />
       <Stack sx={{ margin: '10px' }}>
         <Stack sx={{ marginTop: '64px' }}>
           등록된 계좌 정보

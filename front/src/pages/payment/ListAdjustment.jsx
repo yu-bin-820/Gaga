@@ -66,7 +66,10 @@ const ListAdjustment = () => {
   return (
     <div style={{ backgroundColor: '#ededed' }}>
       <Stack sx={{ marginTop: '64px' }}>
-        <CommonTop />
+        <CommonTop
+          pageName='정산 내역 조회'
+          prevPath='/community/profile/mine'
+        />
         {isAdmin ? (
           <div>
             관리자 페이지입니다.

@@ -69,7 +69,7 @@ const ListFilterClub = () => {
 
   return (
     <div style={{ backgroundColor: '#ededed' }}>
-      <Box sx={{ marginTop: '10px' }}>
+      <Box sx={{ marginTop: '10px', marginBottom: '64px' }}>
         <Box>
           <Box>
             {clubList?.map((club, i) => (
