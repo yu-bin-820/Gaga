@@ -3,15 +3,16 @@ import axios from 'axios';
 import { Button, TextField } from '@mui/material';
 import fetcher from '@utils/fetcher';
 import CommonTop from '@layouts/common/CommonTop';
-import { Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import useSWR from 'swr';
+import { useNavigate } from 'react-router';
 
 function DeleteUser() {
   const [password, setPassword] = useState('');
   const [outReason, setOutReason] = useState('');
   const [isPasswordConfirmed, setIsPasswordConfirmed] = useState(false);
   const [isConfirmationDisplayed, setIsConfirmationDisplayed] = useState(false);
-
+  const navigate = useNavigate();
   const { data: myData, error } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
@@ -77,7 +78,7 @@ function DeleteUser() {
         }
 
         // 페이지 이동
-        window.location.href = '/'; // 이 경로를 메인 페이지 경로로 변경해주세요.
+        navigate("/")// 이 경로를 메인 페이지 경로로 변경해주세요.
 
         alert('회원 탈퇴가 완료되었습니다.');
       } catch (error) {
@@ -94,9 +95,17 @@ function DeleteUser() {
   return (
     <div>
       <CommonTop />
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        width="80%"
+        margin="0 auto"
+      >
       <Typography
         variant="body1"
-        style={{ marginTop: '63px', paddingLeft: '12px', paddingRight: '12px' }}
+        style={{ marginTop: '75px', paddingLeft: '0px', paddingRight: '0px' }}
+        textAlign={'left'}
       >
         Gaga 서비스를 이용해 주셔서 감사드립니다.
         <br />
@@ -116,36 +125,41 @@ function DeleteUser() {
         <br />
         <br />
       </Typography>
-      <TextField
-        label="비밀번호"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <br />
-      <Button variant="contained" onClick={confirmPassword}>
-        확인
-      </Button>
-      <TextField
-        label="탈퇴 사유"
-        value={outReason}
-        onChange={handleOutReasonChange}
-        multiline
-        rows={4}
-        style={{ marginTop: '16px', width: '99%' }}
-      />
 
-      {isPasswordConfirmed && (
-        <>
-          <Typography>비밀번호가 확인되었습니다.</Typography>
 
-          <Button variant="contained" onClick={deleteUser}>
-            회원 탈퇴
-          </Button>
-        </>
-      )}
+        <TextField
+          label="비밀번호"
+          type="password"
+          fullWidth
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <br />
+        <Button variant="contained" onClick={confirmPassword}>
+          확인
+        </Button>
+        <TextField
+          label="탈퇴 사유"
+          value={outReason}
+          onChange={handleOutReasonChange}
+          multiline
+          rows={5}
+          style={{ marginTop: '16px', width: '100%' }}
+        />
+
+        {isPasswordConfirmed && (
+          <>
+            <Typography>비밀번호가 확인되었습니다.</Typography>
+
+            <Button variant="contained" onClick={deleteUser}>
+              회원 탈퇴
+            </Button>
+          </>
+        )}
+      </Box>
     </div>
   );
 }
+
 
 export default DeleteUser;

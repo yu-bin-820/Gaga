@@ -13,10 +13,12 @@ import TuneIcon from '@mui/icons-material/Tune';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { Search } from '@mui/icons-material';
 import { Stack } from '@mui/system';
-import { Badge } from '@mui/material';
+import { Badge, Divider, Drawer, SwipeableDrawer } from '@mui/material';
 import ListAlarmDialog from '@components/communication/ListAlarmDialog';
 import useCommonStore from '@stores/common/useCommonStore';
-import DefaultFilterDrawer from '@components/common/DefaultFilterDrawer';
+
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import DefaultFilterStepper from '@components/common/DefaultFilterStepper';
 
 const MainTop = () => {
   const [anchorAlarmEl, setAnchorAlarmEl] = useState();
@@ -36,6 +38,12 @@ const MainTop = () => {
 
   const isAuthenticated = myData?.userNo && myData?.profileImg;
   // console.log(unreadsData);
+  const toggleDefaultFilterDrawer = useCallback(
+    (state) => () => {
+      setDefaultFilterDrawerOpen(state);
+    },
+    []
+  );
 
   const onClickAlram = useCallback(
     (e) => {
@@ -71,6 +79,14 @@ const MainTop = () => {
     },
     [navigate, groupType]
   );
+
+  const onClickCloseDefaultFilterDrawer = useCallback(() => {
+    setDefaultFilterDrawerOpen(false);
+  }, [setDefaultFilterDrawerOpen]);
+
+  const onClickDefaultFilter = useCallback(() => {
+    setDefaultFilterDrawerOpen(true);
+  }, [setDefaultFilterDrawerOpen]);
 
   return (
     <>
@@ -112,7 +128,7 @@ const MainTop = () => {
                   </Badge>
                 </IconButton>
 
-                <IconButton>
+                <IconButton onClick={onClickDefaultFilter}>
                   <TuneIcon />
                 </IconButton>
 
@@ -124,17 +140,52 @@ const MainTop = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      {/*---------------------------------- 모달 -------------------------------------*/}
+      {/*-----------------toggleDefaultFilterDrawer----------------- 모달 -------------------------------------*/}
       <ListAlarmDialog
         anchorEl={anchorAlarmEl}
         setAnchorEl={setAnchorAlarmEl}
         alarmData={alarmData}
       />
 
-      {/* <DefaultFilterDrawer
-        defaultFilterDrawerOpen={defaultFilterDrawerOpen}
-        setDefaultFilterDrawerOpen={setDefaultFilterDrawerOpen}
-      /> */}
+      <Drawer
+        anchor="right"
+        open={defaultFilterDrawerOpen}
+        onClose={toggleDefaultFilterDrawer(false)}
+      >
+        <Box sx={{ minWidth: '100vw' }}>
+          <Stack>
+            <Stack
+              direction={'row'}
+              alignItems={'center'}
+              sx={{ height: '55px' }}
+            >
+              <IconButton onClick={onClickCloseDefaultFilterDrawer}>
+                <ArrowBackIosNewIcon />
+              </IconButton>
+              <Box
+                sx={{
+                  minWidth: 'calc(100vw - 90px)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                  }}
+                >
+                  필터 설정
+                </Typography>
+              </Box>
+            </Stack>
+            <Divider />
+            <DefaultFilterStepper
+              setDefaultFilterDrawerOpen={setDefaultFilterDrawerOpen}
+            />
+          </Stack>
+        </Box>
+      </Drawer>
     </>
   );
 };
