@@ -1,4 +1,3 @@
-import AddClub1 from '@components/club/AddClub1';
 import AddClubName from '@components/club/AddClubName';
 import AddClubRegion from '@components/club/AddClubRegion';
 import AddClubImg from '@components/club/AddClubImg';

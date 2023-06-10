@@ -9,25 +9,44 @@ import {
 import { Box, Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ListMyClub from '@components/club/ListMyClub';
 import ListMyMeeting from '@components/meeting/ListMyMeeting';
 import AddClubByMeeting from './AddClubByMeeting';
 import AddClubByClub from './AddClubByClub';
+import useClubFormStore from '@hooks/club/useClubFormStore';
 
 const SelectClubType = () => {
   const [expanded, setExpanded] = useState(null);
+  const { parentMeeingNo, parentClubNo, setField, onChangeField } =
+    useClubFormStore();
   const [clubList, setClubList] = useState();
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : null);
+    setField('parentMeetingNo', 0);
+    setField('parentClubNo', 0);
   };
 
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
+  );
+
+  const handleParentMeetingOnClick = useCallback(
+    (meetingNo) => {
+      setField('parentMeetingNo', meetingNo);
+    },
+    [setField]
+  );
+
+  const handleParentClubgOnClick = useCallback(
+    (clubNo) => {
+      setField('parentClubNo', clubNo);
+    },
+    [setField]
   );
 
   return (
@@ -58,9 +77,19 @@ const SelectClubType = () => {
           <AccordionDetails></AccordionDetails>
         </AccordionSummary>
       </Accordion>
-      <AddClubByMeeting expanded={expanded} handleChange={handleChange} />
+      <AddClubByMeeting
+        expanded={expanded}
+        userNo={myData.userNo}
+        handleChange={handleChange}
+        onParentMeetingOnClick={handleParentMeetingOnClick}
+      />
 
-      <AddClubByClub expanded={expanded} handleChange={handleChange} />
+      <AddClubByClub
+        expanded={expanded}
+        userNo={myData.userNo}
+        handleChange={handleChange}
+        onParentClubOnClick={handleParentClubgOnClick}
+      />
       <Box>
         {clubList?.map((club, i) => (
           <Box key={i}>

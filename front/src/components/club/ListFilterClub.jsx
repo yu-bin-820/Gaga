@@ -11,7 +11,7 @@ import Payment from '@pages/payment/Payment';
 import Account from '@components/payment/Account';
 import useCommonStore from '@stores/common/useCommonStore';
 
-const ListClub = () => {
+const ListFilterClub = () => {
   const [clubList, setClubList] = useState();
   const navigate = useNavigate();
   const { setField } = useCommonStore();
@@ -68,38 +68,52 @@ const ListClub = () => {
   );
 
   return (
-    <>
+    <div style={{ backgroundColor: '#ededed' }}>
       <Box sx={{ marginTop: '10px' }}>
         <Box>
           <Box>
             {clubList?.map((club, i) => (
               <Box key={i}>
-                <ClubThumbnail club={club} />
-                <Stack direction={'row'} justifyContent='center' spacing={1.5}>
-                  <Button
-                    id={club.clubNo}
-                    variant='outlined'
-                    sx={{ width: '180px' }}
-                    onClick={onClickAddMember}
+                <Box
+                  sx={{
+                    borderRadius: 2,
+                    p: 2,
+                    minWidth: 295,
+                    padding: 1,
+                    backgroundColor: '#ffffff',
+                  }}
+                >
+                  <ClubThumbnail club={club} />
+                  <Stack
+                    direction={'row'}
+                    justifyContent='center'
+                    spacing={1.5}
                   >
-                    참여 신청
-                  </Button>
-                  <Button
-                    id={club.clubLeaderNo}
-                    variant='outlined'
-                    sx={{ width: '180px' }}
-                    onClick={onClickDirectChat}
-                  >
-                    리더에게 문의
-                  </Button>
-                </Stack>
+                    <Button
+                      id={club.clubNo}
+                      variant='outlined'
+                      sx={{ width: '180px' }}
+                      onClick={onClickAddMember}
+                    >
+                      참여 신청
+                    </Button>
+                    <Button
+                      id={club.clubLeaderNo}
+                      variant='outlined'
+                      sx={{ width: '180px' }}
+                      onClick={onClickDirectChat}
+                    >
+                      리더에게 문의
+                    </Button>
+                  </Stack>
+                </Box>
               </Box>
             ))}
           </Box>
         </Box>
       </Box>
-    </>
+    </div>
   );
 };
 
-export default ListClub;
+export default ListFilterClub;
