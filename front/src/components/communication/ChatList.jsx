@@ -112,7 +112,7 @@ const ChatList = ({ chatData, setSize }) => {
                     ? DateTime.fromISO(messages[j + 1].created_at).minute
                     : null
                 }
-                prevUserNo={j !== 0 ? messages(j - 1).sender_no : null}
+                prevUserNo={j !== 0 ? messages[j - 1].sender_no : null}
                 nextUserNo={
                   j !== messages?.length - 1 ? messages[j + 1].sender_no : null
                 }
