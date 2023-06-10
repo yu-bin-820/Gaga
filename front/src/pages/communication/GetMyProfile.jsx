@@ -50,10 +50,12 @@ const GetMyProfile = () => {
   const [isUpdateIntro, setIsUpdateIntro] = useState(false);
   const [isUpdateNickName, setIsUpdateNickName] = useState(false);
   const [updateMainTitleOpen, setUpdateMainTitleOpen] = useState(false);
+
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+
   const { mutate: mutateTitleList } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/community/title/list/userno/${
       myData?.userNo
