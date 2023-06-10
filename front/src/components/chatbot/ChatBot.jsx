@@ -285,14 +285,14 @@ const handleSendMessage = async (text) => {
           <button
               className="toggleChatBot"
               onClick={toggleChatBot}
-              style={{ backgroundColor: '#036635' }}
+              style={{ backgroundColor: '#036635'  }}
           >
               {!isVisible ? (
-                  <SmartToyRoundedIcon />
+                  <SmartToyRoundedIcon style={{ fontSize: '35px' }} />
               ) : isGptMode ? (
-                  <PsychologyRoundedIcon />
+                  <PsychologyRoundedIcon style={{ fontSize: '35px' }}/>
               ) : (
-                  <CloseRoundedIcon />
+                  <CloseRoundedIcon style={{ fontSize: '35px' }}/>
               )}
           </button>
 
