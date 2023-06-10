@@ -214,7 +214,7 @@ const handleToggleGpt = () => {
    /*  width: '50%',
     height: '50%',
     기타 원하는 스타일 속성들 */
-  };
+  }; 
 
 const handleSendMessage = async (text) => {
   document.querySelector('.toggleChatBot').addEventListener('click', async function () {
