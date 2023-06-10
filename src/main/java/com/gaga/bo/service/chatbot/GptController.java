@@ -33,7 +33,7 @@ public class GptController {
         System.out.println("이러기싫어서 나눈 gpt로 왔다.");
         System.out.println(prompt + "프롬프트프롬프트");
         
-//        String openAIApiKey = "Bearer " + env.getProperty("GPT_KEY");
+        String openAIApiKey = "Bearer " + env.getProperty("GPT_KEY");
         RestTemplate restTemplate = new RestTemplate();
         System.out.println("어디에서");
         HttpHeaders headers = new HttpHeaders();
