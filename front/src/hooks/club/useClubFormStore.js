@@ -8,13 +8,14 @@ const clubField = {
   selectedSido: '',
   selectedSigoon: '',
   clubRegion: '',
-  filterGender: '',
-  filterMinAge: '',
-  filterMaxAge: '',
+  filterGender: null,
+  filterMinAge: 14,
+  filterMaxAge: 50,
   filterTag: '',
   mainCategoryNo: '',
   file: null,
   image: null,
+  parentClubNo: 0,
 };
 
 const useClubFormStore = create((set) => ({
