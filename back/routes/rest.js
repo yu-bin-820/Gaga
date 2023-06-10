@@ -295,6 +295,8 @@ router.get(
             },
           ],
           order: [['created_at', 'ASC']],
+          limit: parseInt(req.query.pageSize, 10),
+          offset: req.query.pageSize * (req.query.page - 1),
         });
         // );
 
@@ -329,7 +331,7 @@ router.get(
         // 읽은 인원 수를 카운트하여 meetingMessages에 연결
         const clubMessagesWithReadCount = await Promise.all(
           clubMessages.map(async (message) => {
-            const readCount =
+            let readCount =
               countClubMembers +
               1 -
               (await Reader.count({
@@ -387,7 +389,9 @@ router.get(
               as: 'Meeting',
             },
           ],
-          order: [['created_at', 'ASC']],
+          order: [['created_at', 'DESC']],
+          limit: parseInt(req.query.pageSize, 10),
+          offset: req.query.pageSize * (req.query.page - 1),
         });
         // );
 
@@ -856,6 +860,9 @@ router.get(
               attributes: ['nick_name', 'user_no', 'profile_img'],
             },
           ],
+          order: [['created_at', 'ASC']],
+          limit: parseInt(req.query.pageSize, 10),
+          offset: req.query.pageSize * (req.query.page - 1),
         })
       );
     } catch (error) {

@@ -62,7 +62,7 @@ export default function ListChatRoom() {
     (e) => {
       const selectedData = JSON.parse(e.currentTarget.dataset.value);
       console.log(selectedData.chatRoomEntryNo);
-
+      setField('shouldScroll', true);
       setField('chatRoomEntryNo', selectedData.chatRoomEntryNo);
       setField('chatType', selectedData.chatType);
       setField('chatRoomLeader', selectedData.chatRoomLeader);
@@ -74,6 +74,7 @@ export default function ListChatRoom() {
 
   const onClickDirectChat = useCallback(
     (e) => {
+      setField('shouldScroll', true);
       setField('chatRoomEntryNo', e.currentTarget.dataset.value);
       navigate('/chat/direct/message/list');
     },

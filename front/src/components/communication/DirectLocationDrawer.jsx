@@ -16,7 +16,7 @@ import DirectChatMap from './DirectChatMap';
 const DirectLocationDrawer = ({
   toggleLocationDrawer,
   postPath,
-
+  mutateDirectMessages,
   senderNo,
   receiverNo,
 }) => {
@@ -73,6 +73,7 @@ const DirectLocationDrawer = ({
               postPath={postPath}
               senderNo={senderNo}
               receiverNo={receiverNo}
+              mutateDirectMessages={mutateDirectMessages}
             />
           </Box>
         </Stack>
@@ -87,6 +88,7 @@ DirectLocationDrawer.propTypes = {
   postPath: PropTypes.string,
   senderNo: PropTypes.number,
   receiverNo: PropTypes.number,
+  mutateDirectMessages: PropTypes.func,
 };
 
 export default DirectLocationDrawer;
