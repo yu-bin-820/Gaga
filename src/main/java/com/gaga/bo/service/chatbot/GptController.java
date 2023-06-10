@@ -18,8 +18,6 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping("/rest/*")
 public class GptController {
-    private String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
-    private String OPENAI_API_KEY = "Bearer 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";
     
     @Autowired
     private RestTemplate restTemplate;
@@ -28,11 +26,16 @@ public class GptController {
     public String generateResponse(@RequestBody String prompt) throws ParseException {
         System.out.println("이러기싫어서 나눈 gpt로 왔다.");
         System.out.println(prompt + "프롬프트프롬프트");
-
+        
+        String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
+        String OPENAI_API_KEY = "Bearer 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";
+        
+        
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", OPENAI_API_KEY);
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpHeaders headers = new HttpHeaders();        
+        
+        headers.add("Authorization", OPENAI_API_KEY);
+        headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
 
         JSONObject body = new JSONObject();
         body.put("model", "gpt-3.5-turbo");
