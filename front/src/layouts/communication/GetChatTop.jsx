@@ -54,7 +54,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
   );
   console.log(memberData);
   return (
-    <Box>
+    <Box sx={{ overflow: 'hidden' }}>
       <AppBar
         position="fixed"
         color="secondary"

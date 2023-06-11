@@ -34,6 +34,7 @@ import axios from 'axios';
 import useInputOrigin from '@hooks/common/useInputOrigin';
 import LocationDrawer from './LocationDrawer';
 import useChatMapStore from '@stores/communication/useChatMapStore';
+import useCommunityStore from '@stores/communication/useCommunityStore';
 
 const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
   const [chat, onChangeChat, setChat] = useInputOrigin('');
@@ -75,7 +76,9 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
 
   const onSubmitForm = useCallback(
     (e) => {
+      setField('shouldScroll', true);
       e.preventDefault();
+
       if (chat?.trim()) {
         axios
           .post(
@@ -97,7 +100,7 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
           });
       }
     },
-    [chat, setChat, mutateGroupMessages, senderNo, groupNo, postPath]
+    [chat, setChat, mutateGroupMessages, senderNo, groupNo, postPath, setField]
   );
 
   // const onKeydownChat = useCallback(
@@ -133,6 +136,7 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
   }, [setField]);
 
   const submitUploadChatImgDialog = useCallback(() => {
+    setField('shouldScroll', true);
     const formData = new FormData();
     formData.append('file', selectedFile);
     formData.append('senderNo', senderNo);
@@ -147,6 +151,7 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
         { withCredentials: true }
       )
       .then(() => {
+        mutateGroupMessages();
         setUploadChatImgDialogOpen(false);
         setAnchorEl(null);
       })
@@ -157,10 +162,18 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
         setUploadChatImgDialogOpen(false);
         setAnchorEl(null);
       });
-  }, [selectedFile, setUploadChatImgDialogOpen, groupType, groupNo, senderNo]);
+  }, [
+    selectedFile,
+    setUploadChatImgDialogOpen,
+    groupType,
+    groupNo,
+    senderNo,
+    mutateGroupMessages,
+    setField,
+  ]);
 
   return (
-    <Box>
+    <Box sx={{ overflow: 'hidden' }}>
       <Stack
         spacing={0}
         direction="row"
@@ -305,6 +318,7 @@ const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
         postPath={postPath}
         senderNo={senderNo}
         groupNo={groupNo}
+        mutateGroupMessages={mutateGroupMessages}
       />
     </Box>
   );
