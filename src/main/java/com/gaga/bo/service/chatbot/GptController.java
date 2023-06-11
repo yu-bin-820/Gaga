@@ -1,36 +1,50 @@
 package com.gaga.bo.service.chatbot;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
+@RequestMapping("/rest/*")
 public class GptController {
-    private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
-    private static final String OPENAI_API_KEY = "Bearer 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";
+	
+	@Autowired
+    private Environment env;
+	
+	@Value("${openai.apiUrl}")
+    private String openAIApiUrl;	
 
-    @PostMapping("/rest/gpt")
-    public String generateResponse(@RequestBody String prompt) throws ParseException {
+    @PostMapping("gpt")
+    public String generateResponse(@org.springframework.web.bind.annotation.RequestBody String prompt) throws ParseException {
         System.out.println("이러기싫어서 나눈 gpt로 왔다.");
         System.out.println(prompt + "프롬프트프롬프트");
-
+        
+        String openAIApiKeyBearer = "Bearer " + "sk-gLHa5Dh7TG05fqc7QNOd";
+        String openAIApiK = "T3BlbkFJ04HSniveZQOu3rFgnDHv";        
+        String openAIApiKey = openAIApiKeyBearer + openAIApiK;
+        
         RestTemplate restTemplate = new RestTemplate();
+        System.out.println("어디에서");
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", OPENAI_API_KEY);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
+        System.out.println("에러가"+headers);
+        headers.set("Authorization", openAIApiKey);
+        System.out.println("뜨는거지?"+headers);
+        headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
+        System.out.println("좀 알려줘라?"+headers);
         JSONObject body = new JSONObject();
         body.put("model", "gpt-3.5-turbo");
-
+        System.out.println("좀 알려줘라? 좀?"+headers+body);
         JSONArray messages = new JSONArray();
         JSONObject messageContent = new JSONObject();
         messageContent.put("role", "user");
@@ -40,7 +54,7 @@ public class GptController {
         body.put("messages", messages);
 
         HttpEntity<String> entity = new HttpEntity<>(body.toString(), headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_API_URL, entity, String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity(openAIApiUrl, entity, String.class);
 
         // OpenAI의 응답을 파싱하여 GPT-3의 응답을 추출합니다.
         System.out.println("응답은영어로response"+response);
