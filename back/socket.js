@@ -1,6 +1,6 @@
 require('dotenv').config();
 const SocketIO = require('socket.io');
-const { createClient } = require('redis');
+const { createClient } = require('@redis/client');
 const { createAdapter } = require('@socket.io/redis-adapter');
 const { REACT_HOST, REACT_PORT, SPRING_HOST, SPRING_PORT } = process.env;
 const onlineMap = {};
