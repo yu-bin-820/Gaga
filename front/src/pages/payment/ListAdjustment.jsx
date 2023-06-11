@@ -1,8 +1,6 @@
 import AdjustmentThumnail from '@components/payment/AdjustmentThumnail';
 import ListAdminAdjustmnet from '@components/payment/ListAdminAdjustmnet';
-import UnckeckedAdjustmentThumnail from '@components/payment/UnckeckedAdjustmentThumnail';
 import CommonTop from '@layouts/common/CommonTop';
-import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
