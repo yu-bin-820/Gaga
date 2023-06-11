@@ -105,10 +105,10 @@ public class PaymentServiceImpl implements PaymentService {
 
 
 	@Override
-	public List<Meeting> getAdjustmentIngList() throws Exception {
+	public List<Meeting> getAdjustmentStateList(int adjustmentState) throws Exception {
 		System.out.println("정산 상태별 목록 조회");
 		
-		return paymentDao.getAdjustmentIngList();
+		return paymentDao.getAdjustmentStateList(adjustmentState);
 	}
 
 	@Override

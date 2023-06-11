@@ -29,8 +29,11 @@ public interface ClubDao {
 	//SELECT LIST 필터적용 클럽 목록 조회
 	public List<Club> getFilterClubList(Filter filter) throws Exception;
 	
-	//SELECT LIST 내가 참여한 클럽 목록 조회
+	//SELECT LIST 내가 참여/신청/생성한 클럽 목록 조회
 	public List<Club> getMyClubList(int userNo) throws Exception;
+	
+	//SELECT LIST 내가 참여/생성한 클럽 목록 조회
+	public List<Club> getMyIngClubList(int userNo) throws Exception;
 	
 	//SELECT LIST 비회원, 미인증회원 메인화면 클럽 목록
 	public List<Club> getMainClubList(int mainCategoryNo) throws Exception;

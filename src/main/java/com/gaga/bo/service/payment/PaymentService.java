@@ -32,7 +32,7 @@ public interface PaymentService {
 	public List<Meeting> getAdjustmentList(int userNo) throws Exception;
 	
 	//정산 상태별 목록 조회 state 1 :정산대기
-	public List<Meeting> getAdjustmentIngList() throws Exception;
+	public List<Meeting> getAdjustmentStateList(int adjustmentState) throws Exception;
 
 	//정산상태 변경  state 정산대기1->정산성공2
 	public void updateAdjustmentState(int meetingNo) throws Exception;

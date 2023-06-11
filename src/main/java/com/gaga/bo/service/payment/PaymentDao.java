@@ -33,7 +33,7 @@ public interface PaymentDao {
 	public List<Meeting> getAllAdjustmentList() throws Exception;
 	
 	//SELECT LIST 정산 대기 상태 목록 조회
-	public List<Meeting> getAdjustmentIngList() throws Exception;
+	public List<Meeting> getAdjustmentStateList(int adjustmentState) throws Exception;
 	
 	//SELECT LIST 회원별 정산 목록 조회
 	public List<Meeting> getAdjustmentList(int userNo) throws Exception;
