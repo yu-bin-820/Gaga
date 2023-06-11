@@ -1,14 +1,14 @@
 require('dotenv').config();
 const SocketIO = require('socket.io');
-const { createClient } = require('@redis/client');
-const { createAdapter } = require('@socket.io/redis-adapter');
+// const { createClient } = require('@redis/client');
+// const { createAdapter } = require('@socket.io/redis-adapter');
 const { REACT_HOST, REACT_PORT, SPRING_HOST, SPRING_PORT } = process.env;
 const onlineMap = {};
 
-const pubClient = createClient({
-  url: 'redis://redisc-gu43o.vpc-cdb.ntruss.com:6379',
-});
-const subClient = pubClient.duplicate();
+// const pubClient = createClient({
+//   url: 'redis://redisc-gu43o.vpc-cdb.ntruss.com:6379',
+// });
+// const subClient = pubClient.duplicate();
 
 module.exports = (server, app) => {
   const io = SocketIO(server, {
@@ -32,7 +32,7 @@ module.exports = (server, app) => {
     },
   });
 
-  io.adapter(createAdapter(pubClient, subClient));
+  // io.adapter(createAdapter(pubClient, subClient));
 
   app.set('io', io);
   app.set('onlineMap', onlineMap);
