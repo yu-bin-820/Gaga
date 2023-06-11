@@ -123,54 +123,58 @@ const AddClubRegionTest = () => {
 
   return (
     <>
-      <Box sx={{ margin: '5px' }}>
-        <h5>지역은 어디인가요? </h5>
+      <Box sx={{ margin: '10px' }}>
+        <h4>지역은 어디인가요?</h4>
         <Stack sx={{ marginLeft: '15px', marginRight: '20px' }}>
-          <PlaceIcon />
-          <TextField
-            fullWidth
-            name='clubRegion'
-            onChange={(e) => onChangeField('clubRegion', e)}
-            placeholder='예시: 서울특별시 강남구'
-            required
-            variant='standard'
-            value={finalValue}
-          />
-          <Box width='45%'>
-            <FormControl fullWidth>
-              <InputLabel id='sido-select-label'>시도 선택</InputLabel>
-              <Select
-                labelId='sido-select-label'
-                value={selectedSido}
-                onChange={handleSidoChange}
-                label='시도 선택'
-              >
-                {sidoOptions.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          <Box direction='row' display='flex'>
+            <PlaceIcon />
+            <TextField
+              fullWidth
+              name='clubRegion'
+              onChange={(e) => onChangeField('clubRegion', e)}
+              placeholder='예시: 서울특별시 강남구'
+              required
+              variant='standard'
+              value={finalValue}
+            />
           </Box>
-          <Box width='45%'>
-            <FormControl fullWidth>
-              <InputLabel id='sigoon-select-label'>
-                시군구 선택(미선택시 시도전체)
-              </InputLabel>
-              <Select
-                labelId='sigoon-select-label'
-                value={selectedSigoon}
-                onChange={handleSigoonChange}
-                label='시군구 선택(미선택시 시도전체)'
-              >
-                {sigoonOptions.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          <Box direction='row' display='flex' marginTop={2} marginBottom={2}>
+            <Box width='45%' marginRight={5}>
+              <FormControl fullWidth>
+                <InputLabel id='sido-select-label'>시도 선택</InputLabel>
+                <Select
+                  labelId='sido-select-label'
+                  value={selectedSido}
+                  onChange={handleSidoChange}
+                  label='시도 선택'
+                >
+                  {sidoOptions.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+            <Box width='45%'>
+              <FormControl fullWidth>
+                <InputLabel id='sigoon-select-label'>
+                  시군구 선택(미선택시 시도전체)
+                </InputLabel>
+                <Select
+                  labelId='sigoon-select-label'
+                  value={selectedSigoon}
+                  onChange={handleSigoonChange}
+                  label='시군구 선택(미선택시 시도전체)'
+                >
+                  {sigoonOptions.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
           </Box>
 
           <Grid item xs={12}>

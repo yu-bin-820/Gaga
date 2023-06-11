@@ -16,14 +16,6 @@ import axios from 'axios';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 
-const StyledAvatarGroup = styled(AvatarGroup)({
-  '& .MuiAvatar-root': {
-    width: 24,
-    height: 24,
-    fontSize: 12,
-  },
-});
-
 const AdjustmentThumnail = ({ meeting }) => {
   const navigate = useNavigate();
 
@@ -31,8 +23,6 @@ const AdjustmentThumnail = ({ meeting }) => {
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
-
-  const isAdmin = myData?.role === 1;
 
   const onClickMeeting = useCallback((event) => {
     navigate(`/meeting/meetingno/${meeting.meetingNo}`);
@@ -54,7 +44,7 @@ const AdjustmentThumnail = ({ meeting }) => {
     >
       <Stack
         sx={{
-          width: '33%',
+          width: '20%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -89,7 +79,7 @@ const AdjustmentThumnail = ({ meeting }) => {
       </Stack>
       <Stack
         sx={{
-          width: '33%',
+          width: '40%',
           flexGrow: 1,
           display: 'flex',
           justifyContent: 'space-between',
@@ -162,22 +152,7 @@ const AdjustmentThumnail = ({ meeting }) => {
 };
 
 AdjustmentThumnail.propTypes = {
-  meeting: PropTypes.shape({
-    meetingNo: PropTypes.number.isRequired,
-    meetingName: PropTypes.string.isRequired,
-    entryFee: PropTypes.number.isRequired,
-    count: PropTypes.number.isRequired,
-    meetingDate: PropTypes.number.isRequired,
-    meetingStartTime: PropTypes.number.isRequired,
-    meetingEndTime: PropTypes.number.isRequired,
-    meetingSuccess: PropTypes.number.isRequired,
-    meetingLeaderNo: PropTypes.number.isRequired,
-    meetingImg: PropTypes.string.isRequired,
-    adjustmentTime: PropTypes.number.isRequired,
-    adjustmentState: PropTypes.number.isRequired,
-    accountNo: PropTypes.number.isRequired,
-    bankName: PropTypes.string.isRequired,
-  }).isRequired,
+  meeting: PropTypes.object.isRequired,
 };
 
 export default AdjustmentThumnail;

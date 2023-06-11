@@ -1,12 +1,12 @@
-import MeetingMember from "@components/meeting/MeetingMember";
-import CommonTop from "@layouts/common/CommonTop";
-import { Button } from "@mui/material";
-import { Box } from "@mui/system";
-import fetcher from "@utils/fetcher";
-import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
-import useSWR from "swr";
+import ClubMember from '@components/club/ClubMember';
+import CommonTop from '@layouts/common/CommonTop';
+import { Button } from '@mui/material';
+import { Box } from '@mui/system';
+import fetcher from '@utils/fetcher';
+import axios from 'axios';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import useSWR from 'swr';
 
 const ListClubMember = () => {
   const { clubNo } = useParams();
@@ -40,10 +40,7 @@ const ListClubMember = () => {
       console.log(data);
 
       const response = await axios
-        .patch(
-          `${import.meta.env.VITE_SPRING_HOST}/rest/club/member`,
-          data
-        )
+        .patch(`${import.meta.env.VITE_SPRING_HOST}/rest/club/member`, data)
         .then(() => {
           mutateConfirmedMemberList();
           mutatePendingMemberList();
@@ -85,7 +82,7 @@ const ListClubMember = () => {
         <h5>신청 멤버</h5>
         {pendingMemberList?.map((pendingMember, i) => (
           <Box key={i}>
-            <MeetingMember member={pendingMember} />
+            <ClubMember member={pendingMember} />
             <Button id={pendingMember.userNo} onClick={onClickDeleteMember}>
               거절
             </Button>
@@ -97,7 +94,7 @@ const ListClubMember = () => {
         <h5>확정 멤버</h5>
         {confirmedMemberList?.map((confirmedMember, i) => (
           <Box key={i}>
-            <MeetingMember key={i} member={confirmedMember} />
+            <ClubMember key={i} member={confirmedMember} />
             <Button id={confirmedMember.userNo} onClick={onClickDeleteMember}>
               내보내기
             </Button>

@@ -1,4 +1,6 @@
 import AdjustmentThumnail from '@components/payment/AdjustmentThumnail';
+import ListAdminAdjustmnet from '@components/payment/ListAdminAdjustmnet';
+import UnckeckedAdjustmentThumnail from '@components/payment/UnckeckedAdjustmentThumnail';
 import CommonTop from '@layouts/common/CommonTop';
 import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
@@ -71,30 +73,9 @@ const ListAdjustment = () => {
           prevPath='/community/profile/mine'
         />
         {isAdmin ? (
-          <div>
-            관리자 페이지입니다.
-            <Stack>
-              {adjustmentAllList?.map((meeting, i) => (
-                <Stack key={i}>
-                  <h3>유저정보{meeting.meetingLeaderNo}</h3>
-                  <AdjustmentThumnail meeting={meeting} />
-                  <Stack
-                    direction={'row'}
-                    justifyContent='center'
-                    spacing={1.5}
-                  >
-                    <Button
-                      variant='outlined'
-                      sx={{ width: '180px' }}
-                      onClick={() => onClickUpdate(meeting.meetingNo)}
-                    >
-                      정산하기
-                    </Button>
-                  </Stack>
-                </Stack>
-              ))}
-            </Stack>
-          </div>
+          <>
+            <ListAdminAdjustmnet />
+          </>
         ) : (
           <Stack>
             {adjustmentList?.map((meeting, i) => (

@@ -7,7 +7,7 @@ import useCommonStore from '@stores/common/useCommonStore';
 import axios from 'axios';
 import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
-import DeleteMemberDialog from './DeleteMemberDialog';
+import DeleteMemberDialog from './DeleteClubMemberDialog';
 import ClubThumbnail from './ClubThumbnail';
 
 const ListMyPendingClubThumnail = ({ club }) => {

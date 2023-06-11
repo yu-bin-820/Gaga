@@ -7,7 +7,7 @@ import axios from 'axios';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import useCommonStore from '@stores/common/useCommonStore';
-import DeleteMemberDialog from './DeleteMemberDialog';
+import DeleteClubMemberDialog from './DeleteClubMemberDialog';
 import ClubThumbnail from './ClubThumbnail';
 
 const ListMyConfirmClubThumnail = ({ club }) => {
@@ -35,13 +35,9 @@ const ListMyConfirmClubThumnail = ({ club }) => {
   }, []);
 
   return (
-    <div>
+    <>
       <Box
         sx={{
-          borderRadius: 2,
-          p: 2,
-          minWidth: 295,
-          padding: 1,
           backgroundColor: '#ffffff',
         }}
       >
@@ -65,12 +61,12 @@ const ListMyConfirmClubThumnail = ({ club }) => {
           </Stack>
         </Stack>
       </Box>
-      <DeleteMemberDialog
+      <DeleteClubMemberDialog
         open={deleteMemberDialogOpen}
         setOpen={setDeleteMemberDialogOpen}
         club={club}
       />
-    </div>
+    </>
   );
 };
 

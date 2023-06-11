@@ -1,4 +1,3 @@
-import SmallChip from '@components/club/SmallChip';
 import ListMeetingParentClubNo from '@components/meeting/ListMeetingParentClubNo';
 import styled from '@emotion/styled';
 import CommonTop from '@layouts/common/CommonTop';
@@ -12,6 +11,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PeopleIcon from '@mui/icons-material/People';
 import ClubMember from '@components/club/ClubMember';
 import GetClubTop from '@layouts/club/GetClubTop';
+import ClubSmallChip from '@components/club/ClubSmallChip';
 
 const GetClub = () => {
   const { clubNo } = useParams();
@@ -207,7 +207,7 @@ const GetClub = () => {
           </Stack>
           <Stack direction='row' spacing={5}>
             <Box direction='row' spacing={0} alignItems='left'>
-              <SmallChip label={club?.filterTag} />
+              <ClubSmallChip label={club?.filterTag} />
             </Box>
 
             <Stack direction={'row'} spacing={1} alignItems={'center'}>
@@ -218,11 +218,11 @@ const GetClub = () => {
             </Stack>
 
             <Box direction='row' spacing={0} alignItems='left'>
-              <SmallChip
-                label={club?.clubState === 1 ? '모집중' : '모집완료'}
+              <ClubSmallChip
+                label={club?.clubState === 2 ? '모집완료' : '모집중'}
                 sx={{
                   backgroundColor:
-                    club?.clubState === 1 ? '#81BEF7' : '#F78181',
+                    club?.clubState === 2 ? '#F78181' : '#81BEF7',
                 }}
               />
             </Box>
@@ -232,8 +232,11 @@ const GetClub = () => {
             </Stack>
           </Stack>
           <Typography sx={{ fontSize: 16 }}>클럽 소개</Typography>
-
-          <Typography sx={{ fontSize: 13 }}>{club?.clubIntro}</Typography>
+          <Typography sx={{ fontSize: 13 }}>
+            {club?.clubIntro?.split('\n').map((line, i) => (
+              <div key={i}>{line}</div>
+            ))}
+          </Typography>
         </Stack>
         <h5>확정 멤버</h5>
         {confirmedMemberList?.map((confirmedMember, i) => (
@@ -246,14 +249,6 @@ const GetClub = () => {
 
         <h5>클럽 내 생성 모임 목록</h5>
         <ListMeetingParentClubNo />
-
-        {isClubLeader && (
-          <>
-            <Button onClick={onClickUpdate}>수정하기</Button>
-            <Button onClick={onClickDelete}>삭제하기</Button>
-          </>
-        )}
-
         <Button
           variant='contained'
           sx={{ width: '85vw', borderRadius: '50px' }}

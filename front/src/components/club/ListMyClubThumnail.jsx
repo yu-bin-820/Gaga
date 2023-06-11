@@ -35,22 +35,24 @@ const ListMyClubThumnail = ({ club }) => {
           backgroundColor: '#ffffff',
         }}
       >
-        <ClubThumbnail club={club} />
-        <Stack direction={'row'} justifyContent='center' spacing={1.5}>
-          <Button
-            variant='outlined'
-            sx={{ width: '180px' }}
-            onClick={onClickListClubMember}
-          >
-            멤버목록
-          </Button>
-          <Button
-            variant='outlined'
-            sx={{ width: '180px' }}
-            onClick={onClickChatRoom}
-          >
-            채팅방 입장
-          </Button>
+        <Stack spacing={0.8}>
+          <ClubThumbnail club={club} />
+          <Stack direction={'row'} justifyContent='center' spacing={1.5}>
+            <Button
+              variant='outlined'
+              sx={{ width: '180px' }}
+              onClick={onClickListClubMember}
+            >
+              멤버목록
+            </Button>
+            <Button
+              variant='outlined'
+              sx={{ width: '180px' }}
+              onClick={onClickChatRoom}
+            >
+              채팅방 입장
+            </Button>
+          </Stack>
         </Stack>
       </Box>
     </div>
