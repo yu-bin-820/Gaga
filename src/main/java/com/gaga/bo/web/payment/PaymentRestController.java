@@ -100,6 +100,14 @@ public class PaymentRestController {
 		return paymentService.getPaymentList(userNo);
 	}
 	
+	@GetMapping("")
+	public List<Payment> getAllPaymentList() throws Exception{
+		
+		System.out.println("전체 회원 결제 내역 목록 조회 Ctrl");
+		
+		return paymentService.getAllPaymentList();
+	}
+	
 		
 	//정산 	
 	@GetMapping("adjustment")
@@ -111,12 +119,12 @@ public class PaymentRestController {
 		
 	}
 	
-	@GetMapping("adjustment/ing")
-	public List<Meeting> getAdjustmentIngList() throws Exception{
+	@GetMapping("adjustment/state/{adjustmentState}")
+	public List<Meeting> getAdjustmentIngList(@PathVariable("adjustmentState") int adjustmentState) throws Exception{
 		
-		System.out.println("정산 상태별 목록 조회 Ctrl");
+		System.out.println("정산 상태별 목록 조회 Ctrl"); //1: 정산대기 2: 정산완료
 		
-		return paymentService.getAdjustmentIngList();
+		return paymentService.getAdjustmentStateList(adjustmentState);
 		
 	}
 	
@@ -133,7 +141,7 @@ public class PaymentRestController {
 		
 		System.out.println("정산 상태 변경 Ctrl");
 		
-		paymentService.updateAdjustmentState(meeting);
+		paymentService.updateAdjustmentState(meeting.getMeetingNo());
 	}
 	
 	@PostMapping("refund")

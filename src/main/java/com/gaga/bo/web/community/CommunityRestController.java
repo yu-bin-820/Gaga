@@ -1,7 +1,9 @@
 package com.gaga.bo.web.community;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
@@ -152,11 +154,12 @@ public class CommunityRestController {
 		
 		session.setAttribute("user", user);
 		
-	}
+	} 
 	
 	@GetMapping("title/list/userno/{userNo}")
 	public List<Title> getTitleList(
-							 @PathVariable int userNo) throws Exception {
+							 		@PathVariable int userNo
+							 								) throws Exception {
 		
 		List<Title> userEarnedTitleList = communityService.getUserEarnedTitleList(userNo);
 		System.out.println(" :: getTitleList :: " + userEarnedTitleList);
@@ -164,6 +167,28 @@ public class CommunityRestController {
 		return userEarnedTitleList;
 	}
 	
+	@PostMapping("title/userno/{userNo}")
+	public void addUserEarnedTitle(
+								   @PathVariable int userNo
+														   ) throws Exception {
+		
+		Map<String,Integer> userNoMainCategoryNoLeaderState = new HashMap<String,Integer>();
+		
+		userNoMainCategoryNoLeaderState.put("userNo", userNo);
+		
+		System.out.println(" :: addUserEarnedTitle :: " + userNoMainCategoryNoLeaderState);
+		
+		for (int i = 0; i < 2; i++) {
+			userNoMainCategoryNoLeaderState.put("leaderState",i);
+			
+			for (int j = 0; j < 6; j++) {
+				userNoMainCategoryNoLeaderState.put("mainCategoryNo", j);
+				communityService.addUserEarnedTitle(userNoMainCategoryNoLeaderState);
+				
+			}
+		}
+		
+	}
 	//------------------------Report Request Mapping----------------------------------------------------------
 	
 	@GetMapping("report/list/userno/{userNo}/role/{role}")

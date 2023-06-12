@@ -138,9 +138,9 @@ public class PaymentServiceTest {
     	meeting = meetingService.getMeeting(21);
     
     	meeting.setAdjustmentTime(Timestamp.valueOf(LocalDateTime.now()));
-    	meeting.setAdjustmentState(0);
+    	meeting.setAdjustmentState(2);
 
-    	paymentService.updateAdjustmentState(meeting);
+    	paymentService.updateAdjustmentState(21);
     	
     	System.out.println("업데이트 왜 안돼111"+meeting.toString());
     	meeting = meetingService.getMeeting(21);
