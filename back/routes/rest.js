@@ -1,6 +1,10 @@
 const { Op, literal } = require('sequelize');
 const express = require('express');
+
+const AWS = require('aws-sdk');
 const multer = require('multer');
+const multerS3 = require('multer-s3');
+
 const fs = require('fs');
 const path = require('path');
 
@@ -15,22 +19,75 @@ const Member = require('../models/member');
 const router = express.Router();
 
 //-------------------file upload ------------------------------------------
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../uploads'));
-  },
-  filename: function (req, file, cb) {
-    // 현재 시간을 밀리초 단위로 가져와 파일명에 추가
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const storageFileName =
-      file.fieldname + '_' + uniqueSuffix + '_' + file.originalname;
 
-    req.body.content = storageFileName;
-    cb(null, storageFileName);
+// AWS.config.update({
+//   accessKeyId: 'bPEvFJueAhcx3WIpM2ox',
+//   secretAccessKey: 'GHvfAADsVz9Nk9EgZdIVYDfmB2btdKBD3NABbJ2U',
+//   region: 'ap-northeast-2', // 예: 'ap-northeast-2' (서울)
+// });
+
+const s3option = {
+  endpoint: 'https://kr.object.ncloudstorage.com/',
+  region: 'ap-northeast-2',
+  credentials: {
+    accessKeyId: 'bPEvFJueAhcx3WIpM2ox',
+    secretAccessKey: 'GHvfAADsVz9Nk9EgZdIVYDfmB2btdKBD3NABbJ2U',
   },
+};
+
+async function uploadToS3(file) {
+  const s3 = new AWS.S3(s3option);
+
+  const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+  const fileName = uniqueSuffix + '_' + file.originalname;
+
+  const bucket_name = 'gaga-objectstorage';
+  const objectName = 'upload_images/chat/' + fileName;
+
+  await s3
+    .putObject({
+      Bucket: bucket_name,
+      Key: objectName,
+      ACL: 'public-read',
+      Body: file.buffer,
+    })
+    .promise();
+
+  return objectName;
+}
+
+// const s3 = new AWS.S3({
+//   endpoint: 'https://kr.object.ncloudstorage.com/',
+//   region: 'ap-northeast-2',
+//   credentials: {
+//     accessKeyId: 'bPEvFJueAhcx3WIpM2ox',
+//     secretAccessKey: 'GHvfAADsVz9Nk9EgZdIVYDfmB2btdKBD3NABbJ2U',
+//   },
+// });
+
+// const upload = multer({
+//   storage: multerS3({
+//     s3: s3,
+//     bucket: 'gaga-objectstorage',
+//     acl: 'public-read', // 파일 접근 권한 설정
+//     metadata: function (req, file, cb) {
+//       cb(null, { fieldName: file.fieldname });
+//     },
+//     key: function (req, file, cb) {
+//       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+//       const fileName =
+//         file.fieldname + '_' + uniqueSuffix + '_' + file.originalname;
+
+//       const fullPath = 'upload_images/chat/' + fileName;
+//       req.body.content = fullPath;
+//       cb(null, fullPath);
+//     },
+//   }),
+// });
+
+const upload = multer({
+  storage: multer.memoryStorage(),
 });
-
-const upload = multer({ storage: storage });
 
 //-----------------Club,Meeting Totalunread GET-----------------------------------------
 router.get(
@@ -475,26 +532,27 @@ router.post('/chat/club/message', async (req, res, next) => {
       lng: req.body.lng,
     });
     //1: text, 2: imgFile, 3:location
-    const roomMessageWithUser = await RoomMessage.findOne({
-      where: {
-        message_no: roomMessage.message_no,
-      },
-      include: [
-        {
-          model: User,
-          as: 'Sender',
-        },
-        {
-          model: Club,
-          as: 'Club',
-        },
-      ],
-    });
+    // const roomMessageWithUser = await RoomMessage.findOne({
+    //   where: {
+    //     message_no: roomMessage.message_no,
+    //   },
+    //   include: [
+    //     {
+    //       model: User,
+    //       as: 'Sender',
+    //     },
+    //     {
+    //       model: Club,
+    //       as: 'Club',
+    //     },
+    //   ],
+    // });
 
     const io = req.app.get('io');
     io.of(`/ct-club`)
       .to(`/ct-club-${req.body.groupNo}`)
-      .emit('message', roomMessageWithUser);
+      // .emit('message', roomMessageWithUser);
+      .emit('message', 'ok');
 
     let lastMessage = req.body.content;
 
@@ -533,25 +591,26 @@ router.post('/chat/meeting/message', async (req, res, next) => {
       lng: req.body.lng,
     });
 
-    const roomMessageWithUser = await RoomMessage.findOne({
-      where: {
-        message_no: roomMessage.message_no,
-      },
-      include: [
-        {
-          model: User,
-          as: 'Sender',
-        },
-        {
-          model: Meeting,
-          as: 'Meeting',
-        },
-      ],
-    });
+    // const roomMessageWithUser = await RoomMessage.findOne({
+    //   where: {
+    //     message_no: roomMessage.message_no,
+    //   },
+    //   include: [
+    //     {
+    //       model: User,
+    //       as: 'Sender',
+    //     },
+    //     {
+    //       model: Meeting,
+    //       as: 'Meeting',
+    //     },
+    //   ],
+    // });
     const io = req.app.get('io');
     io.of(`/ct-meeting`)
       .to(`/ct-meeting-${req.body.groupNo}`)
-      .emit('message', roomMessageWithUser);
+      // .emit('message', roomMessageWithUser);
+      .emit('message', 'ok');
 
     let lastMessage = req.body.content;
 
@@ -583,35 +642,39 @@ router.post(
   upload.single('file'),
   async (req, res, next) => {
     try {
+      const objectName = await uploadToS3(req.file);
+
       const club = await Club.findOne({
         where: { club_no: req.body.groupNo },
       });
       const roomMessage = await RoomMessage.create({
         sender_no: req.body.senderNo,
         club_no: req.body.groupNo,
-        content: req.body.content,
+        content: objectName,
         content_type_no: 2,
       });
 
-      const roomMessageWithUser = await RoomMessage.findOne({
-        where: {
-          message_no: roomMessage.message_no,
-        },
-        include: [
-          {
-            model: User,
-            as: 'Sender',
-          },
-          {
-            model: Club,
-            as: 'Club',
-          },
-        ],
-      });
+      // const roomMessageWithUser = await RoomMessage.findOne({
+      //   where: {
+      //     message_no: roomMessage.message_no,
+      //   },
+      //   include: [
+      //     {
+      //       model: User,
+      //       as: 'Sender',
+      //     },
+      //     {
+      //       model: Club,
+      //       as: 'Club',
+      //     },
+      //   ],
+      // });
       const io = req.app.get('io');
       io.of(`/ct-club`)
         .to(`/ct-club-${req.body.groupNo}`)
-        .emit('message', roomMessageWithUser);
+        // .emit('message', roomMessageWithUser);
+        .emit('message', 'ok');
+
       const lastMessage = '(사진)';
 
       await club.update({
@@ -631,35 +694,38 @@ router.post(
   upload.single('file'),
   async (req, res, next) => {
     try {
+      const objectName = await uploadToS3(req.file);
+
       const meeting = await Meeting.findOne({
         where: { meeting_no: req.body.groupNo },
       });
       const roomMessage = await RoomMessage.create({
         sender_no: req.body.senderNo,
         meeting_no: req.body.groupNo,
-        content: req.body.content,
+        content: objectName,
         content_type_no: 2,
       });
 
-      const roomMessageWithUser = await RoomMessage.findOne({
-        where: {
-          message_no: roomMessage.message_no,
-        },
-        include: [
-          {
-            model: User,
-            as: 'Sender',
-          },
-          {
-            model: Meeting,
-            as: 'Meeting',
-          },
-        ],
-      });
+      // const roomMessageWithUser = await RoomMessage.findOne({
+      //   where: {
+      //     message_no: roomMessage.message_no,
+      //   },
+      //   include: [
+      //     {
+      //       model: User,
+      //       as: 'Sender',
+      //     },
+      //     {
+      //       model: Meeting,
+      //       as: 'Meeting',
+      //     },
+      //   ],
+      // });
       const io = req.app.get('io');
       io.of(`/ct-meeting`)
         .to(`/ct-meeting-${req.body.groupNo}`)
-        .emit('message', roomMessageWithUser);
+        // .emit('message', roomMessageWithUser);
+        .emit('message', 'ok');
       const lastMessage = '(사진)';
 
       await meeting.update({
@@ -922,15 +988,15 @@ router.post('/chat/direct/message', async (req, res, next) => {
       lat: req.body.lat,
       lng: req.body.lng,
     });
-    const directMessageWithSender = await DirectMessage.findOne({
-      where: { message_no: directMessage.message_no },
-      include: [
-        {
-          model: User,
-          as: 'Sender',
-        },
-      ],
-    });
+    // const directMessageWithSender = await DirectMessage.findOne({
+    //   where: { message_no: directMessage.message_no },
+    //   include: [
+    //     {
+    //       model: User,
+    //       as: 'Sender',
+    //     },
+    //   ],
+    // });
     const io = req.app.get('io');
     const onlineMap = req.app.get('onlineMap');
     //--불안한 부분--
@@ -940,7 +1006,9 @@ router.post('/chat/direct/message', async (req, res, next) => {
     );
     io.of('/ct-direct')
       .to(receiverSocketId)
-      .emit('directMessage', directMessageWithSender);
+      // .emit('directMessage', directMessageWithSender);
+      .emit('directMessage', 'ok');
+
     //--불안한부분끝--
     res.send('direct ok');
   } catch (error) {
@@ -953,22 +1021,24 @@ router.post(
   upload.single('file'),
   async (req, res, next) => {
     try {
+      const objectName = await uploadToS3(req.file);
+
       const directMessage = await DirectMessage.create({
         sender_no: req.body.senderNo,
         receiver_no: req.body.receiverNo,
-        content: req.body.content,
+        content: objectName,
         content_type_no: 2,
       });
 
-      const directMessageWithSender = await DirectMessage.findOne({
-        where: { message_no: directMessage.message_no },
-        include: [
-          {
-            model: User,
-            as: 'Sender',
-          },
-        ],
-      });
+      // const directMessageWithSender = await DirectMessage.findOne({
+      //   where: { message_no: directMessage.message_no },
+      //   include: [
+      //     {
+      //       model: User,
+      //       as: 'Sender',
+      //     },
+      //   ],
+      // });
 
       const io = req.app.get('io');
       const onlineMap = req.app.get('onlineMap');
@@ -978,7 +1048,9 @@ router.post(
       );
       io.of('/ct-direct')
         .to(receiverSocketId)
-        .emit('directMessage', directMessageWithSender);
+        // .emit('directMessage', directMessageWithSender);
+        .emit('directMessage', 'ok');
+
       res.send('direct ok');
     } catch (error) {
       next(error);
@@ -995,15 +1067,15 @@ router.post('/chat/alarm', async (req, res, next) => {
       content: req.body.content,
       path: req.body.path,
     });
-    const directMessageWithSender = await DirectMessage.findOne({
-      where: { message_no: directMessage.message_no },
-      include: [
-        {
-          model: User,
-          as: 'Sender',
-        },
-      ],
-    });
+    // const directMessageWithSender = await DirectMessage.findOne({
+    //   where: { message_no: directMessage.message_no },
+    //   include: [
+    //     {
+    //       model: User,
+    //       as: 'Sender',
+    //     },
+    //   ],
+    // });
     const io = req.app.get('io');
     const onlineMap = req.app.get('onlineMap');
     const receiverSocketId = getKeyByValue(
@@ -1012,7 +1084,9 @@ router.post('/chat/alarm', async (req, res, next) => {
     );
     io.of('/ct-direct')
       .to(receiverSocketId)
-      .emit('directMessage', directMessageWithSender);
+      // .emit('directMessage', directMessageWithSender);
+      .emit('directMessage', 'ok');
+
     res.send('alarm ok');
   } catch (error) {
     next(error);
