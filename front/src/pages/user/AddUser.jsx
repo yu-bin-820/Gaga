@@ -20,6 +20,7 @@ import useUserFormStore from "@hooks/user/useUserFormStore";
 import { useNavigate } from "react-router";
 import AddUserDate from "@components/user/AddUserDate";
 import Modal from "@mui/material/Modal";
+import Alert from "@mui/material/Alert";
 
 const AddUser = () => {
   const {
@@ -79,9 +80,11 @@ const AddUser = () => {
   const navigate = useNavigate();
   const handleSubmit = useCallback(async () => {
     event.preventDefault();
+    let filterMinAge = 14;
+    let filterMaxAge = 100;
     if (!isUserIdValid) {
-      alert("중복된 아이디입니다. 아이디찾기로 이동합니다.");
-      navigate("/user/findid");
+      alert("중복된 아이디입니다. 기존 아이디로 로그인해주세요.");
+      // navigate("/user/findid");
       reset();
       return;
     }
@@ -105,6 +108,9 @@ const AddUser = () => {
           gender: gender,
           nickName: nickName,
           phoneNo: phoneNo,
+          filterMaxAge: filterMaxAge,
+          filterMinAge: filterMinAge,
+          
         },
         {
           headers: {
@@ -156,6 +162,29 @@ const AddUser = () => {
   const [emailAuthCodeSent, setEmailAuthCodeSent] = useState(false);
   const handleEmailAuthRequest = async () => {
     try {
+      // 1. 아이디 중복 검사를 먼저 실행합니다.
+      const duplicateResponse = await axios.post(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/checkDuplicateId`,
+        {
+          userId: userId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      // 2. 이미 사용 중인 아이디인 경우
+      if (duplicateResponse.data.isDuplicate) {
+        alert("이미 Gaga의 회원이세요. 아이디 찾기를 이용해주세요.");
+        setIsUserIdValid(false);
+        return;  // 아이디가 중복되므로 이메일 인증 절차를 종료합니다.
+      } else {
+        setIsUserIdValid(true);
+      }
+  
+      // 3. 중복이 없을 경우 이메일 인증을 진행합니다.
       const response = await axios.post(
         `${import.meta.env.VITE_SPRING_HOST}/rest/user/mailAuth`,
         {
@@ -167,7 +196,7 @@ const AddUser = () => {
           },
         }
       );
-
+  
       // 이메일 인증 코드를 받아옴
       const emailAuthCode = response.data;
       setEmailAuthCode(emailAuthCode);
@@ -198,23 +227,32 @@ const AddUser = () => {
 
   const handlePhoneAuthRequest = async () => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneNo`,
-        {
-          phoneNo: phoneNo,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+      const response = await axios.get(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneno/${phoneNo}`
       );
-
-      // 핸드폰 인증 코드를 받아옴
-      const phoneAuthCode = response.data;
-      setPhoneAuthCode(phoneAuthCode);
-      alert("인증 코드가 핸드폰으로 발송되었습니다.");
-      setPhoneAuthCodeSent(true);
+  
+      if (response.data) {
+        alert("이미 가입된 핸드폰 번호입니다.");
+      } else {
+        // 핸드폰 인증 코드를 발송하는 부분은 이곳으로 옮깁니다.
+        const response = await axios.post(
+          `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneNo`,
+          {
+            phoneNo: phoneNo,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+  
+        // 핸드폰 인증 코드를 받아옴
+        const phoneAuthCode = response.data;
+        setPhoneAuthCode(phoneAuthCode);
+        alert("인증 코드가 핸드폰으로 발송되었습니다.");
+        setPhoneAuthCodeSent(true);
+      }
     } catch (error) {
       console.error(error);
       alert("인증 코드 발송에 실패했습니다. 다시 시도해 주세요.");
@@ -255,31 +293,31 @@ const AddUser = () => {
       e.target.value === password ? "" : "비밀번호가 일치하지 않습니다."
     );
   };
-  const checkDuplicateId = async () => {
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/user/checkDuplicateId`,
-        {
-          userId: userId,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+  // const checkDuplicateId = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       `${import.meta.env.VITE_SPRING_HOST}/rest/user/checkDuplicateId`,
+  //       {
+  //         userId: userId,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
 
-      // 아이디 중복 여부를 확인합니다.
-      if (response.data.isDuplicate) {
-        alert("이미 사용 중인 아이디입니다.");
-        setIsUserIdValid(false);
-      } else {
-        setIsUserIdValid(true);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     // 아이디 중복 여부를 확인합니다.
+  //     if (response.data.isDuplicate) {
+  //       alert("이미 사용 중인 아이디입니다.");
+  //       setIsUserIdValid(false);
+  //     } else {
+  //       setIsUserIdValid(true);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   return (
     <>
@@ -361,7 +399,7 @@ const AddUser = () => {
                 type="email"
                 value={userId}
                 onChange={handleEmailChange}
-                onBlur={checkDuplicateId}
+                // onBlur={checkDuplicateId}
                 error={!!emailError}
                 helperText={emailError}
                 autoComplete="email"

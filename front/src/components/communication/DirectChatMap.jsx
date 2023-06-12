@@ -9,7 +9,12 @@ import useChatMapStore from '@stores/communication/useChatMapStore';
 
 const { kakao } = window;
 
-const DirectChatMap = ({ postPath, senderNo, receiverNo }) => {
+const DirectChatMap = ({
+  postPath,
+  senderNo,
+  receiverNo,
+  mutateDirectMessages,
+}) => {
   const { setField, lat, lng, isPost } = useChatMapStore();
   const [map, setMap] = useState(null);
 
@@ -94,6 +99,8 @@ const DirectChatMap = ({ postPath, senderNo, receiverNo }) => {
           { withCredentials: true }
         )
         .then(() => {
+          mutateDirectMessages();
+          setField('shouldScroll', true);
           setField('locationDrawerOpen', false);
         });
     }
@@ -106,6 +113,7 @@ const DirectChatMap = ({ postPath, senderNo, receiverNo }) => {
     markerLat,
     markerLng,
     isPost,
+    mutateDirectMessages,
   ]);
 
   const onClickMap = useCallback(
@@ -175,6 +183,7 @@ DirectChatMap.propTypes = {
   postPath: PropTypes.string,
   senderNo: PropTypes.number,
   receiverNo: PropTypes.number,
+  mutateDirectMessages: PropTypes.func,
 };
 
 export default DirectChatMap;

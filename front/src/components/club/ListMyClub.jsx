@@ -11,6 +11,7 @@ import ListMyPendingClubThumnail from './ListMyPendingClubThumnail';
 import ListMyClubThumnail from './ListMyClubThumnail';
 import ListClubProfile from './ListClubProfile';
 import ListCreateClub from './ListCreateClub';
+import NoClub from './NoClub';
 
 const ListMyClub = () => {
   const { userNo } = useParams();
@@ -27,7 +28,7 @@ const ListMyClub = () => {
     axios
       .get(
         `${import.meta.env.VITE_SPRING_HOST}/rest/club/list/join/${
-          myData?.userNo
+          userNo ? userNo : myData?.userNo
         }`
       )
       .then((response) => {
@@ -37,21 +38,15 @@ const ListMyClub = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
-
-  const onClickClub = useCallback((event) => {
-    const { id } = event.target;
-    navigate(`/club/no/${id}`);
-  }, []);
-
-  const onClickListClubMember = useCallback((event) => {
-    const { id } = event.target;
-    navigate(`/club/member/listmember/clubno/${id}`);
-  }, []);
+  }, [userNo, myData]);
 
   return (
     <Box sx={{ marginBottom: '170px', backgroundColor: '#ededed' }}>
       <h5 style={{ margin: '1px' }}>참여 확정 클럽</h5>
+
+      {clubList?.filter((club) => club.state === 2).length === 0 && (
+        <NoClub ment={'참여가 확정된 클럽이 없습니다'} />
+      )}
       {clubList?.map((club, i) => {
         if (club.state === 2) {
           return (
@@ -63,17 +58,25 @@ const ListMyClub = () => {
         }
       })}
       <h5 style={{ margin: '1px' }}>참여 신청 클럽</h5>
+
+      {clubList?.filter((club) => club.state === 1).length === 0 && (
+        <NoClub ment={'참여 신청한 클럽이 없습니다'} />
+      )}
       {clubList?.map((club, i) => {
         if (club.state === 1) {
           return (
             <Box key={i} sx={{ margin: '3px' }}>
               {!isMyProfile && <ListClubProfile club={club} />}
-              <ListMyPendingClubThumnail club={club} />
+              {isMyProfile && <ListMyPendingClubThumnail club={club} />}
             </Box>
           );
         }
       })}
-      <h5 style={{ margin: '1px' }}>주최한 모임</h5>
+      <h5 style={{ margin: '1px' }}>주최한 클럽</h5>
+
+      {clubList?.filter((club) => club.state === 0).length === 0 && (
+        <NoClub ment={'주최한 클럽이 없습니다'} />
+      )}
       {clubList?.map((club, i) => {
         if (club.state === 0) {
           return (

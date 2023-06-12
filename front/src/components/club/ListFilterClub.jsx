@@ -11,7 +11,7 @@ import Payment from '@pages/payment/Payment';
 import Account from '@components/payment/Account';
 import useCommonStore from '@stores/common/useCommonStore';
 
-const ListClub = () => {
+const ListFilterClub = () => {
   const [clubList, setClubList] = useState();
   const navigate = useNavigate();
   const { setField } = useCommonStore();
@@ -68,38 +68,35 @@ const ListClub = () => {
   );
 
   return (
-    <>
-      <Box sx={{ marginTop: '10px' }}>
+    <div style={{ backgroundColor: '#ededed' }}>
+      <Box
+        sx={{
+          paddingTop: '1px',
+          paddingBottom: '1px',
+          marginBottom: '75px',
+          bgcolor: '#ededed',
+        }}
+      >
         <Box>
           <Box>
             {clubList?.map((club, i) => (
               <Box key={i}>
-                <ClubThumbnail club={club} />
-                <Stack direction={'row'} justifyContent='center' spacing={1.5}>
-                  <Button
-                    id={club.clubNo}
-                    variant='outlined'
-                    sx={{ width: '180px' }}
-                    onClick={onClickAddMember}
-                  >
-                    참여 신청
-                  </Button>
-                  <Button
-                    id={club.clubLeaderNo}
-                    variant='outlined'
-                    sx={{ width: '180px' }}
-                    onClick={onClickDirectChat}
-                  >
-                    리더에게 문의
-                  </Button>
-                </Stack>
+                <Box
+                  sx={{
+                    marginRight: '10px',
+                    marginLeft: '10px',
+                    paddingTop: '5px',
+                  }}
+                >
+                  <ClubThumbnail club={club} />
+                </Box>
               </Box>
             ))}
           </Box>
         </Box>
       </Box>
-    </>
+    </div>
   );
 };
 
-export default ListClub;
+export default ListFilterClub;

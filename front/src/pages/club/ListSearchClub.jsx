@@ -67,20 +67,28 @@ const ListSearchClub = () => {
   };
 
   return (
-    <div>
+    <div style={{ backgroundColor: '#ededed' }}>
       <CommonTop />
-      <Box sx={{ marginTop: '64px' }}>
-        <Box>
-          {clubList?.map((club, i) => (
-            <Box key={i}>
-              <ClubThumbnail club={club} />
-              <h5>{club.state}</h5>
-              <Button id={club.clubNo} onClick={onClickClub}>
-                클럽정보
-              </Button>
-            </Box>
-          ))}
-        </Box>
+      <Box
+        sx={{
+          paddingTop: '64px',
+          paddingBottom: '1px',
+          marginBottom: '64px',
+          bgcolor: '#ededed',
+        }}
+      >
+        {clubList?.map((club, i) => (
+          <Box
+            key={i}
+            sx={{
+              marginRight: '10px',
+              marginLeft: '10px',
+              marginBottom: '5px',
+            }}
+          >
+            <ClubThumbnail club={club} />
+          </Box>
+        ))}
       </Box>
     </div>
   );

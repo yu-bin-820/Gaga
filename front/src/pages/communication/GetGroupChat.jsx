@@ -1,59 +1,69 @@
-import { useEffect, useState, FormEvent, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 
 import fetcher from '@utils/fetcher';
 
-import axios from 'axios';
-
 import useSWR from 'swr';
+import useSWRInfinite from 'swr/infinite';
 
 import { Box } from '@mui/material';
 import useSocket from '@hooks/common/useSocket';
 import useCommunityStore from '@stores/communication/useCommunityStore';
 import ChatList from '@components/communication/ChatList';
 import ChatBox from '@components/communication/ChatBox';
-import useInput from '@hooks/common/useInput';
-import useInputOrigin from '@hooks/common/useInputOrigin';
-import CommonTop from '@layouts/common/CommonTop';
+
 import GetChatTop from '@layouts/communication/GetChatTop';
-import { useLocation } from 'react-router';
+
+import makeSection from '@utils/makeSection';
 
 const GetGroupChat = () => {
   const { chatRoomEntryNo, chatRoomLeader, chatType } = useCommunityStore();
 
   const boxRef = useRef();
 
-  const { data: myData, mutate: mutateMe } = useSWR(
+  const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
   const isMeeting = chatType === 2;
-  const [socket, discconect] = useSocket(isMeeting ? 'meeting' : 'club');
+  const [socket, disconnect] = useSocket(isMeeting ? 'meeting' : 'club');
 
-  const { data: groupMessagesData, mutate: mutateGroupMessages } = useSWR(
-    `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/${
-      isMeeting ? 'meetingno' : 'clubno'
-    }/${chatRoomEntryNo}/message/list/userno/${myData?.userNo}`,
-    fetcher
-  );
-
-  const scrollToBottom = useCallback(() => {
-    if (boxRef.current) {
-      boxRef.current.scrollTop = boxRef.current.scrollHeight;
-
-      window.scrollTo({ top: boxRef.current.scrollHeight });
+  const getKey = (index, prevPageData) => {
+    if (prevPageData && !prevPageData.length) {
+      return null;
     }
-  }, [boxRef]);
+
+    return `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/${
+      isMeeting ? 'meetingno' : 'clubno'
+    }/${chatRoomEntryNo}/message/list/userno/${
+      myData?.userNo
+    }?pageSize=20&page=${index + 1}`;
+  };
+
+  const {
+    data: groupMessagesData,
+    mutate: mutateGroupMessages,
+    setSize,
+  } = useSWRInfinite(getKey, fetcher);
+
+  console.log(groupMessagesData);
+
+  // const scrollToBottom = useCallback(() => {
+  //   if (boxRef.current) {
+  //     boxRef.current.scrollTo({ top: boxRef.current.scrollHeight });
+  //   }
+  // }, [boxRef]);
 
   useEffect(() => {
     return () => {
       if (socket) {
-        discconect();
+        disconnect();
       }
     };
-  }, [discconect, socket]);
+  }, [disconnect, socket]);
 
   const onMessage = useCallback(() => {
     mutateGroupMessages();
+    // scrollToBottom();
   }, [mutateGroupMessages]);
 
   useEffect(() => {
@@ -63,23 +73,30 @@ const GetGroupChat = () => {
     };
   }, [socket, onMessage]);
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [groupMessagesData, scrollToBottom]);
+  // useEffect(() => {
+  //   scrollToBottom();
+  // }, [groupMessagesData, scrollToBottom]);
+
+  const chatData = makeSection(
+    groupMessagesData ? groupMessagesData.flat().reverse() : []
+    // groupMessagesData ? [...groupMessagesData] : []
+  );
+
   if (!groupMessagesData || !socket) {
     return <>로딩</>;
   }
+
   // console.log(meetingMessagesData);
 
   return (
-    <div ref={boxRef}>
+    <div>
       <GetChatTop
         groupType={chatType}
         groupNo={chatRoomEntryNo}
         groupLeader={chatRoomLeader}
       />
-      <Box>
-        <ChatList chatData={groupMessagesData} />
+      <Box ref={boxRef}>
+        <ChatList chatData={chatData} setSize={setSize} />
         <Box sx={{ position: 'fixed', bottom: 65, left: 0, right: 0 }}>
           <ChatBox
             senderNo={myData?.userNo}

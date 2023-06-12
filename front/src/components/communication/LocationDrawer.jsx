@@ -14,9 +14,8 @@ import useChatMapStore from '@stores/communication/useChatMapStore';
 
 const LocationDrawer = ({
   locationDrawerOpen,
-
   toggleLocationDrawer,
-
+  mutateGroupMessages,
   postPath,
   getPath,
   isPost,
@@ -76,6 +75,7 @@ const LocationDrawer = ({
               postPath={postPath}
               senderNo={senderNo}
               groupNo={groupNo}
+              mutateGroupMessages={mutateGroupMessages}
             />
           </Box>
         </Stack>
@@ -93,6 +93,7 @@ LocationDrawer.propTypes = {
   isPost: PropTypes.bool,
   senderNo: PropTypes.number,
   groupNo: PropTypes.number,
+  mutateGroupMessages: PropTypes.func,
 };
 
 export default LocationDrawer;

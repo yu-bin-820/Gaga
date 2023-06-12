@@ -1,31 +1,36 @@
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 import useSWR from 'swr';
 import { Box, Stack } from '@mui/system';
 import CommonTop from '@layouts/common/CommonTop';
 import PaymentThumnail from '@components/payment/PaymentThumnail';
+import { Button } from '@mui/material';
+import NoPayment from '@components/payment/NoPayment';
 
 const ListPayment = () => {
   const { userNo } = useParams();
   const [paymentList, setPaymentList] = useState([]);
+
+  const navigate = useNavigate();
 
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
+  const isAdmin = myData?.role === 1;
+
   useEffect(() => {
     if (myData) {
-      const data = {
-        userNo: myData.userNo,
-      };
+      const apiUrl = isAdmin
+        ? `${import.meta.env.VITE_SPRING_HOST}/rest/payment`
+        : `${import.meta.env.VITE_SPRING_HOST}/rest/payment/list/${userNo}`;
 
       axios
-        .get(`${import.meta.env.VITE_SPRING_HOST}/rest/payment/list/${userNo}`)
+        .get(apiUrl)
         .then((response) => {
-          console.log(data);
           console.log(response.data);
           setPaymentList(response.data);
         })
@@ -33,23 +38,59 @@ const ListPayment = () => {
           console.log(error);
         });
     }
-  }, [myData, userNo]);
+  }, [isAdmin, myData, userNo]);
+
+  const onClickProfile = useCallback(
+    (e) => {
+      navigate(`/community/profile/userno/${e.currentTarget.dataset.value}`);
+    },
+    [navigate]
+  );
 
   return (
-    <>
-      <CommonTop />
-      <Stack sx={{ margin: '10px' }}>
+    <div style={{ backgroundColor: '#ededed' }}>
+      <CommonTop pageName='결제 정보 조회' prevPath='/community/profile/mine' />
+      <Stack sx={{ marginLeft: '10px', marginRight: '10px' }}>
         <Stack sx={{ marginTop: '64px' }}>
           <Stack>
+            {paymentList?.filter(
+              (payment) => payment.payState === 1 || payment.payState === 2
+            ).length === 0 && <NoPayment ment={'결제 내역이 없습니다.'} />}
             {paymentList?.map((payment, i) => (
-              <Stack key={i} sx={{ marginBottom: '30px' }}>
-                <PaymentThumnail payment={payment} />
+              <Stack key={i} sx={{ marginBottom: '10px' }}>
+                {isAdmin ? (
+                  <Box
+                    sx={{
+                      borderRadius: 2,
+                      backgroundColor: '#ffffff',
+                    }}
+                  >
+                    <PaymentThumnail payment={payment} />
+                    <Stack
+                      direction='row'
+                      justifyContent='center'
+                      spacing={1.5}
+                      marginBottom={1}
+                    >
+                      <Button
+                        data-value={payment.userNo}
+                        variant='outlined'
+                        sx={{ width: '180px' }}
+                        onClick={onClickProfile}
+                      >
+                        회원정보
+                      </Button>
+                    </Stack>
+                  </Box>
+                ) : (
+                  <PaymentThumnail payment={payment} />
+                )}
               </Stack>
             ))}
           </Stack>
         </Stack>
       </Stack>
-    </>
+    </div>
   );
 };
 

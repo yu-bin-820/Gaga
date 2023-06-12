@@ -9,9 +9,15 @@ import { Box, Stack } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import StyledToggleButtonGroup from '@components/common/StyledToggleButtonGroup';
 
-const AddClubByMeeting = ({ expanded, handleChange, userNo }) => {
+const AddClubByMeeting = ({
+  expanded,
+  handleChange,
+  userNo,
+  onParentMeetingNoClick,
+}) => {
   const [meetingList, setMeetingList] = useState();
 
   useEffect(() => {
@@ -36,12 +42,16 @@ const AddClubByMeeting = ({ expanded, handleChange, userNo }) => {
     setAlignment(newAlignment);
   };
 
-  const onClickSubCategory = (subCategoryTag) => {
-    console.log('서브카테고리', subCategoryTag);
-    //onSubCategoryClick(subCategoryTag); // 부모 컴포넌트로 subCategoryTag 전달
+  const onClickParentMeeting = (meetingNo) => {
+    console.log('부모미팅번호', meetingNo);
+    onParentMeetingNoClick(meetingNo);
   };
 
   console.log(userNo);
+
+  if (!meetingList) {
+    return <>로딩중</>;
+  }
 
   return (
     <Accordion
@@ -72,20 +82,27 @@ const AddClubByMeeting = ({ expanded, handleChange, userNo }) => {
           onChange={handleAlignment}
           aria-label='text alignment'
         >
-          {meetingList?.map((meeting, k) => {
+          {meetingList?.map((meeting, k) => (
             <ToggleButton
               key={k}
               value={meeting.meetingNo}
               aria-label={meeting.meetingNo}
-              onClick={() => onClickSubCategory(meeting.meetingNo)}
+              onClick={() => onClickParentMeeting(meeting.meetingNo)}
             >
               {meeting.meetingName}
-            </ToggleButton>;
-          })}
+            </ToggleButton>
+          ))}
         </StyledToggleButtonGroup>
       </AccordionDetails>
     </Accordion>
   );
+};
+
+AddClubByMeeting.propTypes = {
+  expanded: PropTypes.object.isRequired,
+  handleChange: PropTypes.object.isRequired,
+  userNo: PropTypes.object.isRequired,
+  onParentMeetingNoClick: PropTypes.object.isRequired,
 };
 
 export default AddClubByMeeting;

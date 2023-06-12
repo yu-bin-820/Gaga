@@ -29,7 +29,7 @@ function GetNoticePost() {
         .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/deleteNoticePost/noticePostNo/${noticePostNo}`)
         .then(() => {
           console.log('공지사항 삭제 완료');
-          navigate('/listNoticePost');
+          navigate('/notice/listNoticePost');
         })
         .catch((error) => {
           console.error(error);

@@ -16,14 +16,6 @@ import axios from 'axios';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 
-const StyledAvatarGroup = styled(AvatarGroup)({
-  '& .MuiAvatar-root': {
-    width: 24,
-    height: 24,
-    fontSize: 12,
-  },
-});
-
 const AdjustmentThumnail = ({ meeting }) => {
   const navigate = useNavigate();
 
@@ -38,21 +30,19 @@ const AdjustmentThumnail = ({ meeting }) => {
 
   return (
     <Stack
+      direction='row'
       sx={{
-        margin: 1,
-        bgcolor: 'background.paper',
         borderRadius: 2,
         p: 2,
         minWidth: 295,
         padding: 1,
-        display: 'flex',
-        justifyContent: 'flex-end',
-        flexDirection: 'row',
+        backgroundColor: '#ffffff',
+        marginBottom: '5px',
       }}
     >
       <Stack
         sx={{
-          width: '33%',
+          width: '20%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -73,13 +63,13 @@ const AdjustmentThumnail = ({ meeting }) => {
               }`}
               alt='noImg'
               loading='lazy'
-              style={{ borderRadius: '7px' }}
+              style={{ borderRadius: '5px' }}
               onClick={onClickMeeting}
             />
           ) : (
             <img
               src={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=164&h=164&fit=crop&auto=format`}
-              style={{ borderRadius: '7px' }}
+              style={{ borderRadius: '5px' }}
               onClick={onClickMeeting}
             />
           )}
@@ -87,7 +77,7 @@ const AdjustmentThumnail = ({ meeting }) => {
       </Stack>
       <Stack
         sx={{
-          width: '33%',
+          marginLeft: '10px',
           flexGrow: 1,
           display: 'flex',
           justifyContent: 'space-between',
@@ -107,26 +97,26 @@ const AdjustmentThumnail = ({ meeting }) => {
             {meeting.meetingDate} {meeting.meetingStartTime}
             <br />
           </Stack>
-
-          <Stack direction='row' spacing={1}>
-            <Stack>모 임 명 {meeting.meetingName}</Stack>
-          </Stack>
-          <Stack direction='row' spacing={1}>
-            <Stack>정산금액 {meeting.entryFee * meeting.count}원</Stack>
-          </Stack>
-          <Stack direction='row' spacing={1}>
-            <Stack>은 행 명 {meeting.bankName}</Stack>
-          </Stack>
-          <Stack direction='row' spacing={1}>
-            <Stack>계좌번호 {meeting.accountNo}</Stack>
-          </Stack>
+          <Box direction='row' display='flex' spacing={4}>
+            <Stack>
+              모 임 명 <br /> 정산금액 <br />은 행 명 <br />
+              계좌번호
+            </Stack>
+            <Stack marginLeft={1}>
+              {meeting.meetingName} <br />
+              {(meeting.entryFee * meeting.count).toLocaleString()}원 <br />
+              {meeting.bankName} <br />
+              {meeting.accountNo}
+            </Stack>
+          </Box>
         </Stack>
+
         <Box>
           <Stack sx={{ alignItems: 'flex-end' }} marginBottom={2}>
             {meeting.meetingSuccess === 1 ? (
               '모임성사전'
             ) : meeting.meetingSuccess === 2 ? (
-              <>모임 성사</>
+              <>모임성사</>
             ) : (
               ''
             )}
@@ -141,7 +131,7 @@ const AdjustmentThumnail = ({ meeting }) => {
                   sx={{
                     color: 'text.secondary',
                     display: 'inline',
-                    fontSize: 12,
+                    fontSize: 10,
                   }}
                 >
                   {new Date(meeting.adjustmentTime).toLocaleString()}
@@ -158,22 +148,7 @@ const AdjustmentThumnail = ({ meeting }) => {
 };
 
 AdjustmentThumnail.propTypes = {
-  meeting: PropTypes.shape({
-    meetingNo: PropTypes.number.isRequired,
-    meetingName: PropTypes.string.isRequired,
-    entryFee: PropTypes.number.isRequired,
-    count: PropTypes.number.isRequired,
-    meetingDate: PropTypes.number.isRequired,
-    meetingStartTime: PropTypes.number.isRequired,
-    meetingEndTime: PropTypes.number.isRequired,
-    meetingSuccess: PropTypes.number.isRequired,
-    meetingLeaderNo: PropTypes.number.isRequired,
-    meetingImg: PropTypes.string.isRequired,
-    adjustmentTime: PropTypes.number.isRequired,
-    adjustmentState: PropTypes.number.isRequired,
-    accountNo: PropTypes.number.isRequired,
-    bankName: PropTypes.string.isRequired,
-  }).isRequired,
+  meeting: PropTypes.object.isRequired,
 };
 
 export default AdjustmentThumnail;

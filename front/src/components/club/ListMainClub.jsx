@@ -168,7 +168,15 @@ const ListMainClub = () => {
 
           {clubList?.map((club, i) => (
             <Stack key={i}>
-              <ClubThumbnail club={club} />
+              <Box
+                sx={{
+                  marginRight: '10px',
+                  marginLeft: '10px',
+                  paddingBottom: '5px',
+                }}
+              >
+                <ClubThumbnail club={club} />
+              </Box>
             </Stack>
           ))}
         </Stack>

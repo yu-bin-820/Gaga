@@ -29,25 +29,28 @@ const UpdateAccount = () => {
     setAccountNo(accountNo);
   };
 
-  const onButtonClick = () => {
-    axios
-      .post(`${import.meta.env.VITE_SPRING_HOST}/rest/user/updateUser`, {
-        ...myData,
-        bankName,
-        accountNo,
-      })
-      .then((response) => {
-        console.log(response.data);
-        setBankName(response.data.bankName);
-        setAccountNo(response.data.accountNo);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const onButtonClick = async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/updateUser`,
+        {
+          ...myData,
+          bankName,
+          accountNo,
+        },
+        { withCredentials: true }
+      );
 
-    alert('계좌가 업데이트 되었습니다');
+      console.log(response.data);
 
-    navigate('/community/profile/mine');
+      // 서버에서 반환된 새로운 데이터로 캐시 업데이트
+      mutateMe(response.data, false);
+      console.log('mutating');
+      // 캐시 업데이트 후 모달 열기
+      setOpenModal(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -59,7 +62,7 @@ const UpdateAccount = () => {
 
   return (
     <>
-      <CommonTop />
+      <CommonTop pageName='계좌 관리' prevPath='/community/profile/mine' />
       <Stack sx={{ margin: '10px' }}>
         <Stack sx={{ marginTop: '64px' }}>
           등록된 계좌 정보
@@ -86,7 +89,7 @@ const UpdateAccount = () => {
         >
           계좌 등록
         </Button>
-        <Stack>
+        <>
           <Modal
             open={openModal}
             onClose={closeModal}
@@ -120,7 +123,7 @@ const UpdateAccount = () => {
               </Button>
             </Box>
           </Modal>
-        </Stack>
+        </>
       </Stack>
     </>
   );
