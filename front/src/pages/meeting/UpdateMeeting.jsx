@@ -69,16 +69,16 @@ const UpdateMeeting = () => {
         setField('filterMaxAge', response.data.filterMaxAge);
         setField('meetingMaxMemberNo', response.data.meetingMaxMemberNo);
         setField('meetingState', response.data.meetingState);
-        setField('image', response.data.meetingImg
-        ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
-          response.data?.meetingReviewImg
-        }`
+        setField('image', response.data?.meetingImg
+        ? `${import.meta.env.VITE_CDN_HOST}/upload_images/meeting/${
+          meetingImg
+        }?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`
       : null)
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [meetingImg, meetingno, setField]);
 
   const navigate = useNavigate();
 
@@ -189,105 +189,6 @@ const UpdateMeeting = () => {
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}></Box>
         </React.Fragment>
       </Box>
-    <Box sx={{ marginTop: '64px' }}>
-      <TextField
-        fulWidth
-        label="meetingName"
-        name="meetingName"
-        onChange={(e)=>onChangeField('meetingName',e)}
-        required
-        value={meetingName}
-      />
-      <TextField
-        fulWidth
-        label="meetingIntro"
-        name="meetingIntro"
-        onChange={(e)=>onChangeField('meetingIntro',e)}
-        required
-        value={meetingIntro}
-      />
-      <TextField
-        fulWidth
-        label="meetingImg"
-        name="meetingImg"
-        onChange={(e)=>onChangeField('meetingImg',e)}
-        required
-        value={meetingImg}
-      />
-      <TextField
-        fulWidth
-        label="filterGender"
-        name="filterGender"
-        onChange={(e)=>onChangeField('filterGender',e)}
-        required
-        value={filterGender}
-      />
-      <TextField
-        fulWidth
-        label="meetingDate"
-        name="meetingDate"
-        onChange={(e)=>onChangeField('meetingDate',e)}
-        required
-        value={meetingDate}
-      />
-      <TextField
-        fulWidth
-        label="meetingStartTime"
-        name="meetingStartTime"
-        onChange={(e)=>onChangeField('meetingStartTime',e)}
-        required
-        value={meetingStartTime}
-      />
-      <TextField
-        fulWidth
-        label="meetingEndTime"
-        name="meetingEndTime"
-        onChange={(e)=>onChangeField('meetingEndTime',e)}
-        required
-        value={meetingEndTime}
-      />
-      <TextField
-        fulWidth
-        label="meetingMaxMemberNo"
-        name="meetingMaxMemberNo"
-        onChange={(e)=>onChangeField('meetingMaxMemberNo',e)}
-        required
-        value={meetingMaxMemberNo}
-      />
-      <TextField
-        fulWidth
-        label="meetingState"
-        name="meetingState"
-        onChange={(e)=>onChangeField('meetingState',e)}
-        required
-        value={meetingState}
-      />
-      <TextField
-        fulWidth
-        label="filterMinAge"
-        name="filterMinAge"
-        onChange={(e)=>onChangeField('filterMinAge',e)}
-        required
-        value={filterMinAge}
-      />
-      <TextField
-        fulWidth
-        label="filterMaxAge"
-        name="filterMaxAge"
-        onChange={(e)=>onChangeField('filterMaxAge',e)}
-        required
-        value={filterMaxAge}
-      />
-      <TextField
-        fulWidth
-        label="meetingNo"
-        name="meetingNo"
-        onChange={(e)=>onChangeField('meetingNo',e)}
-        required
-        value={meetingno}
-      />
-      <Button onClick={handleSubmit}>수정하기</Button>
-    </Box>
     </>
   );
 };
