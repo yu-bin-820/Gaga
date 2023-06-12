@@ -91,12 +91,20 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
                       {sendTime}
                     </Typography>
                   )}
-                  {data?.readCount != 0 && (
+                  {data?.readCount > 0 && (
                     <Typography
                       color={'primary'}
                       sx={{ fontSize: 12, marginLeft: 'auto', fontWeight: 700 }}
                     >
                       {data.readCount}
+                    </Typography>
+                  )}
+                  {data?.read_state > 0 && (
+                    <Typography
+                      color={'primary'}
+                      sx={{ fontSize: 12, marginLeft: 'auto', fontWeight: 700 }}
+                    >
+                      {data.read_state}
                     </Typography>
                   )}
                 </Stack>
@@ -172,6 +180,14 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
                     sx={{ fontSize: 12, fontWeight: 700 }}
                   >
                     {data.readCount}
+                  </Typography>
+                )}
+                {!isMe && data?.read_state != 0 && (
+                  <Typography
+                    color={'primary'}
+                    sx={{ fontSize: 12, fontWeight: 700 }}
+                  >
+                    {data.read_state}
                   </Typography>
                 )}
               </Stack>

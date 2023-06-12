@@ -131,6 +131,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
               </ListItem>
             ))}
             <Divider />
+            <Typography sx={{ marginTop: 'auto' }}>채팅방 나가기</Typography>
           </List>
         </Box>
       </SwipeableDrawer>
