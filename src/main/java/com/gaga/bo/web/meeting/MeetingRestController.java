@@ -1,7 +1,6 @@
 package com.gaga.bo.web.meeting;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.gaga.bo.objectSotrage.S3Uploader;
 import com.gaga.bo.service.domain.Filter;
 import com.gaga.bo.service.domain.Meeting;
 import com.gaga.bo.service.domain.MeetingReview;
@@ -57,6 +57,14 @@ public class MeetingRestController {
 	public MeetingRestController() {
 		System.out.println(this.getClass());
 	}
+	
+    private S3Uploader s3Uploader;
+    
+    @Autowired
+    public void setS3Uploader(S3Uploader s3Uploader) {
+        this.s3Uploader = s3Uploader;
+    }
+	
 	
 	//미팅관련
 	@GetMapping("no/{meetingNo}")
@@ -113,18 +121,19 @@ public class MeetingRestController {
 	 		   				  @RequestParam(value = "file", required = false) MultipartFile file
 							  ) throws Exception{
 		
-		Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
-		File uploadDir = resource.getFile();
 		
 		System.out.println("img변경 전 : "+meeting);
 		
 		if (file != null) {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
-	
-			file.transferTo(new File(uploadDir,"/meeting/"+uuidFileName));
-			
+
+//			file.transferTo(new File(uploadDir,"/meeting/"+uuidFileName));
+		
 			meeting.setMeetingImg(uuidFileName);
+			String fileName = "meeting/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file, fileName);
+	        System.out.println(message);
 		}
 		
 		System.out.println("img변경 후 : "+meeting);
@@ -141,20 +150,21 @@ public class MeetingRestController {
 	public void addMeeting(@ModelAttribute Meeting meeting,
 				 		   @RequestParam(value = "file", required = false) MultipartFile file
 						   ) throws Exception{
-		
-		Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
-		File uploadDir = resource.getFile();
 
 		System.out.println("img변경 전 : "+meeting);
 		
 		if (file != null) {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
-	
-			file.transferTo(new File(uploadDir,"/meeting/"+uuidFileName));
-			
+
+//			file.transferTo(new File(uploadDir,"/meeting/"+uuidFileName));
+		
 			meeting.setMeetingImg(uuidFileName);
+			String fileName = "meeting/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file, fileName);
+	        System.out.println(message);
 		}
+
 		
 		System.out.println("img변경 후 : "+meeting);
 		
@@ -202,19 +212,19 @@ public class MeetingRestController {
 			  					 @RequestParam(value = "file", required = false) MultipartFile file
 								) throws Exception{
 		
-		Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
-		File uploadDir = resource.getFile();
-		
 		System.out.println("img변경 전 : "+meetingReview);
 
 
 		if (file != null) {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
-	
-			file.transferTo(new File(uploadDir,"/meeting/"+uuidFileName));
-			
+
+//			file.transferTo(new File(uploadDir,"/meeting/"+uuidFileName));
+		
 			meetingReview.setMeetingReviewImg(uuidFileName);
+			String fileName = "meeting/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file, fileName);
+	        System.out.println(message);
 		}
 		
 		System.out.println("img변경 후 : "+meetingReview);
@@ -242,18 +252,18 @@ public class MeetingRestController {
 				 					@RequestParam(value = "file", required = false) MultipartFile file
 				 					) throws Exception {
 		
-		Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
-		File uploadDir = resource.getFile();
-		
 		System.out.println("img변경 전 : "+meetingReview);
 
 		if (file != null) {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
-	
-			file.transferTo(new File(uploadDir,"/meeting/"+uuidFileName));
-			
+
+//			file.transferTo(new File(uploadDir,"/meeting/"+uuidFileName));
+		
 			meetingReview.setMeetingReviewImg(uuidFileName);
+			String fileName = "meeting/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file, fileName);
+	        System.out.println(message);
 		}
 		
 		System.out.println("img변경 후 : "+meetingReview);

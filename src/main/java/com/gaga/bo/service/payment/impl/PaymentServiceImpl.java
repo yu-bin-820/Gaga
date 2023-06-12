@@ -87,6 +87,14 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
+	public List<Payment> getAllPaymentList() throws Exception {
+
+		System.out.println("전체 회원 결제 내역 목록 조회 서비스");
+		
+		return paymentDao.getAllPaymentList();
+	}
+
+	@Override
 	public List<Meeting> getAllAdjustmentList() throws Exception {
 		
 		System.out.println("정산 목록 전체 조회 서비스");
@@ -105,18 +113,18 @@ public class PaymentServiceImpl implements PaymentService {
 
 
 	@Override
-	public List<Meeting> getAdjustmentIngList() throws Exception {
+	public List<Meeting> getAdjustmentStateList(int adjustmentState) throws Exception {
 		System.out.println("정산 상태별 목록 조회");
 		
-		return paymentDao.getAdjustmentIngList();
+		return paymentDao.getAdjustmentStateList(adjustmentState);
 	}
 
 	@Override
-	public void updateAdjustmentState(Meeting meeting) throws Exception {
+	public void updateAdjustmentState(int meetingNo) throws Exception {
 		
 		System.out.println("정산 상태 변경 서비스");
 		
-		paymentDao.updateAdjustmentState(meeting);
+		paymentDao.updateAdjustmentState(meetingNo);
 		// TODO Auto-generated method stub 	
 	}
 

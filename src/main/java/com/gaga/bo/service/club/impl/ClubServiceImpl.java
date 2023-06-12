@@ -73,11 +73,19 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
-	public List<Club> getMyClublist(int userNo) throws Exception {
+	public List<Club> getMyClubList(int userNo) throws Exception {
 			
-		System.out.println("회원이 참여한 클럽 목록 조회 서비스");
+		System.out.println("회원이 참여/신청/생성한 클럽 목록 조회 서비스");
 		// TODO Auto-generated method stub
 		return clubDao.getMyClubList(userNo);
+	}
+	
+	@Override
+	public List<Club> getMyIngClubList(int userNo) throws Exception {
+			
+		System.out.println("회원이 참여/생성한 클럽 목록 조회 서비스");
+		// TODO Auto-generated method stub
+		return clubDao.getMyIngClubList(userNo);
 	}
 	  
 	@Override

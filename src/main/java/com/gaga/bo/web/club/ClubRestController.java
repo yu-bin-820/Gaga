@@ -60,7 +60,7 @@ public class ClubRestController {
 	
 	@PostMapping("")
 	public void addClub(@ModelAttribute Club club,
-				 		   @RequestParam("file") MultipartFile file
+				 		   @RequestParam(value = "file", required = false) MultipartFile file
 						   ) throws Exception{
 		
 		System.out.println("클럽 생성 Ctrl");
@@ -223,9 +223,17 @@ public class ClubRestController {
 	@GetMapping("list/join/{userNo}")
 	public List<Club> getMyClubList(@PathVariable int userNo) throws Exception{
 		
-		System.out.println("회원이 참여한 클럽 목록 조회 Ctrl");
+		System.out.println("회원이 참여/신청/생성한 클럽 목록 조회 Ctrl");
 		
-		return clubService.getMyClublist(userNo);
+		return clubService.getMyClubList(userNo);
+	}
+	
+	@GetMapping("list/joincreate/{userNo}")
+	public List<Club> getMyIngClubList(@PathVariable int userNo) throws Exception{
+		
+		System.out.println("회원이 참여/생성한 클럽 목록 조회 Ctrl");
+		
+		return clubService.getMyIngClubList(userNo);
 	}
 	
 	@GetMapping("list/nonuser/{mainCategoryNo}")
