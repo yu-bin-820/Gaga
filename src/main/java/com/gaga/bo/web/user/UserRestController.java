@@ -121,6 +121,17 @@ public class UserRestController {
         
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    
+    @PostMapping("/checkPassword")
+    public boolean checkPassword(@RequestBody User user) throws Exception{
+        User dbUser = userService.getUserById(user.getUserId());
+        if (dbUser != null) {
+            // 회원의 입력 비밀번호와 데이터베이스에 저장된 해시화된 비밀번호를 비교
+            boolean passwordMatch = passwordEncoder.matches(user.getPassword(), dbUser.getPassword());
+            return passwordMatch;
+        }
+        return false;
+    }
 	
 	@DeleteMapping("/logout")
 	public ResponseEntity<String> logout(HttpSession session, HttpServletResponse response,
