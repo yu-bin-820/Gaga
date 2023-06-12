@@ -19,10 +19,6 @@ const PaymentFail = () => {
     navigate(`/meeting/meetingno/${meetingNo}`);
   }, []);
 
-  const onClickMain = useCallback((event) => {
-    navigate(`/`);
-  }, []);
-
   return (
     <>
       <CommonTop prevPath='/' />
@@ -31,7 +27,7 @@ const PaymentFail = () => {
 
         <CheckCircleIcon color='error' sx={{ fontSize: '60px' }} />
 
-        <h3>{nickName}님 결제가 정상적으로 처리되지 않았습니다. </h3>
+        <h5>{nickName}님 결제가 정상적으로 처리되지 않았습니다. </h5>
 
         <Stack sx={{ marginTop: '20px' }} direction='row' spacing={2}>
           <Button

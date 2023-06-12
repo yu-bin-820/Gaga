@@ -53,27 +53,26 @@ const PaymentThumnail = ({ payment }) => {
 
   return (
     <Stack
+      direction='row'
       sx={{
-        margin: 1,
-        bgcolor: 'background.paper',
         borderRadius: 2,
         p: 2,
-        minWidth: 300,
-        padding: 1.3,
-        display: 'flex',
-        justifyContent: 'flex-end',
-        flexDirection: 'row',
+        minWidth: 295,
+        padding: 1,
+        backgroundColor: '#ffffff',
       }}
     >
       <Stack
         sx={{
-          width: '33%',
+          width: '20%',
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <ImageListItem
           sx={{
+            marginLeft: '5px',
             maxWidth: '100px',
             maxHeight: '100px',
             minWidth: '100px',
@@ -87,13 +86,13 @@ const PaymentThumnail = ({ payment }) => {
               }`}
               alt='noImg'
               loading='lazy'
-              style={{ borderRadius: '7px' }}
+              style={{ borderRadius: '5px' }}
               onClick={onClickMeeting}
             />
           ) : (
             <img
               src={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=164&h=164&fit=crop&auto=format`}
-              style={{ borderRadius: '7px' }}
+              style={{ borderRadius: '5px' }}
               onClick={onClickMeeting}
             />
           )}
@@ -101,7 +100,7 @@ const PaymentThumnail = ({ payment }) => {
       </Stack>
       <Stack
         sx={{
-          width: '33%',
+          marginLeft: '15px',
           flexGrow: 1,
           display: 'flex',
           justifyContent: 'space-between',
@@ -148,7 +147,7 @@ const PaymentThumnail = ({ payment }) => {
                 sx={{
                   color: 'text.secondary',
                   display: 'inline',
-                  fontSize: 12,
+                  fontSize: 10,
                 }}
               >
                 {new Date(refundTime).toLocaleString()}

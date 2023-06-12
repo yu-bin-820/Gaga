@@ -1,6 +1,6 @@
 import AdjustmentThumnail from '@components/payment/AdjustmentThumnail';
 import CommonTop from '@layouts/common/CommonTop';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
@@ -64,8 +64,7 @@ const ListAdminAdjustmnet = () => {
 
   return (
     <>
-      <CommonTop />
-      <Box sx={{ margin: '10px' }}>
+      <Box sx={{ marginRight: '10px', marginLeft: '10px' }}>
         <h5>정산 대기</h5>
         {unckeckedAdjustmentList?.map((adjustment, i) => (
           <Box key={i}>
@@ -74,6 +73,7 @@ const ListAdminAdjustmnet = () => {
                 borderRadius: 2,
                 backgroundColor: '#ffffff',
                 paddingBottom: '2px',
+                marginBottom: '5px',
               }}
             >
               <AdjustmentThumnail meeting={adjustment} />
@@ -111,10 +111,11 @@ const ListAdminAdjustmnet = () => {
                 borderRadius: 2,
                 backgroundColor: '#ffffff',
                 paddingBottom: '2px',
+                marginBottom: '5px',
               }}
             >
               <AdjustmentThumnail key={i} meeting={adjustment} />
-              <Stack direction='row' justifyContent='center'>
+              <Stack direction='row' justifyContent='center' marginBottom={1}>
                 <Button
                   data-value={adjustment.meetingLeaderNo}
                   variant='outlined'

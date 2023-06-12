@@ -30,16 +30,14 @@ const AdjustmentThumnail = ({ meeting }) => {
 
   return (
     <Stack
+      direction='row'
       sx={{
-        margin: 1,
-        bgcolor: 'background.paper',
         borderRadius: 2,
         p: 2,
         minWidth: 295,
         padding: 1,
-        display: 'flex',
-        justifyContent: 'flex-end',
-        flexDirection: 'row',
+        backgroundColor: '#ffffff',
+        marginBottom: '5px',
       }}
     >
       <Stack
@@ -65,13 +63,13 @@ const AdjustmentThumnail = ({ meeting }) => {
               }`}
               alt='noImg'
               loading='lazy'
-              style={{ borderRadius: '7px' }}
+              style={{ borderRadius: '5px' }}
               onClick={onClickMeeting}
             />
           ) : (
             <img
               src={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=164&h=164&fit=crop&auto=format`}
-              style={{ borderRadius: '7px' }}
+              style={{ borderRadius: '5px' }}
               onClick={onClickMeeting}
             />
           )}
@@ -79,7 +77,7 @@ const AdjustmentThumnail = ({ meeting }) => {
       </Stack>
       <Stack
         sx={{
-          width: '40%',
+          marginLeft: '10px',
           flexGrow: 1,
           display: 'flex',
           justifyContent: 'space-between',
@@ -99,28 +97,26 @@ const AdjustmentThumnail = ({ meeting }) => {
             {meeting.meetingDate} {meeting.meetingStartTime}
             <br />
           </Stack>
-
-          <Stack direction='row' spacing={1}>
-            <Stack>모 임 명 {meeting.meetingName}</Stack>
-          </Stack>
-          <Stack direction='row' spacing={1}>
+          <Box direction='row' display='flex' spacing={4}>
             <Stack>
-              정산금액 {(meeting.entryFee * meeting.count).toLocaleString()}원
+              모 임 명 <br /> 정산금액 <br />은 행 명 <br />
+              계좌번호
             </Stack>
-          </Stack>
-          <Stack direction='row' spacing={1}>
-            <Stack>은 행 명 {meeting.bankName}</Stack>
-          </Stack>
-          <Stack direction='row' spacing={1}>
-            <Stack>계좌번호 {meeting.accountNo}</Stack>
-          </Stack>
+            <Stack marginLeft={1}>
+              {meeting.meetingName} <br />
+              {(meeting.entryFee * meeting.count).toLocaleString()}원 <br />
+              {meeting.bankName} <br />
+              {meeting.accountNo}
+            </Stack>
+          </Box>
         </Stack>
+
         <Box>
           <Stack sx={{ alignItems: 'flex-end' }} marginBottom={2}>
             {meeting.meetingSuccess === 1 ? (
               '모임성사전'
             ) : meeting.meetingSuccess === 2 ? (
-              <>모임 성사</>
+              <>모임성사</>
             ) : (
               ''
             )}
@@ -135,7 +131,7 @@ const AdjustmentThumnail = ({ meeting }) => {
                   sx={{
                     color: 'text.secondary',
                     display: 'inline',
-                    fontSize: 12,
+                    fontSize: 10,
                   }}
                 >
                   {new Date(meeting.adjustmentTime).toLocaleString()}

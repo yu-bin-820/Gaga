@@ -73,7 +73,7 @@ const ListFilterClub = () => {
         sx={{
           paddingTop: '1px',
           paddingBottom: '1px',
-          marginBottom: '64px',
+          marginBottom: '75px',
           bgcolor: '#ededed',
         }}
       >
@@ -83,15 +83,9 @@ const ListFilterClub = () => {
               <Box key={i}>
                 <Box
                   sx={{
-                    marginLeft: 1.5,
-                    marginRight: 1.5,
-                    marginTop: 0.5,
-                    marginBottom: 2,
-                    borderRadius: 3,
-                    p: 2,
-                    minWidth: 265,
-                    padding: 1.3,
-                    backgroundColor: '#ffffff',
+                    marginRight: '10px',
+                    marginLeft: '10px',
+                    paddingTop: '5px',
                   }}
                 >
                   <ClubThumbnail club={club} />

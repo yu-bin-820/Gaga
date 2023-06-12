@@ -12,6 +12,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import ClubMember from '@components/club/ClubMember';
 import GetClubTop from '@layouts/club/GetClubTop';
 import ClubSmallChip from '@components/club/ClubSmallChip';
+import IsClubMemberDialog from '@components/club/IsClubMemberDialog';
 
 const GetClub = () => {
   const { clubNo } = useParams();
@@ -19,11 +20,20 @@ const GetClub = () => {
   const [club, setClub] = useState();
   const [pendingMemberList, setPendingMemberList] = useState();
   const [confirmedMemberList, setConfirMemberList] = useState();
+  const [isClubMemberOpen, setIsClubMemberOpen] = useState(false);
 
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+
+  const { data: leaderData, mutate: mutateLeader } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/userno/${
+      club?.clubLeaderNo
+    }`,
+    fetcher
+  );
+
   const isClubLeader = club?.clubLeaderNo === myData?.userNo;
   const navigate = useNavigate();
 
@@ -37,7 +47,7 @@ const GetClub = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [clubNo]);
 
   useEffect(() => {
     if (!club) {
@@ -75,7 +85,7 @@ const GetClub = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [clubNo]);
 
   useEffect(() => {
     axios
@@ -91,7 +101,7 @@ const GetClub = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [clubNo]);
 
   const onClickProfileImg = useCallback(
     (e) => {
@@ -100,9 +110,24 @@ const GetClub = () => {
     [navigate, club]
   );
 
-  const onClickAddMember = useCallback((event) => {
-    navigate(`/club/member/addmember/${clubNo}`);
-  }, []);
+  const onClickAddMember = useCallback(
+    (event) => {
+      const isUserInConfirmedMembers = confirmedMemberList?.some(
+        (confirmedMember) => confirmedMember.userNo === myData?.userNo
+      );
+
+      const isUserInPendingMembers = pendingMemberList?.some(
+        (pendingMember) => pendingMember.userNo === myData?.userNo
+      );
+
+      if (!isUserInConfirmedMembers && !isUserInPendingMembers) {
+        navigate(`/club/member/addmember/${clubNo}`);
+      } else {
+        setIsClubMemberOpen(true);
+      }
+    },
+    [confirmedMemberList, myData?.userNo, navigate, clubNo, pendingMemberList]
+  );
 
   const [imageLoadingError, setImageLoadingError] = useState(false);
 
@@ -110,32 +135,9 @@ const GetClub = () => {
     setImageLoadingError(true);
   }, []);
 
-  const onClickUpdate = useCallback((MouseEvent) => {
-    navigate(`/club/updateclub/${clubNo}`);
-  }, []);
-  const onClickDelete = useCallback(async (event) => {
-    event.preventDefault();
-
-    try {
-      const data = {
-        clubNo: club?.clubNo,
-      };
-
-      console.log(data);
-
-      const response = await axios.delete(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/club`,
-        {
-          data: data,
-        }
-      );
-
-      navigate(`/`);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
-
+  if (!leaderData) {
+    return <>로딩중</>;
+  }
   return (
     <>
       {isClubLeader ? <GetClubTop /> : <CommonTop />}
@@ -249,14 +251,21 @@ const GetClub = () => {
 
         <h5>클럽 내 생성 모임 목록</h5>
         <ListMeetingParentClubNo />
-        <Button
-          variant='contained'
-          sx={{ width: '85vw', borderRadius: '50px' }}
-          onClick={onClickAddMember}
-        >
-          참여하기
-        </Button>
+
+        {!isClubLeader && (
+          <Button
+            variant='contained'
+            sx={{ width: '95vw', borderRadius: '50px' }}
+            onClick={onClickAddMember}
+          >
+            참여하기
+          </Button>
+        )}
       </Box>
+      <IsClubMemberDialog
+        open={isClubMemberOpen}
+        setOpen={setIsClubMemberOpen}
+      />
     </>
   );
 };

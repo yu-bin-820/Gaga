@@ -1,7 +1,9 @@
+import NoClub from '@components/club/NoClub';
 import AdjustmentThumnail from '@components/payment/AdjustmentThumnail';
 import ListAdminAdjustmnet from '@components/payment/ListAdminAdjustmnet';
+import NoPayment from '@components/payment/NoPayment';
 import CommonTop from '@layouts/common/CommonTop';
-import { Stack } from '@mui/system';
+import { Stack, margin } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -65,7 +67,7 @@ const ListAdjustment = () => {
 
   return (
     <div style={{ backgroundColor: '#ededed' }}>
-      <Stack sx={{ marginTop: '64px' }}>
+      <Stack sx={{ marginTop: '50px' }}>
         <CommonTop
           pageName='정산 내역 조회'
           prevPath='/community/profile/mine'
@@ -75,7 +77,13 @@ const ListAdjustment = () => {
             <ListAdminAdjustmnet />
           </>
         ) : (
-          <Stack>
+          <Stack sx={{ marginLeft: '10px', marginRight: '10px' }}>
+            <h5>
+              정산은 매주 화요일에 진행됩니다. <br />
+              문의사항은 Q&A 게시판을 이용해 주세요
+            </h5>
+            {adjustmentList?.filter((meeting) => meeting.meetingSuccess === 2)
+              .length === 0 && <NoPayment ment={'정산 내역이 없습니다.'} />}
             {adjustmentList?.map((meeting, i) => (
               <Stack key={i}>
                 <AdjustmentThumnail meeting={meeting} />

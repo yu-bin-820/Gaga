@@ -29,13 +29,10 @@ const ListMyClubThumnail = ({ club }) => {
       <Box
         sx={{
           borderRadius: 2,
-          p: 2,
-          minWidth: 295,
-          padding: 1,
           backgroundColor: '#ffffff',
         }}
       >
-        <Stack spacing={0.8}>
+        <Stack spacing={0.8} paddingBottom={1}>
           <ClubThumbnail club={club} />
           <Stack direction={'row'} justifyContent='center' spacing={1.5}>
             <Button

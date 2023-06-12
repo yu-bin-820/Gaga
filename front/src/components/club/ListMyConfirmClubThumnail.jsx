@@ -38,10 +38,11 @@ const ListMyConfirmClubThumnail = ({ club }) => {
     <>
       <Box
         sx={{
+          borderRadius: 2,
           backgroundColor: '#ffffff',
         }}
       >
-        <Stack spacing={0.8}>
+        <Stack spacing={0.8} paddingBottom={1}>
           <ClubThumbnail club={club} />
           <Stack direction={'row'} justifyContent='center' spacing={1.5}>
             <Button
