@@ -1,75 +1,120 @@
 import { LocalizationProvider, MobileDatePicker, MobileTimePicker, TimePicker } from '@mui/x-date-pickers';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
 import { Box, Stack } from '@mui/system';
-import { Paper, Typography } from '@mui/material';
+import { Button, Modal, Paper, TextField, Typography } from '@mui/material';
 
 const AddMeetingDate = () => {
-    const {
-        meetingDate,
-        meetingStartTime,
-        meetingEndTime,
-        setField
-      } = useMeetingFormStore();  
+  const {
+    meetingDate,
+    meetingStartTime,
+    meetingEndTime,
+    setField
+  } = useMeetingFormStore();
 
-      const handleMeetingDateChange = useCallback((newValue) => {
-        setField('meetingDate', newValue);
-      }, [setField]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedMeetingDate, setSelectedMeetingDate] = useState(meetingDate);
 
-      const handleMeetingStartTimeChange = useCallback((newValue) => {
-        setField('meetingStartTime', newValue);
-      }, [setField]);
+  useEffect(() => {
+    setSelectedMeetingDate(meetingDate);
+  }, [meetingDate]);
 
-      const handleMeetingEndTimeChange = useCallback((newValue) => {
-        setField('meetingEndTime', newValue);
-      }, [setField]);
+  const handleMeetingDateChange = useCallback((newValue) => {
+    if (newValue < new Date()) {
+      setShowModal(true);
+    } else {
+      setSelectedMeetingDate(newValue);
+      setField('meetingDate', newValue);
+    }
+  }, [setField]);
 
-    return (
-      <Box sx={{ margin: '10px' }}>
+  const handleMeetingStartTimeChange = useCallback((newValue) => {
+    setField('meetingStartTime', newValue);
+  }, [setField]);
+
+  const handleMeetingEndTimeChange = useCallback((newValue) => {
+    setField('meetingEndTime', newValue);
+  }, [setField]);
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  return (
+    <Box sx={{ margin: '10px' }}>
       <h4>언제 만날까요?</h4>
       <Box sx={{ margin: '10px' }}>
         <Stack spacing={2}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoItem >
-                <MobileDatePicker 
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoItem>
+              <MobileDatePicker
                 label="모임날짜"
-                value={meetingDate} 
-                onChange={handleMeetingDateChange}/>
+                value={selectedMeetingDate}
+                onChange={handleMeetingDateChange}
+                renderInput={(params) => <TextField {...params} disabled={showModal} />}
+              />
             </DemoItem>
-            </LocalizationProvider>
+          </LocalizationProvider>
 
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoItem >
-                <MobileTimePicker 
-                value={meetingStartTime} 
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoItem>
+              <MobileTimePicker
+                value={meetingStartTime}
                 label="모임 시작 시간"
-                onChange={handleMeetingStartTimeChange}/>
+                onChange={handleMeetingStartTimeChange}
+              />
             </DemoItem>
-            </LocalizationProvider>
+          </LocalizationProvider>
 
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoItem >
-                <MobileTimePicker 
-                value={meetingEndTime} 
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoItem>
+              <MobileTimePicker
+                value={meetingEndTime}
                 label="모임 끝나는 시간"
-                onChange={handleMeetingEndTimeChange}/>
+                onChange={handleMeetingEndTimeChange}
+              />
             </DemoItem>
-            </LocalizationProvider>
-            </Stack>
-
-        </Box>
-        <Paper variant="outlined" sx={{margin: '5px', padding: '10px'}}>
-        <Typography style={{ color: 'gray' }} sx={{ fontSize: 13}}>
-        모임 인원이 다 차거나 모임 시작 시간 이후에는
+          </LocalizationProvider>
+        </Stack>
+      </Box>
+      <Paper variant="outlined" sx={{ margin: '5px', padding: '10px' }}>
+        <Typography style={{ color: 'gray' }} sx={{ fontSize: 13 }}>
+          모임 인원이 다 차거나 모임 시작 시간 이후에는
         </Typography>
         <Typography style={{ color: 'gray' }} sx={{ fontSize: 13 }}>
-        모집 완료 상태로 자동 변경됩니다.
+          모집 완료 상태로 자동 변경됩니다.
         </Typography>
       </Paper>
+      <Modal
+        open={showModal}
+        onClose={handleCloseModal}
+        aria-labelledby="date-selection-error-modal"
+        aria-describedby="date-selection-error-modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Typography id="date-selection-error-modal-description">
+            오늘 날짜 이후의 날짜를 선택해야 합니다. 다시 선택해주세요.
+          </Typography>
+          <Button onClick={handleCloseModal} variant="contained" sx={{ mt: 2 }}>
+            확인
+          </Button>
         </Box>
-    );
+      </Modal>
+    </Box>
+  );
 };
 
 export default AddMeetingDate;

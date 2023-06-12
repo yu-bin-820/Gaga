@@ -54,7 +54,7 @@ const UpdateMeetingReview = () => {
         setMeetingReview(response.data);
         setSelectedImage(
           response.data?.meetingReviewImg
-            ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
+            ? `${import.meta.env.VITE_CDN_HOST}/upload_images/meeting/${
                 response.data?.meetingReviewImg
               }`
             : null

@@ -142,7 +142,7 @@ const GetMeeting = () => {
       >
         {meeting?.meetingImg ? (
           <img
-            src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
+            src={`${import.meta.env.VITE_CDN_HOST}/upload_images/meeting/${
               meeting?.meetingImg
             }`}
             alt="noImg"
@@ -167,12 +167,27 @@ const GetMeeting = () => {
 
         <Stack spacing={1}>
           <Box>
+            <Stack direction={'row'} spacing={1}>
             <SmallChip label={meeting?.filterTag} />
+            {meeting.meetingSuccess===2 &&
+            <SmallChip
+                label={'성사완료'}
+              />}
+            {meeting.meetingSuccess===1 &&
+            <SmallChip
+                label={meeting?.meetingState === 1 ? '모집중' : '모집완료'}
+                sx={{
+                  backgroundColor:
+                  meeting?.meetingState === 1 ? '#81BEF7' : '#F78181',
+                }}
+              />}
+            </Stack>
           </Box>
-          <Typography variant="h3" sx={{ fontSize: 16 }}>
+          <Typography variant="h6" component="h2" id="date-selection-error-modal">
             {meeting?.meetingName}
           </Typography>
 
+          <h5>모임 리더</h5>
           <MeetingMember member={leaderData} />
 
           <Stack direction={'row'} spacing={1} alignItems={'center'}>
@@ -182,12 +197,14 @@ const GetMeeting = () => {
             </Typography>
           </Stack>
 
-          <Stack direction={'row'} spacing={1} alignItems={'center'}>
+          {meeting?.enttyFee !== null && meeting?.enttyFee !== 0 && (
+          <Stack direction="row" spacing={1} alignItems="center">
             <PaymentIcon />
             <Typography sx={{ fontSize: 13 }}>
               {meeting?.enttyFee}원
             </Typography>
           </Stack>
+          )}
 
           <Stack direction={'row'} spacing={1} alignItems={'center'}>
             <CalendarMonthIcon />
@@ -238,8 +255,12 @@ const GetMeeting = () => {
         {pendingMemberList?.map((pendingMember, i) => (
           <MeetingMember key={i} member={pendingMember} />
         ))}
-        <h5>리뷰</h5>
-        <ListMeetingReview />
+        { meeting.meetingSuccess === 2 &&(
+        <>
+          <h5>리뷰</h5>
+          <ListMeetingReview />
+        </>
+        )}
         <Stack
           spacing={0}
           direction="row"

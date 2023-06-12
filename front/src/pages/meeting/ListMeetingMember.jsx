@@ -73,7 +73,7 @@ const ListMeetingMember = () => {
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [meetingno, mutateConfirmedMemberList, mutatePendingMemberList]);
 
   return (
     <Box sx={{ bgcolor: '#ededed' }}>
