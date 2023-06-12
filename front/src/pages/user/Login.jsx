@@ -95,9 +95,13 @@ const Login = () => {
             console.log(response);
             if (response.data.userId == null) {
               showAlert("아이디를 확인해 주세요.");
-            } else if (response.data.password !== user.password) {
+            } else if (response.data.userId === "invalid_password") {
               showAlert("비밀번호를 확인해 주세요.");
-            } else if (
+            }
+            // } else if (response.data.password !== user.password) {
+            //   showAlert("비밀번호를 확인해 주세요.");
+            // } 
+            else if (
               "blacklist" in response.data &&
               (response.data.blacklist === 1 || response.data.blacklist === 2)
             ) {
@@ -114,8 +118,13 @@ const Login = () => {
             }
           });
       } catch (error) {
-        showAlert("오류가 발생했습니다.");
         console.error(error);
+  
+        if (error.response && error.response.status === 401) {
+          showAlert("비밀번호를 확인해 주세요.");
+        } else {
+          showAlert("오류가 발생했습니다.");
+        }
       }
     },
     [user, mutateMe]
@@ -123,14 +132,14 @@ const Login = () => {
 
   const handleNaverLogin = () => {
     window.location.href =
-      `https://nid.naver.com/oauth2.0/authorize?client_id=FzMGbETEgw2xNeSUlIIF&response_type=code&redirect_uri=${import.meta.env.VITE_SPRING_HOST}/rest/user/naverLogin&state=test`;
+  
+    `https://nid.naver.com/oauth2.0/authorize?client_id=FzMGbETEgw2xNeSUlIIF&response_type=code&redirect_uri=${import.meta.env.VITE_SPRING_HOST}/rest/user/naverLogin&state=test`;
   };
 
   const handleKakaoLogin = () => {
     window.location.href =
       `https://kauth.kakao.com/oauth/authorize?client_id=5d88ee6131a76417bcf8e0d0dc852d91&scope=profile_nickname,profile_image,account_email&redirect_uri=${import.meta.env.VITE_SPRING_HOST}/rest/user/kakaoLogin&response_type=code`;
   };
-
   if (myData === undefined) {
     return <div>로딩중</div>;
   }
