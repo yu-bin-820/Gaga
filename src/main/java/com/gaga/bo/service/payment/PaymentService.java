@@ -19,6 +19,9 @@ public interface PaymentService {
 	//회원별 결제 내역 목록 조회
 	public List<Payment> getPaymentList(int userNo) throws Exception;
 	
+	//전체 회원 결제 내역 목록 조회 
+	public List<Payment> getAllPaymentList() throws Exception;
+	
 	//결제 내역 수정(환불)
 	public void updatePayment(String payNo) throws Exception;
 	

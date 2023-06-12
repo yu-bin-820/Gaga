@@ -25,6 +25,9 @@ public interface PaymentDao {
 	//SELECT LIST
 	public List<Payment> getPaymentList(int userNo) throws Exception;
 	
+	//SELECT LIST
+	public List<Payment> getAllPaymentList() throws Exception;
+	
 	//UPDATE 1: 결제완료 2: 환불완료
 	public void updatePayment(String payNo) throws Exception;
 	

@@ -100,6 +100,14 @@ public class PaymentRestController {
 		return paymentService.getPaymentList(userNo);
 	}
 	
+	@GetMapping("")
+	public List<Payment> getAllPaymentList() throws Exception{
+		
+		System.out.println("전체 회원 결제 내역 목록 조회 Ctrl");
+		
+		return paymentService.getAllPaymentList();
+	}
+	
 		
 	//정산 	
 	@GetMapping("adjustment")

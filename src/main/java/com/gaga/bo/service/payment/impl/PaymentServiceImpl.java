@@ -87,6 +87,14 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
+	public List<Payment> getAllPaymentList() throws Exception {
+
+		System.out.println("전체 회원 결제 내역 목록 조회 서비스");
+		
+		return paymentDao.getAllPaymentList();
+	}
+
+	@Override
 	public List<Meeting> getAllAdjustmentList() throws Exception {
 		
 		System.out.println("정산 목록 전체 조회 서비스");

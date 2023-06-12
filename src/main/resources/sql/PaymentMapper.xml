@@ -78,6 +78,13 @@
 	    ORDER BY pay_time DESC
 	</select>
 	
+	<!-- SQL: SELECT -->
+	<select id="getAllPaymentList" resultMap="paymentResultMap">
+	    SELECT pay_no, user_no, meeting_no, meeting_name, pay_time, refund_time, pay_state, entry_fee
+	    FROM payments
+	    ORDER BY pay_time DESC
+	</select>
+	
 	<update id="updatePayment" parameterType="String">
 	  UPDATE payments
 	  SET pay_state = 2,
