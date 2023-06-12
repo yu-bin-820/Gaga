@@ -145,7 +145,7 @@ public class PaymentRestController {
 	}
 	
 	@PostMapping("refund")
-	public ResponseEntity<String> refundTest(@RequestBody Map<String, String> requestData) throws Exception {
+	public ResponseEntity<String> refund(@RequestBody Map<String, String> requestData) throws Exception {
 
 	    String merchantUid = requestData.get("merchant_uid");
 
@@ -175,6 +175,8 @@ public class PaymentRestController {
 	        if (responseEntity.getStatusCode() == HttpStatus.OK) {
 	        	
 	        	paymentService.updatePayment(merchantUid);
+	        	
+	        	System.out.println("결제 번호는? "+ merchantUid);
          	
 	        	System.out.println("환불처리가 성공적으로 진행되었습니다.");
 	        	
