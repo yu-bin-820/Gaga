@@ -74,11 +74,13 @@ const UpdateMeetingSuccess = () => {
             sx={{ marginTop: '8px' }}
             label='은행명'
             value={bankName}
+            disabled
           />
           <TextField
             sx={{ marginTop: '8px' }}
             label='계좌번호'
             value={accountNo}
+            disabled
           />
           *기존 계좌와 다른 계좌를 등록하고 싶은 경우*
           <Stack>
