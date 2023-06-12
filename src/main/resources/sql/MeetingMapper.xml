@@ -175,6 +175,7 @@
   	m.meeting_leader_no = #{userNo}
   AND
   	m.meeting_state IN (1, 2, 3)
+  ORDER BY m.meeting_success ASC, m.meeting_date ASC
 </select>
 
   
@@ -366,7 +367,7 @@
   UPDATE meetings
   SET
     meeting_success = 2,
-    meeting_state = 2,
+    meeting_state = 1,
     account_no = #{accountNo},
     bank_name = #{bankName}
   WHERE

@@ -20,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.gaga.bo.service.domain.User;
 import com.gaga.bo.service.user.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RestController
 @RequestMapping("/rest/user")
@@ -30,6 +32,8 @@ public class UserRestController {
 	
 	@Value("${redirectUrl}")
     private String redirectUrl;
+	
+	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
 	public UserRestController(){
 		System.out.println(this.getClass());
@@ -78,21 +82,26 @@ public class UserRestController {
 	}
 	
 	@PostMapping("/login")
-	public User login(	@RequestBody User user,
+	public ResponseEntity<User> login(	@RequestBody User user,
 									HttpSession session ) throws Exception{
 		System.out.println("/rest/user/login : POST");
 		
 		//Business Logic
-		User dbUser=userService.getUserById(user.getUserId());
-
-		if( dbUser!=null ) {
-			if( user.getPassword().equals(dbUser.getPassword())){
-				session.setAttribute("user", dbUser);
-			}
-		}
-		System.out.println("::"+user);	
-		return dbUser;
-		
+	    User dbUser = userService.getUserById(user.getUserId());
+	    if (dbUser != null) {
+	        // 회원의 입력 비밀번호와 데이터베이스에 저장된 해시화된 비밀번호를 비교
+	        boolean passwordMatch = passwordEncoder.matches(user.getPassword(), dbUser.getPassword());
+//	        System.out.println("화면에서 입력한 비밀번호: " + user.getPassword());
+//	        System.out.println("디비에서 가져온 비밀번호 암호화한거"+dbUser.getPassword());
+//	        System.out.println("화면에서 입력한 비밀번호 암호화한거"+passwordEncoder.encode(user.getPassword()));
+	        
+	        if (passwordMatch) {
+	            session.setAttribute("user", dbUser);
+	            return new ResponseEntity<>(dbUser, HttpStatus.OK);
+	        } 
+	    }
+	    
+	    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
     @PostMapping("/checkDuplicateId")
@@ -111,6 +120,17 @@ public class UserRestController {
         response.put("isDuplicate", isDuplicate);
         
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    
+    @PostMapping("/checkPassword")
+    public boolean checkPassword(@RequestBody User user) throws Exception{
+        User dbUser = userService.getUserById(user.getUserId());
+        if (dbUser != null) {
+            // 회원의 입력 비밀번호와 데이터베이스에 저장된 해시화된 비밀번호를 비교
+            boolean passwordMatch = passwordEncoder.matches(user.getPassword(), dbUser.getPassword());
+            return passwordMatch;
+        }
+        return false;
     }
 	
 	@DeleteMapping("/logout")
@@ -156,6 +176,9 @@ public class UserRestController {
 //	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 //	    }
 		// Business Logic
+		//비밀번호 암호화부분 디코딩 메소드는 bcrypt에서 제공하지 않음
+		String encodedPassword = passwordEncoder.encode(user.getPassword());
+		user.setPassword(encodedPassword);
 		userService.addUser(user);
 		
 		// 회원 가입 후 자동 로그인 처리를 위해 세션에 사용자 정보 저장
@@ -169,6 +192,8 @@ public class UserRestController {
 	public ResponseEntity<User> updateUser(@RequestBody User user,HttpSession session) throws Exception {
 		System.out.println("/rest/user/updateUser : POST");
 
+		String encodedPassword = passwordEncoder.encode(user.getPassword());
+		user.setPassword(encodedPassword);
 		userService.updateUser(user);
 		System.out.println();
 		session.setAttribute("user", user);
