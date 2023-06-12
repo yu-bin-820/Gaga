@@ -107,9 +107,9 @@ const GetDirectTop = ({ receiverNo }) => {
               <Stack direction={'row'} spacing={2} alignItems={'center'}>
                 <Avatar
                   alt={myData?.nickName}
-                  src={`${
-                    import.meta.env.VITE_SPRING_HOST
-                  }/upload_images/user/${myData?.profileImg}`}
+                  src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
+                    myData?.profileImg
+                  }`}
                 />
                 <Typography>{myData?.nickName} (나)</Typography>
               </Stack>
@@ -119,9 +119,9 @@ const GetDirectTop = ({ receiverNo }) => {
               <Stack direction={'row'} spacing={2} alignItems={'center'}>
                 <Avatar
                   alt={userData?.nickName}
-                  src={`${
-                    import.meta.env.VITE_SPRING_HOST
-                  }/upload_images/user/${userData?.profileImg}`}
+                  src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
+                    userData?.profileImg
+                  }`}
                 />
                 <Typography>{userData?.nickName}</Typography>
               </Stack>

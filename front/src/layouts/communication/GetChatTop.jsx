@@ -106,9 +106,9 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
               <Stack direction={'row'} spacing={2} alignItems={'center'}>
                 <Avatar
                   alt={groupLeader.nick_name}
-                  src={`${
-                    import.meta.env.VITE_SPRING_HOST
-                  }/upload_images/user/${groupLeader.profile_img}`}
+                  src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
+                    groupLeader.profile_img
+                  }`}
                 />
                 <Typography>{groupLeader.nick_name}</Typography>
               </Stack>
@@ -122,9 +122,9 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
                 <Stack direction={'row'} spacing={2} alignItems={'center'}>
                   <Avatar
                     alt={member.nickName}
-                    src={`${
-                      import.meta.env.VITE_SPRING_HOST
-                    }/upload_images/user/${member.profileImg}`}
+                    src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
+                      member.profileImg
+                    }`}
                   />
                   <Typography>{member.nickName}</Typography>
                 </Stack>
