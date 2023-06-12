@@ -98,7 +98,9 @@ const AddMeeting1 = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [filterTag, meetingName, meetingAddr,meetingDate, meetingStartTime, meetingEndTime, filterGender, filterMinAge, filterMaxAge, entryFee]);
+  }, [filterTag, meetingName, meetingAddr,meetingDate, meetingStartTime, meetingEndTime, filterGender, 
+    filterMinAge, filterMaxAge, entryFee, file, mainCategoryNo, meetingDetailAddr, meetingIntro, meetingLat,
+     meetingLng, meetingMaxMemberNo, myData.userNo, navigate, parentClubNo, parentMeetingNo, reset]);
 
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);

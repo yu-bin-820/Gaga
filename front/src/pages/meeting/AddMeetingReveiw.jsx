@@ -66,7 +66,7 @@ const AddMeetingReveiw = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [meetingReview, selectedFile]);
+  }, [meetingReview, selectedFile, meetingno, myData.userNo, navigate]);
   return (
     <Box sx={{ margin: '10px' }}>
       <CommonTop />

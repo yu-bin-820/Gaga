@@ -1,5 +1,5 @@
 import { Accordion, AccordionDetails, AccordionSummary, ToggleButton, Typography } from '@mui/material';
-import { Box, Stack } from '@mui/system';
+import { Stack } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from 'axios';

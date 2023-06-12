@@ -1,5 +1,5 @@
 import ListMeetingReview from '@components/meeting/ListMeetingReview';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Skeleton, Typography } from '@mui/material';
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
@@ -127,14 +127,17 @@ const GetMeeting = () => {
   const isMeetingSuccessful = meeting?.meetingSuccess === 2;
 
   if (!leaderData) {
-    return <>로딩중</>;
+    return (
+      <Skeleton variant="rectangular" width={'100vw'} height={'100vh'} />
+
+    );
   }
   return (
     <>
       {isUserLeader && !isMeetingSuccessful ? <GetMeetingTop /> : <CommonTop />}
       <Box
         sx={{
-          marginTop: '50px',
+          marginTop: '64px',
           marginBottom: '64px',
           marginLeft: '10px',
           marginRight: '10px',
@@ -142,37 +145,52 @@ const GetMeeting = () => {
       >
         {meeting?.meetingImg ? (
           <img
-            src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
+            src={`${import.meta.env.VITE_CDN_HOST}/upload_images/meeting/${
               meeting?.meetingImg
-            }`}
+            }?type=f_sh&w=400&h=250&faceopt=true&sharp_amt=1.0`}
             alt="noImg"
             loading="lazy"
             onError={handleImageError}
             style={{            
             maxWidth: '100%',
-            maxHeight: '300px',
+            maxHeight: '250px',
             minWidth: '100%',
-            minHeight: '300px'}}
+            minHeight: '250px'}}
           />
         ) : (
           <img
             src={`https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c`}
             style={{            
               maxWidth: '100%',
-              maxHeight: '300px',
+              maxHeight: '250px',
               minWidth: '100%',
-              minHeight: '300px'}}
+              minHeight: '250px'}}
           />
         )}
 
         <Stack spacing={1}>
           <Box>
+            <Stack direction={'row'} spacing={1}>
             <SmallChip label={meeting?.filterTag} />
+            {meeting.meetingSuccess===2 &&
+            <SmallChip
+                label={'성사완료'}
+              />}
+            {meeting.meetingSuccess===1 &&
+            <SmallChip
+                label={meeting?.meetingState === 1 ? '모집중' : '모집완료'}
+                sx={{
+                  backgroundColor:
+                  meeting?.meetingState === 1 ? '#81BEF7' : '#F78181',
+                }}
+              />}
+            </Stack>
           </Box>
-          <Typography variant="h3" sx={{ fontSize: 16 }}>
+          <Typography variant="h6" component="h2" id="date-selection-error-modal">
             {meeting?.meetingName}
           </Typography>
 
+          <h5>모임 리더</h5>
           <MeetingMember member={leaderData} />
 
           <Stack direction={'row'} spacing={1} alignItems={'center'}>
@@ -182,12 +200,14 @@ const GetMeeting = () => {
             </Typography>
           </Stack>
 
-          <Stack direction={'row'} spacing={1} alignItems={'center'}>
+          {meeting?.entryFee !== null && meeting?.entryFee !== 0 && (
+          <Stack direction="row" spacing={1} alignItems="center">
             <PaymentIcon />
             <Typography sx={{ fontSize: 13 }}>
-              {meeting?.enttyFee}원
+              {meeting?.entryFee}원
             </Typography>
           </Stack>
+          )}
 
           <Stack direction={'row'} spacing={1} alignItems={'center'}>
             <CalendarMonthIcon />
@@ -238,8 +258,12 @@ const GetMeeting = () => {
         {pendingMemberList?.map((pendingMember, i) => (
           <MeetingMember key={i} member={pendingMember} />
         ))}
-        <h5>리뷰</h5>
-        <ListMeetingReview />
+        { meeting.meetingSuccess === 2 &&(
+        <>
+          <h5>리뷰</h5>
+          <ListMeetingReview />
+        </>
+        )}
         <Stack
           spacing={0}
           direction="row"

@@ -80,7 +80,7 @@ AddMeetingMapDrawer.propTypes = {
     keyword: PropTypes.object.isRequired,
     handleKeywordChange: PropTypes.object.isRequired,
     handleSubmit: PropTypes.object.isRequired,
-  };
+    };
 
 
 export default AddMeetingMapDrawer;

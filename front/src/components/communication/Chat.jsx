@@ -124,9 +124,7 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
               )}
               {data.content_type_no == 2 && (
                 <img
-                  src={`${import.meta.env.VITE_EXPRESS_HOST}/uploads/${
-                    data.content
-                  }`}
+                  src={`${import.meta.env.VITE_CDN_HOST}/${data.content}`}
                   alt="error"
                   loading="lazy"
                   style={{

@@ -12,12 +12,14 @@ import SmallChip from './SmallChip';
 
 const MeetingThumbnail = ({ meeting }) => {
   const navigate = useNavigate();
-  const { meetingName, meetingAddr, meetingMaxMemberNo, count, meetingNo } =
-  meeting;
 
   const onClickMeeting = useCallback(() => {
-    navigate(`/meeting/meetingno/${meetingNo}`);
-  }, [meetingNo, navigate]);
+    navigate(`/meeting/meetingno/${meeting?.meetingNo}`);
+  }, [meeting?.meetingNo, navigate]);
+
+  const truncatedName = meeting?.meetingName?.length > 13
+  ? `${meeting?.meetingName.slice(0, 13)}...`
+  : meeting?.meetingName;
 
   return (
     <Stack direction='row' spacing={2}>
@@ -31,9 +33,9 @@ const MeetingThumbnail = ({ meeting }) => {
       >
         {meeting?.meetingImg ? (
           <img
-            src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
+            src={`${import.meta.env.VITE_CDN_HOST}/upload_images/meeting/${
               meeting?.meetingImg
-            }`}
+            }?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`}
             alt='noImg'
             loading='lazy'
             style={{ borderRadius: '7px' }}
@@ -48,18 +50,32 @@ const MeetingThumbnail = ({ meeting }) => {
         )}
       </ImageListItem>
       <Box>
-        <SmallChip label={meeting.filterTag} />
+        <Stack direction={'row'} spacing={1}>
+            <SmallChip label={meeting?.filterTag} />
+            {meeting?.meetingSuccess===2 &&
+            <SmallChip
+                label={'성사완료'}
+              />}
+            {meeting?.meetingSuccess===1 &&
+            <SmallChip
+                label={meeting?.meetingState === 1 ? '모집중' : '모집완료'}
+                sx={{
+                  backgroundColor:
+                  meeting?.meetingState === 1 ? '#81BEF7' : '#F78181',
+                }}
+              />}
+            </Stack>
         <Box sx={{ color: 'text.primary', fontSize: 15, fontWeight: 'medium' }}>
-          {meetingName}
+          {truncatedName}
         </Box>
         <Box sx={{ color: 'text.secondary', display: 'inline', fontSize: 12 }}>
-          {meetingAddr}
+          {meeting?.meetingAddr}
         </Box>
         <Stack direction='row' spacing={1}>
           <Stack direction={'row'} spacing={1} alignItems={'center'}>
             <PeopleIcon />
             <Typography sx={{ fontSize: 13 }}>
-              {count}/{meetingMaxMemberNo}
+              {meeting?.count}/{meeting?.meetingMaxMemberNo}
             </Typography>
           </Stack>
         </Stack>

@@ -38,7 +38,7 @@ const DeleteMeetingDialog = ({ open, setOpen }) => {
                 console.error(error);
             }
         },
-        [meetingno]
+        [meetingno, navigate]
     );
 
     return (

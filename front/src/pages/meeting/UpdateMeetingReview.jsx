@@ -29,13 +29,8 @@ const UpdateMeetingReview = () => {
     fetcher
 );
 
-  const [selectedImage, setSelectedImage] = useState(
-    meetingReview?.meetingReviewImg
-      ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
-          meetingReview?.meetingReviewImg
-        }`
-      : null
-  );
+  const [selectedImage, setSelectedImage] = useState();
+  
   const [selectedFile, setSelectedFile] = useState(null);
 
   const onChangeImg = (event) => {
@@ -54,9 +49,9 @@ const UpdateMeetingReview = () => {
         setMeetingReview(response.data);
         setSelectedImage(
           response.data?.meetingReviewImg
-            ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
+            ? `${import.meta.env.VITE_CDN_HOST}/upload_images/meeting/${
                 response.data?.meetingReviewImg
-              }`
+              }?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`
             : null
         );
       })

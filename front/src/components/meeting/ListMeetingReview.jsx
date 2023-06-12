@@ -7,7 +7,6 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 
 
-
 const ListMeetingReview = () => {
     const { meetingno } = useParams();
     const navigate = useNavigate();
@@ -32,7 +31,7 @@ const ListMeetingReview = () => {
         const onClickUpdateMeetingReview = React.useCallback(()=>{
             const { id } = event.target;
             navigate(`/meeting/review/updatereview/reviewno/${id}`);
-            },[]);
+            },[navigate]);
 
         const onClickDelete = useCallback(
             
@@ -55,7 +54,7 @@ const ListMeetingReview = () => {
                     console.error(error);
                 }
             },
-            []
+            [meetingno, navigate]
         );
         console.log(meetingReviewList)
 
@@ -70,8 +69,8 @@ const ListMeetingReview = () => {
                         alignItems="center">
                             <img
                                 src={`${
-                                import.meta.env.VITE_SPRING_HOST
-                                }/upload_images/meeting/${meetingReview?.meetingReviewImg}`}
+                                import.meta.env.VITE_CDN_HOST
+                                }/upload_images/meeting/${meetingReview?.meetingReviewImg}?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`}
                                 style={{ width: '100px', height: '100px' }}
                             />
                         <Stack>
