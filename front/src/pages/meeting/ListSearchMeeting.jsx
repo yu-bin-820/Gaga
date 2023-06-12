@@ -1,7 +1,8 @@
 import MeetingThumbnail from '@components/meeting/MeetingThumnail';
 import useSearchMeetingFormStore from '@hooks/meeting/useSearchMeetingFormStore';
 import CommonTop from '@layouts/common/CommonTop';
-import { Button } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { Button, Grid, IconButton, TextField, Tooltip } from '@mui/material';
 import { Box, margin } from '@mui/system';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -13,6 +14,12 @@ const ListSearchMeeting = () => {
   const [loading, setLoading] = useState(false);
 
   const { searchKeyword, currentPage, setField } = useSearchMeetingFormStore();
+
+  const onClickSearch = useCallback(() => {
+    navigate(`/meeting/meetinglist`);
+    console.log(searchKeyword);
+    setField('currentPage', 1);
+  }, [navigate, searchKeyword]);
 
 
 
@@ -67,6 +74,30 @@ const ListSearchMeeting = () => {
   return (
     <div>
       <CommonTop />
+      <Box>
+      <Grid container spacing={2} alignItems="center">
+          <Grid item></Grid>
+          <Grid item xs>
+            <TextField
+              fullWidth
+              InputProps={{
+                disableUnderline: true,
+                sx: { fontSize: 'default' },
+              }}
+              variant="standard"
+              value={searchKeyword}
+              onChange={(e) => setField('searchKeyword', e.target.value)}
+            />
+          </Grid>
+          <Grid item>
+            <Tooltip title="Reload">
+              <IconButton onClick={onClickSearch}>
+                <SearchIcon color="inherit" sx={{ display: 'block' }} />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+        </Grid>
+        </Box>
       <Box sx={{ bgcolor: '#ededed' }}>
         <Box sx={{ paddingTop: '66px', paddingBottom: '20px', marginBottom: '136px', bgcolor: '#ededed' }}>
           {meetingList?.map((meeting, i) => (

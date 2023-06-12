@@ -82,6 +82,7 @@ const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
 
   const onSubmitForm = useCallback(
     (e) => {
+      setField('shouldScroll', true);
       e.preventDefault();
       if (chat?.trim()) {
         axios
@@ -104,7 +105,7 @@ const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
           });
       }
     },
-    [chat, setChat, mutateDirectMessages, senderNo, receiverNo]
+    [chat, setChat, mutateDirectMessages, senderNo, receiverNo, setField]
   );
 
   // const onKeydownChat = useCallback(
@@ -128,6 +129,7 @@ const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
   );
 
   const submitUploadChatImgDialog = useCallback(() => {
+    setField('shouldScroll', true);
     const formData = new FormData();
     formData.append('file', selectedFile);
     formData.append('senderNo', senderNo);
@@ -140,6 +142,7 @@ const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
         { withCredentials: true }
       )
       .then(() => {
+        mutateDirectMessages();
         setUploadChatImgDialogOpen(false);
         setAnchorEl(null);
       })
@@ -150,7 +153,14 @@ const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
         setUploadChatImgDialogOpen(false);
         setAnchorEl(null);
       });
-  }, [selectedFile, setUploadChatImgDialogOpen, senderNo, receiverNo]);
+  }, [
+    selectedFile,
+    setUploadChatImgDialogOpen,
+    senderNo,
+    receiverNo,
+    mutateDirectMessages,
+    setField,
+  ]);
   const onClickLocationMenu = useCallback(() => {
     handleClose();
     setField('isPost', true);
@@ -300,6 +310,7 @@ const DirectChatBox = ({ senderNo, receiverNo, mutateDirectMessages }) => {
         postPath={postPath}
         senderNo={senderNo}
         receiverNo={receiverNo}
+        mutateDirectMessages={mutateDirectMessages}
       />
     </Box>
   );

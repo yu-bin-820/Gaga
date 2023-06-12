@@ -7,14 +7,14 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
-import useCommonStore from '@stores/common/useCommonStore';
 import DeleteMemberDialog from './DeleteMemberDialog';
+import useCommunityStore from '@stores/communication/useCommunityStore';
 
 
 const ListMyConfirmMeetingThumnail = ({ meeting }) => {
 
     const { meetingNo } = meeting;
-    const {setField} = useCommonStore();
+    const {setField} = useCommunityStore();
 
     const [deleteMemberDialogOpen, setDeleteMemberDialogOpen] =
     useState(false);

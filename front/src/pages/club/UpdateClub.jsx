@@ -1,32 +1,56 @@
 import useInput from '@hooks/common/useInput';
-import { Avatar, Button, ImageListItem, TextField } from '@mui/material';
+import {
+  Avatar,
+  Button,
+  ImageListItem,
+  MobileStepper,
+  TextField,
+} from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
+import useUpdateClubFormStore from '@stores/club/useUpdateClubFormStore';
+import { useTheme } from '@emotion/react';
+import AddClubMaxMember from '@components/club/AddClubMaxMember';
+import AddClubFilter from '@components/club/AddClubFilter';
+import AddClubImg from '@components/club/AddClubImg';
+import AddClubName from '@components/club/AddClubName';
+import AddClubRegion from '@components/club/AddClubRegion';
+import AddClubListCategory from '@components/club/AddClubListCategory';
+import SelectClubType from '@components/club/SelectClubType';
+import CommonTop from '@layouts/common/CommonTop';
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
+import UpdateClubName from '@components/club/UpdateClubName';
+import UpdateClubRegion from '@components/club/UpdateClubRegion';
+import UpdateClubImg from '@components/club/UpdateClubImg';
+import UpdateClubFilter from '@components/club/UpdateClubFilter';
+import UpdateClubMaxMember from '@components/club/UpdateClubMaxMember';
+import UpdateClubState from '@components/club/UpdateClubState';
 
 const UpdateClub = () => {
   const { clubNo } = useParams();
-  const [club, onChangeClub, setClub] = useInput({
-    clubName: '',
-    clubIntro: '',
-    clubImg: '',
-    clubRegion: '',
-    filterGender: '',
-    filterMinAge: '',
-    filterMaxAge: '',
-    clubState: '',
-    clubMaxMemberNo: '',
-    filterTag: '',
-    clubNo: '',
-  });
+  const {
+    clubName,
+    clubIntro,
+    clubImg,
+    clubRegion,
+    filterGender,
+    filterMinAge,
+    filterMaxAge,
+    filterTag,
+    clubState,
+    clubMaxMemberNo,
+    file,
+    image,
+    setField,
+    onChangeField,
+  } = useUpdateClubFormStore();
 
   const [selectedImage, setSelectedImage] = useState(
-    club?.clubImg
-      ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/club/${
-          club?.clubImg
-        }`
+    clubImg
+      ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/club/${clubImg}`
       : null
   );
   const [selectedFile, setSelectedFile] = useState(null);
@@ -42,7 +66,24 @@ const UpdateClub = () => {
       .get(`${import.meta.env.VITE_SPRING_HOST}/rest/club/no/${clubNo}`)
       .then((response) => {
         console.log(response.data);
-        setClub(response.data);
+        setField('clubName', response.data.clubName);
+        setField('clubIntro', response.data.clubIntro);
+        setField('clubImg', response.data.clubImg);
+        setField('clubRegion', response.data.clubRegion);
+        setField('filterGender', response.data.filterGender);
+        setField('filterMinAge', response.data.filterMinAge);
+        setField('filterMaxAge', response.data.filterMaxAge);
+        setField('filterTag', response.data.filterTag);
+        setField('clubMaxMemberNo', response.data.clubMaxMemberNo);
+        setField('clubState', response.data.clubState);
+        setField(
+          'image',
+          response.data.clubImg
+            ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/club/${
+                response.data?.clubImg
+              }`
+            : null
+        );
       })
       .catch((error) => {
         console.log(error);
@@ -58,15 +99,16 @@ const UpdateClub = () => {
       const formData = new FormData();
 
       formData.append('file', selectedFile);
-      formData.append('clubName', club.clubName);
-      formData.append('clubIntro', club.clubIntro);
-      formData.append('clubRegion', club.clubRegion);
-      formData.append('filterGender', club.filterGender);
-      formData.append('filterMinAge', club.filterMinAge);
-      formData.append('filterMaxAge', club.filterMaxAge);
-      formData.append('clubMaxMemberNo', club.clubMaxMemberNo);
-      formData.append('filterTag', club.filterTag);
-      formData.append('clubState', club.clubState);
+      formData.append('clubName', clubName);
+      formData.append('clubIntro', clubIntro);
+      formData.append('clubRegion', clubRegion);
+      formData.append('filterGender', filterGender);
+      formData.append('filterMinAge', filterMinAge);
+      formData.append('filterMaxAge', filterMaxAge);
+      formData.append('filterTag', filterTag);
+      formData.append('clubMaxMemberNo', clubMaxMemberNo);
+      formData.append('filterTag', filterTag);
+      formData.append('clubState', clubState);
       formData.append('clubNo', clubNo);
 
       console.log(clubNo.clubRegion);
@@ -82,127 +124,181 @@ const UpdateClub = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [club, selectedFile, clubNo, navigate]);
+  }, [clubNo, navigate]);
+
+  const theme = useTheme();
+  const [activeStep, setActiveStep] = useState(0);
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return <UpdateClubName />;
+      case 1:
+        return <UpdateClubRegion />;
+      case 2:
+        return <UpdateClubImg />;
+      case 3:
+        return <UpdateClubFilter />;
+      case 4:
+        return <UpdateClubMaxMember />;
+      case 5:
+        return <UpdateClubState />;
+      default:
+        throw new Error('Unknown step');
+    }
+  }
 
   return (
-    <Box sx={{ marginTop: '64px' }}>
-      <TextField
-        fulWidth
-        label='clubName'
-        name='clubName'
-        onChange={onChangeClub}
-        required
-        value={club.clubName}
-      />
-      <TextField
-        fulWidth
-        label='clubIntro'
-        name='clubIntro'
-        onChange={onChangeClub}
-        required
-        value={club.clubIntro}
-      />
-      <TextField
-        fulWidth
-        label='clubRegion'
-        name='clubRegion'
-        onChange={onChangeClub}
-        required
-        value={club.clubRegion}
-      />
-      <TextField
-        fulWidth
-        label='clubImg'
-        name='clubImg'
-        onChange={onChangeClub}
-        required
-        value={club.clubImg}
-      />
-      <TextField
-        fulWidth
-        label='filterGender'
-        name='filterGender'
-        onChange={onChangeClub}
-        required
-        value={club.filterGender}
-      />
-      <TextField
-        fulWidth
-        label='filterMinAge'
-        name='filterMinAge'
-        onChange={onChangeClub}
-        required
-        value={club.filterMinAge}
-      />
-      <TextField
-        fulWidth
-        label='filterMaxAge'
-        name='filterMaxAge'
-        onChange={onChangeClub}
-        required
-        value={club.filterMaxAge}
-      />
-      <TextField
-        fulWidth
-        label='clubMaxMemberNo'
-        name='clubMaxMemberNo'
-        onChange={onChangeClub}
-        required
-        value={club.clubMaxMemberNo}
-      />
-      <TextField
-        fulWidth
-        label='clubState'
-        name='clubState'
-        onChange={onChangeClub}
-        required
-        value={club.clubState}
-      />
-
-      <TextField
-        fulWidth
-        label='clubNo'
-        name='clubNo'
-        onChange={onChangeClub}
-        required
-        value={club.clubNo}
-      />
-      <Stack direction='row' spacing={2} alignItems={'center'} marginLeft='5px'>
-        <Button
-          variant='outlined'
-          startIcon={
-            <Avatar>
-              <AddPhotoAlternateIcon />
-            </Avatar>
+    <>
+      <CommonTop />
+      <Box sx={{ marginTop: '64px' }}>
+        <MobileStepper
+          variant='progress'
+          steps={6}
+          position='static'
+          activeStep={activeStep}
+          sx={{ maxWidth: 500, flexGrow: 1 }}
+          nextButton={
+            <Button
+              size='small'
+              onClick={handleNext}
+              disabled={activeStep === 5}
+            >
+              Next
+              {theme.direction === 'rtl' ? (
+                <KeyboardArrowLeft />
+              ) : (
+                <KeyboardArrowRight />
+              )}
+            </Button>
           }
-          color='primary'
-          aria-label='upload picture'
-          component='label'
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderColor: 'grey',
-            width: '150px',
-            height: '150px',
-          }}
-          size='large'
+          backButton={
+            <Button
+              size='small'
+              onClick={handleBack}
+              disabled={activeStep === 0}
+            >
+              {theme.direction === 'rtl' ? (
+                <KeyboardArrowRight />
+              ) : (
+                <KeyboardArrowLeft />
+              )}
+              Back
+            </Button>
+          }
+        />
+        <React.Fragment>
+          {getStepContent(activeStep)}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}></Box>
+        </React.Fragment>
+      </Box>
+      <Box sx={{ marginTop: '64px' }}>
+        <TextField
+          fulWidth
+          label='clubName'
+          name='clubName'
+          onChange={(e) => onChangeField('clubName', e)}
+          required
+          value={clubName}
+        />
+        <TextField
+          fulWidth
+          label='clubIntro'
+          name='clubIntro'
+          onChange={(e) => onChangeField('clubIntro', e)}
+          required
+          value={clubIntro}
+        />
+        <TextField
+          fulWidth
+          label='clubImg'
+          name='clubImg'
+          onChange={(e) => onChangeField('clubImg', e)}
+          required
+          value={clubImg}
+        />
+        <TextField
+          fulWidth
+          label='filterGender'
+          name='filterGender'
+          onChange={(e) => onChangeField('filterGender', e)}
+          required
+          value={filterGender}
+        />
+        <TextField
+          fulWidth
+          label='clubRegion'
+          name='clubRegion'
+          onChange={(e) => onChangeField('clubRegion', e)}
+          required
+          value={clubRegion}
+        />
+
+        <TextField
+          fulWidth
+          label='filterTag'
+          name='filterTag'
+          onChange={(e) => onChangeField('filterTag', e)}
+          required
+          value={filterTag}
+        />
+        <TextField
+          fulWidth
+          label='clubMaxMemberNo'
+          name='clubMaxMemberNo'
+          onChange={(e) => onChangeField('clubMaxMemberNo', e)}
+          required
+          value={clubMaxMemberNo}
+        />
+        <TextField
+          fulWidth
+          label='clubState'
+          name='clubState'
+          onChange={(e) => onChangeField('clubState', e)}
+          required
+          value={clubState}
+        />
+        <TextField
+          fulWidth
+          label='filterMinAge'
+          name='filterMinAge'
+          onChange={(e) => onChangeField('filterMinAge', e)}
+          required
+          value={filterMinAge}
+        />
+        <TextField
+          fulWidth
+          label='filterMaxAge'
+          name='filterMaxAge'
+          onChange={(e) => onChangeField('filterMaxAge', e)}
+          required
+          value={filterMaxAge}
+        />
+        <TextField
+          fulWidth
+          label='clubNo'
+          name='clubNo'
+          onChange={(e) => onChangeField('clubNo', e)}
+          required
+          value={clubNo}
+        />
+        <Button
+          variant='contained'
+          sx={{ width: '85vw', borderRadius: '50px' }}
+          onClick={handleSubmit}
         >
-          <input
-            hidden
-            accept='image/*'
-            type='file'
-            id='file'
-            name='file'
-            onChange={onChangeImg}
-          />
+          수정하기
         </Button>
-        <ImageListItem>
-          {selectedImage && <img src={selectedImage} />}
-        </ImageListItem>
-      </Stack>
-      <Button onClick={handleSubmit}>수정하기</Button>
-    </Box>
+      </Box>
+    </>
   );
 };
 

@@ -1,4 +1,11 @@
-import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
+import {
+  Button,
+  Grid,
+  Modal,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { Box, Stack, margin } from '@mui/system';
 import React, { useCallback, useEffect, useState } from 'react';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -31,6 +38,12 @@ const AddClubMaxMember = () => {
     onChangeField,
     reset,
   } = useClubFormStore();
+
+  const [openModal, setOpenModal] = useState(false);
+  const closeModal = () => {
+    setOpenModal(false);
+    navigate('/community/profile/mine');
+  };
 
   const isDecreaseDisabled = clubMaxMemberNo === 3;
   const isIncreaseDisabled = clubMaxMemberNo === 99;
@@ -73,10 +86,6 @@ const AddClubMaxMember = () => {
         formData.append('clubMaxMemberNo', clubMaxMemberNo);
         formData.append('clubLeaderNo', myData.userNo);
 
-        console.log(useClubFormStore.clubName);
-        console.log(useClubFormStore.clubRegion);
-        console.log(useClubFormStore.clubMaxMemberNo);
-
         const response = await axios.post(
           `${import.meta.env.VITE_SPRING_HOST}/rest/club`,
           formData
@@ -84,8 +93,7 @@ const AddClubMaxMember = () => {
 
         reset();
 
-        //생성 완료 후 내 프로필로 이동 가능하면 클럽 상세페이지로 이동하고 싶음..
-        navigate('/community/profile/mine');
+        setOpenModal(true);
 
         console.log(response.data);
       } catch (error) {
@@ -142,6 +150,41 @@ const AddClubMaxMember = () => {
         >
           생성하기
         </Button>
+        <>
+          <Modal
+            open={openModal}
+            onClose={closeModal}
+            aria-labelledby='modal-title'
+            aria-describedby='modal-description'
+          >
+            <Box
+              sx={{
+                p: 4,
+                backgroundColor: 'white',
+                borderRadius: 2,
+                mx: 'auto',
+                my: '20%',
+                width: '50%',
+              }}
+            >
+              <Typography id='modal-title' variant='h6' component='h2'>
+                알림
+              </Typography>
+              <Typography id='modal-description' sx={{ mt: 2 }}>
+                클럽 생성이 완료되었습니다.
+              </Typography>
+              <Button
+                onClick={() => {
+                  closeModal();
+                }}
+                style={{ alignSelf: 'flex-end', marginTop: 16 }}
+                variant='contained'
+              >
+                확인
+              </Button>
+            </Box>
+          </Modal>
+        </>
       </Stack>
     </Box>
   );

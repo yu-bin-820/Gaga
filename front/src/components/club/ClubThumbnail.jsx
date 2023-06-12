@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router';
 import { useCallback } from 'react';
 import PeopleIcon from '@mui/icons-material/People';
 import { Place } from '@mui/icons-material';
+import ClubSmallChip from './ClubSmallChip';
 
 const StyledAvatarGroup = styled(AvatarGroup)({
   '& .MuiAvatar-root': {
@@ -51,7 +52,7 @@ const ClubThumbnail = ({ club }) => {
         minWidth: 295,
         padding: 1,
         backgroundColor: '#ffffff',
-        margin: 1,
+        margin: 0.1,
       }}
     >
       <Stack spacing={0.8}>
@@ -74,15 +75,17 @@ const ClubThumbnail = ({ club }) => {
                 alt='noImg'
                 loading='lazy'
                 onError={handleImageError}
+                style={{ borderRadius: '5px' }}
               />
             ) : (
               <img
                 src={`https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c`}
+                style={{ borderRadius: '5px' }}
               />
             )}
           </ImageListItem>
           <Box>
-            <Chip label={club.filterTag} size='small' />
+            <ClubSmallChip label={club.filterTag} size='small' />
             <Stack
               sx={{ color: 'text.primary', fontSize: 16, fontWeight: 'medium' }}
             >

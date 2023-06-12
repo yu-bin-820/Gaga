@@ -1,19 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { Box, Stack } from '@mui/system';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Button,
   FormControl,
   Grid,
   InputLabel,
   MenuItem,
+  Paper,
   Select,
   TextField,
+  Typography,
 } from '@mui/material';
-import { Box, Stack } from '@mui/system';
+import useUpdateMeetingFormStore from '@stores/meeting/useUpdateMeetingFormStore';
+import SelectGender from '@components/common/SelectGender';
+import SelectAge from '@components/common/SelectAge';
+import useUpdateClubFormStore from '@stores/club/useUpdateClubFormStore';
 import axios from 'axios';
-import useClubFormStore from '@hooks/club/useClubFormStore';
 import PlaceIcon from '@mui/icons-material/Place';
+import useClubFormStore from '@hooks/club/useClubFormStore';
 
-const AddClubRegionTest = () => {
+const UpdateClubRegion = () => {
+  const { clubReion, setField } = useUpdateClubFormStore();
+
   const [sidoOptions, setSidoOptions] = useState([]);
   const [sigoonOptions, setSigoonOptions] = useState([]);
   const [selectedSido, setSelectedSido] = useState('');
@@ -121,6 +129,22 @@ const AddClubRegionTest = () => {
     setFinalValue(finalValue);
   };
 
+  const handleGenderChange = useCallback(
+    (gender) => {
+      setField('filterGender', gender);
+    },
+    [setField]
+  );
+
+  const handleAgeChange = useCallback(
+    (filterMinAge, filterMaxAge) => {
+      setField('filterMinAge', filterMinAge);
+      setField('filterMaxAge', filterMaxAge);
+      console.log(filterMaxAge);
+    },
+    [setField]
+  );
+
   return (
     <>
       <Box sx={{ margin: '10px' }}>
@@ -135,7 +159,7 @@ const AddClubRegionTest = () => {
               placeholder='예시: 서울특별시 강남구'
               required
               variant='standard'
-              value={finalValue}
+              value={clubRegion}
             />
           </Box>
           <Box direction='row' display='flex' marginTop={2} marginBottom={2}>
@@ -188,4 +212,4 @@ const AddClubRegionTest = () => {
   );
 };
 
-export default AddClubRegionTest;
+export default UpdateClubRegion;

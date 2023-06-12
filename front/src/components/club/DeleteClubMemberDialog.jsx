@@ -6,7 +6,7 @@ import useSWR from 'swr';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-const DeleteMemberDialog = ({ open, setOpen, club }) => {
+const DeleteClubMemberDialog = ({ open, setOpen, club }) => {
   const handleClose = () => {
     setOpen(false);
   };
@@ -69,8 +69,8 @@ const DeleteMemberDialog = ({ open, setOpen, club }) => {
   );
 };
 
-DeleteMemberDialog.propTypes = {
+DeleteClubMemberDialog.propTypes = {
   club: PropTypes.object.isRequired,
 };
 
-export default DeleteMemberDialog;
+export default DeleteClubMemberDialog;

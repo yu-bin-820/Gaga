@@ -9,7 +9,7 @@ import useChatMapStore from '@stores/communication/useChatMapStore';
 
 const { kakao } = window;
 
-const ChatMap = ({ postPath, senderNo, groupNo }) => {
+const ChatMap = ({ postPath, senderNo, groupNo, mutateGroupMessages }) => {
   const { setField, lat, lng, isPost } = useChatMapStore();
   const [map, setMap] = useState(null);
 
@@ -94,6 +94,8 @@ const ChatMap = ({ postPath, senderNo, groupNo }) => {
           { withCredentials: true }
         )
         .then(() => {
+          mutateGroupMessages();
+          setField('shouldScroll', true);
           setField('locationDrawerOpen', false);
         });
     }
@@ -106,6 +108,7 @@ const ChatMap = ({ postPath, senderNo, groupNo }) => {
     markerLat,
     markerLng,
     isPost,
+    mutateGroupMessages,
   ]);
 
   const onClickMap = useCallback(
@@ -176,6 +179,7 @@ ChatMap.propTypes = {
   postPath: PropTypes.string,
   senderNo: PropTypes.number,
   groupNo: PropTypes.number,
+  mutateGroupMessages: PropTypes.func,
 };
 
 export default ChatMap;

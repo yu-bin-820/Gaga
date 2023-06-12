@@ -2,14 +2,56 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  ToggleButton,
   Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ListMyClub from './ListMyClub';
+import axios from 'axios';
+import { PropTypes } from 'prop-types';
+import StyledToggleButtonGroup from '@components/common/StyledToggleButtonGroup';
 
-const AddClubByClub = ({ expanded, handleChange }) => {
+const AddClubByClub = ({
+  expanded,
+  handleChange,
+  userNo,
+  onParentClubNoClick,
+}) => {
+  const [clubList, setClubList] = useState();
+
+  useEffect(() => {
+    axios
+      .get(
+        `${
+          import.meta.env.VITE_SPRING_HOST
+        }/rest/club/list/joincreate/${userNo}`
+      )
+      .then((response) => {
+        console.log(response.data);
+        setClubList(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [userNo]);
+  const [alignment, setAlignment] = useState('left');
+
+  const handleAlignment = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
+
+  const onClickParentClub = (clubNo) => {
+    console.log('부모클럽번호', clubNo);
+    onParentClubNoClick(clubNo);
+  };
+
+  console.log(userNo);
+
+  if (!clubList) {
+    return <>로딩중</>;
+  }
+
   return (
     <Accordion
       expanded={expanded === 'panel3'}
@@ -32,12 +74,34 @@ const AddClubByClub = ({ expanded, handleChange }) => {
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography>
-          <ListMyClub />
-        </Typography>
+        <StyledToggleButtonGroup
+          size='small'
+          value={alignment}
+          exclusive
+          onChange={handleAlignment}
+          aria-label='text alignment'
+        >
+          {clubList?.map((club, k) => (
+            <ToggleButton
+              key={k}
+              value={club.clubNo}
+              aria-label={club.clubNo}
+              onClick={() => onClickParentClub(club.clubNo)}
+            >
+              {club.clubName}
+            </ToggleButton>
+          ))}
+        </StyledToggleButtonGroup>
       </AccordionDetails>
     </Accordion>
   );
+};
+
+AddClubByClub.propTypes = {
+  expanded: PropTypes.object.isRequired,
+  handleChange: PropTypes.object.isRequired,
+  userNo: PropTypes.object.isRequired,
+  onParentClubNoClick: PropTypes.object.isRequired,
 };
 
 export default AddClubByClub;

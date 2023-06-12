@@ -1,7 +1,7 @@
 import AddMeetingMemberThumnail from '@components/meeting/AddMeetingMemberThumnail';
 import CommonTop from '@layouts/common/CommonTop';
-import { Button, Typography } from '@mui/material';
-import { Box, Stack } from '@mui/system';
+import { Button, Typography, Modal, Box } from '@mui/material';
+import { Stack } from '@mui/system';
 import Payment from '@pages/payment/Payment';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
@@ -12,6 +12,7 @@ import useSWR from 'swr';
 const AddMeetingMember = () => {
   const { meetingno } = useParams();
   const [meeting, setMeeting] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -47,13 +48,18 @@ const AddMeetingMember = () => {
           data
         );
 
-        navigate(`/`);
+        setIsModalOpen(true);
       } catch (error) {
         console.error(error);
       }
     },
-    [meeting, navigate]
+    [meeting, myData.userNo]
   );
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+    navigate('/');
+  }, [navigate]);
 
   console.log(myData);
   console.log(meeting);
@@ -114,6 +120,27 @@ const AddMeetingMember = () => {
           )}
         </Stack>
       </Box>
+      <Modal open={isModalOpen} onClose={handleCloseModal}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Typography variant="body1" component="div" sx={{ mb: 2 }}>
+            참여가 완료되었습니다.
+          </Typography>
+          <Button variant="contained" onClick={handleCloseModal}>
+            확인
+          </Button>
+        </Box>
+      </Modal>
     </>
   );
 };

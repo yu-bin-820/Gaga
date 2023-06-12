@@ -4,13 +4,13 @@ import MeetingThumbnail from './MeetingThumnail';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router';
-import useCommonStore from '@stores/common/useCommonStore';
+import useCommunityStore from '@stores/communication/useCommunityStore';
 
 const ListMyMeetingThumnail = ({ meeting }) => {
 
     const currentDate = new Date();
     const meetingDateTime = new Date(`${meeting.meetingDate}T${meeting.meetingStartTime}`);
-    const {setField} = useCommonStore();
+    const {setField} = useCommunityStore();
 
     const isMeetingSuccessTime = currentDate >= meetingDateTime;
     const isMeetingSuccess = meeting.meetingSuccess === 2;

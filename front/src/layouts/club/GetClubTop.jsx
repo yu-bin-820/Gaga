@@ -17,9 +17,12 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useNavigate, useParams } from 'react-router';
 import { Box } from '@mui/system';
 import DeleteClubDialog from '@components/club/DeleteClubDialog';
+import useUpdateClubFormStore from '@stores/club/useUpdateClubFormStore';
 
 const GetClubTop = () => {
   const { clubNo } = useParams();
+
+  const { reset } = useUpdateClubFormStore();
 
   const navigate = useNavigate();
 
@@ -37,9 +40,12 @@ const GetClubTop = () => {
     []
   );
 
-  const onClickUpdate = useCallback((MouseEvent) => {
-    navigate(`/club/updateclub/${clubNo}`);
-  }, []);
+  const onClickUpdate = useCallback(
+    (MouseEvent) => {
+      navigate(`/club/updateclub/${clubNo}`);
+    },
+    [navigate, reset, clubNo]
+  );
 
   const [deleteClubDialogOpen, setDeleteClubDialogOpen] = useState(false);
 
@@ -80,14 +86,14 @@ const GetClubTop = () => {
       >
         <Box sx={{ minWidth: '300px' }}>
           <List>
-            <ListItem>
-              <Button variant='contained' onClick={onClickUpdate}>
+            <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
+              <Button onClick={onClickUpdate} sx={{ minWidth: '100vw' }}>
                 수정하기
               </Button>
             </ListItem>
-            <Divider />
-            <ListItem>
-              <Button variant='contained' onClick={onClickDeleteSelect}>
+            <Divider sx={{ minWidth: '100vw' }} />
+            <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
+              <Button onClick={onClickDeleteSelect} sx={{ minWidth: '100vw' }}>
                 삭제하기
               </Button>
             </ListItem>
@@ -102,5 +108,4 @@ const GetClubTop = () => {
     </>
   );
 };
-
 export default GetClubTop;

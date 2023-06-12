@@ -15,7 +15,7 @@ const useSocket = (chattype) => {
         delete sockets[chattype];
       }
     }
-  }, [chattype, sockets]);
+  }, [chattype]);
 
   if (!chattype) {
     return [undefined, disconnect];

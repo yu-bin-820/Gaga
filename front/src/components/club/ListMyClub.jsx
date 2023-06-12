@@ -28,7 +28,7 @@ const ListMyClub = () => {
     axios
       .get(
         `${import.meta.env.VITE_SPRING_HOST}/rest/club/list/join/${
-          myData?.userNo
+          userNo ? userNo : myData?.userNo
         }`
       )
       .then((response) => {
@@ -67,7 +67,7 @@ const ListMyClub = () => {
           return (
             <Box key={i} sx={{ margin: '3px' }}>
               {!isMyProfile && <ListClubProfile club={club} />}
-              <ListMyPendingClubThumnail club={club} />
+              {isMyProfile && <ListMyPendingClubThumnail club={club} />}
             </Box>
           );
         }

@@ -4,17 +4,14 @@ import { useNavigate } from 'react-router';
 import { Box, Stack } from '@mui/system';
 import MeetingThumbnail from './MeetingThumnail';
 import { Button } from '@mui/material';
-import useCommonStore from '@stores/common/useCommonStore';
-import axios from 'axios';
-import fetcher from '@utils/fetcher';
-import useSWR from 'swr';
 import DeleteMemberDialog from './DeleteMemberDialog';
+import useCommunityStore from '@stores/communication/useCommunityStore';
 
 
 
 const ListMyPendingMeetingThumnail = ({ meeting }) => {
 
-    const {setField} = useCommonStore();
+    const {setField} = useCommunityStore();
 
     const [deleteMemberDialogOpen, setDeleteMemberDialogOpen] =
     useState(false);
@@ -27,10 +24,10 @@ const ListMyPendingMeetingThumnail = ({ meeting }) => {
 
     const onClickDirectChat = useCallback(
         (e) => {
-        setField('chatRoomEntryNo', meeting.meetingLeaderNo);
+        setField('chatRoomEntryNo', meeting?.meetingLeaderNo);
         navigate('/chat/direct/message/list');
         },
-        [navigate, setField, meeting.meetingLeaderNo]
+        [navigate, setField, meeting?.meetingLeaderNo]
     );
 
     return (

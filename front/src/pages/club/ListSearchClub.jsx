@@ -71,9 +71,9 @@ const ListSearchClub = () => {
       <CommonTop />
       <Box
         sx={{
-          paddingTop: '66px',
-          paddingBottom: '20px',
-          marginBottom: '136px',
+          paddingTop: '64px',
+          paddingBottom: '1px',
+          marginBottom: '64px',
           bgcolor: '#ededed',
         }}
       >
@@ -81,15 +81,9 @@ const ListSearchClub = () => {
           <Box
             key={i}
             sx={{
-              marginLeft: 1.5,
-              marginRight: 1.5,
-              marginTop: 0.5,
-              marginBottom: 2,
-              borderRadius: 3,
-              p: 2,
-              minWidth: 300,
-              padding: 1.3,
-              backgroundColor: '#ffffff',
+              marginRight: '10px',
+              marginLeft: '10px',
+              marginBottom: '5px',
             }}
           >
             <ClubThumbnail club={club} />

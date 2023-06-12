@@ -12,7 +12,7 @@ import { StaticMap } from 'react-kakao-maps-sdk';
 import ChatStaticMap from './ChatStaticMap';
 import useChatMapStore from '@stores/communication/useChatMapStore';
 
-const Chat = ({ data }) => {
+const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
   const { setField } = useChatMapStore();
   const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -20,8 +20,12 @@ const Chat = ({ data }) => {
   );
   // console.log('!!!', myData);
   // console.log('!!!', data.data);
+  const minute = DateTime.fromISO(data.created_at).minute;
   const isNotice = data.content_type_no === 101;
   const isMe = myData?.userNo === data.sender_no;
+  const isShowProfile = data.sender_no != prevUserNo;
+  const isShowTime = minute !== nextMinute || data.sender_no != nextUserNo;
+
   const messageColor = isMe ? 'black' : 'gray';
   const messageBackColor = isMe ? 'rgba(3, 102, 69, 0.15)' : '#ededed';
   const sendTime = DateTime.fromISO(data.created_at).toLocaleString(
@@ -57,7 +61,7 @@ const Chat = ({ data }) => {
           spacing={1.5}
           sx={{ marginBottom: '10px' }}
         >
-          {!isMe && (
+          {!isMe && isShowProfile && (
             <Avatar
               src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
                 data?.Sender.profile_img
@@ -66,22 +70,27 @@ const Chat = ({ data }) => {
               sx={{ marginLeft: '10px' }}
             />
           )}
+
+          {!isMe && !isShowProfile && <Box sx={{ minWidth: '50px' }} />}
+
           <Stack>
-            {!isMe && data.Sender.nick_name}
+            {!isMe && isShowProfile && data.Sender.nick_name}
 
             <Stack direction={'row'} sx={{ maxWidth: '78vw' }}>
               {isMe && (
                 <Stack marginTop="auto">
-                  <Typography
-                    sx={{
-                      fontSize: 12,
-                      marginLeft: 'auto',
-                      minWidth: '58px',
-                      color: 'gray',
-                    }}
-                  >
-                    {sendTime}
-                  </Typography>
+                  {isShowTime && (
+                    <Typography
+                      sx={{
+                        fontSize: 12,
+                        marginLeft: 'auto',
+                        minWidth: '58px',
+                        color: 'gray',
+                      }}
+                    >
+                      {sendTime}
+                    </Typography>
+                  )}
                   {data?.readCount != 0 && (
                     <Typography
                       color={'primary'}
@@ -153,21 +162,21 @@ const Chat = ({ data }) => {
                 </div>
               )}
 
-              {!isMe && (
-                <Stack marginTop="auto">
+              <Stack marginTop="auto">
+                {!isMe && isShowTime && (
                   <Typography sx={{ fontSize: 12, color: 'grey' }}>
                     {sendTime}
                   </Typography>
-                  {!isMe && data?.readCount != 0 && (
-                    <Typography
-                      color={'primary'}
-                      sx={{ fontSize: 12, fontWeight: 700 }}
-                    >
-                      {data.readCount}
-                    </Typography>
-                  )}
-                </Stack>
-              )}
+                )}
+                {!isMe && data?.readCount != 0 && (
+                  <Typography
+                    color={'primary'}
+                    sx={{ fontSize: 12, fontWeight: 700 }}
+                  >
+                    {data.readCount}
+                  </Typography>
+                )}
+              </Stack>
             </Stack>
           </Stack>
         </Stack>
@@ -177,5 +186,9 @@ const Chat = ({ data }) => {
 };
 Chat.propTypes = {
   data: PropTypes.object,
+  prevMinute: PropTypes.number,
+  nextMinute: PropTypes.number,
+  prevUserNo: PropTypes.number,
+  nextUserNo: PropTypes.number,
 };
 export default Chat;

@@ -1,7 +1,9 @@
+import NoClub from '@components/club/NoClub';
 import AdjustmentThumnail from '@components/payment/AdjustmentThumnail';
+import ListAdminAdjustmnet from '@components/payment/ListAdminAdjustmnet';
+import NoPayment from '@components/payment/NoPayment';
 import CommonTop from '@layouts/common/CommonTop';
-import { Button } from '@mui/material';
-import { Stack } from '@mui/system';
+import { Stack, margin } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -65,35 +67,23 @@ const ListAdjustment = () => {
 
   return (
     <div style={{ backgroundColor: '#ededed' }}>
-      <Stack sx={{ marginTop: '64px' }}>
-        <CommonTop />
+      <Stack sx={{ marginTop: '50px' }}>
+        <CommonTop
+          pageName='정산 내역 조회'
+          prevPath='/community/profile/mine'
+        />
         {isAdmin ? (
-          <div>
-            관리자 페이지입니다.
-            <Stack>
-              {adjustmentAllList?.map((meeting, i) => (
-                <Stack key={i}>
-                  <h3>유저정보{meeting.meetingLeaderNo}</h3>
-                  <AdjustmentThumnail meeting={meeting} />
-                  <Stack
-                    direction={'row'}
-                    justifyContent='center'
-                    spacing={1.5}
-                  >
-                    <Button
-                      variant='outlined'
-                      sx={{ width: '180px' }}
-                      onClick={() => onClickUpdate(meeting.meetingNo)}
-                    >
-                      정산하기
-                    </Button>
-                  </Stack>
-                </Stack>
-              ))}
-            </Stack>
-          </div>
+          <>
+            <ListAdminAdjustmnet />
+          </>
         ) : (
-          <Stack>
+          <Stack sx={{ marginLeft: '10px', marginRight: '10px' }}>
+            <h5>
+              정산은 매주 화요일에 진행됩니다. <br />
+              문의사항은 Q&A 게시판을 이용해 주세요
+            </h5>
+            {adjustmentList?.filter((meeting) => meeting.meetingSuccess === 2)
+              .length === 0 && <NoPayment ment={'정산 내역이 없습니다.'} />}
             {adjustmentList?.map((meeting, i) => (
               <Stack key={i}>
                 <AdjustmentThumnail meeting={meeting} />
