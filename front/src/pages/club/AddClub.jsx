@@ -53,7 +53,7 @@ const AddClub = () => {
           steps={7}
           position='static'
           activeStep={activeStep}
-          sx={{ maxWidth: 400, flexGrow: 1 }}
+          sx={{ maxWidth: 600, flexGrow: 1 }}
           nextButton={
             <Button
               size='small'

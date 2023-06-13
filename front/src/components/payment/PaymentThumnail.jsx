@@ -41,6 +41,10 @@ const PaymentThumnail = ({ payment }) => {
     navigate(`/meeting/meetingno/${meetingNo}`);
   }, []);
 
+  const onClickPayment = useCallback(() => {
+    navigate(`/payment/details/${payNo}`);
+  });
+
   const {
     payNo,
     meetingNo,
@@ -53,6 +57,7 @@ const PaymentThumnail = ({ payment }) => {
 
   return (
     <Stack
+      onClick={onClickPayment}
       direction='row'
       sx={{
         borderRadius: 2,
@@ -73,10 +78,6 @@ const PaymentThumnail = ({ payment }) => {
         <ImageListItem
           sx={{
             marginLeft: '5px',
-            maxWidth: '100px',
-            maxHeight: '100px',
-            minWidth: '100px',
-            minHeight: '100px',
           }}
         >
           {meeting?.meetingImg ? (
@@ -109,53 +110,17 @@ const PaymentThumnail = ({ payment }) => {
         }}
       >
         <Stack direction='column'>
-          <Stack
-            sx={{
-              color: 'text.primary',
-              fontSize: 15,
-              fontWeight: 'medium',
-              marginBottom: '2px',
-            }}
-          >
-            결제 번호 {payNo}
+          <Stack direction='row' display='flex' spacing={2}>
+            <Stack sx={{ minWidth: '50px' }}>모임명 </Stack>
+            <Stack>{meeting?.meetingName}</Stack>
           </Stack>
-          <Stack
-            sx={{
-              color: 'text.secondary',
-              display: 'inline',
-              fontSize: 12,
-              marginBottom: '1px',
-            }}
-          >
-            {new Date(payTime).toLocaleString()}
-          </Stack>
-
-          <Stack direction='row' spacing={1}>
-            <Stack>모 임 명 {meetingName}</Stack>
-          </Stack>
-          <Stack direction='row' spacing={1}>
-            <Stack>참 가 비 {entryFee}원</Stack>
+          <Stack direction='row' display='flex' spacing={2}>
+            <Stack>참가비</Stack>
+            <Stack> {meeting?.entryFee}</Stack>
           </Stack>
         </Stack>
-        <Stack sx={{ alignItems: 'flex-end' }}>
-          {payState === 1 ? (
-            '결제완료'
-          ) : payState === 2 ? (
-            <>
-              환불완료
-              <Stack
-                sx={{
-                  color: 'text.secondary',
-                  display: 'inline',
-                  fontSize: 10,
-                }}
-              >
-                {new Date(refundTime).toLocaleString()}
-              </Stack>
-            </>
-          ) : (
-            ''
-          )}
+        <Stack sx={{ alignItems: 'flex-end', minWidth: '70px' }}>
+          {payState === 1 ? '결제완료' : payState === 2 ? '환불완료' : ''}
         </Stack>
       </Stack>
     </Stack>

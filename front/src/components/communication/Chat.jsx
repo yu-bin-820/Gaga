@@ -45,9 +45,12 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
           <Typography
             sx={{
               backgroundColor: '#ededed',
-              padding: '3px',
+              padding: '5px',
               margin: '6px',
               borderRadius: '1rem',
+              fontSize: 13,
+              fontWeight: 500,
+              color: 'grey',
             }}
           >
             &nbsp;&nbsp;{data.content}&nbsp;&nbsp;
@@ -91,12 +94,20 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
                       {sendTime}
                     </Typography>
                   )}
-                  {data?.readCount != 0 && (
+                  {data?.readCount > 0 && (
                     <Typography
                       color={'primary'}
                       sx={{ fontSize: 12, marginLeft: 'auto', fontWeight: 700 }}
                     >
                       {data.readCount}
+                    </Typography>
+                  )}
+                  {data?.read_state > 0 && (
+                    <Typography
+                      color={'primary'}
+                      sx={{ fontSize: 12, marginLeft: 'auto', fontWeight: 700 }}
+                    >
+                      {data.read_state}
                     </Typography>
                   )}
                 </Stack>
@@ -124,7 +135,9 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
               )}
               {data.content_type_no == 2 && (
                 <img
-                  src={`${import.meta.env.VITE_CDN_HOST}/${data.content}`}
+                  src={`${import.meta.env.VITE_CDN_ORIGIN_HOST}/${
+                    data.content
+                  }`}
                   alt="error"
                   loading="lazy"
                   style={{
@@ -172,6 +185,14 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
                     sx={{ fontSize: 12, fontWeight: 700 }}
                   >
                     {data.readCount}
+                  </Typography>
+                )}
+                {!isMe && data?.read_state != 0 && (
+                  <Typography
+                    color={'primary'}
+                    sx={{ fontSize: 12, fontWeight: 700 }}
+                  >
+                    {data.read_state}
                   </Typography>
                 )}
               </Stack>

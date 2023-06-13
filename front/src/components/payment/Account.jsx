@@ -115,7 +115,10 @@ const Account = (props) => {
         계좌 조회하기
       </Button>
       <Dialog open={openAccountModal} onClose={handleClose}>
-        <DialogTitle>계좌 조회</DialogTitle>
+        <DialogTitle>
+          <h4>계좌 조회</h4>
+          <h7>정확한 정보를 입력해주세요</h7>
+        </DialogTitle>
         <Stack />
         <DialogContent>
           <TextField
@@ -149,6 +152,7 @@ const Account = (props) => {
           />
           <Stack sx={{ marginBottom: '8px' }} />
         </DialogContent>
+
         <DialogActions>
           <Button
             onClick={onClickAccount}
@@ -163,7 +167,6 @@ const Account = (props) => {
         <Modal
           open={openModal}
           onClose={closeModal}
-          aria-labelledby='modal-title'
           aria-describedby='modal-description'
         >
           <Box
@@ -176,12 +179,9 @@ const Account = (props) => {
               width: '50%',
             }}
           >
-            <Typography id='modal-title' variant='h6' component='h2'>
-              알림
-            </Typography>
             <Typography id='modal-description' sx={{ mt: 2 }}>
-              {bankHolderCheck}님의 계좌 정보를 <br />
-              조회하였습니다.
+              {bankHolderCheck}님의 계좌 <br />
+              정보를 조회하였습니다.
             </Typography>
             <Button
               onClick={() => {

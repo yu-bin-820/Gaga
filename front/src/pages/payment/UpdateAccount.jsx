@@ -70,11 +70,13 @@ const UpdateAccount = () => {
           <TextField
             sx={{ marginTop: '16px' }}
             label='은행명'
+            disabled
             value={bankName}
           />
           <TextField
             sx={{ marginTop: '16px' }}
             label='계좌번호'
+            disabled
             value={accountNo}
           />
         </Stack>
@@ -93,7 +95,6 @@ const UpdateAccount = () => {
           <Modal
             open={openModal}
             onClose={closeModal}
-            aria-labelledby='modal-title'
             aria-describedby='modal-description'
           >
             <Box
@@ -106,17 +107,13 @@ const UpdateAccount = () => {
                 width: '50%',
               }}
             >
-              <Typography id='modal-title' variant='h6' component='h2'>
-                알림
-              </Typography>
-              <Typography id='modal-description' sx={{ mt: 2 }}>
-                계좌 정보를 업데이트했습니다.
+              <Typography id='modal-description' sx={{ mt: 0.5 }}>
+                계좌 정보를
+                <br /> 업데이트했습니다.
               </Typography>
               <Button
-                onClick={() => {
-                  closeModal();
-                }}
-                style={{ alignSelf: 'flex-end', marginTop: 16 }}
+                onClick={closeModal}
+                style={{ alignSelf: 'flex-end', marginTop: 8 }}
                 variant='contained'
               >
                 확인
