@@ -430,7 +430,7 @@ const AddKakaoUser = () => {
                 maxLength: 16,
               }}
             />
-            <AddKakaoUserDate fullWidth={true}/>
+            <AddKakaoUserDate />
             <TextField
               variant="outlined"
               margin="none"
