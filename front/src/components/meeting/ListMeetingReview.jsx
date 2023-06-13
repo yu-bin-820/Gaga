@@ -70,7 +70,7 @@ const ListMeetingReview = () => {
                             <img
                                 src={`${
                                 import.meta.env.VITE_CDN_HOST
-                                }/upload_images/meeting/${meetingReview?.meetingReviewImg}`}
+                                }/upload_images/meeting/${meetingReview?.meetingReviewImg}?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`}
                                 style={{ width: '100px', height: '100px' }}
                             />
                         <Stack>

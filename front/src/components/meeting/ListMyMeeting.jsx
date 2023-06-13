@@ -37,7 +37,7 @@ const ListMyMeeting = () => {
     },[userNo, myData]);
 
     return (
-        <Box sx={{ marginBottom: '170px', backgroundColor: '#ededed' }}>
+        <Box sx={{ marginBottom: '130px', backgroundColor: '#ededed' }}>
             <h5 style={{margin:'1px'}}>참여 확정 모임</h5>
             
             {meetingList?.filter(meeting => meeting.state === 2 && meeting.meetingSuccess === 1).length === 0 && (
@@ -67,7 +67,7 @@ const ListMyMeeting = () => {
                 return (
                     <Box key={i} sx={{ margin: '3px' }}>
                     {!isMyProfile&&(<ListMeetingProfile meeting={meeting} />)}
-                    <ListMyPendingMeetingThumnail meeting={meeting} />
+                    {isMyProfile&& (<ListMyPendingMeetingThumnail meeting={meeting} />)}
                     </Box>
                 );
                 }
@@ -93,13 +93,13 @@ const ListMyMeeting = () => {
 
             <h5 style={{margin:'1px'}}>성사된 모임</h5>
 
-            {meetingList?.filter(meeting => meeting?.state === ( 0|| 2 || 3) && meeting?.meetingSuccess === 2).length === 0 && (
+            {meetingList?.filter(meeting => meeting?.state === ( 2 || 3) && meeting?.meetingSuccess === 2).length === 0 && (
                 <NoMeeting 
                 ment={'성사된 모임이 없습니다'}/>
             )}
 
             {meetingList?.map((meeting, i) => {
-                if (meeting?.state === ( 0|| 2 || 3) && meeting?.meetingSuccess === 2) {
+                if (meeting?.state === ( 2 || 3) && meeting?.meetingSuccess === 2) {
                 return (
                     <Box key={i} sx={{ margin: '3px' }}>
                     {!isMyProfile&&(<ListMeetingProfile />)}

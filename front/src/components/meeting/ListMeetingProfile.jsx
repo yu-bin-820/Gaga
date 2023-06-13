@@ -16,7 +16,7 @@ const ListMeetingProfile = ({ meeting }) => {
         }}
         >
             <Stack
-            spacing={0.8}
+            spacing={3}
             >
             <MeetingThumbnail meeting={meeting}/>
             </Stack>

@@ -77,6 +77,7 @@ import Payment from '@pages/payment/Payment.jsx';
 import PaymentRedirect from '@pages/payment/PaymentRedirect.jsx';
 import PaymentFail from '@pages/payment/PaymentFail.jsx';
 import ListAdjustment from '@pages/payment/ListAdjustment.jsx';
+import PaymentDetails from '@pages/payment/PaymentDetails.jsx';
 
 const router = createBrowserRouter([
   {
@@ -373,6 +374,11 @@ const router = createBrowserRouter([
             path: 'fail',
             element: <PaymentFail />,
           },
+          {
+            path: 'details/:payNo',
+            element: <PaymentDetails />,
+          },
+
           {
             path: 'adjustment',
             children: [
