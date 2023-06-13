@@ -166,13 +166,15 @@ export default function ListChatRoom() {
                   onClick={onClickGroupChatOne}
                 >
                   <ChatItem
-                    avatar={`${import.meta.env.VITE_CDN_HOST}/upload_images/${
+                    avatar={`${
+                      import.meta.env.VITE_CDN_ORIGIN_HOST
+                    }/upload_images/${
                       group.meeting_name ? 'meeting' : 'club'
                     }/${
                       group.meeting_name ? group.meeting_img : group.club_img
                     }`}
                     alt={`${
-                      import.meta.env.VITE_CDN_HOST
+                      import.meta.env.VITE_CDN_ORIGIN_HOST
                     }/uploads/group_alt.jpg`}
                     title={
                       group.meeting_name ? group.meeting_name : group.club_name
@@ -199,7 +201,7 @@ export default function ListChatRoom() {
                 >
                   <ChatItem
                     avatar={`${
-                      import.meta.env.VITE_CDN_HOST
+                      import.meta.env.VITE_CDN_ORIGIN_HOST
                     }/upload_images/user/${
                       direct.Receiver
                         ? direct.Receiver?.profile_img
