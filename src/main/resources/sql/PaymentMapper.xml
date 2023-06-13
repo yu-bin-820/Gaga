@@ -18,33 +18,34 @@
     </resultMap>
     
     <resultMap id="meetingResultMap" type="meeting">
-    <id property="meetingNo" 				column="meeting_no" 			jdbcType="INTEGER" />
-    <result property="entryFee" 			column="entry_fee" 				jdbcType="INTEGER" />
-    <result property="meetingDate" 			column="meeting_date" 			jdbcType="DATE" />
-    <result property="meetingStartTime" 	column="meeting_start_time" 	jdbcType="TIME" />
-    <result property="meetingEndTime" 		column="meeting_end_time" 		jdbcType="TIME" />
-    <result property="parentClubNo" 		column="parent_club_no" 		jdbcType="INTEGER" />
-    <result property="meetingSuccess" 		column="meeting_success" 		jdbcType="INTEGER" />
-    <result property="meetingAddr" 			column="meeting_addr" 			jdbcType="LONGVARCHAR" />
-    <result property="meetingDetailAddr" 	column="meeting_detail_addr" 	jdbcType="LONGVARCHAR" />
-    <result property="meetingLat" 			column="meeting_lat" 			jdbcType="DOUBLE" />
-    <result property="meetingLng" 			column="meeting_lng" 			jdbcType="DOUBLE" />
-    <result property="meetingName" 			column="meeting_name" 			jdbcType="VARCHAR" />
-    <result property="meetingIntro" 		column="meeting_intro" 			jdbcType="LONGVARCHAR" />
-    <result property="meetingLeaderNo" 		column="meeting_leader_no" 		jdbcType="INTEGER" />
-    <result property="meetingMaxMemberNo" 	column="meeting_max_member_no" 	jdbcType="INTEGER" />
-    <result property="meetingRegDate" 		column="meeting_reg_date" 		jdbcType="TIMESTAMP" />
-    <result property="meetingState" 		column="meeting_state" 			jdbcType="INTEGER" />
-    <result property="meetingImg" 			column="meeting_img" 			jdbcType="LONGVARCHAR" />
-    <result property="filterGender" 		column="filter_gender" 			jdbcType="INTEGER" />
-    <result property="filterMinAge" 		column="filter_min_age" 		jdbcType="INTEGER" />
-    <result property="filterMaxAge" 		column="filter_max_age" 		jdbcType="INTEGER" />
-    <result property="mainCategoryNo" 		column="main_category_no" 		jdbcType="INTEGER"/>
-    <result property="filterTag" 			column="filter_tag" 			jdbcType="LONGVARCHAR" />
-    <result property="adjustmentTime" 		column="adjustment_time" 		jdbcType="TIMESTAMP" />
-    <result property="adjustmentState" 		column="adjustment_state" 		jdbcType="INTEGER" />
-    <result property="accountNo" 			column="account_no"				jdbcType="VARCHAR" />
-    <result property="bankName" 			column="bank_name" 				jdbcType="VARCHAR" />
+	    <id property="meetingNo" 				column="meeting_no" 			jdbcType="INTEGER" />
+	    <result property="entryFee" 			column="entry_fee" 				jdbcType="INTEGER" />
+	    <result property="meetingDate" 			column="meeting_date" 			jdbcType="DATE" />
+	    <result property="meetingStartTime" 	column="meeting_start_time" 	jdbcType="TIME" />
+	    <result property="meetingEndTime" 		column="meeting_end_time" 		jdbcType="TIME" />
+	    <result property="parentClubNo" 		column="parent_club_no" 		jdbcType="INTEGER" />
+	    <result property="meetingSuccess" 		column="meeting_success" 		jdbcType="INTEGER" />
+	    <result property="meetingAddr" 			column="meeting_addr" 			jdbcType="LONGVARCHAR" />
+	    <result property="meetingDetailAddr" 	column="meeting_detail_addr" 	jdbcType="LONGVARCHAR" />
+	    <result property="meetingLat" 			column="meeting_lat" 			jdbcType="DOUBLE" />
+	    <result property="meetingLng" 			column="meeting_lng" 			jdbcType="DOUBLE" />
+	    <result property="meetingName" 			column="meeting_name" 			jdbcType="VARCHAR" />
+	    <result property="meetingIntro" 		column="meeting_intro" 			jdbcType="LONGVARCHAR" />
+	    <result property="meetingLeaderNo" 		column="meeting_leader_no" 		jdbcType="INTEGER" />
+	    <result property="meetingMaxMemberNo" 	column="meeting_max_member_no" 	jdbcType="INTEGER" />
+	    <result property="meetingRegDate" 		column="meeting_reg_date" 		jdbcType="TIMESTAMP" />
+	    <result property="meetingState" 		column="meeting_state" 			jdbcType="INTEGER" />
+	    <result property="meetingImg" 			column="meeting_img" 			jdbcType="LONGVARCHAR" />
+	    <result property="filterGender" 		column="filter_gender" 			jdbcType="INTEGER" />
+	    <result property="filterMinAge" 		column="filter_min_age" 		jdbcType="INTEGER" />
+	    <result property="filterMaxAge" 		column="filter_max_age" 		jdbcType="INTEGER" />
+	    <result property="mainCategoryNo" 		column="main_category_no" 		jdbcType="INTEGER"/>
+	    <result property="filterTag" 			column="filter_tag" 			jdbcType="LONGVARCHAR" />
+	    <result property="adjustmentTime" 		column="adjustment_time" 		jdbcType="TIMESTAMP" />
+	    <result property="adjustmentState" 		column="adjustment_state" 		jdbcType="INTEGER" />
+	    <result property="accountNo" 			column="account_no"				jdbcType="VARCHAR" />
+	    <result property="bankName" 			column="bank_name" 				jdbcType="VARCHAR" />
+	    <result property="count" 				column="count" 					jdbcType="INTEGER" />
   </resultMap>
     
     <!-- SQL : INSERT -->
@@ -66,7 +67,7 @@
 	<select 	id="getPayNoByUserMeeting"  parameterType="int" resultType="java.lang.String" >
 	 	SELECT pay_no
 		FROM payments
-		WHERE user_no = #{userNo} AND meeting_no = #{meetingNo} AND pay_state = 1
+		WHERE user_no = #{userNo} AND meeting_no = #{meetingNo} AND pay_state IN (1,3) 
 	</select>
 	
 	<!-- SQL: SELECT -->
@@ -77,20 +78,40 @@
 	    ORDER BY pay_time DESC
 	</select>
 	
+	<!-- SQL: SELECT -->
+	<select id="getAllPaymentList" resultMap="paymentResultMap">
+	    SELECT pay_no, user_no, meeting_no, meeting_name, pay_time, refund_time, pay_state, entry_fee
+	    FROM payments
+	    ORDER BY pay_time DESC
+	</select>
+	
+	<!-- 환불 SQL-->
 	<update id="updatePayment" parameterType="String">
 	  UPDATE payments
 	  SET pay_state = 2,
 	      refund_time = NOW()
 	  WHERE pay_no = #{payNo}
 	</update>
+	
+	<!-- 환불알림 목록 SQL-->
+	<select id="offerRefund" resultMap="paymentResultMap">
+		SELECT m.meeting_no, m.user_no
+		FROM members m
+		WHERE m.meeting_no IN ( SELECT meeting_no 
+	    						FROM meetings 
+	   						    WHERE meeting_state = 4 
+	    							  AND entry_fee != 0 
+	    							  AND meeting_success != 2)
+	</select>
 
 	
 	
 	<!-- 정산 SQL -->
 	<!-- SQL : SELECT --> <!-- 1 :진행중 2: 성사 -->
 	<select id="getAllAdjustmentList" resultMap="meetingResultMap">
-		SELECT meeting_no, entry_fee, meeting_success, meeting_name,meeting_date,
+		SELECT meeting_no, entry_fee, meeting_success, meeting_name, meeting_date,
    			   meeting_start_time, meeting_leader_no, meeting_reg_date, meeting_state,
+   			   adjustment_time, account_no, bank_name,
 			   (SELECT COUNT(*) FROM members WHERE state = 2 AND meeting_no = m.meeting_no) AS count
 		FROM 
 		    meetings m
@@ -104,8 +125,9 @@
 	
 	<!-- SQL : SELECT -->
 	<select id="getAdjustmentList" parameterType="int" resultMap="meetingResultMap">
-	  SELECT meeting_no, entry_fee, meeting_success, meeting_name,meeting_date,
+	  SELECT meeting_no, entry_fee, meeting_success, meeting_name, meeting_date,
    			 meeting_start_time, meeting_leader_no, meeting_reg_date, meeting_state,
+   			 adjustment_time, account_no, bank_name, adjustment_state,
 			 (SELECT COUNT(*) FROM members WHERE state = 2 AND meeting_no = m.meeting_no) AS count
 		FROM 
 		    meetings m
@@ -129,12 +151,13 @@
 
 	<!-- 정산 상태별 정렬 1. 정산대기(adjustmentState=1) 2. 모임 끝 시간이 최신 -->
 	<!-- SQL : SELECT -->
-    <select id="getAdjustmentIngList" resultMap="meetingResultMap">
-     SELECT meeting_date, meeting_end_time, adjustment_time, 
-		    adjustment_state, account_no, bank_name, meeting_name, 
-		    meeting_leader_no, entry_fee
-	 FROM meetings
-	 WHERE entry_fee != 0 AND meeting_success = 2 AND adjustment_state = 1
+    <select id="getAdjustmentStateList" resultMap="meetingResultMap">
+     SELECT meeting_no, entry_fee, meeting_success, meeting_name, meeting_date,
+   			 meeting_start_time, meeting_leader_no, meeting_reg_date, meeting_state,
+   			 adjustment_time, account_no, bank_name, adjustment_state,
+			 (SELECT COUNT(*) FROM members WHERE state = 2 AND meeting_no = m.meeting_no) AS count
+	 FROM meetings m
+	 WHERE entry_fee != 0 AND meeting_success = 2 AND adjustment_state = #{adjustmentState}
 	 ORDER BY 
 		    meeting_date DESC,
 		    meeting_end_time DESC;    

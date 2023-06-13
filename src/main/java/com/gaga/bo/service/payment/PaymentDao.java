@@ -22,8 +22,14 @@ public interface PaymentDao {
 	//SELECT ONE
 	public String getPayNoByUserMeeting(Map<String, Object> refund) throws Exception;
 	
+	//SELECT ONE
+	public List<Payment> offerRefund() throws Exception;
+	
 	//SELECT LIST
 	public List<Payment> getPaymentList(int userNo) throws Exception;
+	
+	//SELECT LIST
+	public List<Payment> getAllPaymentList() throws Exception;
 	
 	//UPDATE 1: 결제완료 2: 환불완료
 	public void updatePayment(String payNo) throws Exception;
@@ -33,7 +39,7 @@ public interface PaymentDao {
 	public List<Meeting> getAllAdjustmentList() throws Exception;
 	
 	//SELECT LIST 정산 대기 상태 목록 조회
-	public List<Meeting> getAdjustmentIngList() throws Exception;
+	public List<Meeting> getAdjustmentStateList(int adjustmentState) throws Exception;
 	
 	//SELECT LIST 회원별 정산 목록 조회
 	public List<Meeting> getAdjustmentList(int userNo) throws Exception;

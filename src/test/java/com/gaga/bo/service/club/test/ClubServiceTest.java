@@ -104,7 +104,7 @@ public class ClubServiceTest {
 	//@Test
 	public void getMyClubListTest() throws Exception{
 		
-		List<Club> clubList = clubService.getMyClublist(4);
+		List<Club> clubList = clubService.getMyClubList(4);
 		
 		System.out.println("클럽리스트 결과 출력 시작");
 		if (clubList != null) {

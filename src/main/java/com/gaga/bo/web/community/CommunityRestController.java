@@ -1,6 +1,6 @@
 package com.gaga.bo.web.community;
 
-import java.io.File;
+//import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +11,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
+//import org.springframework.core.io.Resource;
+//import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.gaga.bo.objectSotrage.S3Uploader;
 import com.gaga.bo.service.community.CommunityService;
 import com.gaga.bo.service.domain.Report;
 import com.gaga.bo.service.domain.Title;
@@ -45,33 +46,48 @@ public class CommunityRestController {
 	@Qualifier("userServiceImpl")
 	private UserService userService;
 	
-	@Autowired
-	private ResourceLoader resourceLoader;
+//	@Autowired
+//	private ResourceLoader resourceLoader;
 	
 	@Value("${fileUploadPath}")
 	private String fileUploadPath;
+	
+	private S3Uploader s3Uploader;
 	
 	///Constructor()
 	public CommunityRestController() {
 		System.out.println(this.getClass());
 	}
 	
+	///set S3 method
+	@Autowired
+	public void setS3Uploader(S3Uploader s3Uploader) {
+		this.s3Uploader = s3Uploader;
+	}
+	
 	//------------------------Profile Request Mapping----------------------------------------------------------
 	@PatchMapping("profileimg/userno/{userNo}")
 	public void updateProfileImg(@PathVariable int userNo, @RequestParam("file") MultipartFile file, HttpSession session) throws Exception {
-	    Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
-	    File uploadDir = resource.getFile();
+//	    Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+//	    File uploadDir = resource.getFile();
 	    
 		User user = userService.getUser(userNo);
 		System.out.println("profileImg 변경 전 :: " + user);
-
-		String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-		String uuidFileName = UUID.randomUUID().toString()+ext;
-
-		file.transferTo(new File(uploadDir, "user/"+uuidFileName));
 		
-		user.setProfileImg(uuidFileName);
-		userService.updateUser(user);
+		if (file != null) {
+			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+			String uuidFileName = UUID.randomUUID().toString()+ext;
+	
+	//		file.transferTo(new File(uploadDir, "user/"+uuidFileName));
+			
+			String fileName = "user/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file, fileName);
+	        System.out.println(":: updateProfileImg() S3 Message :: "+message);
+			
+			user.setProfileImg(uuidFileName);
+			userService.updateUser(user);
+		}
+		
 		System.out.println("profileImg 변경 후 :: " + user);
 		session.setAttribute("user", user);
 	} 
@@ -84,8 +100,8 @@ public class CommunityRestController {
 								  @RequestParam(value = "file3", required = false) MultipartFile file3, 
 								  HttpSession session
 								  											  ) throws Exception {
-		Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
-		File uploadDir = resource.getFile();
+//		Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+//		File uploadDir = resource.getFile();
 		    
 		User user = userService.getUser(userNo);
 		
@@ -96,7 +112,11 @@ public class CommunityRestController {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(uploadDir,"user/"+uuidFileName));
+//			file.transferTo(new File(uploadDir,"user/"+uuidFileName));
+			
+			String fileName = "user/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file, fileName);
+	        System.out.println(":: updateActivityImg() S3 Message file :: "+message);
 			
 			user.setActivityImg(uuidFileName);
 		}
@@ -105,7 +125,11 @@ public class CommunityRestController {
 			String ext = file2.getOriginalFilename().substring(file2.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file2.transferTo(new File(uploadDir,"user/"+uuidFileName));
+//			file2.transferTo(new File(uploadDir,"user/"+uuidFileName));
+			
+			String fileName = "user/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file2, fileName);
+	        System.out.println(":: updateActivityImg() S3 Message file2 :: "+message);
 			
 			user.setActivityImg2(uuidFileName);
 		}
@@ -114,7 +138,11 @@ public class CommunityRestController {
 			String ext = file3.getOriginalFilename().substring(file3.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file3.transferTo(new File(uploadDir,"user/"+uuidFileName));
+//			file3.transferTo(new File(uploadDir,"user/"+uuidFileName));
+			
+			String fileName = "user/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file3, fileName);
+	        System.out.println(":: updateActivityImg() S3 Message file3 :: "+message);
 			
 			user.setActivityImg3(uuidFileName);
 		}
@@ -236,14 +264,18 @@ public class CommunityRestController {
 						  @RequestParam(value = "file2", required = false) MultipartFile file2, 
 						  @RequestParam(value = "file3", required = false) MultipartFile file3
 								  											       				) throws Exception {
-	    Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
-	    File uploadDir = resource.getFile();
+//	    Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+//	    File uploadDir = resource.getFile();
 
 		if (file != null) {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(uploadDir, "community/"+uuidFileName));
+//			file.transferTo(new File(uploadDir, "community/"+uuidFileName));
+			
+			String fileName = "community/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file, fileName);
+	        System.out.println(":: addReport() S3 Message file :: "+message);
 			
 			report.setReportImg(uuidFileName);
 		}
@@ -252,7 +284,11 @@ public class CommunityRestController {
 			String ext = file2.getOriginalFilename().substring(file2.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file2.transferTo(new File(uploadDir, "community/"+uuidFileName));
+//			file2.transferTo(new File(uploadDir, "community/"+uuidFileName));
+			
+			String fileName = "community/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file2, fileName);
+	        System.out.println(":: addReport() S3 Message file2 :: "+message);
 			
 			report.setReportImg2(uuidFileName);
 		}
@@ -261,7 +297,11 @@ public class CommunityRestController {
 			String ext = file3.getOriginalFilename().substring(file3.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file3.transferTo(new File(uploadDir, "community/"+uuidFileName));
+//			file3.transferTo(new File(uploadDir, "community/"+uuidFileName));
+			
+			String fileName = "community/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file3, fileName);
+	        System.out.println(":: addReport() S3 Message file3 :: "+message);
 			
 			report.setReportImg3(uuidFileName);
 		}
@@ -277,8 +317,8 @@ public class CommunityRestController {
 							 @RequestParam(value = "file2", required = false) MultipartFile file2, 
 							 @RequestParam(value = "file3", required = false) MultipartFile file3
 														  										  ) throws Exception {
-	    Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
-	    File uploadDir = resource.getFile();
+//	    Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+//	    File uploadDir = resource.getFile();
 		
 		System.out.println(":: updateReport() - Before Set Files :: "+ report);
 		
@@ -286,7 +326,11 @@ public class CommunityRestController {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(uploadDir,"community/"+uuidFileName));
+//			file.transferTo(new File(uploadDir,"community/"+uuidFileName));
+			
+			String fileName = "community/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file, fileName);
+	        System.out.println(":: updateReport() S3 Message file :: "+message);
 			
 			report.setReportImg(uuidFileName);
 		}
@@ -295,7 +339,11 @@ public class CommunityRestController {
 			String ext = file2.getOriginalFilename().substring(file2.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file2.transferTo(new File(uploadDir, "community/"+uuidFileName));
+//			file2.transferTo(new File(uploadDir, "community/"+uuidFileName));
+			
+			String fileName = "community/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file2, fileName);
+	        System.out.println(":: updateReport() S3 Message file2 :: "+message);
 			
 			report.setReportImg2(uuidFileName);
 		}
@@ -304,7 +352,11 @@ public class CommunityRestController {
 			String ext = file3.getOriginalFilename().substring(file3.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file3.transferTo(new File(uploadDir, "community/"+uuidFileName));
+//			file3.transferTo(new File(uploadDir, "community/"+uuidFileName));
+			
+			String fileName = "community/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file3, fileName);
+	        System.out.println(":: updateReport() S3 Message file3 :: "+message);
 			
 			report.setReportImg3(uuidFileName);
 		}

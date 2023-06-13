@@ -71,6 +71,14 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
+	public List<Payment> offerRefund() throws Exception {
+		
+		System.out.println("참가비 있는 미팅 삭제, 미성사 등으로 인한 환불요청 목록 서비스");
+		
+		return paymentDao.offerRefund();
+	}
+
+	@Override
 	public String getPayNoByUserMeeting(Map<String, Object> refund) throws Exception {
 		
 		System.out.println("모임, 유저번호로 결제번호 출력 서비스");
@@ -84,6 +92,14 @@ public class PaymentServiceImpl implements PaymentService {
 		System.out.println("회원별 결제 내역 목록 조회 서비스");
 		
 		return paymentDao.getPaymentList(userNo);
+	}
+
+	@Override
+	public List<Payment> getAllPaymentList() throws Exception {
+
+		System.out.println("전체 회원 결제 내역 목록 조회 서비스");
+		
+		return paymentDao.getAllPaymentList();
 	}
 
 	@Override
@@ -105,10 +121,10 @@ public class PaymentServiceImpl implements PaymentService {
 
 
 	@Override
-	public List<Meeting> getAdjustmentIngList() throws Exception {
+	public List<Meeting> getAdjustmentStateList(int adjustmentState) throws Exception {
 		System.out.println("정산 상태별 목록 조회");
 		
-		return paymentDao.getAdjustmentIngList();
+		return paymentDao.getAdjustmentStateList(adjustmentState);
 	}
 
 	@Override

@@ -26,8 +26,11 @@ public interface ClubService {
 	//필터적용 클럽 목록 조회
 	public List<Club> getFilterClubList(Filter filter) throws Exception;
 	
-	//회원이 참여한 클럽 목록 조회
-	public List<Club> getMyClublist(int userNo) throws Exception;
+	//회원이 참여/신청/생성한 클럽 목록 조회
+	public List<Club> getMyClubList(int userNo) throws Exception;
+	
+	//회원이 참여/생성한 클럽 목록 조회
+	public List<Club> getMyIngClubList(int userNo) throws Exception;
 	
 	//비회원, 미인증 회원 메인화면 클럽 목록
 	public List<Club> getMainClubList(int mainCategoryNo) throws Exception;
