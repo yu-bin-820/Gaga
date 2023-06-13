@@ -36,11 +36,11 @@ export default function BlackListTabs() {
   return (
     <Box sx={{ width: '100%', typography: 'body1',alignItems: "center", display: "flex", justifyContent: "center"  }}>
       <TabContext value={value}>
-        <Box sx={{ borderBottom: 2, borderColor: 'divider', width: 1000, alignItems: "center", display: "flex", justifyContent: "center"  }}>
+        <Box sx={{ borderBottom: 2, borderColor: 'divider', width: '150%', alignItems: "center", display: "flex", justifyContent: "center"}}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Black List" value="1" component={Link} to="/blackList/listBlackList" />
-            <Tab label="User List" value="2" component={Link} to="/blackList/listUser" />
-            <Tab label="Report Admin" value="3" component={Link} to="/blackList/listReportAdmin" />
+            <Tab label="BlackList" value="1" component={Link} to="/blackList/listBlackList" />
+            <Tab label="UserList" value="2" component={Link} to="/blackList/listUser" />
+            <Tab label="Report " value="3" component={Link} to="/blackList/listReportAdmin" />
           </TabList>
         </Box>        
       </TabContext>

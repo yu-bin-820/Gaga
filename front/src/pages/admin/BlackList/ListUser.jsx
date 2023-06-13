@@ -64,6 +64,7 @@ function ListUser() {
         setHasMore(false);
       } else {
         setLastUserNo(newUserlist[newUserlist.length - 1].userNo);
+        
       }
     } catch (error) {
       console.error(error);

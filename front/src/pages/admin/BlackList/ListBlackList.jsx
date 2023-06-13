@@ -132,7 +132,7 @@ function ListBlackList() {
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
             onKeyPress={handleKeyPress}
-            style={{ marginRight: "0.5rem" }}
+            style={{ marginRight: "0.2rem" }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -157,7 +157,7 @@ function ListBlackList() {
       <CommonTop pageName="블랙리스트" prevPath="/community/profile/mine" />
       <BlackListTabs />
       <Chatbot />
-      <Stack >
+      <Stack>
         <Box
           sx={{
             display: "flex",
@@ -168,35 +168,37 @@ function ListBlackList() {
         >
           <SearchTransition />
         </Box>
-
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-          <TableContainer sx={{ maxHeight: 440 }}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      align={column.align}
-                      style={{ minWidth: column.minWidth }}
-                      sx={{ color: "white", backgroundColor: "primary.main" }}
-                    >
-                      {column.label}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {blackList.map((user, index) => (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={user.userNo} onClick={() => handleBlackListClick(user.userNo)}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{user.userName}</TableCell>
-                    <TableCell>{user.blacklist === 1 ? "신고 누적 블랙리스트" : "관리자 블랙리스트"}</TableCell>
+  
+        <Paper sx={{ maxWidth: '100%' }}>
+          <div style={{ overflowX: 'auto' }}>
+            <TableContainer sx={{ maxHeight: 540, tableLayout: 'auto', width: '100%' }}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    {columns.map((column) => (
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        style={{ minWidth: column.minWidth }}
+                        sx={{ color: "white", backgroundColor: "primary.main" }}
+                      >
+                        {column.label}
+                      </TableCell>
+                    ))}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {blackList.map((user, index) => (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={user.userNo} onClick={() => handleBlackListClick(user.userNo)}>
+                      <TableCell style={{ width: '5%', maxWidth: '5vw' }}>{index + 1}</TableCell>
+                    <TableCell style={{ width: '10%', maxWidth: '10vw' }}>{user.userName}</TableCell>
+                <TableCell style={{ width: '25%', maxWidth: '25vw' }}>{user.blacklist === 1 ? "신고 누적 블랙리스트" : "관리자 블랙리스트"}</TableCell>
+       </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
         </Paper>
         {isLoading && <Typography align="center">Loading...</Typography>}
       </Stack>
