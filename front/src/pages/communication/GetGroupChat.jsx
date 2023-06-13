@@ -18,16 +18,18 @@ import makeSection from '@utils/makeSection';
 const GetGroupChat = () => {
   const { chatRoomEntryNo, chatRoomLeader, chatType } = useCommunityStore();
 
-  const { data: roomLeaderData } = useSWR(
-    `${import.meta.env.VITE_SPRING_HOST}/rest/user/userno/${chatRoomLeader}`
-  );
-
   const boxRef = useRef();
 
   const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+
+  const { data: roomLeaderData } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/userno/${chatRoomLeader}`,
+    fetcher
+  );
+
   const isMeeting = chatType === 2;
   const [socket, disconnect] = useSocket(isMeeting ? 'meeting' : 'club');
 
@@ -85,8 +87,8 @@ const GetGroupChat = () => {
     groupMessagesData ? groupMessagesData.flat().reverse() : []
     // groupMessagesData ? [...groupMessagesData] : []
   );
-
-  if (!groupMessagesData || !socket) {
+  console.log(chatRoomLeader, roomLeaderData);
+  if (!groupMessagesData || !socket || !roomLeaderData) {
     return <>로딩</>;
   }
 
