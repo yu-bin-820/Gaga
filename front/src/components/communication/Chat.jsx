@@ -45,9 +45,12 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
           <Typography
             sx={{
               backgroundColor: '#ededed',
-              padding: '3px',
+              padding: '5px',
               margin: '6px',
               borderRadius: '1rem',
+              fontSize: 13,
+              fontWeight: 500,
+              color: 'grey',
             }}
           >
             &nbsp;&nbsp;{data.content}&nbsp;&nbsp;
