@@ -4,6 +4,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React, { useCallback } from 'react';
 import dayjs from 'dayjs';
 import useUserFormStore from '@hooks/user/useUserFormStore';
+import 'dayjs/locale/ko';
 
 const AddUserDate = () => {
     const [value, setValue] = React.useState(dayjs('1990-01-01'));
@@ -19,7 +20,7 @@ const AddUserDate = () => {
 
     return (
         <div>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
             <DemoItem >
                 <MobileDatePicker value={birthday} onChange={handleUserDateChange}/>
             </DemoItem>
