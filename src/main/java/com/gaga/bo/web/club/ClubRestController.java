@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.gaga.bo.objectSotrage.S3Uploader;
 import com.gaga.bo.service.club.ClubService;
 import com.gaga.bo.service.domain.Club;
 import com.gaga.bo.service.domain.Filter;
@@ -56,6 +57,13 @@ public class ClubRestController {
 		System.out.println(this.getClass());
 	}
 	
+    private S3Uploader s3Uploader;
+    
+    @Autowired
+    public void setS3Uploader(S3Uploader s3Uploader) {
+        this.s3Uploader = s3Uploader;
+    }
+	
 	//클럽관리
 	
 	@PostMapping("")
@@ -65,18 +73,19 @@ public class ClubRestController {
 		
 		System.out.println("클럽 생성 Ctrl");
 		
-		 Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
-		 File uploadDir = resource.getFile();
-				
 		System.out.println("img변경 전 : "+club);
 		
 		if (file != null) {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(uploadDir,"club/"+uuidFileName));
+			//file.transferTo(new File(uploadDir,"club/"+uuidFileName));
 			
 			club.setClubImg(uuidFileName);
+			
+			String fileName = "club/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file, fileName);
+	        System.out.println(message);
 		}
 		
 		System.out.println("img변경 후 : "+club);
@@ -188,8 +197,8 @@ public class ClubRestController {
 		
 	}
 	
-	@PostMapping("search")
-	public List<Club> getSearchClubList(@RequestBody Search search) throws Exception{
+	@GetMapping("search")
+	public List<Club> getSearchClubList(@ModelAttribute Search search) throws Exception{
 		
 		System.out.println("클럽 목록 검색 Ctrl");
 		
@@ -205,7 +214,7 @@ public class ClubRestController {
 		
 		List<Club> list = clubService.getSearchClubList(search);
 		
-		System.out.println(list);
+		//System.out.println(list);
 		
 		return list;
 	}
@@ -255,13 +264,10 @@ public class ClubRestController {
 	
 	@PatchMapping("")
 	public void updateClub(@ModelAttribute Club club,
-	 		   				  @RequestParam("file") MultipartFile file
+	 		   				  @RequestParam(value ="file", required = false) MultipartFile file
 							  ) throws Exception{
 		
 		System.out.println("클럽 정보 수정 Ctrl");
-		
-		 Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
-		 File uploadDir = resource.getFile();
 		
 		System.out.println("img변경 전 : "+club);
 		
@@ -269,9 +275,12 @@ public class ClubRestController {
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			String uuidFileName = UUID.randomUUID().toString()+ext;
 	
-			file.transferTo(new File(uploadDir,"club/"+uuidFileName));
+			//file.transferTo(new File(uploadDir,"club/"+uuidFileName));
 			
 			club.setClubImg(uuidFileName);
+			String fileName = "club/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file, fileName);
+	        System.out.println(message);
 		}
 		
 		System.out.println("img변경 후 : "+club);

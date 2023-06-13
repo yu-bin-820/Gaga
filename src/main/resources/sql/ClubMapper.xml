@@ -36,7 +36,7 @@
 
 	<!-- 클럽관리 -->
 	<!-- SQL : INSERT -->
-	<insert id="addClub" parameterType="club">
+	<insert id="addClub" parameterType="club" useGeneratedKeys="true" keyProperty="clubNo" >
 	  INSERT 
 	  INTO clubs (club_name, club_intro, club_leader_no, club_max_member_no, club_state, club_reg_date,
 	    club_img, club_region, filter_gender, filter_min_age, filter_max_age, filter_tag, main_category_no)
@@ -58,16 +58,16 @@
 	
 	<!-- SELECT LIST 검색어 클럽 목록 조회 -->
 	<select id="getSearchClubList" parameterType="search" resultMap="ClubResultMap">
-	  SELECT club_no, club_name, club_intro, club_leader_no, club_max_member_no,
-	         club_reg_date, club_state, club_img, club_region, filter_gender,
-	         filter_min_age, filter_max_age, filter_tag, main_category_no,
-	         (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND club_no = c.club_no) AS member_count
-	  FROM clubs c
-	  WHERE ((club_region LIKE CONCAT('%', #{searchKeyword}, '%')
-	         OR club_name LIKE CONCAT('%', #{searchKeyword}, '%')
-	         OR club_intro LIKE CONCAT('%', #{searchKeyword}, '%'))
-	         AND club_state = 1)
-	  LIMIT #{startRowNum} , #{pageSize}
+		SELECT club_no, club_name, club_intro, club_leader_no, club_max_member_no,
+			   club_reg_date, club_state, club_img, club_region, filter_gender,
+			   filter_min_age, filter_max_age, filter_tag, main_category_no,
+			   (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND club_no = c.club_no) AS member_count
+		FROM clubs c
+		WHERE (LOWER(REPLACE(club_region, ' ', '')) LIKE CONCAT('%', LOWER(REPLACE(#{searchKeyword}, ' ', '')), '%')
+		         OR LOWER(REPLACE(club_name, ' ', '')) LIKE CONCAT('%', LOWER(REPLACE(#{searchKeyword}, ' ', '')), '%')
+		         OR LOWER(REPLACE(club_intro, ' ', '')) LIKE CONCAT('%', LOWER(REPLACE(#{searchKeyword}, ' ', '')), '%'))
+			 	 AND club_state = 1
+		LIMIT #{startRowNum} , #{pageSize}
 	</select>
 
   
