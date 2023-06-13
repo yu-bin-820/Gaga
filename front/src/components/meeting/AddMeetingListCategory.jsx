@@ -28,6 +28,8 @@ const AddMeetingListCategory = () => {
       <ListCategory
         onMainCategoryChange={handleMainCategoryChange}
         onSubCategoryClick={handleSubCategoryClick}
+        mainCategoryNo={mainCategoryNo}
+        subCategoryTag={filterTag}
       />
         </Box>
       );

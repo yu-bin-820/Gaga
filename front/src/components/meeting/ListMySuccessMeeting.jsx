@@ -1,5 +1,5 @@
 import fetcher from '@utils/fetcher';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
@@ -7,20 +7,27 @@ import MeetingThumbnail from './MeetingThumnail';
 import { Box, Stack } from '@mui/system';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
+import UpdateMeetingReviewDrawer from './UpdateMeetingReviewDrawer';
+import AddMeetingReviewDrawer from './AddMeetingReviewDrawer';
 
 
 const ListMySuccessMeeting = ({ meeting }) => {
-    const { state, entryFee, meetingSuccuess, meetingState, meetingNo } = meeting;
-    const [meetingReviewList, setMeetingReviewList] = useState();
 
-    const { data: myData, mutate: mutateMe } = useSWR(
+    const [meetingReviewList, setMeetingReviewList] = useState();
+    const [ meetingNo, setMeetingNo] = useState(0);
+    const [ reviewNo, setReviewNo] = useState(0);
+    const [settingsUpdateReviewOpen, setSettingsUpdateReviewOpen] = useState(false);
+    const [settingsAddReviewOpen, setSettingsAddReviewOpen] = useState(false);
+
+
+    const { data: myData } = useSWR(
         `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
         fetcher
-      );
+    );
 
     useEffect(()=>{
         axios
-            .get(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/${meetingNo}`)
+            .get(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/${meeting?.meetingNo}`)
             .then((response)=>{
                 console.log(response.data);
                 setMeetingReviewList(response.data);
@@ -28,32 +35,50 @@ const ListMySuccessMeeting = ({ meeting }) => {
             .catch((error)=>{
                 console.log(error);
             });
-        },[meetingNo]);
+        },[meeting?.meetingNo]);
 
         const isMeetingReview = !!(
             meetingReviewList &&
             meetingReviewList.length &&
             meetingReviewList.some((meetingReview) => meetingReview.meetingReviewerNo === myData?.userNo)
-          );
+        );
+
+        const isMeetingChatRoot = meeting.meetingState === 1 || 2;
+
 
     const navigate = useNavigate();
 
     const onClickAddMeetingReview=useCallback(()=>{
-        navigate(`/meeting/review/addreview/meetingno/${meetingNo}`);
-    },[]);
+
+        setMeetingNo(meeting?.meetingNo);
+        setSettingsAddReviewOpen(true);
+    }, [setSettingsAddReviewOpen, meeting?.meetingNo]);
+    
+    const toggleSettingsAddReview = useCallback(
+        (state) => () => {
+            setSettingsAddReviewOpen(state);
+        },
+        []
+    );
 
     const onClickUpdateMeetingReview = useCallback(() => {
-      const matchingMeetingReview = meetingReviewList.find(
-        (meetingReview) => meetingReview.meetingReviewerNo === myData?.userNo
+        const matchingMeetingReview = meetingReviewList.find(
+            (meetingReview) => meetingReview.meetingReviewerNo === myData?.userNo
+        );
+        setReviewNo(matchingMeetingReview.meetingReviewNo);
+        setSettingsUpdateReviewOpen(true);
+      }, [meetingReviewList, myData?.userNo]);
+
+      const toggleSettingsUpdateReview = useCallback(
+        (state) => () => {
+            setSettingsUpdateReviewOpen(state);
+        },
+        []
       );
-      if (matchingMeetingReview) {
-        navigate(`/meeting/review/updatereview/reviewno/${matchingMeetingReview.meetingReviewNo}`);
-      }
-    }, [meetingReviewList, myData?.userNo, navigate]);
 
     const onClickChatRoom=useCallback(()=>{
-        navigate(`/meeting/member/listmember/meetingno/${meetingNo}`);
-    },[meetingNo, navigate]);
+        navigate(`/meeting/member/listmember/meetingno/${meeting?.meetingNo}`);
+    },[meeting?.meetingNo, navigate]);
 
     console.log(isMeetingReview)
 
@@ -87,12 +112,27 @@ const ListMySuccessMeeting = ({ meeting }) => {
                         variant="outlined"
                         sx={{ width: '180px' }}
                         onClick={onClickUpdateMeetingReview}>후기수정</Button>)}
+                    {isMeetingChatRoot && (
                     <Button
                                         variant="outlined"
                                         sx={{ width: '180px' }}
-                    onClick={onClickChatRoom}>채팅방 입장</Button>
+                    onClick={onClickChatRoom}>채팅방 입장</Button>)}
                     </Stack>
                     </Stack>
+
+                <AddMeetingReviewDrawer
+                settingsAddReviewOpen={settingsAddReviewOpen}
+                setSettingsAddReviewOpen={setSettingsAddReviewOpen}
+                toggleSettingsAddReview={toggleSettingsAddReview}
+                meetingNo={meetingNo}
+                />
+                <UpdateMeetingReviewDrawer
+                settingsUpdateReviewOpen={settingsUpdateReviewOpen}
+                setSettingsUpdateReviewOpen={setSettingsUpdateReviewOpen}
+                toggleSettingsUpdateReview={toggleSettingsUpdateReview} 
+                reviewno={reviewNo}
+                />
+
                 </Box>
         </div>
     );
@@ -100,13 +140,7 @@ const ListMySuccessMeeting = ({ meeting }) => {
 
 
 ListMySuccessMeeting.propTypes = {
-    meeting: PropTypes.shape({
-      meetingState: PropTypes.number.isRequired,
-      meetingSuccuess: PropTypes.number.isRequired,
-      state: PropTypes.number.isRequired,
-      meetingNo: PropTypes.number.isRequired,
-      entryFee: PropTypes.number.isRequired,
-    }).isRequired,
+    meeting: PropTypes.object.isRequired,
   };
 
 export default ListMySuccessMeeting;

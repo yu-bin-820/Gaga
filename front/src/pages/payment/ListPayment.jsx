@@ -51,7 +51,13 @@ const ListPayment = () => {
     <div style={{ backgroundColor: '#ededed' }}>
       <CommonTop pageName='결제 내역 조회' prevPath='/community/profile/mine' />
       <Stack sx={{ marginLeft: '10px', marginRight: '10px' }}>
-        <Stack sx={{ marginTop: '64px' }}>
+        <Stack sx={{ marginTop: '45px' }}>
+          <h5>
+            결제 내역 조회 페이지입니다. <br /> 환불은 상세 정보 페이지에서
+            진행됩니다.
+            <br />
+            문의사항은 Q&A 게시판을 이용해 주세요.
+          </h5>
           <Stack>
             {paymentList?.filter(
               (payment) => payment.payState === 1 || payment.payState === 2

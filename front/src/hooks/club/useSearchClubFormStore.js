@@ -1,9 +1,11 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 const useSearchClubFormStore = create((set) => ({
-  searchKeyword: "",
+  searchKeyword: '',
+  currentPage: 1,
+
   setField: (field, value) => set({ [field]: value }),
-  reset: () => set({ searchKeyword: "" }),
+  reset: () => set({ searchKeyword: '' }),
 }));
 
 export default useSearchClubFormStore;

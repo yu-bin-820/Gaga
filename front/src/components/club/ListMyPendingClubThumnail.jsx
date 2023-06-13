@@ -1,14 +1,15 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { Box, Stack } from '@mui/system';
 import { Button } from '@mui/material';
-import useCommonStore from '@stores/common/useCommonStore';
 import DeleteMemberDialog from './DeleteClubMemberDialog';
 import ClubThumbnail from './ClubThumbnail';
+import useCommunityStore from '@stores/communication/useCommunityStore';
 
 const ListMyPendingClubThumnail = ({ club }) => {
-  const { setField } = useCommonStore();
+  const { setField } = useCommunityStore();
+  const location = useLocation();
 
   const [deleteMemberDialogOpen, setDeleteMemberDialogOpen] = useState(false);
 
@@ -20,10 +21,12 @@ const ListMyPendingClubThumnail = ({ club }) => {
 
   const onClickDirectChat = useCallback(
     (e) => {
+      setField('shouldScroll', true);
       setField('chatRoomEntryNo', club.clubLeaderNo);
+      setField('prevGetDirectChatPath', location.pathname);
       navigate('/chat/direct/message/list');
     },
-    [navigate, setField]
+    [navigate, setField, location]
   );
 
   return (
@@ -36,7 +39,7 @@ const ListMyPendingClubThumnail = ({ club }) => {
       >
         <Stack spacing={0.8} paddingBottom={1}>
           <ClubThumbnail club={club} />
-          <Stack direction={'row'} justifyContent='center' spacing={1.5}>
+          <Stack direction='row' justifyContent='center' spacing={0.5}>
             <Button
               variant='outlined'
               sx={{ width: '180px' }}

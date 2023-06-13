@@ -9,6 +9,7 @@ import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import SmartToyRoundedIcon from '@mui/icons-material/SmartToyRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import PsychologyRoundedIcon from '@mui/icons-material/PsychologyRounded';
+import EmailIcon from '@mui/icons-material/Email';
 import { Backdrop, Fade, Modal } from '@mui/material';
 
 //import { fetchGptResponse } from './gptapi';
@@ -288,11 +289,11 @@ const handleSendMessage = async (text) => {
               style={{ backgroundColor: '#036635'  }}
           >
               {!isVisible ? (
-                  <SmartToyRoundedIcon style={{ fontSize: '35px' }} />
+                  <SmartToyRoundedIcon style={{ fontSize: '33px' }} />
               ) : isGptMode ? (
-                  <PsychologyRoundedIcon style={{ fontSize: '35px' }}/>
+                  <PsychologyRoundedIcon style={{ fontSize: '36px' }}/>
               ) : (
-                  <CloseRoundedIcon style={{ fontSize: '35px' }}/>
+                  <CloseRoundedIcon style={{ fontSize: '36px' }}/>
               )}
           </button>
 
@@ -310,24 +311,27 @@ const handleSendMessage = async (text) => {
                   <h3>GAGABOT</h3>
                   </div>
               </div>
-              <div className="chat-messages" id="chatMessages">
+              <div className="chat-messages" id="chatMessages" >
                   {messages.map((message, index) => (
                       <div
                           key={index}
                           className={`chat-message ${message.type}`}
+                          style={{ marginBottom: "12px" }}
                       >
-                          <h4>
-                              {message.type === "user" ? "당신" : "Gagabot"}
-                          </h4>
+                          <h5 style={{ margin: "5px" }}>
+                              {message.type === "user" ? "당신" : "GAGABOT"}
+                          </h5>
                           <p>
-                              {message.text.includes("죄송합니다") ? (
-                                  <a href="mailto:thega4004@naver.com">
-                                      {message.text}
-                                  </a>
-                              ) : (
-                                  message.text
-                              )}
-                          </p>
+    {message.text.replace(/\./g, '.\n').split('\n').map((line, i) => <React.Fragment key={i}>{line}<br /></React.Fragment>)}
+    {message.text.includes("죄송") && (
+        <Button variant="contained" 
+            onClick={() => window.location.href = 'mailto:thega4004@naver.com'} 
+            style={{display: 'block', margin: 'auto', marginTop: '-20px', fontSize: '12px' , width: '99px' }}
+        >
+            <EmailIcon style={{fontSize: '14px' }}/> 문의하기
+        </Button>
+    )}
+</p>
                           {message.type === "bot" && message.bubbles && (
                               <div>
                                   {message.bubbles.map(
@@ -339,42 +343,7 @@ const handleSendMessage = async (text) => {
                                                       {bubble.data.description}
                                                   </p>
                                               );
-                                          } else if (
-                                              bubbleIndex === 1 &&
-                                              bubble.component.data.contentTable
-                                          ) {
-                                              // 두 번째 버블: 멀티링크
-                                              return bubble.component.data.contentTable.map(
-                                                  (contentRow, rowIndex) =>
-                                                      contentRow.map(
-                                                          (
-                                                              contentItem,
-                                                              itemIndex
-                                                          ) => (
-                                                              <a
-                                                                  key={`${bubbleIndex}-${rowIndex}-${itemIndex}`}
-                                                                  href={
-                                                                      contentItem
-                                                                          .data
-                                                                          .data
-                                                                          .action
-                                                                          .data
-                                                                          .url
-                                                                  }
-                                                              >
-                                                                  {
-                                                                      contentItem
-                                                                          .data
-                                                                          .title
-                                                                  }
-                                                              </a>
-                                                          )
-                                                      )
-                                              );
-                                          } else {
-                                              // 그 외 기타 버블 (필요한 경우 추가)
-                                              return null;
-                                          }
+                                          } 
                                       }
                                   )}
                               </div>

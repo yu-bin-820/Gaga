@@ -12,7 +12,7 @@ import React, { useEffect, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import StyledToggleButtonGroup from "./StyledToggleButtonGroup";
 
-const ListCategory = ({ onMainCategoryChange, onSubCategoryClick }) => {
+const ListCategory = ({ onMainCategoryChange, onSubCategoryClick, mainCategoryNo, subCategoryTag }) => {
   const [alignment, setAlignment] = React.useState("left");
 
   const handleAlignment = (event, newAlignment) => {
@@ -21,7 +21,7 @@ const ListCategory = ({ onMainCategoryChange, onSubCategoryClick }) => {
 
   const [mainCategoryList, setMainCategoryList] = useState();
   const [subCategoryList, setSubCategoryList] = useState();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(true); 
 
   useEffect(() => {
     axios
@@ -60,12 +60,13 @@ const ListCategory = ({ onMainCategoryChange, onSubCategoryClick }) => {
     onSubCategoryClick(subCategoryTag); // 부모 컴포넌트로 subCategoryTag 전달
   };
 
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(mainCategoryNo || false);
 
   const handleChange = (mainCategoryNo) => (event, isExpanded) => {
     setExpanded(isExpanded ? mainCategoryNo : false);
     onMainCategoryChange(mainCategoryNo); // 부모 컴포넌트로 mainCategoryNo 전달
   };
+
   return (
     <Box>
       <Box>
@@ -121,6 +122,8 @@ const ListCategory = ({ onMainCategoryChange, onSubCategoryClick }) => {
 ListCategory.propTypes = {
   onMainCategoryChange: PropTypes.object.isRequired,
   onSubCategoryClick: PropTypes.object.isRequired,
+  mainCategoryNo: PropTypes.object.isRequired,
+  subCategoryTag: PropTypes.object.isRequired,
 };
 
 export default ListCategory;

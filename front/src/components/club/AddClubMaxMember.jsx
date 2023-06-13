@@ -95,7 +95,9 @@ const AddClubMaxMember = () => {
 
         setOpenModal(true);
 
-        console.log(response.data);
+        console.log('생기는 클럽 번호 정보', response.data.clubNo);
+
+        console.log('생기는 클럽 정보', response.data);
       } catch (error) {
         console.error(error);
       }

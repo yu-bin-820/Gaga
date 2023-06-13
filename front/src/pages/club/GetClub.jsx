@@ -5,7 +5,7 @@ import { Avatar, Box, Button, Typography, Stack } from '@mui/material';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import useSWR from 'swr';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PeopleIcon from '@mui/icons-material/People';
@@ -13,6 +13,7 @@ import ClubMember from '@components/club/ClubMember';
 import GetClubTop from '@layouts/club/GetClubTop';
 import ClubSmallChip from '@components/club/ClubSmallChip';
 import IsClubMemberDialog from '@components/club/IsClubMemberDialog';
+import useCommunityStore from '@stores/communication/useCommunityStore';
 
 const GetClub = () => {
   const { clubNo } = useParams();
@@ -21,6 +22,8 @@ const GetClub = () => {
   const [pendingMemberList, setPendingMemberList] = useState();
   const [confirmedMemberList, setConfirMemberList] = useState();
   const [isClubMemberOpen, setIsClubMemberOpen] = useState(false);
+  const location = useLocation();
+  const { setField } = useCommunityStore();
 
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -103,8 +106,17 @@ const GetClub = () => {
       });
   }, [clubNo]);
 
+  const onClickLogin = useCallback(() => {
+    navigate('/user/login');
+  }, [navigate]);
+
+  const onClickRegistProfile = useCallback(() => {
+    navigate(`/community/profile/mine`);
+  }, [navigate]);
+
   const onClickProfileImg = useCallback(
     (e) => {
+      setField('prevProfilePath', location.pathname);
       navigate(`/community/profile/userno/${club?.clubLeaderNo}`);
     },
     [navigate, club]
@@ -207,17 +219,10 @@ const GetClub = () => {
               </Stack>
             </Stack>
           </Stack>
-          <Stack direction='row' spacing={5}>
+          <Stack direction='row' alignItems='center' spacing={5}>
             <Box direction='row' spacing={0} alignItems='left'>
               <ClubSmallChip label={club?.filterTag} />
             </Box>
-
-            <Stack direction={'row'} spacing={1} alignItems={'center'}>
-              <PeopleIcon />
-              <Typography sx={{ fontSize: 13 }}>
-                {club?.memberCount}/{club?.clubMaxMemberNo}
-              </Typography>
-            </Stack>
 
             <Box direction='row' spacing={0} alignItems='left'>
               <ClubSmallChip
@@ -228,7 +233,16 @@ const GetClub = () => {
                 }}
               />
             </Box>
-            <Stack direction={'row'} spacing={1} alignItems={'center'}>
+          </Stack>
+          <Stack direction='row' alignItems='center' spacing={5}>
+            <Stack direction='row' spacing={1} alignItems={'center'}>
+              <PeopleIcon />
+              <Typography sx={{ fontSize: 13 }}>
+                {club?.memberCount}/{club?.clubMaxMemberNo}
+              </Typography>
+            </Stack>
+
+            <Stack direction='row' spacing={1} alignItems={'center'}>
               <LocationOnIcon />
               <Typography sx={{ fontSize: 13 }}>{club?.clubRegion}</Typography>
             </Stack>
@@ -252,10 +266,29 @@ const GetClub = () => {
         <h5>클럽 내 생성 모임 목록</h5>
         <ListMeetingParentClubNo />
 
-        {!isClubLeader && (
+        {!myData && (
           <Button
             variant='contained'
-            sx={{ width: '95vw', borderRadius: '50px' }}
+            onClick={onClickLogin}
+            sx={{ width: '95vw', borderRadius: '50px', marginTop: '10px' }}
+          >
+            로그인 후 가가 서비스 이용하기
+          </Button>
+        )}
+        {myData && !myData?.profileImg && (
+          <Button
+            variant='contained'
+            onClick={onClickRegistProfile}
+            sx={{ width: '95vw', borderRadius: '50px', marginTop: '10px' }}
+          >
+            프로필 사진 등록 후 가가 서비스 이용하기
+          </Button>
+        )}
+
+        {myData && !isClubLeader && (
+          <Button
+            variant='contained'
+            sx={{ width: '95vw', borderRadius: '50px', marginTop: '10px' }}
             onClick={onClickAddMember}
           >
             참여하기

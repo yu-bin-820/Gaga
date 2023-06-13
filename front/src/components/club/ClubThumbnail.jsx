@@ -43,6 +43,7 @@ const ClubThumbnail = ({ club }) => {
     memberCount,
     clubNo,
     clubImg,
+    clubState,
   } = club;
   return (
     <Box
@@ -84,28 +85,36 @@ const ClubThumbnail = ({ club }) => {
               />
             )}
           </ImageListItem>
-          <Box>
-            <ClubSmallChip label={club.filterTag} size='small' />
+          <Stack spacing={0.5}>
+            <Stack direction={'row'} spacing={1}>
+              <ClubSmallChip label={club?.filterTag} size='small' />
+              <ClubSmallChip
+                size='small'
+                label={club?.clubState === 1 ? '모집중' : '모집완료'}
+                sx={{
+                  backgroundColor:
+                    club?.clubState === 1 ? '#81BEF7' : '#F78181',
+                }}
+              />
+            </Stack>
             <Stack
               sx={{ color: 'text.primary', fontSize: 16, fontWeight: 'medium' }}
             >
               {clubName}
             </Stack>
-
             <Stack direction='row' spacing={1} alignItems={'center'}>
               <Place />
               <Typography sx={{ fontSize: 12, spacing: 1 }}>
                 {clubRegion}
               </Typography>
             </Stack>
-
             <Stack direction='row' spacing={1} alignItems={'center'}>
               <PeopleIcon />
               <Typography sx={{ fontSize: 13 }}>
                 {memberCount}/{clubMaxMemberNo}
               </Typography>
             </Stack>
-          </Box>
+          </Stack>
         </Stack>
       </Stack>
     </Box>
@@ -113,15 +122,7 @@ const ClubThumbnail = ({ club }) => {
 };
 
 ClubThumbnail.propTypes = {
-  club: PropTypes.shape({
-    clubNo: PropTypes.number.isRequired,
-    clubImg: PropTypes.string.isRequired,
-    filterTag: PropTypes.string.isRequired,
-    clubName: PropTypes.string.isRequired,
-    clubRegion: PropTypes.string.isRequired,
-    clubMaxMemberNo: PropTypes.number.isRequired,
-    memberCount: PropTypes.number.isRequired,
-  }).isRequired,
+  club: PropTypes.object.isRequired,
 };
 
 export default ClubThumbnail;

@@ -85,7 +85,7 @@ const UpdateClubImg = () => {
         id='outlined-multiline-static'
         name='clubIntro'
         placeholder='소개글을 입력해 주세요(선택)'
-        onChange={(e) => onChangeField('meetingIntro', e)}
+        onChange={(e) => onChangeField('clubIntro', e)}
         fullWidth
         multiline
         required

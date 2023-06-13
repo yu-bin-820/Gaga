@@ -14,50 +14,35 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 
-const StyledAvatarGroup = styled(AvatarGroup)({
-  '& .MuiAvatar-root': {
-    width: 24,
-    height: 24,
-    fontSize: 12,
-  },
-});
-
 const PaymentThumnail = ({ payment }) => {
   const navigate = useNavigate();
   const [meeting, setMeeting] = useState();
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${meetingNo}`)
+      .get(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${
+          payment?.meetingNo
+        }`
+      )
       .then((response) => {
         setMeeting(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [payment?.meetingNo]);
 
   const onClickMeeting = useCallback((event) => {
-    navigate(`/meeting/meetingno/${meetingNo}`);
+    navigate(`/meeting/meetingno/${payment?.meetingNo}`);
   }, []);
 
   const onClickPayment = useCallback(() => {
-    navigate(`/payment/details/${payNo}`);
+    navigate(`/payment/details/${payment?.payNo}`);
   });
-
-  const {
-    payNo,
-    meetingNo,
-    meetingName,
-    payTime,
-    refundTime,
-    entryFee,
-    payState,
-  } = payment;
 
   return (
     <Stack
-      onClick={onClickPayment}
       direction='row'
       sx={{
         borderRadius: 2,
@@ -78,6 +63,10 @@ const PaymentThumnail = ({ payment }) => {
         <ImageListItem
           sx={{
             marginLeft: '5px',
+            maxWidth: '100px',
+            maxHeight: '100px',
+            minWidth: '100px',
+            minHeight: '100px',
           }}
         >
           {meeting?.meetingImg ? (
@@ -100,6 +89,7 @@ const PaymentThumnail = ({ payment }) => {
         </ImageListItem>
       </Stack>
       <Stack
+        onClick={onClickPayment}
         sx={{
           marginLeft: '15px',
           flexGrow: 1,
@@ -116,11 +106,17 @@ const PaymentThumnail = ({ payment }) => {
           </Stack>
           <Stack direction='row' display='flex' spacing={2}>
             <Stack>참가비</Stack>
-            <Stack> {meeting?.entryFee}</Stack>
+            <Stack> {meeting?.entryFee?.toLocaleString()}원</Stack>
           </Stack>
         </Stack>
         <Stack sx={{ alignItems: 'flex-end', minWidth: '70px' }}>
-          {payState === 1 ? '결제완료' : payState === 2 ? '환불완료' : ''}
+          {payment?.payState === 1
+            ? '결제완료'
+            : payment?.payState === 2
+            ? '환불완료'
+            : payment?.payState === 3
+            ? '환불요청'
+            : ''}
         </Stack>
       </Stack>
     </Stack>
@@ -128,15 +124,7 @@ const PaymentThumnail = ({ payment }) => {
 };
 
 PaymentThumnail.propTypes = {
-  payment: PropTypes.shape({
-    payNo: PropTypes.string.isRequired,
-    meetingNo: PropTypes.number.isRequired,
-    meetingName: PropTypes.string.isRequired,
-    payTime: PropTypes.number.isRequired,
-    refundTime: PropTypes.number.isRequired,
-    entryFee: PropTypes.number.isRequired,
-    payState: PropTypes.number.isRequired,
-  }).isRequired,
+  payment: PropTypes.object.isRequired,
 };
 
 export default PaymentThumnail;

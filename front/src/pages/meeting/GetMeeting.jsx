@@ -2,7 +2,7 @@ import ListMeetingReview from '@components/meeting/ListMeetingReview';
 import { Box, Button, Skeleton, Typography } from '@mui/material';
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import PeopleIcon from '@mui/icons-material/People';
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -18,13 +18,17 @@ import SmallChip from '@components/meeting/SmallChip';
 import IsMeetingMemberDialog from '@components/meeting/IsMeetingMemberDialog';
 import GetMeetingStaticMapDrawer from '@components/meeting/map/GetMeetingStaticMapDrawer';
 import PaymentIcon from '@mui/icons-material/Payment';
+import AddMeetingMemberDrawer from '@components/meeting/AddMeetingMemberDrawer';
 
 const GetMeeting = () => {
+  
   const { meetingno } = useParams();
   const [meeting, setMeeting] = useState();
   const [pendingMemberList, setPendingMemberList] = useState();
   const [confirmedMemberList, setConfirMemberList] = useState();
   const [isMeetingMemberOpen, setIsMeetingMemberOpen] = useState(false);
+  const [settingsAddMemberOpen, setSettingsAddMemberOpen] = useState(false);
+
 
   const [settingsMapOpen, setSettingsMapOpen] = useState(false);
 
@@ -40,19 +44,17 @@ const GetMeeting = () => {
     []
   );
 
-  const { data: myData, mutate: mutateMe } = useSWR(
+  const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
-  const { data: leaderData, mutate: mutateLeader } = useSWR(
+  const { data: leaderData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/userno/${
       meeting?.meetingLeaderNo
     }`,
     fetcher
   );
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -99,7 +101,7 @@ const GetMeeting = () => {
   }, [meetingno]);
 
   const onClickAddMember = useCallback(
-    (event) => {
+    () => {
       const isUserInConfirmedMembers = confirmedMemberList?.some(
         (confirmedMember) => confirmedMember.userNo === myData?.userNo
       );
@@ -109,19 +111,28 @@ const GetMeeting = () => {
       );
 
       if (!isUserInConfirmedMembers && !isUserInPendingMembers) {
-        navigate(`/meeting/member/addmember/${meetingno}`);
+
+        setSettingsAddMemberOpen(true);
+
       } else {
         setIsMeetingMemberOpen(true);
       }
     },
-    [confirmedMemberList, myData?.userNo, navigate, meetingno, pendingMemberList]
+    [confirmedMemberList, myData?.userNo, pendingMemberList]
   );
 
-  const [imageLoadingError, setImageLoadingError] = useState(false);
+  const toggleSettingsAddMember = useCallback(
+    (state) => () => {
+        setSettingsAddMemberOpen(state);
+    },
+    []
+  );
+
+  const [setImageLoadingError] = useState(false);
 
   const handleImageError = useCallback(() => {
     setImageLoadingError(true);
-  }, []);
+  }, [setImageLoadingError]);
 
   const isUserLeader = meeting?.meetingLeaderNo === myData?.userNo;
   const isMeetingSuccessful = meeting?.meetingSuccess === 2;
@@ -292,6 +303,12 @@ const GetMeeting = () => {
         toggleSettingsMap={toggleSettingsMap}
         setSettingsMapOpen={setSettingsMapOpen}
       />
+      <AddMeetingMemberDrawer
+        settingsAddMemberOpen={settingsAddMemberOpen}
+        setSettingsAddMemberOpen={setSettingsAddMemberOpen}
+        toggleSettingsAddMember={toggleSettingsAddMember} 
+        meetingNo={meetingno}
+        />      
     </>
   );
 };

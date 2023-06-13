@@ -85,7 +85,8 @@ const ListFilterClub = () => {
                   sx={{
                     marginRight: '10px',
                     marginLeft: '10px',
-                    paddingTop: '5px',
+                    paddingTop: '3px',
+                    paddingBottom: '5px',
                   }}
                 >
                   <ClubThumbnail club={club} />
