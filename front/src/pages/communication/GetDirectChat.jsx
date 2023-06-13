@@ -1,21 +1,18 @@
-import ChatBox from '@components/communication/ChatBox';
 import ChatList from '@components/communication/ChatList';
 import DirectChatBox from '@components/communication/DirectChatBox';
 import useSocket from '@hooks/common/useSocket';
-import GetChatTop from '@layouts/communication/GetChatTop';
 import GetDirectTop from '@layouts/communication/GetDirectTop';
 import { Box } from '@mui/material';
 import useCommunityStore from '@stores/communication/useCommunityStore';
 import fetcher from '@utils/fetcher';
 import makeSection from '@utils/makeSection';
-import React, { useCallback, useEffect, useRef } from 'react';
-import { Button, Input, MessageBox, MessageList } from 'react-chat-elements';
+import { useCallback, useEffect, useRef } from 'react';
 import useSWR from 'swr';
 import useSWRInfinite from 'swr/infinite';
 const GetDirectChat = () => {
   const boxRef = useRef();
   const { chatRoomEntryNo } = useCommunityStore();
-  const { data: myData, mutate: mutateMe } = useSWR(
+  const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );

@@ -7,7 +7,7 @@ import 'react-chat-elements/dist/main.css';
 import { ChatItem } from 'react-chat-elements';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import useCommunityStore from '@stores/communication/useCommunityStore';
 import MainBottomNav from '@layouts/common/MainBottomNav';
 import ListChatRoomTop from '@layouts/communication/ListChatRoomTop.jsx';
@@ -16,29 +16,29 @@ import { useCallback, useState } from 'react';
 
 export default function ListChatRoom() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { setField } = useCommunityStore();
 
-  const { chatRoomEntryNo, chatType, setField } = useCommunityStore();
-
-  const { data: myData, mutate: mutateMe } = useSWR(
+  const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
-  const { data: groupsData, mutate: mutateGroups } = useSWR(
+  const { data: groupsData } = useSWR(
     `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/group/list/userno/${
       myData?.userNo
     }`,
     fetcher
   );
 
-  const { data: directListData, mutate: mutateDirectMessages } = useSWR(
+  const { data: directListData } = useSWR(
     `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/direct/list/userno/${
       myData?.userNo
     }`,
     fetcher
   );
 
-  const { data: unreadsData, mutate: mutateUnreads } = useSWR(
+  const { data: unreadsData } = useSWR(
     `${
       import.meta.env.VITE_EXPRESS_HOST
     }/rest/chat/group/message/unreads/userno/${myData?.userNo}`,
@@ -66,19 +66,22 @@ export default function ListChatRoom() {
       setField('chatRoomEntryNo', selectedData.chatRoomEntryNo);
       setField('chatType', selectedData.chatType);
       setField('chatRoomLeader', selectedData.chatRoomLeader);
+      setField('prevGetGroupChatPath', location.pathname);
 
       navigate(`/chat/group/message/list`);
     },
-    [setField, navigate]
+    [setField, navigate, location]
   );
 
   const onClickDirectChat = useCallback(
     (e) => {
       setField('shouldScroll', true);
       setField('chatRoomEntryNo', e.currentTarget.dataset.value);
+      setField('prevGetDirectChatPath', location.pathname);
+
       navigate('/chat/direct/message/list');
     },
-    [navigate, setField]
+    [navigate, setField, location]
   );
 
   console.log(groupsData);

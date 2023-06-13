@@ -1,20 +1,18 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import {
   Avatar,
-  Button,
   Divider,
   IconButton,
   List,
   ListItem,
-  ListItemText,
   SwipeableDrawer,
   Typography,
 } from '@mui/material';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Stack } from '@mui/system';
 import { Menu } from '@mui/icons-material';
 import useSWR from 'swr';
@@ -23,17 +21,17 @@ import PropTypes from 'prop-types';
 import useCommunityStore from '@stores/communication/useCommunityStore';
 
 const GetDirectTop = ({ receiverNo }) => {
-  const { data: myData, mutate: mutateMe } = useSWR(
+  const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
-  const { data: userData, mutate: mutateUser } = useSWR(
+  const { data: userData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/userno/${receiverNo}`,
     fetcher
   );
 
-  const { setField } = useCommunityStore();
+  const { setField, prevGetDirectChatPath } = useCommunityStore();
   const location = useLocation();
   const navigate = useNavigate();
   const [chatMenuOpen, setChatMenuOpen] = useState(false);
@@ -72,7 +70,7 @@ const GetDirectTop = ({ receiverNo }) => {
           >
             <IconButton
               onClick={() => {
-                navigate('/chat/list');
+                navigate(prevGetDirectChatPath || -1);
               }}
             >
               <ArrowBackIosNewIcon />

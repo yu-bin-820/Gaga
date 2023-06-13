@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
@@ -17,11 +17,10 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemText,
   SwipeableDrawer,
   Typography,
 } from '@mui/material';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Stack } from '@mui/system';
 import { Menu } from '@mui/icons-material';
 import useSWR from 'swr';
@@ -31,7 +30,7 @@ import useCommunityStore from '@stores/communication/useCommunityStore';
 import axios from 'axios';
 
 const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
-  const { data: myData, mutate: mutateMe } = useSWR(
+  const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
@@ -39,14 +38,14 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
   const isMeeting = groupType == 2;
   const isLeader = myData?.userNo == groupLeader.user_no;
 
-  const { data: memberData, mutate: mutateMember } = useSWR(
+  const { data: memberData } = useSWR(
     `${
       import.meta.env.VITE_SPRING_HOST
     }/rest/user/list/grouptype/${groupType}/no/${groupNo}/state/2`,
     fetcher
   );
 
-  const { data: groupData, mutate: mutateGroup } = useSWR(
+  const { data: groupData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/${
       isMeeting ? 'meeting' : 'club'
     }/no/${groupNo}`,
@@ -57,7 +56,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
 
   // console.log(groupData);
 
-  const { setField } = useCommunityStore();
+  const { setField, prevGetGroupChatPath } = useCommunityStore();
   const location = useLocation();
   const navigate = useNavigate();
   const [chatMenuOpen, setChatMenuOpen] = useState(false);
@@ -141,7 +140,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
             >
               <IconButton
                 onClick={() => {
-                  navigate('/chat/list');
+                  navigate(prevGetGroupChatPath || -1);
                 }}
               >
                 <ArrowBackIosNewIcon />
@@ -165,7 +164,6 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
           <Box
             sx={{
               minWidth: '300px',
-              minHeight: '90vh',
               display: 'flex',
               flexDirection: 'column',
             }}
@@ -215,7 +213,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
               ))}
             </List>
             {isMeeting && (
-              <>
+              <Box sx={{ position: 'fixed', bottom: '0rem' }}>
                 <Divider />
                 <Stack
                   marginTop={'15px'}
@@ -242,7 +240,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
                     </Stack>
                   )}
                 </Stack>
-              </>
+              </Box>
             )}
           </Box>
         </SwipeableDrawer>
