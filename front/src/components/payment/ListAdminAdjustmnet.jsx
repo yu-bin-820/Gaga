@@ -7,6 +7,7 @@ import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import useSWR from 'swr';
+import NoPayment from '@components/payment/NoPayment';
 
 const ListAdminAdjustmnet = () => {
   const navigate = useNavigate();
@@ -66,6 +67,10 @@ const ListAdminAdjustmnet = () => {
     <>
       <Box sx={{ marginRight: '10px', marginLeft: '10px' }}>
         <h5>정산 대기</h5>
+        {unckeckedAdjustmentList?.filter(
+          (meeting) =>
+            meeting.meetingSuccess === 2 && meeting.adjustmentState == 1
+        ).length === 0 && <NoPayment ment={'정산 대기 내역이 없습니다.'} />}
         {unckeckedAdjustmentList?.map((adjustment, i) => (
           <Box key={i}>
             <Box
@@ -104,6 +109,10 @@ const ListAdminAdjustmnet = () => {
           </Box>
         ))}
         <h5>정산 완료</h5>
+        {ckeckedAdjustmentList?.filter(
+          (meeting) =>
+            meeting.meetingSuccess === 2 && meeting.adjustmentState == 2
+        ).length === 0 && <NoPayment ment={'정산 대기 내역이 없습니다.'} />}
         {ckeckedAdjustmentList?.map((adjustment, i) => (
           <Box key={i}>
             <Box

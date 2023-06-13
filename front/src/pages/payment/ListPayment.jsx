@@ -49,7 +49,7 @@ const ListPayment = () => {
 
   return (
     <div style={{ backgroundColor: '#ededed' }}>
-      <CommonTop pageName='결제 정보 조회' prevPath='/community/profile/mine' />
+      <CommonTop pageName='결제 내역 조회' prevPath='/community/profile/mine' />
       <Stack sx={{ marginLeft: '10px', marginRight: '10px' }}>
         <Stack sx={{ marginTop: '64px' }}>
           <Stack>

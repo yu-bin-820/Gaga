@@ -165,7 +165,7 @@ const GetProfile = () => {
           <Stack direction={'row'} spacing={10} alignItems={'center'}>
             <Avatar
               alt={userData?.nickName}
-              src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+              src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                 userData?.profileImg
               }`}
               sx={{ width: 76, height: 76 }}
@@ -243,17 +243,17 @@ const GetProfile = () => {
             rowHeight={100}
           >
             <CustomedImageListItem
-              src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+              src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                 userData?.activityImg
               }`}
             />
             <CustomedImageListItem
-              src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+              src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                 userData?.activityImg2
               }`}
             />
             <CustomedImageListItem
-              src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+              src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                 userData?.activityImg3
               }`}
             />

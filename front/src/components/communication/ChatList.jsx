@@ -8,7 +8,9 @@ import { DateTime } from 'luxon';
 
 const ChatList = ({ chatData, setSize }) => {
   const boxRef = useRef(null);
-  const { shouldScroll, setField } = useChatMapStore();
+  const { shouldScroll, isInfiniteScroll, scrollPosition, setField } =
+    useChatMapStore();
+
   const scrollToBottom = useCallback(() => {
     if (boxRef.current) {
       // boxRef.current.scrollTop = boxRef.current.scrollHeight;
@@ -17,10 +19,21 @@ const ChatList = ({ chatData, setSize }) => {
       //   boxRef.current.scrollHeight,
       //   boxRef.current.clientHeight
       // );
+      if (isInfiniteScroll) {
+        boxRef.current.scrollTo({ top: scrollPosition });
+        console.log(
+          'isInfiniteScroll',
+          isInfiniteScroll,
+          'scrollPosition',
+          scrollPosition
+        );
 
-      boxRef.current.scrollTo({ top: boxRef.current.scrollHeight });
+        setField('isInfiniteScroll', !isInfiniteScroll);
+      } else {
+        boxRef.current.scrollTo({ top: boxRef.current.scrollHeight });
+      }
     }
-  }, [boxRef]);
+  }, [boxRef, isInfiniteScroll, scrollPosition, setField]);
 
   const onScroll = useCallback(
     (e) => {
@@ -36,14 +49,18 @@ const ChatList = ({ chatData, setSize }) => {
       if (e.currentTarget.scrollTop === 0) {
         // console.log('가장 위');
         setField('shouldScroll', false);
+        const prevScrollHeight = boxRef.current.scrollHeight;
+        const prevScrollTop = boxRef.current.scrollTop;
+
         setSize((prevSize) => prevSize + 1).then(() => {
           // 스크롤 위치 유지
-          const current = boxRef?.current;
-          if (current && e.currentTarget) {
-            current.scrollTop(
-              current.scrollHeight - e.currentTarget.scrollHeight
-            );
-          }
+          setField('isInfiniteScroll', true);
+          const newScrollHeight = boxRef.current.scrollHeight;
+          const newScrollTop =
+            newScrollHeight - prevScrollHeight + prevScrollTop;
+
+          console.log('setScrollPosition', newScrollTop);
+          setField('scrollPosition', newScrollTop);
         });
       }
 
@@ -56,9 +73,12 @@ const ChatList = ({ chatData, setSize }) => {
     if (shouldScroll) {
       scrollToBottom();
     } else {
-      // setShouldScroll(true);
+      if (isInfiniteScroll) {
+        console.log('isInfiniteScroll', isInfiniteScroll);
+        scrollToBottom();
+      }
     }
-  }, [scrollToBottom, shouldScroll, chatData]);
+  }, [scrollToBottom, shouldScroll, chatData, isInfiniteScroll]);
 
   return (
     <Box

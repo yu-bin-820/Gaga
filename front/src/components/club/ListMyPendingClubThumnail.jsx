@@ -4,9 +4,6 @@ import { useNavigate } from 'react-router';
 import { Box, Stack } from '@mui/system';
 import { Button } from '@mui/material';
 import useCommonStore from '@stores/common/useCommonStore';
-import axios from 'axios';
-import fetcher from '@utils/fetcher';
-import useSWR from 'swr';
 import DeleteMemberDialog from './DeleteClubMemberDialog';
 import ClubThumbnail from './ClubThumbnail';
 

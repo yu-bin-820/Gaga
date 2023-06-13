@@ -140,7 +140,7 @@ const GetMyProfile = () => {
             <div onClick={onClickProfileImg}>
               <Avatar
                 alt={myData?.nickName}
-                src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+                src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                   myData?.profileImg
                 }`}
                 sx={{ width: 76, height: 76, marginRight: '100px' }}
@@ -248,17 +248,17 @@ const GetMyProfile = () => {
               rowHeight={100}
             >
               <CustomedImageListItem
-                src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+                src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                   myData?.activityImg
                 }`}
               />
               <CustomedImageListItem
-                src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+                src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                   myData?.activityImg2
                 }`}
               />
               <CustomedImageListItem
-                src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+                src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                   myData?.activityImg3
                 }`}
               />

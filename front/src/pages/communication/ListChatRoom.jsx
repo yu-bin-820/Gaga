@@ -163,15 +163,13 @@ export default function ListChatRoom() {
                   onClick={onClickGroupChatOne}
                 >
                   <ChatItem
-                    avatar={`${
-                      import.meta.env.VITE_SPRING_HOST
-                    }/upload_images/${
+                    avatar={`${import.meta.env.VITE_CDN_HOST}/upload_images/${
                       group.meeting_name ? 'meeting' : 'club'
                     }/${
                       group.meeting_name ? group.meeting_img : group.club_img
                     }`}
                     alt={`${
-                      import.meta.env.VITE_EXPRESS_HOST
+                      import.meta.env.VITE_CDN_HOST
                     }/uploads/group_alt.jpg`}
                     title={
                       group.meeting_name ? group.meeting_name : group.club_name
@@ -201,14 +199,20 @@ export default function ListChatRoom() {
                   onClick={onClickDirectChat}
                 >
                   <ChatItem
-                    avatar={'http://facebook.github.io/react/img/logo.svg'}
+                    avatar={`${
+                      import.meta.env.VITE_CDN_HOST
+                    }/upload_images/user/${
+                      direct.receiver_no == myData?.userNo
+                        ? direct.Sender?.profile_img
+                        : direct.Receiver?.profile_img
+                    }`}
                     alt={`${
                       import.meta.env.VITE_EXPRESS_HOST
                     }/uploads/user_alt.jpg`}
                     title={
                       direct.receiver_no == myData?.userNo
-                        ? direct.Receiver?.nick_name
-                        : direct.Sender?.nick_name
+                        ? direct.Sender?.nick_name
+                        : direct.Receiver?.nick_name
                     }
                     subtitle={direct.content}
                     date={new Date(direct.created_at)}
