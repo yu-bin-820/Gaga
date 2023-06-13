@@ -13,7 +13,7 @@ public interface AdminDao {
 
 	public void addNoticePost(NoticePost noticePost) throws Exception;
 
-	List<NoticePost> getNoticePostList() throws Exception;
+	List<NoticePost> getNoticePostList(int noticePostCategoryNo) throws Exception;
 	
 	List<NoticePost> getNoticePostListByCategoryNo(int noticePostCategoryNo, int lastPostId) throws Exception;
 	
@@ -25,8 +25,10 @@ public interface AdminDao {
 
 	void deleteNoticePost(int noticePostNo) throws Exception;
 	
-	List<NoticePost> searchNoticePost(String searchKeyword) throws Exception;
+	List<NoticePost> searchNoticePost(String searchKeyword, int searchCategoryNo) throws Exception;
 	
+	List<NoticePost> getLatestPostByCategoryNo(int lastPostId, int noticePostCategoryNo) throws Exception;
+		
 	//#블랙리스트 
 	List<User> searchUser(String searchKeyword) throws Exception;
 	

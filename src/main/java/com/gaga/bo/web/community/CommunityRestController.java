@@ -74,7 +74,7 @@ public class CommunityRestController {
 		userService.updateUser(user);
 		System.out.println("profileImg 변경 후 :: " + user);
 		session.setAttribute("user", user);
-	}
+	} 
 	
 	@PatchMapping("activityimg/userno/{userNo}")
 	public void updateActivityImg(

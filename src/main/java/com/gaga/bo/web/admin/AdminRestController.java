@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -20,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,38 +53,151 @@ public class AdminRestController {
 
 	@Value("${fileUploadPath}")
 	String fileUploadPath;
-
+/*
 	@PostMapping("addNoticePost")
-	public ResponseEntity<Integer> addNoticePost(@RequestParam(value = "file", required = false) MultipartFile file,
-			@RequestParam("noticePostTitle") String noticePostTitle,
-			@RequestParam("noticePostText") String noticePostText,
-			@RequestParam("noticePostCategory") Integer noticePostCategoryNo, @RequestParam("userNo") Integer userNo)
-			throws Exception {
-		String noticePostImg = null;
-		if (file != null) {
-			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-			String uuidFileName = UUID.randomUUID().toString() + "." + ext;
+	public void addNoticePost(
+			@ModelAttribute NoticePost noticePost, @RequestParam(value = "file", required = false) MultipartFile file,
+	                                             @RequestParam("noticePostTitle") String noticePostTitle,
+	                                             @RequestParam("noticePostText") String noticePostText,
+	                                             @RequestParam("noticePostCategory") int noticePostCategoryNo,
+	                                             @RequestParam("userNo") int userNo,
+	                                             HttpSession session) throws Exception {
 
-			Path filePath = Path.of(fileUploadPath + uuidFileName);
+	    Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+		File uploadDir = resource.getFile();
+		
+		File dir = new File(uploadDir, "admin");
+		    if (!dir.exists()) {
+		        dir.mkdirs();
+		    }
 
-			try (InputStream inputStream = file.getInputStream()) {
-				Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-			}
+		    
+	    if (file != null) {
+	        String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+	        String uuidFileName = UUID.randomUUID().toString() + ext;
+	        file.transferTo(new File(uploadDir, "admin/"+uuidFileName));
+	        noticePost.setNoticePostImg(uuidFileName);
+	    }
+	    noticePost.setNoticePostTitle(noticePostTitle);
+	    noticePost.setNoticePostText(noticePostText);
+	    
+	    noticePost.setNoticePostRegDate(LocalDateTime.now());
+	    noticePost.setNoticePostCategoryNo(noticePostCategoryNo);
+	    noticePost.setUserNo(userNo);
+	    adminService.addNoticePost(noticePost);
+	    int noticePostNo = noticePost.getNoticePostNo();
+	    System.out.println(noticePostNo + "노티스포스트남바");
 
-			noticePostImg = uuidFileName;
-		}
+	}
+	*/
+	@PostMapping("addNoticePost")
+	public void addNoticePost(
+	        @ModelAttribute NoticePost noticePost,
+	        @RequestParam(value = "file", required = false) MultipartFile file,
+	        @RequestParam(value = "thumbNailFile", required = false) MultipartFile thumbNailFile,
+	        @RequestParam("noticePostTitle") String noticePostTitle,
+	        @RequestParam("noticePostText") String noticePostText,
+	        @RequestParam("noticePostCategory") int noticePostCategoryNo,
+	        @RequestParam("userNo") int userNo,
+	        @RequestParam(value = "qnaCategory", required = false) Integer qnaCategory) throws Exception {
 
-		NoticePost noticePost = new NoticePost();
-		noticePost.setNoticePostTitle(noticePostTitle);
-		noticePost.setNoticePostText(noticePostText);
-		noticePost.setNoticePostImg(noticePostImg);
-		noticePost.setNoticePostRegDate(LocalDateTime.now());
-		noticePost.setNoticePostCategoryNo(noticePostCategoryNo);
-		noticePost.setUserNo(userNo);
-		adminService.addNoticePost(noticePost);
-		int noticePostNo = noticePost.getNoticePostNo();
-		System.out.println(noticePostNo + "노티스포스트남바");
-		return ResponseEntity.ok(noticePostNo);
+	    String uuidFileName = handleFileUpload(file);
+	    if (uuidFileName != null) {
+	        noticePost.setNoticePostImg(uuidFileName);
+	    }
+	    System.out.println(uuidFileName+"uuidFIle");
+	    System.out.println("noticePostCategoryNo :  ::: :::"+noticePostCategoryNo);
+	    System.out.println("thumbNail :  ::: :::"+thumbNailFile);
+	    if (noticePostCategoryNo == 1 && thumbNailFile != null) {
+	        String thumbNailName = handleFileUpload(thumbNailFile);
+	        if (thumbNailName != null) {
+	        	noticePost.setThumbNail(thumbNailName);
+	        	System.out.println("썸넬팔 이름이에용"+thumbNailName);
+		    }	        
+	    }
+	    
+	    if (noticePostCategoryNo == 2 && qnaCategory != null) {
+	    	noticePost.setQnaCategory(qnaCategory);
+	    } 
+	    
+	    noticePost.setNoticePostTitle(noticePostTitle);
+	    noticePost.setNoticePostText(noticePostText);
+	    noticePost.setNoticePostRegDate(LocalDateTime.now());
+	    noticePost.setNoticePostCategoryNo(noticePostCategoryNo);
+	    noticePost.setUserNo(userNo);
+
+	    adminService.addNoticePost(noticePost);
+	    System.out.println(noticePost+"결과보여줘용?");
+	    int noticePostNo = noticePost.getNoticePostNo();
+	    System.out.println(noticePostNo + "노티스포스트남바");
+	}
+	
+	public String handleFileUpload(MultipartFile file) throws Exception {
+	    if (file == null) {
+	        return null;
+	    }
+
+	    String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+	    String uuidFileName = UUID.randomUUID().toString() + ext;
+
+	    Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
+	    File uploadDir = resource.getFile();
+	    File dir = new File(uploadDir, "admin");
+	    if (!dir.exists()) {
+	        dir.mkdirs();
+	    }
+
+	    file.transferTo(new File(dir, uuidFileName));
+
+	    return uuidFileName;
+	}
+	
+	@PutMapping(value = "updateNoticePost/noticePostNo/{noticePostNo}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<NoticePost> updateNoticePost(
+	        @PathVariable int noticePostNo,
+	        @RequestParam(value = "file", required = false) MultipartFile file,
+	        @RequestParam("noticePostTitle") String noticePostTitle,
+	        @RequestParam("noticePostText") String noticePostText,
+	        @RequestParam("noticePostCategory") int noticePostCategoryNo,
+	        @RequestParam(value = "thumbNailFile", required = false) MultipartFile thumbNailFile,
+	        @RequestParam(value = "qnaCategory", required = false) Integer qnaCategory) throws Exception {
+
+	    NoticePost noticePost = adminService.getNoticePost(noticePostNo);
+	    if (noticePost == null) {
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+
+	    String uuidFileName = handleFileUpload(file);
+	    if (uuidFileName != null) {
+	        noticePost.setNoticePostImg(uuidFileName);
+	    }
+
+	    if (noticePostCategoryNo == 1 && thumbNailFile != null) {
+	        String thumbNailName = handleFileUpload(thumbNailFile);
+	        if (thumbNailName != null) {
+	        	noticePost.setThumbNail(thumbNailName);
+		    }	        
+	    }
+	    
+	    if (noticePostCategoryNo == 2 && qnaCategory != null) {
+	    	noticePost.setQnaCategory(qnaCategory);
+	    } 
+	    
+	    noticePost.setNoticePostTitle(noticePostTitle);
+	    noticePost.setNoticePostText(noticePostText);
+	    noticePost.setNoticePostCategoryNo(noticePostCategoryNo);
+
+	    adminService.updateNoticePost(noticePost);
+
+	    return new ResponseEntity<>(noticePost, HttpStatus.OK);
+	}
+	
+	@GetMapping("getNoticePostList")
+	public ResponseEntity<List<NoticePost>> getNoticePostList(
+	        @RequestParam("noticePostCategoryNo") int noticePostCategoryNo) throws Exception {
+	    // 해당 카테고리 번호에 해당하는 최신 게시물 가져오기
+	    List<NoticePost> noticePosts = adminService.getNoticePostList(noticePostCategoryNo);
+	    return new ResponseEntity<>(noticePosts, HttpStatus.OK);
 	}
 
 	@GetMapping("getNoticePostListByCategoryNo")
@@ -90,20 +206,35 @@ public class AdminRestController {
 	        @RequestParam(value = "lastPostId", required = false) int lastPostId) throws Exception {
 	    // 해당 카테고리 번호와 lastPostId에 해당하는 게시물 가져오기
 	    List<NoticePost> noticePosts = adminService.getNoticePostListByCategoryNo(noticePostCategoryNo, lastPostId);
+	    System.out.println(noticePosts+"ㅇㅇ 진짜잘나오나 보러옴");
 	    return new ResponseEntity<>(noticePosts, HttpStatus.OK);
 	}
 	
 	@GetMapping("getLatestPostId")
 	public ResponseEntity<Integer> getLatestPostId() throws Exception {
 	    Integer latestPostId = adminService.getLatestPostId();
-	    return new ResponseEntity<>(latestPostId, HttpStatus.OK);
+	    System.out.println("저 막번인데 뽑혔어요 "+latestPostId);
+	    if (latestPostId == null) {
+	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	    } else {
+	        return new ResponseEntity<>(latestPostId, HttpStatus.OK);
+	    }
 	}
 	
 	@GetMapping("searchNoticePost")
-	public List<NoticePost> searchNoticePost(@RequestParam("searchKeyword") String searchKeyword) throws Exception {
+	public List<NoticePost> searchNoticePost(@RequestParam("searchKeyword") String searchKeyword, @RequestParam("searchCategoryNo") int searchCategoryNo) throws Exception {
 		System.out.println("서버로부터 날라온 키워드"+searchKeyword);
+		System.out.println("서버로부터 날라온 남바"+searchCategoryNo);
 	    String decodedKeyword = URLDecoder.decode(searchKeyword, "UTF-8");
-	    return adminService.searchNoticePost(decodedKeyword);
+	    return adminService.searchNoticePost(decodedKeyword, searchCategoryNo);
+	}
+	
+	@GetMapping("getLatestPostByCategoryNo")
+	public ResponseEntity<List<NoticePost>> getLatestPostByCategoryNo(@RequestParam("lastPostId") int lastPostId, @RequestParam("noticePostCategoryNo") int noticePostCategoryNo) throws Exception {
+		System.out.println("wow yochung coming"+ lastPostId+": 공백임 : " +noticePostCategoryNo);
+		List<NoticePost> noticePosts = adminService.getLatestPostByCategoryNo(lastPostId, noticePostCategoryNo);
+		System.out.println(noticePosts+"결과 보여주세요!");
+		return new ResponseEntity<>(noticePosts, HttpStatus.OK);
 	}
 	
 	@GetMapping("getNoticePost/noticePostNo/{noticePostNo}")
@@ -123,40 +254,8 @@ public class AdminRestController {
 
 		return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource);
 	}
-
-	@PutMapping(value = "updateNoticePost/noticePostNo/{noticePostNo}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<NoticePost> updateNoticePost(@PathVariable int noticePostNo,
-	        @RequestParam(value = "file", required = false) MultipartFile file,
-	        @RequestParam("noticePostTitle") String noticePostTitle,
-	        @RequestParam("noticePostText") String noticePostText,
-	        @RequestParam("noticePostCategory") int noticePostCategoryNo) throws Exception {
-	    NoticePost noticePost = adminService.getNoticePost(noticePostNo);
-	    if (noticePost == null) {
-	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    }
-
-	    String noticePostImg = noticePost.getNoticePostImg();
-	    if (file != null) {
-	        String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-	        String uuidFileName = UUID.randomUUID().toString()+ext;
-
-	        Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
-	        File uploadDir = resource.getFile();
-
-	        file.transferTo(new File(uploadDir, "noticePost/"+uuidFileName));
-
-	        
-	        noticePostImg = uuidFileName;
-	    }
-
-	    noticePost.setNoticePostTitle(noticePostTitle);
-	    noticePost.setNoticePostText(noticePostText);
-	    noticePost.setNoticePostImg(noticePostImg);
-	    noticePost.setNoticePostCategoryNo(noticePostCategoryNo);
-	    adminService.updateNoticePost(noticePost);
-
-	    return new ResponseEntity<>(noticePost, HttpStatus.OK);
-	}
+	
+	
 
 	@DeleteMapping("deleteNoticePost/noticePostNo/{noticePostNo}")
 	public ResponseEntity<Void> deleteNoticePost(@PathVariable int noticePostNo) throws Exception {

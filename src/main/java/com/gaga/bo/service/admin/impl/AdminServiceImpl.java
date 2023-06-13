@@ -32,8 +32,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<NoticePost> getNoticePostList() throws Exception {
-		return adminDao.getNoticePostList();
+	public List<NoticePost> getNoticePostList(int noticePostCategoryNo) throws Exception {
+		return adminDao.getNoticePostList(noticePostCategoryNo);
 	}
 
 	@Override
@@ -51,7 +51,15 @@ public class AdminServiceImpl implements AdminService {
 	public NoticePost getNoticePost(int noticePostNo) throws Exception {
 		return adminDao.getNoticePost(noticePostNo);
 	}
-
+	
+	@Override
+	public List<NoticePost> getLatestPostByCategoryNo(int lastPostId, int noticePostCategoryNo) throws Exception {
+	    System.out.println("Service: getLatestPostByCategoryNo() with lastPostId: " + lastPostId + ", noticePostCategoryNo: " + noticePostCategoryNo);
+	    List<NoticePost> posts = adminDao.getLatestPostByCategoryNo(lastPostId, noticePostCategoryNo);
+	    System.out.println("Service: Received posts: " + posts);
+	    return posts;
+	}
+	
 	@Override
 	public void updateNoticePost(NoticePost noticePost) throws Exception {
 		adminDao.updateNoticePost(noticePost);
@@ -63,8 +71,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<NoticePost> searchNoticePost(String searchKeyword) throws Exception {
-		return adminDao.searchNoticePost(searchKeyword);
+	public List<NoticePost> searchNoticePost(String searchKeyword, int searchCategoryNo) throws Exception {
+		return adminDao.searchNoticePost(searchKeyword, searchCategoryNo);
 	}
 
 	@Override

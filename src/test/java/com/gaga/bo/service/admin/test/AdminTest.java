@@ -43,11 +43,11 @@ class AdminTest {
 	}
 	
 	//@Test
-	public void testListNoticePost() throws Exception {
-		List<NoticePost> noticePost = adminService.getNoticePostList();
+	//public void testListNoticePost() throws Exception {
+		//List<NoticePost> noticePost = adminService.getNoticePostList();
 		// Verify if the list is not empty
-		assertTrue(noticePost.size() > 0);
-	}
+		//assertTrue(noticePost.size() > 0);
+	//}
 	
 	//@Test
 	public void testGetNoticePost() throws Exception {
