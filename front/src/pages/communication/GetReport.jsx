@@ -122,7 +122,7 @@ const GetReport = () => {
                 {reportData?.reportImg && (
                   <img
                     src={`${
-                      import.meta.env.VITE_CDN_HOST
+                      import.meta.env.VITE_CDN_ORGIN_HOST
                     }/upload_images/community/${reportData?.reportImg}`}
                     loading="lazy"
                     style={{
@@ -134,7 +134,7 @@ const GetReport = () => {
                 {reportData?.reportImg2 && (
                   <img
                     src={`${
-                      import.meta.env.VITE_CDN_HOST
+                      import.meta.env.VITE_CDN_ORIGIN_HOST
                     }/upload_images/community/${reportData?.reportImg2}`}
                     loading="lazy"
                     style={{ maxWidth: '80vw', maxHeight: '30vh' }}
@@ -143,7 +143,7 @@ const GetReport = () => {
                 {reportData?.reportImg3 && (
                   <img
                     src={`${
-                      import.meta.env.VITE_CDN_HOST
+                      import.meta.env.VITE_CDN_ORIGIN_HOST
                     }/upload_images/community/${reportData?.reportImg3}`}
                     loading="lazy"
                     style={{ maxWidth: '80vw', maxHeight: '30vh' }}
