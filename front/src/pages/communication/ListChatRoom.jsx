@@ -82,7 +82,7 @@ export default function ListChatRoom() {
   );
 
   console.log(groupsData);
-  console.log(directListData);
+  console.log('directlist', directListData);
   if (!directListData) {
     return <>로딩</>;
   }
@@ -191,28 +191,24 @@ export default function ListChatRoom() {
                     padding: '5px',
                     minWidth: '100%',
                   }}
-                  data-value={
-                    direct.receiver_no === myData?.userNo
-                      ? direct.sender_no
-                      : direct.receiver_no
-                  }
+                  data-value={direct.receiver_no}
                   onClick={onClickDirectChat}
                 >
                   <ChatItem
                     avatar={`${
                       import.meta.env.VITE_CDN_HOST
                     }/upload_images/user/${
-                      direct.receiver_no == myData?.userNo
-                        ? direct.Sender?.profile_img
-                        : direct.Receiver?.profile_img
+                      direct.Receiver
+                        ? direct.Receiver?.profile_img
+                        : direct.Sender?.profile_img
                     }`}
                     alt={`${
                       import.meta.env.VITE_EXPRESS_HOST
                     }/uploads/user_alt.jpg`}
                     title={
-                      direct.receiver_no == myData?.userNo
-                        ? direct.Sender?.nick_name
-                        : direct.Receiver?.nick_name
+                      direct.Receiver
+                        ? direct.Receiver?.nick_name
+                        : direct.Sender?.nick_name
                     }
                     subtitle={direct.content}
                     date={new Date(direct.created_at)}

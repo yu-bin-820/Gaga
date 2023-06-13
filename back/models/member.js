@@ -11,6 +11,9 @@ module.exports = class Member extends Model {
           autoIncrement: true,
           allowNull: false,
         },
+        user_no: {
+          type: DataTypes.INTEGER,
+        },
         club_no: {
           type: DataTypes.INTEGER,
         },

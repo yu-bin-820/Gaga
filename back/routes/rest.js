@@ -131,11 +131,11 @@ router.get(
         }
 
         const countReadedMessage = await user.countReadedMessages();
-        const countGroupUnreads = countMessage - countReadedMessage;
+        let countGroupUnreads = countMessage - countReadedMessage;
 
         //------------------------------directUnreads count--------------------------
 
-        const countDirectUnreads = await DirectMessage.count({
+        let countDirectUnreads = await DirectMessage.count({
           where: {
             [Op.and]: [
               { receiver_no: req.params.userNo },
@@ -145,7 +145,7 @@ router.get(
           },
         });
 
-        const countAlramUnreads = await DirectMessage.count({
+        let countAlramUnreads = await DirectMessage.count({
           where: {
             [Op.and]: [
               { receiver_no: req.params.userNo },
@@ -1092,4 +1092,68 @@ router.post('/chat/alarm', async (req, res, next) => {
     next(error);
   }
 });
-//
+
+//----------------------------------Chat Delete, Exit----------------------------------------------------
+router.patch('/chat/meeting/member/state', async (req, res, next) => {
+  try {
+    const member = await Member.findOne({
+      where: [{ user_no: req.body.userNo }, { meeting_no: req.body.meetingNo }],
+    });
+    await member.update({ state: 3 });
+
+    const user = await User.findOne({ where: { user_no: req.body.userNo } });
+    console.log('user', user);
+    const content = user.dataValues.nick_name + '님이 퇴장하셨습니다.';
+    const roomMessage = await RoomMessage.create({
+      sender_no: null,
+      meeting_no: req.body.meetingNo,
+      content: content,
+      content_type_no: 101,
+      lat: null,
+      lng: null,
+    });
+
+    const meeting = await Meeting.findOne({
+      where: { meeting_no: req.body.meetingNo },
+    });
+
+    await meeting.update({
+      last_message_time: literal('NOW()'),
+      last_message: content,
+    });
+
+    res.sendStatus(200);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch('/chat/meeting/state', async (req, res, next) => {
+  try {
+    const meeting = await Meeting.findOne({
+      where: { meeting_no: req.body.meetingNo },
+    });
+    // console.log('!!!!', meeting);
+    await meeting.update({ meeting_state: 3 });
+
+    const members = await meeting.getMeetingMembers();
+
+    console.log(members);
+    const content =
+      meeting.dataValues.meeting_name + '모임의 채팅방이 삭제되었습니다.';
+    const path = '/meeting/meetingno/' + meeting.dataValues.meeting_no;
+
+    await members.map((user) => {
+      DirectMessage.create({
+        receiver_no: user.dataValues.user_no,
+        content_type_no: 1,
+        content: content,
+        path: path,
+      });
+    });
+
+    res.sendStatus(200);
+  } catch (error) {
+    next(error);
+  }
+});
