@@ -37,10 +37,15 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 
 	@Override
-	public void addMeeting(Meeting meeting) throws Exception {
+	public int addMeeting(Meeting meeting) throws Exception {
 		// TODO Auto-generated method stub
-		//System.out.println(meeting);
-		meetingDao.addMeeting(meeting);
+		int a = meetingDao.addMeeting(meeting);
+		 
+		int meetingNo = meeting.getMeetingNo();
+		
+		System.out.println(meetingNo);
+		
+		return meetingNo;
 	}
 
 

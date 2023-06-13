@@ -95,25 +95,22 @@ public class MeetingRestController {
 		return list;
 	}
 	
-	@PostMapping("search")
-	public List<Meeting> getMeetingListByKeyword(@RequestBody Search search) throws Exception{
-				
-		if(search.getCurrentPage() ==0 ){
-			search.setCurrentPage(1);
-		}
-		
-		System.out.println("searchmeeting : " + search);
-		
-		search.setPageSize(pageSize);
-		
-		System.out.println(search.getStartRowNum());
-		
-		System.out.println("searchmeeting : " + search);
+	@GetMapping("search")
+	public List<Meeting> getMeetingListByKeyword(@RequestParam int page, @RequestParam String searchKeyword) throws Exception{
+	    
+	    System.out.println("page: " + page);
+	    System.out.println("searchKeyword: " + searchKeyword);
 
-		
-		List<Meeting> list = meetingService.getMeetingListByKeyword(search);
-//		System.out.println(list);
-		return list;
+	    Search search = new Search();
+	    search.setCurrentPage(page);
+	    search.setSearchKeyword(searchKeyword);
+	    search.setPageSize(pageSize);
+	    
+	    System.out.println("search: " + search);
+
+	    List<Meeting> list = meetingService.getMeetingListByKeyword(search);
+	     System.out.println(list);
+	    return list;
 	}
 	
 	@PatchMapping("")
@@ -147,7 +144,7 @@ public class MeetingRestController {
 	}
 	
 	@PostMapping("")
-	public void addMeeting(@ModelAttribute Meeting meeting,
+	public int addMeeting(@ModelAttribute Meeting meeting,
 				 		   @RequestParam(value = "file", required = false) MultipartFile file
 						   ) throws Exception{
 
@@ -163,13 +160,19 @@ public class MeetingRestController {
 			String fileName = "meeting/" + uuidFileName;
 	        String message = s3Uploader.uploadFiles(file, fileName);
 	        System.out.println(message);
+	        
+	       
 		}
 
 		
 		System.out.println("img변경 후 : "+meeting);
 		
 
-		meetingService.addMeeting(meeting);
+		int meetingNo = meetingService.addMeeting(meeting);
+		
+		System.out.println("meetingNo : "+meetingNo);
+		
+		return meetingNo;
 
 	}
 	
