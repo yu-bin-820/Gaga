@@ -165,7 +165,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
           <Box
             sx={{
               minWidth: '300px',
-              minHeight: '99vh',
+              minHeight: '90vh',
               display: 'flex',
               flexDirection: 'column',
             }}
