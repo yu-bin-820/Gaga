@@ -21,6 +21,7 @@ public class Club {
     private int mainCategoryNo;
     private int state; //1:신청중 2:참여중
     private int memberCount;
+    private int parentClubNo;
  
     //Constructor
     public Club() {
@@ -153,6 +154,14 @@ public class Club {
 
 	public void setMemberCount(int memberCount) {
 		this.memberCount = memberCount;
+	}
+
+	public int getParentClubNo() {
+		return parentClubNo;
+	}
+
+	public void setParentClubNo(int parentClubNo) {
+		this.parentClubNo = parentClubNo;
 	}
 
 	@Override

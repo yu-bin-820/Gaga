@@ -23,7 +23,7 @@ public interface MeetingService {
 	
 	public List<Meeting> getMeetingListByKeyword(Search search) throws Exception;
 
-	public void addMeeting(Meeting meeting) throws Exception;
+	public int addMeeting(Meeting meeting) throws Exception;
 	
 	public void updateMeeting(Meeting meeting) throws Exception;
 	

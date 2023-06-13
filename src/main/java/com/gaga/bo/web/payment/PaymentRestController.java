@@ -92,6 +92,14 @@ public class PaymentRestController {
 		paymentService.updatePayment(payNo);
 	}
 	
+	@GetMapping("refund/offer")
+	public List<Payment> offerRefund() throws Exception{
+		
+		System.out.println("참가비 있는 미팅 삭제, 미성사 등으로 인한 환불요청 목록 Ctrl");
+		
+		return paymentService.offerRefund();
+	}
+	
 	@GetMapping("list/{userNo}")
 	public List<Payment> getPaymentList(@PathVariable int userNo) throws Exception{
 		

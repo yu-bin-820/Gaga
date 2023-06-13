@@ -15,7 +15,7 @@ public class NoticePost {
     //0526 조회수추가
     private int postCount;
     //0608 썸네일, Q&A카테고리 추가
-    private int qnaCategory;
+    private Integer qnaCategory;
     private String thumbNail; 
     
   //constructor
@@ -23,11 +23,11 @@ public class NoticePost {
     	
     }
     
-    public int getQnaCategory() {
+    public Integer getQnaCategory() {
 		return qnaCategory;
 	}
 
-	public void setQnaCategory(int qnaCategory) {
+	public void setQnaCategory(Integer qnaCategory) {
 		this.qnaCategory = qnaCategory;
 	}
 
@@ -38,8 +38,6 @@ public class NoticePost {
 	public void setThumbNail(String thumbNail) {
 		this.thumbNail = thumbNail;
 	}
-
-	
 
     public int getPostCount() {
 		return postCount;

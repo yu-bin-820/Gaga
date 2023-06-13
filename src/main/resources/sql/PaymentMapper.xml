@@ -67,7 +67,7 @@
 	<select 	id="getPayNoByUserMeeting"  parameterType="int" resultType="java.lang.String" >
 	 	SELECT pay_no
 		FROM payments
-		WHERE user_no = #{userNo} AND meeting_no = #{meetingNo} AND pay_state = 1
+		WHERE user_no = #{userNo} AND meeting_no = #{meetingNo} AND pay_state IN (1,3) 
 	</select>
 	
 	<!-- SQL: SELECT -->
@@ -85,12 +85,24 @@
 	    ORDER BY pay_time DESC
 	</select>
 	
+	<!-- 환불 SQL-->
 	<update id="updatePayment" parameterType="String">
 	  UPDATE payments
 	  SET pay_state = 2,
 	      refund_time = NOW()
 	  WHERE pay_no = #{payNo}
 	</update>
+	
+	<!-- 환불알림 목록 SQL-->
+	<select id="offerRefund" resultMap="paymentResultMap">
+		SELECT m.meeting_no, m.user_no
+		FROM members m
+		WHERE m.meeting_no IN ( SELECT meeting_no 
+	    						FROM meetings 
+	   						    WHERE meeting_state = 4 
+	    							  AND entry_fee != 0 
+	    							  AND meeting_success != 2)
+	</select>
 
 	
 	
