@@ -18,6 +18,10 @@ import makeSection from '@utils/makeSection';
 const GetGroupChat = () => {
   const { chatRoomEntryNo, chatRoomLeader, chatType } = useCommunityStore();
 
+  const { data: roomLeaderData } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/userno/${chatRoomLeader}`
+  );
+
   const boxRef = useRef();
 
   const { data: myData } = useSWR(
@@ -93,7 +97,7 @@ const GetGroupChat = () => {
       <GetChatTop
         groupType={chatType}
         groupNo={chatRoomEntryNo}
-        groupLeader={chatRoomLeader}
+        groupLeader={roomLeaderData}
       />
       <Box ref={boxRef}>
         <ChatList chatData={chatData} setSize={setSize} />

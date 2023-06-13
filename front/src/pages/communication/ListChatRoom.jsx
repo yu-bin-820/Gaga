@@ -155,12 +155,12 @@ export default function ListChatRoom() {
                       ? {
                           chatRoomEntryNo: group.meeting_no,
                           chatType: 2,
-                          chatRoomLeader: group.MeetingLeader,
+                          chatRoomLeader: group.MeetingLeader.user_no,
                         }
                       : {
                           chatRoomEntryNo: group.club_no,
                           chatType: 1,
-                          chatRoomLeader: group.ClubLeader,
+                          chatRoomLeader: group.ClubLeader.user_no,
                         }
                   )}
                   onClick={onClickGroupChatOne}
