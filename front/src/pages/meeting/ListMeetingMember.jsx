@@ -4,13 +4,12 @@ import { Button } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useCallback } from 'react';
+import { useParams } from 'react-router';
 import useSWR from 'swr';
 
 const ListMeetingMember = () => {
   const { meetingno } = useParams();
-  const navigate = useNavigate();
 
   const { data: pendingMemberList, mutate: mutatePendingMemberList } = useSWR(
     `${
@@ -39,7 +38,7 @@ const ListMeetingMember = () => {
 
       console.log(data);
 
-      const response = await axios
+      await axios
         .patch(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`, data)
         .then(() => {
           mutateConfirmedMemberList();
@@ -48,7 +47,7 @@ const ListMeetingMember = () => {
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [meetingno, mutateConfirmedMemberList, mutatePendingMemberList]);
 
   const onClickDeleteMember = useCallback(async (event) => {
     const { id } = event.target;
@@ -62,7 +61,7 @@ const ListMeetingMember = () => {
 
       console.log(data);
 
-      const response = await axios
+      await axios
         .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`, {
           data: data,
         })

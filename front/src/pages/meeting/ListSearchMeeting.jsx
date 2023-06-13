@@ -1,21 +1,16 @@
 import MeetingThumbnail from '@components/meeting/MeetingThumnail';
 import useSearchMeetingFormStore from '@hooks/meeting/useSearchMeetingFormStore';
 import CommonTop from '@layouts/common/CommonTop';
-import SearchIcon from '@mui/icons-material/Search';
-import { Button, Grid, IconButton, TextField, Tooltip } from '@mui/material';
-import { Box, margin } from '@mui/system';
-import axios from 'axios';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Box} from '@mui/system';
+import { useCallback, useRef} from 'react';
 import useSWRInfinite from 'swr/infinite';
 import fetcher from '@utils/fetcher';
-import makeSection from '@utils/makeSection';
 
 
 const ListSearchMeeting = () => {
     const boxRef = useRef(null);
 
-  const { searchKeyword, setField } = useSearchMeetingFormStore();
+  const { searchKeyword } = useSearchMeetingFormStore();
 
   const getKey = (index, prevPageData) => {
     if (prevPageData && !prevPageData.length) {
@@ -27,7 +22,6 @@ const ListSearchMeeting = () => {
 
     const {
     data: meetingListData,
-    mutate: mutateMeetingList,
     setSize,
   } = useSWRInfinite(getKey, fetcher);
 

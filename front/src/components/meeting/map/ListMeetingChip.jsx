@@ -19,7 +19,7 @@ const ListMeetingChip = ({ onClick }) => (
   );
 
   ListMeetingChip.propTypes = {
-    onClick: PropTypes.object.isRequired,
+    onClick: PropTypes.func.isRequired,
   };
 
 export default ListMeetingChip;

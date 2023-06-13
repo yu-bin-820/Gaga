@@ -48,7 +48,6 @@ import AddUserTest from '@pages/user/AddUserTest.jsx';
 
 import UpdateReport from '@pages/communication/UpdateReport.jsx';
 
-import { element } from 'prop-types';
 import SearchMeeting from '@pages/meeting/SearchMeeting';
 import ListClubMember from '@pages/club/ListClubMember.jsx';
 import AddClubMember from '@pages/club/AddClubMember.jsx';

@@ -1,14 +1,38 @@
-import { Button, Divider, List, ListItem, SwipeableDrawer } from '@mui/material';
+import { Button, Divider, Drawer, List, ListItem } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
+import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import ListMeetingSearchBar from './ListMeetingSearchBar';
+import MyLocationIcon from '@mui/icons-material/MyLocation';
 
-const AddMeetingMapDrawer = ({settingsMenuOpen, toggleSettingsMenu, setSettingsMenuOpen, center, setMap, setPosition, setField, markerAddr, position, keyword, handleKeywordChange, handleSubmit }) => {
+const AddMeetingMapDrawer = ({settingsMenuOpen, toggleSettingsMenu, setSettingsMenuOpen, setMap, setPosition, setField, markerAddr, position, keyword, handleKeywordChange, handleSubmit }) => {
+
+    const [latitude, setLatitude] = useState(37.56683320648879);
+    const [longtitude, setLongtitude] = useState(126.97861829907933);
+
+
+    const onClickMyLocation = useCallback(() => {
+        if (navigator.geolocation) {
+          // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const { latitude, longitude } = position.coords;
+              setLatitude(latitude);
+              setLongtitude(longitude);
+              // console.log(latitude,longitude);
+            },
+            (err) => {
+              console.log(err.message);
+            }
+          );
+        } else {
+          console.log("geolocation을 사용할 수 없어요..");
+        }
+      }, []);
 
     return (
-        <SwipeableDrawer
+        <Drawer
             anchor="right"
             open={settingsMenuOpen}
             onClose={toggleSettingsMenu(false)}
@@ -36,7 +60,7 @@ const AddMeetingMapDrawer = ({settingsMenuOpen, toggleSettingsMenu, setSettingsM
                 </List>
             </Box>
             <Map // 로드뷰를 표시할 Container
-                center={center}
+                center={{ lat: latitude, lng: longtitude }}
                 style={{
                     width: "100%",
                     height: "100vh",
@@ -57,20 +81,31 @@ const AddMeetingMapDrawer = ({settingsMenuOpen, toggleSettingsMenu, setSettingsM
             >
                 {position && <MapMarker position={position} />}
             </Map>
+            <MyLocationIcon 
+            onClick ={onClickMyLocation}
+                sx={{
+                    position: 'fixed',
+                    bottom: '1rem',
+                    left: '88%',
+                    transform: 'translate(-50%, -50%)',
+                    zIndex: 999,
+                    fontSize: 40
+                }}
+            />
             <ListMeetingSearchBar 
                 keyword={keyword} 
                 handleKeywordChange={handleKeywordChange} 
                 handleSubmit={handleSubmit}          
                 top= '100px'
             />
-        </SwipeableDrawer>
+        </Drawer>
     );
 };
 
 AddMeetingMapDrawer.propTypes = {
-    settingsMenuOpen: PropTypes.object.isRequired,
-    toggleSettingsMenu: PropTypes.object.isRequired,
-    setSettingsMenuOpen: PropTypes.object.isRequired,
+    settingsMenuOpen: PropTypes.bool.isRequired,
+    toggleSettingsMenu: PropTypes.func.isRequired,
+    setSettingsMenuOpen: PropTypes.func.isRequired,
     center: PropTypes.object.isRequired,
     setMap: PropTypes.object.isRequired,
     setPosition: PropTypes.object.isRequired,
