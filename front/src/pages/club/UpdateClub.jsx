@@ -7,19 +7,11 @@ import {
   TextField,
 } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import useUpdateClubFormStore from '@stores/club/useUpdateClubFormStore';
 import { useTheme } from '@emotion/react';
-import AddClubMaxMember from '@components/club/AddClubMaxMember';
-import AddClubFilter from '@components/club/AddClubFilter';
-import AddClubImg from '@components/club/AddClubImg';
-import AddClubName from '@components/club/AddClubName';
-import AddClubRegion from '@components/club/AddClubRegion';
-import AddClubListCategory from '@components/club/AddClubListCategory';
-import SelectClubType from '@components/club/SelectClubType';
 import CommonTop from '@layouts/common/CommonTop';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import UpdateClubName from '@components/club/UpdateClubName';
@@ -78,53 +70,56 @@ const UpdateClub = () => {
         setField('clubState', response.data.clubState);
         setField(
           'image',
-          response.data.clubImg
-            ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/club/${
-                response.data?.clubImg
-              }`
+          response.data?.clubImg
+            ? `${
+                import.meta.env.VITE_CDN_HOST
+              }/upload_images/club/${clubImg}?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`
             : null
         );
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [clubImg, clubNo, setField]);
 
   const navigate = useNavigate();
 
-  const handleSubmit = useCallback(() => {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
 
-    try {
-      const formData = new FormData();
+      try {
+        const formData = new FormData();
 
-      formData.append('file', selectedFile);
-      formData.append('clubName', clubName);
-      formData.append('clubIntro', clubIntro);
-      formData.append('clubRegion', clubRegion);
-      formData.append('filterGender', filterGender);
-      formData.append('filterMinAge', filterMinAge);
-      formData.append('filterMaxAge', filterMaxAge);
-      formData.append('filterTag', filterTag);
-      formData.append('clubMaxMemberNo', clubMaxMemberNo);
-      formData.append('filterTag', filterTag);
-      formData.append('clubState', clubState);
-      formData.append('clubNo', clubNo);
+        formData.append('file', selectedFile);
+        formData.append('clubName', clubName);
+        formData.append('clubIntro', clubIntro);
+        formData.append('clubRegion', clubRegion);
+        formData.append('filterGender', filterGender);
+        formData.append('filterMinAge', filterMinAge);
+        formData.append('filterMaxAge', filterMaxAge);
+        formData.append('filterTag', filterTag);
+        formData.append('clubMaxMemberNo', clubMaxMemberNo);
+        formData.append('filterTag', filterTag);
+        formData.append('clubState', clubState);
+        formData.append('clubNo', clubNo);
 
-      console.log(clubNo.clubRegion);
+        console.log(clubRegion);
 
-      console.log(formData);
+        console.log(formData);
 
-      const response = axios.patch(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/club`,
-        formData
-      );
+        const response = axios.patch(
+          `${import.meta.env.VITE_SPRING_HOST}/rest/club`,
+          formData
+        );
 
-      navigate(`/club/no/${clubNo}`);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [clubNo, navigate]);
+        navigate(`/club/no/${clubNo}`);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [clubNo, navigate]
+  );
 
   const theme = useTheme();
   const [activeStep, setActiveStep] = useState(0);
