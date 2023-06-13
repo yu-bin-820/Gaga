@@ -37,14 +37,14 @@ const AddUser = () => {
     reset,
   } = useUserFormStore();
 
-  const [emailVerified, setEmailVerified] = useState(true);
-  const [phoneVerified, setPhoneVerified] = useState(true);
-  const [isNameValid, setIsNameValid] = useState(true);
-  const [isNicknameValid, setIsNicknameValid] = useState(true);
-  const [isGenderValid, setIsGenderValid] = useState(true);
-  const [isBirthdayValid, setIsBirthdayValid] = useState(true);
-  const [agreeTerms, setAgreeTerms] = useState(true);
-  const [isUserIdValid, setIsUserIdValid] = useState(true);
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [phoneVerified, setPhoneVerified] = useState(false);
+  const [isNameValid, setIsNameValid] = useState(false);
+  const [isNicknameValid, setIsNicknameValid] = useState(false);
+  const [isGenderValid, setIsGenderValid] = useState(false);
+  const [isBirthdayValid, setIsBirthdayValid] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [isUserIdValid, setIsUserIdValid] = useState(false);
 
   const handleNameChange = (e) => {
     onChangeField("userName", e);
@@ -400,8 +400,7 @@ const AddUser = () => {
                 name="userId"
                 type="email"
                 value={userId}
-                onChange={(e) => onChangeField("userId", e)}
-                // onChange={handleEmailChange}
+                onChange={handleEmailChange}
                 // onBlur={checkDuplicateId}
                 error={!!emailError}
                 helperText={emailError}
@@ -475,8 +474,7 @@ const AddUser = () => {
             name="password"
             type="password"
             value={password}
-            onChange={(e) => onChangeField("password", e)}
-            // onChange={handlePasswordChange}
+            onChange={handlePasswordChange}
             error={!!passwordError}
             helperText={passwordError}
             autoComplete="current-password"
