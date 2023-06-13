@@ -22,6 +22,9 @@ public interface PaymentDao {
 	//SELECT ONE
 	public String getPayNoByUserMeeting(Map<String, Object> refund) throws Exception;
 	
+	//SELECT ONE
+	public List<Payment> offerRefund() throws Exception;
+	
 	//SELECT LIST
 	public List<Payment> getPaymentList(int userNo) throws Exception;
 	
