@@ -140,9 +140,9 @@ const GetMyProfile = () => {
             <div onClick={onClickProfileImg}>
               <Avatar
                 alt={myData?.nickName}
-                src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
-                  myData?.profileImg
-                }`}
+                src={`${
+                  import.meta.env.VITE_CDN_ORIGIN_HOST
+                }/upload_images/user/${myData?.profileImg}`}
                 sx={{ width: 76, height: 76, marginRight: '100px' }}
               />
             </div>
@@ -248,19 +248,19 @@ const GetMyProfile = () => {
               rowHeight={100}
             >
               <CustomedImageListItem
-                src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
-                  myData?.activityImg
-                }`}
+                src={`${
+                  import.meta.env.VITE_CDN_ORIGIN_HOST
+                }/upload_images/user/${myData?.activityImg}`}
               />
               <CustomedImageListItem
-                src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
-                  myData?.activityImg2
-                }`}
+                src={`${
+                  import.meta.env.VITE_CDN_ORIGIN_HOST
+                }/upload_images/user/${myData?.activityImg2}`}
               />
               <CustomedImageListItem
-                src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
-                  myData?.activityImg3
-                }`}
+                src={`${
+                  import.meta.env.VITE_CDN_ORIGIN_HOST
+                }/upload_images/user/${myData?.activityImg3}`}
               />
             </ImageList>
           </Box>

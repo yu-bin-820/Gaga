@@ -17,6 +17,8 @@ const useCommunityStore = create((set) => ({
   ],
   profileUserNo: 0,
   prevProfilePath: '',
+  prevGetGroupChatPath: '',
+  prevGetDirectChatPath: '',
   prevPath: '',
 
   // setChatRoomEntryNo: (chatRoomEntryNo) =>

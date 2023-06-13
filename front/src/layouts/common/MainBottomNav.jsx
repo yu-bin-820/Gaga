@@ -1,10 +1,6 @@
 import * as React from 'react';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import FolderIcon from '@mui/icons-material/Folder';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import HomeIcon from '@mui/icons-material/Home';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
@@ -12,7 +8,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import { useNavigate } from 'react-router';
 import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
-import useSocket from '@hooks/common/useSocket';
 import { useEffect } from 'react';
 import { PropTypes } from 'prop-types';
 import {
@@ -25,10 +20,13 @@ import {
   DialogTitle,
 } from '@mui/material';
 import useCommonStore from '@stores/common/useCommonStore';
+import AddMeetingDrawer from '@components/meeting/AddMeetingDrawer';
 export default function MainBottomNav({ pageName }) {
   const navigate = useNavigate();
 
   const [value, setValue] = React.useState(pageName);
+  const [settingsAddMeetingOpen, setSettingsAddMeetingOpen] = React.useState(false);
+
   const [noProfileImgDialogOpen, setNoProfileImgDialogOpen] =
     React.useState(false);
 
@@ -38,11 +36,11 @@ export default function MainBottomNav({ pageName }) {
     }
   };
 
-  const { data: myData, mutate: mutateMe } = useSWR(
+  const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
-  const { data: unreadsData, mutate: mutateUnreads } = useSWR(
+  const { data: unreadsData } = useSWR(
     `${
       import.meta.env.VITE_EXPRESS_HOST
     }/rest/chat/group/message/unreads/userno/${myData?.userNo}`,
@@ -105,6 +103,13 @@ export default function MainBottomNav({ pageName }) {
     );
   }, [unreadsData]);
 
+  const toggleSettingsAddMeeting = React.useCallback(
+    (state) => () => {
+      setSettingsAddMeetingOpen(state);
+    },
+    []
+  );
+
   const onCloseNoProfileImgDialog = React.useCallback(() => {
     setNoProfileImgDialogOpen(false);
   }, []);
@@ -116,7 +121,7 @@ export default function MainBottomNav({ pageName }) {
   const onClickAddGroup = React.useCallback(() => {
     if (isAuthenticated) {
       if (groupType == 'meeting') {
-        navigate(`/meeting/addmeeting`);
+        setSettingsAddMeetingOpen(true);
       } else {
         navigate('/club/addclub');
       }
@@ -187,6 +192,11 @@ export default function MainBottomNav({ pageName }) {
           <Button onClick={onCloseNoProfileImgDialog}>확인</Button>
         </DialogActions>
       </Dialog>
+      <AddMeetingDrawer
+        settingsAddMeetingOpen={settingsAddMeetingOpen}
+        setSettingsAddMeetingOpen={setSettingsAddMeetingOpen}
+        toggleSettingsAddMeeting={toggleSettingsAddMeeting} 
+        />
     </>
   );
 }

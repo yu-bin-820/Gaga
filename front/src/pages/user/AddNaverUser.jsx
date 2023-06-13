@@ -367,6 +367,7 @@ const AddNaverUser = () => {
               error={!!passwordError}
               helperText={passwordError}
               autoComplete="current-password"
+              autoFocus
               inputProps={{
                 maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
               }}

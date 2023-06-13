@@ -1,102 +1,92 @@
-import useInput from '@hooks/common/useInput';
-import CommonTop from '@layouts/common/CommonTop';
-import {
-  Avatar,
-  Button,
-  Rating,
-  TextField,
-} from '@mui/material';
+import { Avatar, Button, Divider, Drawer, IconButton, Rating, TextField } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import axios from 'axios';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CancelIcon from '@mui/icons-material/Cancel';
+import PropTypes from 'prop-types';
+import { useCallback, useState } from 'react';
 import fetcher from '@utils/fetcher';
+import useInput from '@hooks/common/useInput';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import useSWR from 'swr';
+import axios from 'axios';
 
-const UpdateMeetingReview = () => {
-  const { reviewno } = useParams();
-  const [meetingReview, onChangeMeetingReview, setMeetingReview] = useInput({
-    meetingScore: '',
-    meetingReviewImg: '',
-    meetingReviewContent: '',
-    meetingNo: '',
-  });
+const AddMeetingReviewDrawer = ({settingsAddReviewOpen, setSettingsAddReviewOpen, toggleSettingsAddReview, meetingNo}) => {
 
-  const {data : meetingReviewList, mutate: mutateMeetingReviewList } = useSWR(
-    `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/${meetingReview?.meetingNo}`,
-    fetcher
-);
-
-  const [selectedImage, setSelectedImage] = useState();
-  const [selectedFile, setSelectedFile] = useState(null);
-
-  const onChangeImg = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-    setSelectedImage(URL.createObjectURL(file));
-  };
-
-  useEffect(() => {
-    axios
-      .get(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/no/${reviewno}`
-      )
-      .then((response) => {
-        console.log(response.data);
-        setMeetingReview(response.data);
-        setSelectedImage(
-          response.data?.meetingReviewImg
-            ? `${import.meta.env.VITE_CDN_HOST}/upload_images/meeting/${
-                response.data?.meetingReviewImg
-              }?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`
-            : null
+    const {mutate: mutateMeetingReviewList } = useSWR(
+      `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/${meetingNo}`,
+      fetcher
+  );
+  
+    const [meetingReview, onChangeMeetingReview] = useInput({
+      meetingScore: 5,
+      meetingReviewContent: '',
+    });
+  
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+  
+    const onChangeImg = (event) => {
+      const file = event.target.files[0];
+      setSelectedFile(file);
+      setSelectedImage(URL.createObjectURL(file));
+    };
+  
+    const { data: myData } = useSWR(
+      `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+      fetcher
+    );
+  
+    const handleSubmit = useCallback(() => {
+      event.preventDefault();
+  
+      try {
+        const formData = new FormData();
+  
+        formData.append('file', selectedFile);
+        formData.append('meetingScore', meetingReview.meetingScore);
+        formData.append(
+          'meetingReviewContent',
+          meetingReview.meetingReviewContent
         );
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [reviewno, setMeetingReview]);
-
-  const navigate = useNavigate();
-
-  const handleSubmit = useCallback(() => {
-    event.preventDefault();
-
-    try {
-      const formData = new FormData();
-
-      formData.append('file', selectedFile);
-      formData.append('meetingScore', meetingReview.meetingScore);
-      formData.append(
-        'meetingReviewContent',
-        meetingReview.meetingReviewContent
-      );
-      formData.append('meetingReviewNo', reviewno);
-
-      console.log(formData);
-      const response = 
-      axios
-      .patch(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`,
-        formData )
-        .then(()=>{
+        formData.append('meetingReviewerNo', myData.userNo);
+        formData.append('meetingNo', meetingNo);
+  
+        console.log(formData);
+        const response = axios.post(
+          `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`,
+          formData
+        ).then(()=>{
           mutateMeetingReviewList()
-        });
+        })
 
-      navigate(`/meeting/meetingno/${meetingReview.meetingNo}`);
+        setSettingsAddReviewOpen(false);
 
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [meetingReview, selectedFile, navigate]);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }, [meetingReview, selectedFile, meetingNo, myData.userNo, mutateMeetingReviewList, setSettingsAddReviewOpen]);
 
-  return (
-    <Box sx={{ margin: '10px' }}>
-      <CommonTop />
-      <Box sx={{ marginTop: '64px' }}>
+    return (
+        <Drawer
+            anchor="right"
+            open={settingsAddReviewOpen}
+            onClose={toggleSettingsAddReview(false)}
+            onOpen={toggleSettingsAddReview(true)}
+          >
+            <Stack
+            direction={'row'}
+            alignItems={'center'}
+            sx={{ height: '55px', minWidth: '100vw' }}
+          >
+            <IconButton
+            onClick={() => {
+              setSettingsAddReviewOpen(false);}}>
+              <ArrowBackIosNewIcon />
+            </IconButton>
+          </Stack>
+          <Divider />
+            <Box sx={{ margin: '10px' }}>
         <Stack direction={'row'} spacing={3} sx={{ marginBottom: '30px' }}>
           <Button
             variant="outlined"
@@ -181,7 +171,6 @@ const UpdateMeetingReview = () => {
           required
           value={meetingReview.meetingReviewContent}
         />
-
         <Stack
           spacing={0}
           direction="row"
@@ -194,12 +183,19 @@ const UpdateMeetingReview = () => {
             sx={{ width: '85vw', borderRadius: '50px' }}
             onClick={handleSubmit}
           >
-            수정하기
+            작성하기
           </Button>
         </Stack>
       </Box>
-    </Box>
-  );
+        </Drawer>
+    );
 };
 
-export default UpdateMeetingReview;
+AddMeetingReviewDrawer.propTypes = {
+    settingsAddReviewOpen: PropTypes.bool.isRequired,
+    setSettingsAddReviewOpen: PropTypes.func.isRequired,
+    toggleSettingsAddReview: PropTypes.func.isRequired,
+    meetingNo: PropTypes.object.isRequired,
+    };
+
+export default AddMeetingReviewDrawer;

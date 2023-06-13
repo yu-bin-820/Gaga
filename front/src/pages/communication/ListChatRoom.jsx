@@ -7,7 +7,7 @@ import 'react-chat-elements/dist/main.css';
 import { ChatItem } from 'react-chat-elements';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import useCommunityStore from '@stores/communication/useCommunityStore';
 import MainBottomNav from '@layouts/common/MainBottomNav';
 import ListChatRoomTop from '@layouts/communication/ListChatRoomTop.jsx';
@@ -16,29 +16,29 @@ import { useCallback, useState } from 'react';
 
 export default function ListChatRoom() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { setField } = useCommunityStore();
 
-  const { chatRoomEntryNo, chatType, setField } = useCommunityStore();
-
-  const { data: myData, mutate: mutateMe } = useSWR(
+  const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
-  const { data: groupsData, mutate: mutateGroups } = useSWR(
+  const { data: groupsData } = useSWR(
     `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/group/list/userno/${
       myData?.userNo
     }`,
     fetcher
   );
 
-  const { data: directListData, mutate: mutateDirectMessages } = useSWR(
+  const { data: directListData } = useSWR(
     `${import.meta.env.VITE_EXPRESS_HOST}/rest/chat/direct/list/userno/${
       myData?.userNo
     }`,
     fetcher
   );
 
-  const { data: unreadsData, mutate: mutateUnreads } = useSWR(
+  const { data: unreadsData } = useSWR(
     `${
       import.meta.env.VITE_EXPRESS_HOST
     }/rest/chat/group/message/unreads/userno/${myData?.userNo}`,
@@ -66,23 +66,26 @@ export default function ListChatRoom() {
       setField('chatRoomEntryNo', selectedData.chatRoomEntryNo);
       setField('chatType', selectedData.chatType);
       setField('chatRoomLeader', selectedData.chatRoomLeader);
+      setField('prevGetGroupChatPath', location.pathname);
 
       navigate(`/chat/group/message/list`);
     },
-    [setField, navigate]
+    [setField, navigate, location]
   );
 
   const onClickDirectChat = useCallback(
     (e) => {
       setField('shouldScroll', true);
       setField('chatRoomEntryNo', e.currentTarget.dataset.value);
+      setField('prevGetDirectChatPath', location.pathname);
+
       navigate('/chat/direct/message/list');
     },
-    [navigate, setField]
+    [navigate, setField, location]
   );
 
   console.log(groupsData);
-  console.log(directListData);
+  console.log('directlist', directListData);
   if (!directListData) {
     return <>로딩</>;
   }
@@ -163,13 +166,15 @@ export default function ListChatRoom() {
                   onClick={onClickGroupChatOne}
                 >
                   <ChatItem
-                    avatar={`${import.meta.env.VITE_CDN_HOST}/upload_images/${
+                    avatar={`${
+                      import.meta.env.VITE_CDN_ORIGIN_HOST
+                    }/upload_images/${
                       group.meeting_name ? 'meeting' : 'club'
                     }/${
                       group.meeting_name ? group.meeting_img : group.club_img
                     }`}
                     alt={`${
-                      import.meta.env.VITE_CDN_HOST
+                      import.meta.env.VITE_CDN_ORIGIN_HOST
                     }/uploads/group_alt.jpg`}
                     title={
                       group.meeting_name ? group.meeting_name : group.club_name
@@ -191,28 +196,24 @@ export default function ListChatRoom() {
                     padding: '5px',
                     minWidth: '100%',
                   }}
-                  data-value={
-                    direct.receiver_no === myData?.userNo
-                      ? direct.sender_no
-                      : direct.receiver_no
-                  }
+                  data-value={direct.receiver_no}
                   onClick={onClickDirectChat}
                 >
                   <ChatItem
                     avatar={`${
-                      import.meta.env.VITE_CDN_HOST
+                      import.meta.env.VITE_CDN_ORIGIN_HOST
                     }/upload_images/user/${
-                      direct.receiver_no == myData?.userNo
-                        ? direct.Sender?.profile_img
-                        : direct.Receiver?.profile_img
+                      direct.Receiver
+                        ? direct.Receiver?.profile_img
+                        : direct.Sender?.profile_img
                     }`}
                     alt={`${
                       import.meta.env.VITE_EXPRESS_HOST
                     }/uploads/user_alt.jpg`}
                     title={
-                      direct.receiver_no == myData?.userNo
-                        ? direct.Sender?.nick_name
-                        : direct.Receiver?.nick_name
+                      direct.Receiver
+                        ? direct.Receiver?.nick_name
+                        : direct.Sender?.nick_name
                     }
                     subtitle={direct.content}
                     date={new Date(direct.created_at)}

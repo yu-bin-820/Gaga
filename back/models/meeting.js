@@ -30,6 +30,10 @@ module.exports = class Meeting extends Model {
           type: DataTypes.TEXT, // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
           allowNull: true,
         },
+        meeting_state: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
+        },
       },
       {
         modelName: 'Meeting',

@@ -19,6 +19,12 @@ import CancelIcon from '@mui/icons-material/Cancel';
 
 const AddMeetingReveiw = () => {
   const { meetingno } = useParams();
+
+  const {data : meetingReviewList, mutate: mutateMeetingReviewList } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/${meetingno}`,
+    fetcher
+);
+
   const [meetingReview, onChangeMeetingReview, setMeetingReview] = useInput({
     meetingScore: 5,
     meetingReviewContent: '',
@@ -58,7 +64,12 @@ const AddMeetingReveiw = () => {
       const response = axios.post(
         `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`,
         formData
-      );
+      ).then(()=>{
+        mutateMeetingReviewList()
+      }
+
+      )
+
 
       navigate(`/meeting/meetingno/${meetingno}`);
 

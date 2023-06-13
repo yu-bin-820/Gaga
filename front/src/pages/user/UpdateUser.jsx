@@ -11,6 +11,7 @@ import {
   TextField,
   Checkbox,
   FormControlLabel,
+  Typography,
 } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Link } from "react-router-dom";
@@ -40,6 +41,7 @@ const UpdateUser = () => {
     activityImg3,
     userIntro,
     mainTitleNo,
+    mainTitleName,
     bankCode,
     bankName,
     accountNo,
@@ -73,7 +75,7 @@ const UpdateUser = () => {
   };
   const handleFindPasswordChange = (e) => {
     navigate("/user/findpassword");
-  }
+  };
   const handleGenderChange = (e) => {
     onChangeField("gender", e);
     setIsGenderValid(e.target.value !== "");
@@ -101,6 +103,7 @@ const UpdateUser = () => {
       setField("activityImg3", myData.activityImg3);
       setField("userIntro", myData.userIntro);
       setField("mainTitleNo", myData.mainTitleNo);
+      setField("mainTitleName", myData.mainTitleName);
       setField("bankCode", myData.bankCode);
       setField("bankName", myData.bankName);
       setField("accountNo", myData.accountNo);
@@ -111,7 +114,6 @@ const UpdateUser = () => {
       setField("filterTag", myData.filterTag);
       setField("filterTag2", myData.filterTag2);
       setField("filterTag3", myData.filterTag3);
-
     }
     // return () => {
     //   reset();
@@ -125,52 +127,52 @@ const UpdateUser = () => {
   const handleSubmit = useCallback(async () => {
     event.preventDefault();
 
-      try {
-        const response = await axios.post(
-          `${import.meta.env.VITE_SPRING_HOST}/rest/user/updateUser`,
-          {
-            userNo,
-            userId,
-            password,
-            userName,
-            birthday: dayjs(birthday).format('YYYY-MM-DD'),
-            gender,
-            nickName,
-            phoneNo,
-            profileImg,
-            activityImg,
-            activityImg2,
-            activityImg3,
-            userIntro,
-            mainTitleNo,
-            bankCode,
-            bankName,
-            accountNo,
-            blacklist,
-            filterGender,
-            filterMaxAge,
-            filterMinAge,
-            filterTag,
-            filterTag2,
-            filterTag3,
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/updateUser`,
+        {
+          userNo,
+          userId,
+          password,
+          userName,
+          birthday: dayjs(birthday).format("YYYY-MM-DD"),
+          gender,
+          nickName,
+          phoneNo,
+          profileImg,
+          activityImg,
+          activityImg2,
+          activityImg3,
+          userIntro,
+          mainTitleNo,
+          mainTitleName,
+          bankCode,
+          bankName,
+          accountNo,
+          blacklist,
+          filterGender,
+          filterMaxAge,
+          filterMinAge,
+          filterTag,
+          filterTag2,
+          filterTag3,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
           },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        console.log("요청할때정보는?"+birthday);
-        console.log("요청할때정보는?"+nickName);
-        console.log("요청할때정보는?"+dayjs(birthday).format('YYYY-MM-DD'));
-        alert('정보수정 완료되었습니다.');
-        mutateMe();
-      } catch (error) {
-        console.error(error);
-        alert("오류가 발생했습니다. 다시 시도해 주세요.");
-      }
-    } 
-    , [userId, password, userName, birthday, gender, nickName, phoneNo]);
+        }
+      );
+      console.log("요청할때정보는?" + birthday);
+      console.log("요청할때정보는?" + nickName);
+      console.log("요청할때정보는?" + dayjs(birthday).format("YYYY-MM-DD"));
+      alert("정보수정 완료되었습니다.");
+      mutateMe();
+    } catch (error) {
+      console.error(error);
+      alert("오류가 발생했습니다. 다시 시도해 주세요.");
+    }
+  }, [userId, password, userName, birthday, gender, nickName, phoneNo]);
 
   function isValidEmail(email) {
     const re =
@@ -208,18 +210,18 @@ const UpdateUser = () => {
       alert("인증 코드 발송에 실패했습니다. 다시 시도해 주세요.");
     }
   };
-  const handleEmailVerificationCodeChange = (e) => {
-    setEmailVerificationCode(e.target.value);
-  };
+  // const handleEmailVerificationCodeChange = (e) => {
+  //   setEmailVerificationCode(e.target.value);
+  // };
 
-  const handleEmailVerification = () => {
-    if (emailVerificationCode === emailAuthCode) {
-      alert("인증이 완료되었습니다!");
-      setEmailVerified(true);
-    } else {
-      alert("인증 코드가 올바르지 않습니다. 다시 확인해 주세요.");
-    }
-  };
+  // const handleEmailVerification = () => {
+  //   if (emailVerificationCode === emailAuthCode) {
+  //     alert("인증이 완료되었습니다!");
+  //     setEmailVerified(true);
+  //   } else {
+  //     alert("인증 코드가 올바르지 않습니다. 다시 확인해 주세요.");
+  //   }
+  // };
 
   const [phoneAuthCode, setPhoneAuthCode] = useState(null);
   const [phoneVerificationCode, setPhoneVerificationCode] = useState("");
@@ -227,22 +229,32 @@ const UpdateUser = () => {
 
   const handlePhoneAuthRequest = async () => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneNo`,
-        {
-          phoneNo: phoneNo,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+      const response = await axios.get(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneno/${phoneNo}`
       );
-
-      const phoneAuthCode = response.data;
-      setPhoneAuthCode(phoneAuthCode);
-      alert("인증 코드가 핸드폰으로 발송되었습니다.");
-      setPhoneAuthCodeSent(true);
+  
+      if (response.data) {
+        alert("이미 사용중인 핸드폰 번호입니다.");
+      } else {
+        // 핸드폰 인증 코드를 발송하는 부분은 이곳으로 옮깁니다.
+        const response = await axios.post(
+          `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneNo`,
+          {
+            phoneNo: phoneNo,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+  
+        // 핸드폰 인증 코드를 받아옴
+        const phoneAuthCode = response.data;
+        setPhoneAuthCode(phoneAuthCode);
+        alert("인증 코드가 핸드폰으로 발송되었습니다.");
+        setPhoneAuthCodeSent(true);
+      }
     } catch (error) {
       console.error(error);
       alert("인증 코드 발송에 실패했습니다. 다시 시도해 주세요.");
@@ -258,51 +270,53 @@ const UpdateUser = () => {
     }
   };
 
-  function isValidPassword(password) {
-    const re =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,14}$/;
-    return re.test(password);
-  }
+  // function isValidPassword(password) {
+  //   const re =
+  //     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,14}$/;
+  //   return re.test(password);
+  // }
 
-  const [passwordError, setPasswordError] = useState("");
-  const handlePasswordChange = (e) => {
-    onChangeField("password", e);
-    const isValid = isValidPassword(e.target.value);
-    setPasswordError(isValid ? "" : "영문 숫자 특수문자조합 8~14자리 이내로 입력해주세요.");
-  };
+  // const [passwordError, setPasswordError] = useState("");
+  // const handlePasswordChange = (e) => {
+  //   onChangeField("password", e);
+  //   const isValid = isValidPassword(e.target.value);
+  //   setPasswordError(
+  //     isValid ? "" : "영문 숫자 특수문자조합 8~14자리 이내로 입력해주세요."
+  //   );
+  // };
 
-  // 3. 비밀번호 일치 확인
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [passwordConfirmError, setPasswordConfirmError] = useState("");
-  const handlePasswordConfirmChange = (e) => {
-    setPasswordConfirm(e.target.value);
-    setPasswordConfirmError(
-      e.target.value === password ? "" : "비밀번호가 일치하지 않습니다."
-    );
-  };
-  const checkDuplicateId = async () => {
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/user/checkDuplicateId`,
-        {
-          userId: userId,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response.data.isDuplicate) {
-        alert("이미 사용 중인 아이디입니다.");
-        setIsUserIdValid(false);
-      } else {
-        setIsUserIdValid(true);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // // 3. 비밀번호 일치 확인
+  // const [passwordConfirm, setPasswordConfirm] = useState("");
+  // const [passwordConfirmError, setPasswordConfirmError] = useState("");
+  // const handlePasswordConfirmChange = (e) => {
+  //   setPasswordConfirm(e.target.value);
+  //   setPasswordConfirmError(
+  //     e.target.value === password ? "" : "비밀번호가 일치하지 않습니다."
+  //   );
+  // };
+  // const checkDuplicateId = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       `${import.meta.env.VITE_SPRING_HOST}/rest/user/checkDuplicateId`,
+  //       {
+  //         userId: userId,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     if (response.data.isDuplicate) {
+  //       alert("이미 사용 중인 아이디입니다.");
+  //       setIsUserIdValid(false);
+  //     } else {
+  //       setIsUserIdValid(true);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   return (
     <>
@@ -311,18 +325,26 @@ const UpdateUser = () => {
         container
         component="main"
         sx={{
-          height: "100vh",
+          marginTop: "75px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          mb: 13
+          mb: 13,
         }}
       >
         <CssBaseline />
-        <Box component="form" noValidate sx={{ width: "80%", mt: 3, '& .MuiTextField-root:not(:last-child)': { marginBottom: '10px' } }}>
+        <Box
+          component="form"
+          noValidate
+          sx={{
+            width: "80%",
+            mt: 3,
+            "& .MuiTextField-root:not(:last-child)": { marginBottom: "15px" },
+          }}
+        >
           <TextField
-            label="아이디"
+            label="아이디 변경불가"
             variant="outlined"
             margin="none"
             required
@@ -332,17 +354,25 @@ const UpdateUser = () => {
             type="email"
             value={userId}
             onChange={handleEmailChange}
-            onBlur={checkDuplicateId}
+            // onBlur={checkDuplicateId}
             error={!!emailError}
             helperText={emailError}
             autoComplete="email"
             autoFocus
             disabled
           />
-          <Button onClick={handleFindPasswordChange}>
-            비밀번호 변경하기
+          {/* <Typography>
+            비밀번호는 암호화되어 재설정만 가능합니다
+          </Typography> */}
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{ mt: "0px", mb: "20px" }}
+            onClick={handleFindPasswordChange}
+          >
+            비밀번호 변경하기(재설정만 가능합니다)
           </Button>
-          <TextField
+          {/* <TextField
             label="비밀번호"
             variant="outlined"
             margin="none"
@@ -377,9 +407,9 @@ const UpdateUser = () => {
             inputProps={{
               maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
             }}
-          />
+          /> */}
           <TextField
-            label="회원실명"
+            label="회원실명 변경불가"
             variant="outlined"
             margin="none"
             required
@@ -395,6 +425,7 @@ const UpdateUser = () => {
               maxLength: 6,
               pattern: "^[ㄱ-ㅎ가-힣]*$",
             }}
+            disabled
           />
           <TextField
             variant="outlined"
@@ -402,7 +433,7 @@ const UpdateUser = () => {
             required
             fullWidth
             id="nickName"
-            label="닉네임"
+            label="닉네임 변경"
             name="nickName"
             value={nickName}
             onChange={handleNicknameChange}
@@ -411,8 +442,20 @@ const UpdateUser = () => {
               minLength: 2,
               maxLength: 16,
             }}
+            autoFocus
           />
-          <UpdateUserDate birthday={birthday} />
+          <TextField
+            variant="outlined"
+            margin="none"
+            required
+            fullWidth
+            id="birthday"
+            label="생년월일 변경불가"
+            name="birthday"
+            value={birthday}
+            disabled
+          />
+          {/* <UpdateUserDate birthday={birthday} /> */}
           <TextField
             variant="outlined"
             margin="none"
@@ -435,6 +478,7 @@ const UpdateUser = () => {
             spacing={2}
             alignItems="center"
             justify="space-between"
+            style={{ marginBottom: "10px"}}
           >
             <Grid item xs={9} sm={8}>
               <TextField
@@ -444,7 +488,7 @@ const UpdateUser = () => {
                 fullWidth
                 type="tel"
                 id="phoneNo"
-                label="핸드폰 번호"
+                label="변경할 핸드폰 번호 입력"
                 name="phoneNo"
                 value={phoneNo}
                 onChange={(e) => onChangeField("phoneNo", e)}
@@ -513,7 +557,7 @@ const UpdateUser = () => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 1, mb: 1, marginTop: 1 }}
+            sx={{ mt: 1, mb: 1, marginTop: 3 }}
             onClick={handleSubmit}
           >
             정보 수정 하기

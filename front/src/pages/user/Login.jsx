@@ -273,7 +273,7 @@ const Login = () => {
                   >
                     {"회원이 아니신가요? "}
                   </Typography>
-              <Grid container>
+              <Grid container mt={1}>
                 <Grid item xs>
                   <Typography
                     component={Link}

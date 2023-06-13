@@ -7,6 +7,7 @@ import ListMainClub from '@components/club/ListMainClub';
 import MainTop from '@layouts/common/MainTop';
 import axios from 'axios';
 import { Box } from '@mui/system';
+import Chatbot from '@components/chatbot/ChatBot';
 
 const UnauthenticatedMain = () => {
   const { data: myData, mutate: mutateMe } = useSWR(
@@ -46,7 +47,7 @@ const UnauthenticatedMain = () => {
       <MainTop />
       <Box sx={{ backgroundColor: '#ededed', minHeight: '100vh' }}>
         <ListMainClub />
-
+        <Chatbot />
         <Box
           sx={{
             margin: '10px',
