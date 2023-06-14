@@ -24,6 +24,7 @@ function Chatbot() {
 
   const chatMessagesRef = useRef(null);
   const messageEndRef = useRef(null);
+  const messagesEndRef = useRef(null);
 
   function toggleChatBot() {
     if (isVisible) {
@@ -131,7 +132,7 @@ function Chatbot() {
   };
 
   useEffect(() => {
-	messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+	messageEndRef.current.scrollIntoView({ behavior: 'auto'});
   }, [messages]);
 
   //입력용
@@ -141,6 +142,8 @@ function Chatbot() {
       setInputText('');
     }
   };
+  
+
 
   function delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -160,7 +163,7 @@ function Chatbot() {
   
         // 한 글자씩 지연시간을 두면서 메시지 추가
         for (let i = 0; i < botMessageArray.length; i++) {
-          await delay(35); // 0.1초 대기 (원하는 지연시간 설정)
+          await delay(25); // 0.1초 대기 (원하는 지연시간 설정)
           const currentBotMessage = botMessageArray.slice(0, i + 1).join('');
           const currentBotMessageObject = { type: 'bot', text: currentBotMessage };
           setMessages([...messages, userMessage, currentBotMessageObject]);
@@ -326,7 +329,7 @@ const handleSendMessage = async (text) => {
     {message.text.includes("죄송") && (
         <Button variant="contained" 
             onClick={() => window.location.href = 'mailto:thega4004@naver.com'} 
-            style={{display: 'block', margin: 'auto', marginTop: '-20px', fontSize: '12px' , width: '99px' }}
+            style={{display: 'block', margin: 'auto', marginTop: '-0px', fontSize: '12px' , width: '99px' }}
         >
             <EmailIcon style={{fontSize: '14px' }}/> 문의하기
         </Button>

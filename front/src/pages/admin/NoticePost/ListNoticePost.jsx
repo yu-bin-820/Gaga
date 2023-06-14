@@ -129,10 +129,11 @@ function ListNoticePost() {
   };
 
   return (
-    <Box sx={{ marginTop: '64px', marginLeft: '10px', marginRight: '10px' }}>
+<Box sx={{ marginTop: '64px', marginLeft: '10px', marginRight: '10px' }}>
       <CommonTop pageName="공지사항" prevPath="/community/profile/mine" />
-        <AdminTabs />
+      <AdminTabs />
       <Stack spacing={2.5}>
+      {myData && myData.role == 1 && (
       <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', alignItems: 'center', margin: '10px' }}>
       {myData && myData.role == 1 && (
              <>
@@ -157,6 +158,25 @@ function ListNoticePost() {
     }}
   />
 </Box>
+      )}
+       {myData && myData.role != 1 && (
+  <TextField
+    type="text"
+    value={searchKeyword}
+    onChange={(e) => setSearchKeyword(e.target.value)}
+    onKeyPress={handleKeyPress}
+    placeholder="제목, 내용 검색" // 여기에 placeholder를 추가했습니다.
+    InputProps={{
+      endAdornment: (
+        <IconButton onClick={handleSearch}> {/* 버튼을 IconButton으로 변경하고, variant를 제거했습니다. */}
+          <SearchIcon color="primary" style={{ marginRight: '-13px' }} /> {/* 검색 아이콘을 사용했습니다. 필요하면 이를 변경하실 수 있습니다. */}
+        </IconButton>
+      ),
+      sx: { height: '38px', width: '180px', marginLeft : '180px', marginBottom: '-35px'},
+    }}
+  />
+       )}
+
         <List component="nav">
         {(Array.isArray(noticePosts) ? noticePosts : []).map((noticePost, index) => (
     noticePost && <div key={noticePost.noticePostNo}>

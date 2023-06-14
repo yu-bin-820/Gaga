@@ -62,6 +62,22 @@ function GetNoticePost() {
         return "";
     }
 }
+
+function getCategoryBack(noticePostCategoryNo) {
+    switch (noticePostCategoryNo) {
+      case 0:
+        return "Notice";
+      case 1:
+        return "Event";
+      case 2:
+        return "Qna";
+      default:
+        return "";
+    }
+}
+const noticePostCategoryNo = noticePost.noticePostCategoryNo;
+const prevPath = `/notice/list${getCategoryBack(noticePostCategoryNo)}Post`;
+
   const handleUpdate = () => {
     navigate(`/notice/updateNoticePost/noticePostNo/${noticePostNo}`, { state: { noticePost } });
   };
@@ -73,7 +89,7 @@ function GetNoticePost() {
     <Box sx={{ margin: '1rem', padding: '0.1rem', paddingTop: '0.9rem',backgroundColor: '#f5f5f5', borderRadius: '10px' }}>
     <CommonTop
               pageName= {getCategoryText(noticePost.noticePostCategoryNo) + " 조회"}
-              prevPath="/notice/listNoticePost"
+              prevPath={prevPath}
           />
     <Typography variant="h4" gutterBottom style={{ display: 'flex', alignItems: 'center' }}>
       
@@ -81,10 +97,10 @@ function GetNoticePost() {
     <Paper elevation={3} sx={{ padding: '1rem', backgroundColor: '#ffffff', borderRadius: '10px', marginTop: '35px' , marginBottom: '1rem' }}>
       <Grid container spacing={2}>
         <Grid item xs={12} md={2}>
-          <Typography variant="body1" >게시글 번호 {noticePost.noticePostNo}</Typography>
+          <Typography variant="body1" >GAGA 운영자</Typography>
         </Grid>
         <Grid item xs={12} md={2}>
-          <Typography variant="body1" style={{ fontWeight: 'bold' }}>게시글 카테고리 :{getCategoryText(noticePost.noticePostCategoryNo)}</Typography>
+          <Typography variant="body1" style={{ fontWeight: 'bold' }}>카테고리 : {getCategoryText(noticePost.noticePostCategoryNo)}</Typography>
 
         </Grid>
         <Grid item xs={12} md={2}>
@@ -96,12 +112,12 @@ function GetNoticePost() {
           <Typography variant="body1">{noticePost.noticePostText}</Typography>
           {noticePost.noticePostImg && (
   <img
-    src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/admin/${noticePost.noticePostImg}`}
+    src={`${import.meta.env.VITE_CDN_HOST}/upload_images/admin/${noticePost.noticePostImg}?type=f_sh&w=400&h=250&faceopt=true&sharp_amt=1.0`}
     alt="공지사항 이미지"
-    style={{  maxWidth: '90vw',
-    maxHeight: '30vh',
+    style={{  maxWidth: '83vw',
     display: 'block',
-    margin: '0 auto',}}
+    objectFit: 'contain',
+maxHeight: 'auto'}}
   />
 )}
         </Grid>

@@ -9,6 +9,7 @@ import CommonTop from '@layouts/common/CommonTop';
 import AdminTabs from '@components/admin/AdminTabs';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
+import QACategoryButtonGroup from '@components/admin/QACategoryButtonGroup';
 
 function ListQnaPost() {
   const [noticePosts, setNoticePosts] = useState([]);
@@ -17,6 +18,7 @@ function ListQnaPost() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [lastPostId, setLastPostId] = useState(null);
+  const [qnaCategory, setQnaCategory] = useState(null);
 
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -130,38 +132,76 @@ function ListQnaPost() {
     }
   };
 
+  const fetchQnaPostsByCategory = async (qnaCategory) => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/selectQnaByCategory?qnaCategory=${qnaCategory}`);
+      setNoticePosts(response.data);  // 데이터를 받아와서 상태를 업데이트 합니다.
+      console.log("오웅ㅇ", qnaCategory )
+    } catch (error) {
+      console.error(`Failed to fetch posts: ${error}`);
+    }
+  };
+  
+  const handleCategoryChange = (qnaCategory) => {
+    setQnaCategory(qnaCategory);
+    fetchQnaPostsByCategory(qnaCategory);
+  };
+
   return (
     <Box sx={{ marginTop: '64px', marginLeft: '10px', marginRight: '10px' }}>
       <CommonTop pageName="Q&A" prevPath="/community/profile/mine" />
       <AdminTabs />
       <Stack spacing={2.5}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', alignItems: 'center', margin: '10px' }}>
-      {myData && myData.role == 1 && (
-             <>
-        <Link to="/notice/addNoticePost">
-          <Button variant="contained">Q&A 작성</Button>
-        </Link>
-        </>
+        {myData && myData.role == 1 && (
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', alignItems: 'center', margin: '10px' }}>
+            {myData && myData.role == 1 && (
+              <>
+                <Link to="/notice/addNoticePost" style={{ marginLeft: '9px' }}>
+                  <Button variant="contained">Q&A 작성</Button>
+                </Link>
+              </>
+            )}
+            <TextField
+              style={{ marginRight: '8px' }}
+              type="text"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="제목, 내용 검색"
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={handleSearch} >
+                    <SearchIcon color="primary" style={{ marginRight: '-13px' }} />
+                  </IconButton>
+                ),
+                sx: { height: '38px', width: '200px' },
+              }}
+            />
+          </Box>
         )}
-  <TextField
-    type="text"
-    value={searchKeyword}
-    onChange={(e) => setSearchKeyword(e.target.value)}
-    onKeyPress={handleKeyPress}
-    placeholder="제목, 내용 검색" // 여기에 placeholder를 추가했습니다.
-    InputProps={{
-      endAdornment: (
-        <IconButton onClick={handleSearch}> {/* 버튼을 IconButton으로 변경하고, variant를 제거했습니다. */}
-          <SearchIcon color="primary" style={{ marginRight: '-13px' }} /> {/* 검색 아이콘을 사용했습니다. 필요하면 이를 변경하실 수 있습니다. */}
-        </IconButton>
-      ),
-      sx: { height: '38px', width: '200px' },
-    }}
-  />
-</Box>
+        {myData && myData.role != 1 && (
+          <TextField
+          
+            type="text"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="제목, 내용 검색"
+            InputProps={{
+              endAdornment: (
+                <IconButton onClick={handleSearch}>
+                  <SearchIcon color="primary" style={{ marginRight: '-13px' }} />
+                </IconButton>
+              ),
+              sx: { height: '38px', width: '180px', marginLeft : '170px', marginBottom: '-10px'},
+            }}
+            
+          />
+        )}
+        <QACategoryButtonGroup onChange={handleCategoryChange} /> {/* 추가된 부분 */}
         <List component="nav">
-        {(Array.isArray(noticePosts) ? noticePosts : []).map((noticePost, index) => (
-    noticePost &&<div key={noticePost.noticePostNo}>
+          {(Array.isArray(noticePosts) ? noticePosts : []).map((noticePost, index) => (
+            noticePost && <div key={noticePost.noticePostNo}>
               <ListItem button onClick={() => handlePostClick(noticePost.noticePostNo)}>
                 <ListItemText primary={noticePost.noticePostTitle} secondary={noticePost.noticePostRegDate.split('T')[0]} />
               </ListItem>
