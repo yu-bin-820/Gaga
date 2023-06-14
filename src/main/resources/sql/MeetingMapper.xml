@@ -223,9 +223,9 @@
   OR 
   	m.meeting_leader_no = #{userNo}
   AND
-  	m.meeting_state IN (1, 2, 3)
+  	m.meeting_state IN (1, 2)
   AND
-  	mb.state IN ( 0, 2)
+  	(mb.state IN (2) OR mb.state IS NULL)
   ORDER BY m.meeting_success ASC, m.meeting_date ASC
 </select>
   
