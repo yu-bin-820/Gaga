@@ -568,20 +568,12 @@ router.post('/chat/club/message', async (req, res, next) => {
       lastMessage = content;
     }
 
-    if (typeof content === 'object' && content !== null) {
+    if (req.body.contentTypeNo === 2) {
+      lastMessage = '(사진)';
+    } else if (req.body.contentTypeNo === 3) {
+      lastMessage = '(위치 공유)' + lastMessage;
+    } else if (req.body.contentTypeNo === 102) {
       lastMessage = '(새 모임 참여링크)';
-    }
-
-    if (req.body.contentTypeNo === 2) {
-      lastMessage = '(사진)';
-    } else if (req.body.contentTypeNo === 3) {
-      lastMessage = '(위치 공유)' + lastMessage;
-    }
-
-    if (req.body.contentTypeNo === 2) {
-      lastMessage = '(사진)';
-    } else if (req.body.contentTypeNo === 3) {
-      lastMessage = '(위치 공유)' + lastMessage;
     }
 
     if (lastMessage.length > 15) {
