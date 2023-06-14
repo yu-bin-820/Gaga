@@ -99,22 +99,26 @@ const MainTop = () => {
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
-              <Typography
-                variant="h5"
-                noWrap
-                component="a"
-                href=""
-                sx={{
-                  mr: 2,
-                  display: { xs: 'flex', md: 'flex' },
-                  flexGrow: 1,
-                  fontWeight: 700,
-                  color: '#036635',
-                  textDecoration: 'none',
+              <div
+                onClick={() => {
+                  navigate('/');
                 }}
               >
-                GAGA
-              </Typography>
+                <Typography
+                  variant="h5"
+                  noWrap
+                  sx={{
+                    mr: 2,
+                    display: { xs: 'flex', md: 'flex' },
+                    flexGrow: 1,
+                    fontWeight: 700,
+                    color: '#036635',
+                    textDecoration: 'none',
+                  }}
+                >
+                  GAGA
+                </Typography>
+              </div>
             </Box>
             {isAuthenticated && (
               <Stack direction={'row'}>

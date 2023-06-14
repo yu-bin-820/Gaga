@@ -3,7 +3,12 @@ import { create } from 'zustand';
 const useCommunityStore = create((set) => ({
   chatRoomEntryNo: 0,
   chatType: 0,
-  chatRoomLeader: {},
+  chatRoomLeader: 0,
+
+  prevChatRoomEntryNo: 0,
+  prevChatType: 0,
+  prevChatRoomLeader: 0,
+
   reportNo: 0,
   reportCategory: [
     '개인 연락처 또는 1:1 만남요구',
