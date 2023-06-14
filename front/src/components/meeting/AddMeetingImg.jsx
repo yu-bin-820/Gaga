@@ -71,7 +71,7 @@ const AddMeetingImg = ({setNextButtonDisable}) => {
             <TextField
                 id="outlined-multiline-static"
                 name="meetingIntro"
-                placeholder="소개글을 입력해 주세요(선택)
+                placeholder="소개글을 입력해 주세요
 참가비가 있을 경우 참가비 정보도 함께 적어주세요!"
                 onChange={(e)=>onChangeField('meetingIntro',e)}
                 fullWidth

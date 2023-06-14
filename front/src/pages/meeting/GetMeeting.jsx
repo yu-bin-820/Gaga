@@ -1,5 +1,5 @@
 import ListMeetingReview from '@components/meeting/ListMeetingReview';
-import { Box, Button, Skeleton, Typography } from '@mui/material';
+import { Box, Button, Grid, Paper, Skeleton, Typography } from '@mui/material';
 import { useCallback, useState } from 'react';
 import { useParams } from 'react-router';
 import PeopleIcon from '@mui/icons-material/People';
@@ -18,6 +18,10 @@ import IsMeetingMemberDialog from '@components/meeting/IsMeetingMemberDialog';
 import GetMeetingStaticMapDrawer from '@components/meeting/map/GetMeetingStaticMapDrawer';
 import PaymentIcon from '@mui/icons-material/Payment';
 import AddMeetingMemberDrawer from '@components/meeting/AddMeetingMemberDrawer';
+import Face3Icon from '@mui/icons-material/Face3';
+import Face6Icon from '@mui/icons-material/Face6';
+import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
+import MemberListTapview from '@components/meeting/MemberListTapview';
 
 const GetMeeting = () => {
   
@@ -62,7 +66,7 @@ const GetMeeting = () => {
 );
 
 const {data : pendingMemberList } = useSWR(
-  `${import.meta.env.VITE_SPRING_HOST}/rest/user/list/grouptype/2/no/${meetingno}/state/2`,
+  `${import.meta.env.VITE_SPRING_HOST}/rest/user/list/grouptype/2/no/${meetingno}/state/1`,
   fetcher
 );
 
@@ -170,6 +174,64 @@ const {data : pendingMemberList } = useSWR(
           <h5>모임 리더</h5>
           <MeetingMember member={leaderData} />
 
+          <h5>참여 조건</h5>
+          <Grid container
+                          sx={{
+                            display: 'flex',
+                            border: '2px solid #c7c7c7',
+                            width: '95vw',
+                            height: 60,
+                          }}>
+          <Grid item xs={6}>
+          <item>
+          <Box
+                sx={{
+                  display: 'flex',
+                  width: '45vw',
+                  height: 50,
+                }}>
+          <Stack 
+          direction={'row'}
+          alignItems={'center'}
+          justifyContent={'center'}
+          spacing={1}>
+          {(meeting.filterGender===(0) ||meeting.filterGender===(1)) &&
+          <Face6Icon/>}
+          {(meeting.filterGender===(0)||meeting.filterGender===(2)) &&
+          <Face3Icon/>}
+          <Typography variant="h6" sx={{ fontSize: 15 }}>
+            {meeting.filterGender===(0)&& '누구나' }
+            {meeting.filterGender===(1)&& '남자만' }
+            {meeting.filterGender===(2)&& '여자만' }
+            </Typography>
+          </Stack>
+          </Box>
+          </item>
+          </Grid>
+          <Grid item xs={6}>
+          <Box
+                sx={{
+                  display: 'flex',
+                  width: '45vw',
+                  height: 50,
+                }}>
+          <Stack 
+          direction={'row'}
+          alignItems={'center'}
+          justifyContent={'center'}
+          spacing={1}>
+          <TuneRoundedIcon />
+          <Typography sx={{ fontSize: 15 }}>
+          {(meeting.filterMinAge ===14 && meeting.filterMaxAge === 50) &&"누구나"}
+            {(meeting.filterMinAge !== 14 && meeting.filterMaxAge === 50) && <div>{meeting.filterMinAge}이상</div>}
+            {(meeting.filterMinAge !== 14 && meeting.filterMaxAge !== 50) &&  <div>{meeting.filterMinAge}이상 {meeting.filterMaxAge}미만</div>}
+            {(meeting.filterMinAge === 14 && meeting.filterMaxAge !== 50) &&  <div>{meeting.filterMaxAge}미만</div>}
+            </Typography>
+          </Stack>
+          </Box>
+          </Grid>
+          </Grid>
+
           <Stack direction={'row'} spacing={1} alignItems={'center'}>
             <PeopleIcon />
             <Typography sx={{ fontSize: 13 }}>
@@ -210,15 +272,14 @@ const {data : pendingMemberList } = useSWR(
 
           <Stack direction={'row'} spacing={1} alignItems={'center'}>
             <LocationOnIcon />
-            <Typography sx={{ fontSize: 13 }}>
+          <Stack spacing={1}>
+          <Typography sx={{ fontSize: 13 }}>
               {meeting?.meetingAddr}
             </Typography>
-          </Stack>
-
-          <Stack direction={'row'} spacing={1} alignItems={'center'}>
             <Typography sx={{ marginLeft: '34px', fontSize: 13 }}>
               {meeting?.meetingDetailAddr}
             </Typography>
+          </Stack>
           </Stack>
         </Stack>
         <br />
@@ -227,14 +288,9 @@ const {data : pendingMemberList } = useSWR(
             <GetMeetingStaticMap meeting={meeting} />
           </Box>
         )}
-        <h5>확정 멤버</h5>
-        {confirmedMemberList?.map((confirmedMember, i) => (
-          <MeetingMember key={i} member={confirmedMember} />
-        ))}
-        <h5>신청 멤버</h5>
-        {pendingMemberList?.map((pendingMember, i) => (
-          <MeetingMember key={i} member={pendingMember} />
-        ))}
+        <Box>
+        <MemberListTapview confirmedMemberList={confirmedMemberList} pendingMemberList={pendingMemberList}/>
+        </Box>
         { meeting.meetingSuccess === 2 &&(
         <>
           <h5>리뷰</h5>
@@ -248,7 +304,7 @@ const {data : pendingMemberList } = useSWR(
           alignItems="center"
           sx={{ position: 'fixed', bottom: 5, left: 0, right: 0 }}
         >
-          {!isUserLeader && !isMeetingSuccessful && (
+          {!isUserLeader && !isMeetingSuccessful && myData &&(
             <Button
               variant="contained"
               sx={{ width: '85vw', borderRadius: '50px' }}
