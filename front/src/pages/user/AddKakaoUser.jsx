@@ -20,6 +20,7 @@ import { useNavigate } from "react-router";
 import AddKakaoUserDate from "@components/user/AddKakaoUserDate";
 import useKakaoFormStore from "@hooks/user/useKakaoFormStore";
 import TermsOfGaga from "./TermsOfGaga";
+import AddKakaoTop from "@layouts/user/AddKakaoTop";
 
 const AddKakaoUser = () => {
   const {
