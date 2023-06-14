@@ -69,13 +69,14 @@ public class PaymentServiceImpl implements PaymentService {
 		paymentDao.updatePayment(payNo);
 			
 	}
-
+	
 	@Override
-	public List<Payment> offerRefund() throws Exception {
+	public void deleteMemberRefund(Map<String, Integer> map) throws Exception {
 		
-		System.out.println("참가비 있는 미팅 삭제, 미성사 등으로 인한 환불요청 목록 서비스");
+		System.out.println("참여거절, 내보내기 회원에게 환불 서비스");
 		
-		return paymentDao.offerRefund();
+		paymentDao.deleteMemberRefund(map);
+		
 	}
 
 	@Override

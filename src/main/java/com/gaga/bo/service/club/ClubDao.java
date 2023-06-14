@@ -15,7 +15,7 @@ public interface ClubDao {
 	
 	//클럽관리
 	//INSERT
-	public void addClub(Club club) throws Exception;
+	public int addClub(Club club) throws Exception;
 
 	//SELECT ONE 
 	public Club getClub(int clubNo) throws Exception;
