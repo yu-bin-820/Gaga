@@ -12,8 +12,6 @@ import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ListMyClub from '@components/club/ListMyClub';
-import ListMyMeeting from '@components/meeting/ListMyMeeting';
 import AddClubByMeeting from './AddClubByMeeting';
 import AddClubByClub from './AddClubByClub';
 import useClubFormStore from '@hooks/club/useClubFormStore';
@@ -42,7 +40,7 @@ const SelectClubType = () => {
     [setField]
   );
 
-  const handleParentClubgOnClick = useCallback(
+  const handleParentClubOnClick = useCallback(
     (clubNo) => {
       setField('parentClubNo', clubNo);
     },
@@ -61,7 +59,8 @@ const SelectClubType = () => {
       </Box>
       <Accordion
         expanded={expanded === 'panel1'}
-        onChange={handleChange('panel')}
+        onChange={handleChange('panel1')}
+        sx={{ backgroundColor: expanded === 'panel1' ? '#f3f8f7' : '#ffffff' }}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -88,7 +87,7 @@ const SelectClubType = () => {
         expanded={expanded}
         userNo={myData.userNo}
         handleChange={handleChange}
-        onParentClubOnClick={handleParentClubgOnClick}
+        onParentClubOnClick={handleParentClubOnClick}
       />
       <Box>
         {clubList?.map((club, i) => (

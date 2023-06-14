@@ -56,6 +56,16 @@ const Login = () => {
     setOpen(true);
   };
 
+  const [isCapsLockOn, setIsCapsLockOn] = useState(false);
+
+  const handleKeyDown = (event) => {
+    if (event.getModifierState('CapsLock')) {
+      setIsCapsLockOn(true);
+    } else {
+      setIsCapsLockOn(false);
+    }
+  };
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -223,6 +233,9 @@ const Login = () => {
                 autoComplete="current-password"
                 value={user.password}
                 onChange={onChangeUser}
+                error={isCapsLockOn}
+                helperText={isCapsLockOn ? 'Caps Lock이 켜져 있습니다.' : ''}
+                onKeyDown={handleKeyDown}
               />
               {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}

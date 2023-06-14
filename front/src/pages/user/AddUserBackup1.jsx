@@ -1,7 +1,7 @@
 import fetcher from "@utils/fetcher";
 import useSWR from "swr";
 import axios from "axios";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import dayjs from "dayjs";
 import MenuItem from "@mui/material/MenuItem";
 import {
@@ -21,7 +21,8 @@ import { useNavigate } from "react-router";
 import AddUserDate from "@components/user/AddUserDate";
 import Modal from "@mui/material/Modal";
 import Alert from "@mui/material/Alert";
-import 'dayjs/locale/ko';
+import "dayjs/locale/ko";
+import AddUserTop from "@layouts/user/AddUserTop";
 
 const AddUser = () => {
   const {
@@ -89,14 +90,14 @@ const AddUser = () => {
       reset();
       return;
     }
-        // 현재 날짜와 생년월일의 차이(나이)를 계산합니다.
-        const age = dayjs().diff(dayjs(birthday), "year");
+    // 현재 날짜와 생년월일의 차이(나이)를 계산합니다.
+    const age = dayjs().diff(dayjs(birthday), "year");
 
-        // 나이가 14세 미만인 경우 가입을 제한합니다.
-        if (age < 14) {
-          alert("14세 미만은 가입할 수 없습니다.");
-          return;
-        }
+    // 나이가 14세 미만인 경우 가입을 제한합니다.
+    if (age < 14) {
+      alert("14세 미만은 가입할 수 없습니다.");
+      return;
+    }
     try {
       const formData = new FormData();
       formData.append("userId", userId);
@@ -119,7 +120,6 @@ const AddUser = () => {
           phoneNo: phoneNo,
           filterMaxAge: filterMaxAge,
           filterMinAge: filterMinAge,
-          
         },
         {
           headers: {
@@ -169,6 +169,36 @@ const AddUser = () => {
   const [emailAuthCode, setEmailAuthCode] = useState(null);
   const [emailVerificationCode, setEmailVerificationCode] = useState("");
   const [emailAuthCodeSent, setEmailAuthCodeSent] = useState(false);
+  const [emailAuthExpirationTime, setEmailAuthExpirationTime] = useState(null); // 추가: 이메일 인증 코드의 만료 시간
+  const [isEmailExpired, setIsEmailExpired] = useState(false); // 추가: 이메일 인증 코드의 만료 여부
+  const [remainingTime, setRemainingTime] = useState(null);
+
+  useEffect(() => {
+    if (emailAuthExpirationTime) {
+      const timer = setInterval(() => {
+        const remaining = new Date(emailAuthExpirationTime) - new Date();
+        if (remaining < 0) {
+          setIsEmailExpired(true);
+          setRemainingTime(null);
+          clearInterval(timer);
+        } else {
+          const minutes = Math.floor(
+            (remaining % (1000 * 60 * 60)) / (1000 * 60)
+          );
+          const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+          setRemainingTime(`${minutes}분 ${seconds}초`);
+        }
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [emailAuthExpirationTime]);
+
+  // 만료 시간이 지났을 때 알림 표시
+  useEffect(() => {
+    if (isEmailExpired) {
+      alert("인증 코드가 만료되었습니다. 다시 요청해 주세요.");
+    }
+  }, [isEmailExpired]);
   const handleEmailAuthRequest = async () => {
     try {
       // 1. 아이디 중복 검사를 먼저 실행합니다.
@@ -183,16 +213,16 @@ const AddUser = () => {
           },
         }
       );
-  
+
       // 2. 이미 사용 중인 아이디인 경우
       if (duplicateResponse.data.isDuplicate) {
         alert("이미 Gaga의 회원이세요. 아이디 찾기를 이용해주세요.");
         setIsUserIdValid(false);
-        return;  // 아이디가 중복되므로 이메일 인증 절차를 종료합니다.
+        return; // 아이디가 중복되므로 이메일 인증 절차를 종료합니다.
       } else {
         setIsUserIdValid(true);
       }
-  
+
       // 3. 중복이 없을 경우 이메일 인증을 진행합니다.
       const response = await axios.post(
         `${import.meta.env.VITE_SPRING_HOST}/rest/user/mailAuth`,
@@ -205,10 +235,11 @@ const AddUser = () => {
           },
         }
       );
-  
+
       // 이메일 인증 코드를 받아옴
-      const emailAuthCode = response.data;
+      const { emailAuthCode, expirationTime } = response.data; // 수정: 응답에서 만료 시간도 받아옴
       setEmailAuthCode(emailAuthCode);
+      setEmailAuthExpirationTime(expirationTime);
       setEmailAuthCodeSent(true);
       alert("인증 코드가 이메일로 발송되었습니다.");
     } catch (error) {
@@ -221,7 +252,10 @@ const AddUser = () => {
   };
 
   const handleEmailVerification = () => {
-    if (emailVerificationCode === emailAuthCode) {
+    // 수정: 만료 시간을 확인하여 인증 코드의 유효성을 검사
+    if (new Date() > new Date(emailAuthExpirationTime)) {
+      alert("인증 코드가 만료되었습니다. 다시 요청해 주세요.");
+    } else if (emailVerificationCode === emailAuthCode) {
       alert("인증이 완료되었습니다!");
       setEmailVerified(true);
     } else {
@@ -239,7 +273,7 @@ const AddUser = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_SPRING_HOST}/rest/user/phoneno/${phoneNo}`
       );
-  
+
       if (response.data) {
         alert("이미 가입된 핸드폰 번호입니다.");
       } else {
@@ -255,7 +289,7 @@ const AddUser = () => {
             },
           }
         );
-  
+
         // 핸드폰 인증 코드를 받아옴
         const phoneAuthCode = response.data;
         setPhoneAuthCode(phoneAuthCode);
@@ -290,7 +324,9 @@ const AddUser = () => {
   const handlePasswordChange = (e) => {
     onChangeField("password", e);
     const isValid = isValidPassword(e.target.value);
-  setPasswordError(isValid ? "" : "영문 숫자 특수문자조합 8~14자리 이내로 입력해주세요.");
+    setPasswordError(
+      isValid ? "" : "영문 숫자 특수문자조합 8~14자리 이내로 입력해주세요."
+    );
   };
 
   // 3. 비밀번호 일치 확인
@@ -330,7 +366,7 @@ const AddUser = () => {
 
   return (
     <>
-      <CommonTop pageName="Gaga 회원가입" />
+      <AddUserTop pageName="Gaga 회원가입" />
       <Grid
         container
         component="main"
@@ -381,8 +417,8 @@ const AddUser = () => {
                 border: "2px solid #000",
                 boxShadow: 24,
                 p: 4,
-                maxHeight: '90vh',  // 뷰포트 높이의 90%를 최대 높이로 설정
-                overflow: 'auto',  // 컨텐츠가 Box를 벗어나면 스크롤바 표시
+                maxHeight: "90vh", // 뷰포트 높이의 90%를 최대 높이로 설정
+                overflow: "auto", // 컨텐츠가 Box를 벗어나면 스크롤바 표시
               }}
               onClick={handleCloseTerms}
             >
@@ -397,7 +433,7 @@ const AddUser = () => {
             justify="space-between"
             style={{ marginBottom: "9px" }}
           >
-            <Grid item xs={9} sm={8} >
+            <Grid item xs={9} sm={8}>
               <TextField
                 label="아이디 이메일형식"
                 variant="outlined"
@@ -416,6 +452,8 @@ const AddUser = () => {
                 autoFocus
               />
             </Grid>
+            {/* {remainingTime && <p>남은 시간: {remainingTime}</p>} */}
+
             <Grid item xs={3} sm={4}>
               <Button
                 variant="contained"
@@ -487,7 +525,7 @@ const AddUser = () => {
             helperText={passwordError}
             autoComplete="current-password"
             inputProps={{
-              maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
+              maxLength: 14, // 최대 입력 가능한 문자 수를 14개로 제한
             }}
           />
           <TextField
@@ -505,7 +543,7 @@ const AddUser = () => {
             helperText={passwordConfirmError}
             autoComplete="new-password"
             inputProps={{
-              maxLength: 14,  // 최대 입력 가능한 문자 수를 14개로 제한
+              maxLength: 14, // 최대 입력 가능한 문자 수를 14개로 제한
             }}
           />
           <TextField

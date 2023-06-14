@@ -89,6 +89,18 @@ const AddUser = () => {
       reset();
       return;
     }
+    if (!birthday) {
+      alert("생년월일을 입력해주세요.");
+      return;
+    }
+    // 현재 날짜와 생년월일의 차이(나이)를 계산합니다.
+    const age = dayjs().diff(dayjs(birthday), "year");
+
+    // 나이가 14세 미만인 경우 가입을 제한합니다.
+    if (age < 14) {
+      alert("14세 미만은 가입할 수 없습니다.");
+      return;
+    }
     try {
       const formData = new FormData();
       formData.append("userId", userId);

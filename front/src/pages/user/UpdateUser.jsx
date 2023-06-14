@@ -24,6 +24,7 @@ import Modal from "@mui/material/Modal";
 import { Update } from "@mui/icons-material";
 import useUpdateUserFormStore from "@hooks/user/useUpdateUserFormStore";
 import UpdateUserDate from "@components/user/UpdateUserDate";
+import UpdateUserTop from "@layouts/user/UpdateUserTop";
 
 const UpdateUser = () => {
   const {

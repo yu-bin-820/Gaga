@@ -56,6 +56,7 @@ const AddClubByClub = ({
     <Accordion
       expanded={expanded === 'panel3'}
       onChange={handleChange('panel3')}
+      sx={{ backgroundColor: expanded === 'panel3' ? '#f3f8f7' : '#ffffff' }}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}

@@ -1,44 +1,61 @@
-import CommonTop from "@layouts/common/CommonTop";
-import { Grid, IconButton, TextField, Tooltip } from "@mui/material";
-import { Box } from "@mui/system";
-import React, { useCallback } from "react";
-import SearchIcon from "@mui/icons-material/Search";
-import { useNavigate } from "react-router";
-import useSearchClubFormStore from "@hooks/club/useSearchClubFormStore";
+import CommonTop from '@layouts/common/CommonTop';
+import { Grid, IconButton, TextField, Tooltip } from '@mui/material';
+import { Box } from '@mui/system';
+import React, { useCallback } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
+import { useNavigate } from 'react-router';
+import useSearchClubFormStore from '@hooks/club/useSearchClubFormStore';
+import useClubStore from '@stores/club/useClubStore';
 
 const SearchClub = () => {
   const navigate = useNavigate();
+  const { setField: setClubField } = useClubStore();
 
   const { searchKeyword, setField } = useSearchClubFormStore();
 
   const onClickSearch = useCallback(() => {
     navigate(`/club/clublist`);
     console.log(searchKeyword);
+    setField('currentPage', 1);
+    setClubField('prevClubPath', location.pathname);
   }, [navigate, searchKeyword]);
+
+  const onKeydownChat = useCallback(
+    (e) => {
+      if (e.key === 'Enter') {
+        if (!e.shiftKey) {
+          e.preventDefault();
+          onClickSearch(e);
+        }
+      }
+    },
+    [onClickSearch]
+  );
 
   return (
     <div>
       <CommonTop />
-      <Box sx={{ marginTop: "64px" }}>
-        <Grid container spacing={2} alignItems="center">
+      <Box sx={{ marginTop: '64px' }}>
+        <Grid container spacing={2} alignItems='center'>
           <Grid item></Grid>
           <Grid item xs>
             <TextField
               fullWidth
-              placeholder="지역 및 키워드로 클럽을 검색해주세요"
+              placeholder='지역 및 키워드로 클럽을 검색해주세요'
               InputProps={{
                 disableUnderline: true,
-                sx: { fontSize: "default" },
+                sx: { fontSize: 'default' },
               }}
-              variant="standard"
+              variant='standard'
               value={searchKeyword}
-              onChange={(e) => setField("searchKeyword", e.target.value)}
+              onChange={(e) => setField('searchKeyword', e.target.value)}
+              onKeyDown={onKeydownChat}
             />
           </Grid>
           <Grid item>
-            <Tooltip title="Reload">
+            <Tooltip title='Reload'>
               <IconButton onClick={onClickSearch}>
-                <SearchIcon color="inherit" sx={{ display: "block" }} />
+                <SearchIcon color='inherit' sx={{ display: 'block' }} />
               </IconButton>
             </Tooltip>
           </Grid>

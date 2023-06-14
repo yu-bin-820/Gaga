@@ -7,6 +7,7 @@ import { FormHelperText } from "@mui/material";
 import CommonTop from "@layouts/common/CommonTop";
 import Typography from "@mui/material/Typography";
 import { text } from "@fortawesome/fontawesome-svg-core";
+import { useNavigate } from "react-router";
 
 const FindPassword = () => {
   const passwordRegex =
@@ -19,6 +20,7 @@ const FindPassword = () => {
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(false);
+  const navigate = useNavigate();
   // ...
   const checkPassword = (password) => {
     if (passwordRegex.test(password)) {
@@ -63,6 +65,8 @@ const FindPassword = () => {
 
         if (updateResponse.status === 201) {
           alert("비밀번호가 변경되었습니다."); //비밀번호 변경 완료 알림 추가
+          navigate("/");
+          
         } else {
           alert("비밀번호 변경에 실패하였습니다."); //비밀번호 변경 실패 알림 추가
         }
@@ -124,7 +128,7 @@ const FindPassword = () => {
       <CommonTop pageName="비밀번호 재설정"/>
       <Typography
         style={{ color: "black", marginTop: "100px", textAlign: "center" }}
-      >
+      > 
         휴대폰 인증 완료 후 비밀번호 변경
       </Typography>
 

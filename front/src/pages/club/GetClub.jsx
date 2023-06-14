@@ -14,6 +14,11 @@ import GetClubTop from '@layouts/club/GetClubTop';
 import ClubSmallChip from '@components/club/ClubSmallChip';
 import IsClubMemberDialog from '@components/club/IsClubMemberDialog';
 import useCommunityStore from '@stores/communication/useCommunityStore';
+import WcIcon from '@mui/icons-material/Wc';
+import ManIcon from '@mui/icons-material/Man';
+import WomanIcon from '@mui/icons-material/Woman';
+import useClubStore from '@stores/club/useClubStore';
+import AddClubMemberDrawer from '@components/club/AddClubMemberDrawer';
 
 const GetClub = () => {
   const { clubNo } = useParams();
@@ -22,8 +27,11 @@ const GetClub = () => {
   const [pendingMemberList, setPendingMemberList] = useState();
   const [confirmedMemberList, setConfirMemberList] = useState();
   const [isClubMemberOpen, setIsClubMemberOpen] = useState(false);
+  const [settingsAddMemberOpen, setSettingsAddMemberOpen] = useState(false);
+
   const location = useLocation();
   const { setField } = useCommunityStore();
+  const { prevClubPath } = useClubStore();
 
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -119,26 +127,30 @@ const GetClub = () => {
       setField('prevProfilePath', location.pathname);
       navigate(`/community/profile/userno/${club?.clubLeaderNo}`);
     },
-    [navigate, club]
+    [navigate, club, location]
   );
 
-  const onClickAddMember = useCallback(
-    (event) => {
-      const isUserInConfirmedMembers = confirmedMemberList?.some(
-        (confirmedMember) => confirmedMember.userNo === myData?.userNo
-      );
+  const onClickAddMember = useCallback(() => {
+    const isUserInConfirmedMembers = confirmedMemberList?.some(
+      (confirmedMember) => confirmedMember.userNo === myData?.userNo
+    );
 
-      const isUserInPendingMembers = pendingMemberList?.some(
-        (pendingMember) => pendingMember.userNo === myData?.userNo
-      );
+    const isUserInPendingMembers = pendingMemberList?.some(
+      (pendingMember) => pendingMember.userNo === myData?.userNo
+    );
 
-      if (!isUserInConfirmedMembers && !isUserInPendingMembers) {
-        navigate(`/club/member/addmember/${clubNo}`);
-      } else {
-        setIsClubMemberOpen(true);
-      }
+    if (!isUserInConfirmedMembers && !isUserInPendingMembers) {
+      setSettingsAddMemberOpen(true);
+    } else {
+      setIsClubMemberOpen(true);
+    }
+  }, [confirmedMemberList, myData?.userNo, pendingMemberList]);
+
+  const toggleSettingsAddMember = useCallback(
+    (state) => () => {
+      setSettingsAddMemberOpen(state);
     },
-    [confirmedMemberList, myData?.userNo, navigate, clubNo, pendingMemberList]
+    []
   );
 
   const [imageLoadingError, setImageLoadingError] = useState(false);
@@ -152,7 +164,7 @@ const GetClub = () => {
   }
   return (
     <>
-      {isClubLeader ? <GetClubTop /> : <CommonTop />}
+      {isClubLeader ? <GetClubTop /> : <CommonTop prevPath={prevClubPath} />}
       <Box
         sx={{
           marginTop: '64px',
@@ -187,38 +199,13 @@ const GetClub = () => {
             }}
           />
         )}
-        <Stack spacing={1}>
-          <Stack direction='row' margin={1} spacing={2}>
-            <Stack
-              direction={'row'}
-              spacing={10}
-              alignItems={'center'}
-              onClick={onClickProfileImg}
-              data-value={myData?.userNo}
-            >
-              <Box>
-                <Avatar
-                  alt={club?.nickName}
-                  src={`${
-                    import.meta.env.VITE_SPRING_HOST
-                  }/upload_images/user/${clubLeader?.profileImg}`}
-                  sx={{ width: 60, height: 60 }}
-                />
-              </Box>
-            </Stack>
-            <Stack>
-              <Stack margin={1}>
-                <Typography variant='h3' sx={{ fontSize: 16 }}>
-                  {club?.clubName}
-                </Typography>
-              </Stack>
-              <Stack margin={1}>
-                <Typography variant='h3' sx={{ fontSize: 16 }}>
-                  {clubLeader?.nickName}
-                </Typography>
-              </Stack>
-            </Stack>
+        <Stack spacing={2}>
+          <Stack margin={1} spacing={2}>
+            <ClubMember member={leaderData} />
           </Stack>
+          <Typography variant='h3' sx={{ fontSize: 16 }}>
+            {club?.clubName}
+          </Typography>
           <Stack direction='row' alignItems='center' spacing={5}>
             <Box direction='row' spacing={0} alignItems='left'>
               <ClubSmallChip label={club?.filterTag} />
@@ -233,6 +220,15 @@ const GetClub = () => {
                 }}
               />
             </Box>
+            {club?.filterGender === 0 ? (
+              <WcIcon />
+            ) : club?.filterGender === 1 ? (
+              <ManIcon />
+            ) : club?.filterGender === 2 ? (
+              <WomanIcon />
+            ) : (
+              ''
+            )}
           </Stack>
           <Stack direction='row' alignItems='center' spacing={5}>
             <Stack direction='row' spacing={1} alignItems={'center'}>
@@ -285,7 +281,7 @@ const GetClub = () => {
           </Button>
         )}
 
-        {myData && !isClubLeader && (
+        {myData && myData?.profileImg && !isClubLeader && (
           <Button
             variant='contained'
             sx={{ width: '95vw', borderRadius: '50px', marginTop: '10px' }}
@@ -298,6 +294,12 @@ const GetClub = () => {
       <IsClubMemberDialog
         open={isClubMemberOpen}
         setOpen={setIsClubMemberOpen}
+      />
+      <AddClubMemberDrawer
+        settingsAddMemberOpen={settingsAddMemberOpen}
+        setSettingsAddMemberOpen={setSettingsAddMemberOpen}
+        toggleSettingsAddMember={toggleSettingsAddMember}
+        clubNo={clubNo}
       />
     </>
   );
