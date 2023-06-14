@@ -42,6 +42,7 @@ const ProfileTop = ({ userNo }) => {
   const {
     prevProfilePath,
     setField,
+    chatRoomEntryNo,
     prevChatRoomEntryNo,
     prevChatType,
     prevChatRoomLeader,
@@ -108,10 +109,17 @@ const ProfileTop = ({ userNo }) => {
     onCloseDuplicateReportDialog,
   ]);
 
-  const onClickDirectMessage = useCallback(() => {
-    setField('chatRoomEntryNo', userNo);
-    navigate('/chat/direct/message/list');
-  }, [userNo, setField, navigate]);
+  const onClickDirectMessage = useCallback(
+    (e) => {
+      setField('shouldScroll', true);
+      setField('chatRoomEntryNo', userNo);
+      setField('prevChatRoomEntryNo', chatRoomEntryNo);
+      setField('prevGetDirectChatPath', location.pathname);
+
+      navigate('/chat/direct/message/list');
+    },
+    [userNo, setField, chatRoomEntryNo, location, navigate]
+  );
 
   const onClickPrev = useCallback(() => {
     setField('chatRoomEntryNo', prevChatRoomEntryNo);
