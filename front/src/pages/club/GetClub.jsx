@@ -17,7 +17,6 @@ import useCommunityStore from '@stores/communication/useCommunityStore';
 import WcIcon from '@mui/icons-material/Wc';
 import ManIcon from '@mui/icons-material/Man';
 import WomanIcon from '@mui/icons-material/Woman';
-import useClubStore from '@stores/club/useClubStore';
 import AddClubMemberDrawer from '@components/club/AddClubMemberDrawer';
 
 const GetClub = () => {
@@ -31,7 +30,6 @@ const GetClub = () => {
 
   const location = useLocation();
   const { setField } = useCommunityStore();
-  const { prevClubPath } = useClubStore();
 
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -127,7 +125,7 @@ const GetClub = () => {
       setField('prevProfilePath', location.pathname);
       navigate(`/community/profile/userno/${club?.clubLeaderNo}`);
     },
-    [navigate, club, location]
+    [navigate, club]
   );
 
   const onClickAddMember = useCallback(() => {
@@ -164,7 +162,7 @@ const GetClub = () => {
   }
   return (
     <>
-      {isClubLeader ? <GetClubTop /> : <CommonTop prevPath={prevClubPath} />}
+      {isClubLeader ? <GetClubTop /> : <CommonTop />}
       <Box
         sx={{
           marginTop: '64px',
@@ -175,16 +173,17 @@ const GetClub = () => {
       >
         {club?.clubImg ? (
           <img
-            src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/club/${
+            src={`${import.meta.env.VITE_CDN_HOST}/upload_images/club/${
               club?.clubImg
-            }`}
+            }?type=f_sh&w=400&h=250&faceopt=true&sharp_amt=1.0`}
             alt='noImg'
             loading='lazy'
             onError={handleImageError}
             style={{
               maxWidth: '100%',
-              maxHeight: '400px',
-              objectFit: 'cover',
+              maxHeight: '250px',
+              minWidth: '100%',
+              minHeight: '250px',
             }}
           />
         ) : (
@@ -194,8 +193,9 @@ const GetClub = () => {
             loading='lazy'
             style={{
               maxWidth: '100%',
-              maxHeight: '400px',
-              objectFit: 'cover',
+              maxHeight: '250px',
+              minWidth: '100%',
+              minHeight: '250px',
             }}
           />
         )}

@@ -25,54 +25,68 @@ const ListMeetingMember = () => {
       fetcher
     );
 
-  const onClickUpdateMember = useCallback(async (event) => {
-    const { id } = event.target;
-    event.preventDefault();
+  const onClickUpdateMember = useCallback(
+    async (event) => {
+      const { id } = event.target;
+      event.preventDefault();
 
-    try {
-      const data = {
-        meetingNo: meetingno,
-        userNo: id,
-        state: 2,
-      };
+      try {
+        const data = {
+          meetingNo: meetingno,
+          userNo: id,
+          state: 2,
+        };
 
-      console.log(data);
+        console.log(data);
 
-      await axios
-        .patch(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`, data)
-        .then(() => {
-          mutateConfirmedMemberList();
-          mutatePendingMemberList();
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  }, [meetingno, mutateConfirmedMemberList, mutatePendingMemberList]);
+        await axios
+          .patch(
+            `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`,
+            data
+          )
+          .then(() => {
+            mutateConfirmedMemberList();
+            mutatePendingMemberList();
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [meetingno, mutateConfirmedMemberList, mutatePendingMemberList]
+  );
 
-  const onClickDeleteMember = useCallback(async (event) => {
-    const { id } = event.target;
-    event.preventDefault();
+  const onClickDeleteMember = useCallback(
+    async (event) => {
+      const { id } = event.target;
+      event.preventDefault();
 
-    try {
-      const data = {
-        meetingNo: meetingno,
-        userNo: id,
-      };
+      try {
+        const data = {
+          meetingNo: meetingno,
+          userNo: id,
+        };
 
-      console.log(data);
+        console.log(data);
 
-      await axios
-        .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`, {
-          data: data,
-        })
-        .then(() => {
-          mutateConfirmedMemberList();
-          mutatePendingMemberList();
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  }, [meetingno, mutateConfirmedMemberList, mutatePendingMemberList]);
+        await axios
+          .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`, {
+            data: data,
+          })
+          .then(() => {
+            mutateConfirmedMemberList();
+            mutatePendingMemberList();
+          });
+
+        await axios.patch(
+          `${import.meta.env.VITE_SPRING_HOST}/rest/payment/refund/delete`,
+          data
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [meetingno, mutateConfirmedMemberList, mutatePendingMemberList]
+  );
 
   return (
     <Box sx={{ bgcolor: '#ededed' }}>
@@ -91,14 +105,14 @@ const ListMeetingMember = () => {
           <Box key={i} sx={{ marginBottom: '10px' }}>
             <MeetingMember member={pendingMember} />
             <Stack
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
+              direction='row'
+              justifyContent='center'
+              alignItems='center'
               spacing={3}
               sx={{ marginBottom: '3px' }}
             >
               <Button
-                variant="contained"
+                variant='contained'
                 id={pendingMember.userNo}
                 onClick={onClickDeleteMember}
                 sx={{ height: '33px', width: '100px' }}
@@ -106,7 +120,7 @@ const ListMeetingMember = () => {
                 거절
               </Button>
               <Button
-                variant="contained"
+                variant='contained'
                 id={pendingMember.userNo}
                 onClick={onClickUpdateMember}
                 sx={{ height: '33px', width: '100px' }}
@@ -124,7 +138,7 @@ const ListMeetingMember = () => {
             <Stack direction={'row'} alignItems={'center'}>
               <MeetingMember key={i} member={confirmedMember} />
               <Button
-                variant="contained"
+                variant='contained'
                 id={confirmedMember.userNo}
                 onClick={onClickDeleteMember}
                 sx={{ height: '33px', width: '100px' }}

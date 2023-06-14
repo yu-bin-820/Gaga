@@ -22,6 +22,7 @@ const ListMyPendingClubThumnail = ({ club }) => {
   const onClickDirectChat = useCallback(
     (e) => {
       setField('shouldScroll', true);
+      setField('isInfiniteScroll', false);
       setField('chatRoomEntryNo', club.clubLeaderNo);
       setField('prevGetDirectChatPath', location.pathname);
       navigate('/chat/direct/message/list');
