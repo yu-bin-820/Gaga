@@ -15,6 +15,10 @@
 			jdbcType="LONGVARCHAR" />
 		<result property="noticePostImg" column="notice_post_img"
 			jdbcType="LONGVARCHAR" />
+		<result property="thumbNail" column="thumbnail"
+			jdbcType="LONGVARCHAR" />
+		<result property="qnaCategory" column="qna_category"
+			jdbcType="INTEGER" />
 		<result property="noticePostRegDate"
 			column="notice_post_reg_date" jdbcType="TIMESTAMP" />
 		<result property="userNo" column="user_no" jdbcType="INTEGER" />
@@ -111,6 +115,8 @@
 		notice_post_title,
 		notice_post_text,
 		notice_post_img,
+		thumbNail,
+		qna_category,
 		notice_post_reg_date,
 		user_no
 		)
@@ -119,6 +125,8 @@
 		#{noticePostTitle:LONGVARCHAR},
 		#{noticePostText:LONGVARCHAR},
 		#{noticePostImg:LONGVARCHAR},
+		#{thumbNail:LONGVARCHAR},
+		#{qnaCategory:INTEGER},
 		now(),
 		#{userNo:INTEGER}
 		)
@@ -129,13 +137,25 @@
 		notice_posts
 	</select>
 
+	<select id="getLatestPostByCategoryNo"
+		resultMap="noticePostResult">
+		SELECT * FROM
+		notice_posts
+		WHERE notice_post_no =
+		#{lastPostId}
+		AND
+		notice_post_Category_no = #{noticePostCategoryNo}
+	</select>
+
+
 	<select id="getNoticePostListByCategoryNo"
 		resultMap="noticePostResult">
 		SELECT * FROM notice_posts
-		WHERE notice_post_no &lt;
-		#{lastPostId} AND notice_post_Category_no =
+		WHERE notice_post_Category_no =
 		#{noticePostCategoryNo}
-		ORDER BY notice_post_no DESC
+		AND notice_post_no &lt; #{lastPostId}
+		ORDER BY
+		notice_post_no DESC
 		LIMIT 10
 	</select>
 
@@ -147,8 +167,15 @@
 	<select id="searchNoticePost" resultMap="noticePostResult">
 		SELECT * FROM
 		notice_posts
-		WHERE notice_post_title LIKE CONCAT('%', #{keyword}, '%')
-		OR notice_post_text LIKE CONCAT('%', #{keyword}, '%')
+		WHERE (
+		notice_post_title LIKE CONCAT('%',
+		#{searchKeyword}, '%')
+		OR notice_post_text LIKE CONCAT('%',
+		#{searchKeyword}, '%')
+		)
+		AND
+		notice_post_category_no =
+		#{searchCategoryNo}
 	</select>
 
 	<select id="getNoticePost" resultMap="noticePostResult">
@@ -164,8 +191,13 @@
 		notice_post_title = #{noticePostTitle},
 		notice_post_text = #{noticePostText},
 		notice_post_img =
-		#{notic
-		ePostImg}
+		#{noticePostImg}
+		<if test="thumbNail != null">
+			, thumbNail = #{thumbNail}
+		</if>
+		<if test="qnaCategory != null">
+			, qna_category = #{qnaCategory}
+		</if>
 		WHERE notice_post_no = #{noticePostNo}
 	</update>
 
@@ -173,6 +205,13 @@
 		DELETE FROM notice_posts WHERE notice_post_no =
 		#{noticePostNo}
 	</delete>
+
+	<select id="selectQnaByCategory" parameterType="int"
+		resultMap="noticePostResult">
+		select * from notice_posts
+		where notice_post_category_no = 2
+		and qna_category = #{qnaCategory}
+	</select>
 
 	<!-- 블랙리스트 CRUD -->
 	<insert id="addBlackList"
@@ -200,7 +239,7 @@
 		SELECT * FROM
 		users
 		WHERE
-		user_no &lt;=
+		user_no &lt;
 		#{lastUserNo} and blacklist != 0
 		ORDER BY user_no DESC
 		LIMIT 10
@@ -209,9 +248,12 @@
 	<select id="searchBlackList" resultMap="userResultMap">
 		SELECT * FROM
 		users
-		WHERE (user_id LIKE CONCAT('%', #{keyword}, '%')
-		OR nick_name LIKE CONCAT('%', #{keyword}, '%')
-		OR user_name LIKE CONCAT('%', #{keyword}, '%'))
+		WHERE
+		(user_id LIKE CONCAT('%', #{keyword}, '%')
+		OR nick_name LIKE
+		CONCAT('%', #{keyword}, '%')
+		OR user_name LIKE CONCAT('%', #{keyword},
+		'%'))
 		AND blacklist != 0
 	</select>
 
@@ -225,9 +267,10 @@
 		SELECT *
 		FROM users
 		WHERE
-		user_id = #{userId}
-		or nick_name = #{nickName}
-		or user_name = #{userName}
+		user_id LIKE CONCAT ('%', #{userId} '%')
+		or nick_name LIKE CONCAT ('%',
+		#{nickName}, '%')
+		or user_name LIKE CONCAT ('%', #{userName}, '%')
 	</select>
 
 	<select id="getUser" parameterType="int"
@@ -241,7 +284,7 @@
 		SELECT * FROM
 		users
 		WHERE
-		user_no &lt;=
+		user_no &lt;
 		#{lastUserNo}
 		ORDER BY user_no DESC
 		LIMIT 12
@@ -305,5 +348,25 @@
 		</where>
 	</select>
 
+	<select id="searchReport" resultMap="reportResultMap">
+		SELECT
+		r.report_no,
+		r.reporting_no,
+		r.reported_no,
+		r.report_category_no,
+		r.report_date,
+		reporting.user_id AS reporting_id,
+		reported.user_id AS reported_id,
+		reporting.nick_name AS reporting_nick_name,
+		reported.nick_name AS reported_nick_name
+		FROM reports AS r
+		INNER JOIN users AS reporting ON r.reporting_no = reporting.user_no
+		INNER JOIN users AS reported ON r.reported_no = reported.user_no
+		WHERE
+		reported.user_id LIKE CONCAT ('%', #{userId}, '%')
+		or reporting.user_id LIKE CONCAT ('%', #{reporting_id}, '%')
+		or (reported.nick_name LIKE CONCAT ('%', #{userName}, '%') OR
+		reporting.nick_name LIKE CONCAT ('%', #{userName}, '%'))
+	</select>
 
 </mapper>

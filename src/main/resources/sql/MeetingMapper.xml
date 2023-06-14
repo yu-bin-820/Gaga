@@ -209,15 +209,24 @@
     m.adjustment_state,
     m.account_no,
     m.bank_name,
-    mb.state,
-    (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND meeting_no = m.meeting_no) AS count
-  FROM meetings AS m
-  INNER JOIN members mb ON m.meeting_no = mb.meeting_no
-  WHERE mb.user_no = #{userNo}
-  AND mb.state IN (2)
-  AND m.meeting_state IN (1, 2)
+    (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND meeting_no = m.meeting_no) AS count,
+    mb.state
+  FROM meetings m
+  LEFT JOIN 
+  	(SELECT meeting_no, user_no, state
+  		FROM members
+  		WHERE user_no = #{userNo}) mb 
+  ON 
+  	m.meeting_no = mb.meeting_no
+  WHERE 
+  	mb.user_no = #{userNo}
   OR 
-   m.meeting_leader_no = #{userNo}
+  	m.meeting_leader_no = #{userNo}
+  AND
+  	m.meeting_state IN (1, 2)
+  AND
+  	(mb.state IN (2) OR mb.state IS NULL)
+  ORDER BY m.meeting_success ASC, m.meeting_date ASC
 </select>
   
   

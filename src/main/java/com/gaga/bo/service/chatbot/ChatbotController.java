@@ -37,9 +37,6 @@ public class ChatbotController {
     @Autowired
     private SignatureGenerator signatureGenerator;
     
-    @Autowired
-    private GptService gptService;
-    
     //@CrossOrigin
     @RequestMapping("chatbot")
     public ResponseEntity<String> chat(@org.springframework.web.bind.annotation.RequestBody String requestBody) {
