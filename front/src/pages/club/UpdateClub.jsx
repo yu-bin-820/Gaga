@@ -20,6 +20,8 @@ import UpdateClubImg from '@components/club/UpdateClubImg';
 import UpdateClubFilter from '@components/club/UpdateClubFilter';
 import UpdateClubMaxMember from '@components/club/UpdateClubMaxMember';
 import UpdateClubState from '@components/club/UpdateClubState';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
 
 const UpdateClub = () => {
   const { clubNo } = useParams();
@@ -31,14 +33,19 @@ const UpdateClub = () => {
     filterGender,
     filterMinAge,
     filterMaxAge,
-    filterTag,
     clubState,
     clubMaxMemberNo,
+    filterTag,
     file,
     image,
     setField,
     onChangeField,
   } = useUpdateClubFormStore();
+
+  const { data: clubData, mutate: mutateClub } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/club/no/${clubNo}`,
+    fetcher
+  );
 
   const [selectedImage, setSelectedImage] = useState(
     clubImg
@@ -62,20 +69,22 @@ const UpdateClub = () => {
         setField('clubIntro', response.data.clubIntro);
         setField('clubImg', response.data.clubImg);
         setField('clubRegion', response.data.clubRegion);
+        setField('filterTag', response.data.filterTag);
         setField('filterGender', response.data.filterGender);
         setField('filterMinAge', response.data.filterMinAge);
         setField('filterMaxAge', response.data.filterMaxAge);
-        setField('filterTag', response.data.filterTag);
         setField('clubMaxMemberNo', response.data.clubMaxMemberNo);
         setField('clubState', response.data.clubState);
         setField(
           'image',
           response.data?.clubImg
-            ? `${
-                import.meta.env.VITE_CDN_HOST
-              }/upload_images/club/${clubImg}?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`
+            ? `${import.meta.env.VITE_CDN_HOST}/upload_images/club/${
+                response.data?.clubImg
+              }?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`
             : null
         );
+
+        mutateClub();
       })
       .catch((error) => {
         console.log(error);
@@ -95,12 +104,11 @@ const UpdateClub = () => {
         formData.append('clubName', clubName);
         formData.append('clubIntro', clubIntro);
         formData.append('clubRegion', clubRegion);
+        formData.append('filterTag', filterTag);
         formData.append('filterGender', filterGender);
         formData.append('filterMinAge', filterMinAge);
         formData.append('filterMaxAge', filterMaxAge);
-        formData.append('filterTag', filterTag);
         formData.append('clubMaxMemberNo', clubMaxMemberNo);
-        formData.append('filterTag', filterTag);
         formData.append('clubState', clubState);
         formData.append('clubNo', clubNo);
 
@@ -112,6 +120,8 @@ const UpdateClub = () => {
           `${import.meta.env.VITE_SPRING_HOST}/rest/club`,
           formData
         );
+
+        mutateClub();
 
         navigate(`/club/no/${clubNo}`);
       } catch (error) {
@@ -137,14 +147,12 @@ const UpdateClub = () => {
       case 0:
         return <UpdateClubName />;
       case 1:
-        return <UpdateClubRegion />;
-      case 2:
         return <UpdateClubImg />;
-      case 3:
+      case 2:
         return <UpdateClubFilter />;
-      case 4:
+      case 3:
         return <UpdateClubMaxMember />;
-      case 5:
+      case 4:
         return <UpdateClubState />;
       default:
         throw new Error('Unknown step');
@@ -157,7 +165,7 @@ const UpdateClub = () => {
       <Box sx={{ marginTop: '64px' }}>
         <MobileStepper
           variant='progress'
-          steps={6}
+          steps={5}
           position='static'
           activeStep={activeStep}
           sx={{ maxWidth: 500, flexGrow: 1 }}
@@ -165,7 +173,7 @@ const UpdateClub = () => {
             <Button
               size='small'
               onClick={handleNext}
-              disabled={activeStep === 5}
+              disabled={activeStep === 4}
             >
               Next
               {theme.direction === 'rtl' ? (
@@ -285,13 +293,6 @@ const UpdateClub = () => {
           required
           value={clubNo}
         />
-        <Button
-          variant='contained'
-          sx={{ width: '85vw', borderRadius: '50px' }}
-          onClick={handleSubmit}
-        >
-          수정하기
-        </Button>
       </Box>
     </>
   );

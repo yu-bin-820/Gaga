@@ -1,15 +1,17 @@
 import CommonTop from '@layouts/common/CommonTop';
-import { Box, margin } from '@mui/system';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Box } from '@mui/system';
+import { useCallback, useRef } from 'react';
 import useSWRInfinite from 'swr/infinite';
 import fetcher from '@utils/fetcher';
 import useSearchClubFormStore from '@hooks/club/useSearchClubFormStore';
 import ClubThumbnail from '@components/club/ClubThumbnail';
+import useClubFormStore from '@hooks/club/useClubFormStore';
+import useClubStore from '@stores/club/useClubStore';
 
 const ListSearchClub = () => {
   const boxRef = useRef(null);
 
-  const { searchKeyword, setField } = useSearchClubFormStore();
+  const { searchKeyword } = useSearchClubFormStore();
 
   const getKey = (index, prevPageData) => {
     if (prevPageData && !prevPageData.length) {
@@ -21,11 +23,7 @@ const ListSearchClub = () => {
     }&searchKeyword=${searchKeyword}`;
   };
 
-  const {
-    data: clubListData,
-    mutate: mutateClubList,
-    setSize,
-  } = useSWRInfinite(getKey, fetcher);
+  const { data: clubListData, setSize } = useSWRInfinite(getKey, fetcher);
 
   const onScroll = useCallback(
     (e) => {
@@ -34,6 +32,7 @@ const ListSearchClub = () => {
         e.currentTarget.scrollHeight
       ) {
         setSize((prevSize) => prevSize + 1).then(() => {
+          console.log(setSize);
           const current = boxRef?.current;
           if (current && e.currentTarget) {
             const scrollTopOffset =
@@ -51,7 +50,7 @@ const ListSearchClub = () => {
   const clubList = clubListData?.flat();
 
   if (!clubList) {
-    return <>로딩</>;
+    return <>로딩중</>;
   }
 
   console.log(clubList);
@@ -65,20 +64,19 @@ const ListSearchClub = () => {
         overflow: 'scroll',
       }}
     >
-      <CommonTop pageName='클럽 검색 결과' />
+      <CommonTop />
       <Box></Box>
       <Box sx={{ bgcolor: '#ededed' }}>
         <Box
-          sx={{ paddingTop: '66px', paddingBottom: '5px', bgcolor: '#ededed' }}
+          sx={{ paddingTop: '60px', paddingBottom: '5px', bgcolor: '#ededed' }}
         >
           {clubList?.map((club, i) => (
             <Box
               key={i}
               sx={{
-                marginLeft: 1,
-                marginRight: 1,
-                marginBottom: 1,
+                margin: 1,
                 borderRadius: 3,
+                minWidth: 300,
                 backgroundColor: '#ffffff',
               }}
             >
