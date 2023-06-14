@@ -74,7 +74,12 @@ public class AdminServiceImpl implements AdminService {
 	public List<NoticePost> searchNoticePost(String searchKeyword, int searchCategoryNo) throws Exception {
 		return adminDao.searchNoticePost(searchKeyword, searchCategoryNo);
 	}
-
+	
+	@Override
+	public List<NoticePost> selectQnaByCategory(int qnaCategory) throws Exception{
+		return adminDao.selectQnaByCategory(qnaCategory);
+	};
+	
 	@Override
 	public void addBlackList(int userNo) throws Exception {
 		adminDao.addBlackList(userNo);

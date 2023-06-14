@@ -16,6 +16,8 @@ public interface AdminService {
 	
 	List<NoticePost> getLatestPostByCategoryNo(int lastPostId, int noticePostCategoryNo) throws Exception;
 	
+	List<NoticePost> selectQnaByCategory(int qnaCategory) throws Exception;
+	
 	int getLatestPostId() throws Exception;
 	
 	NoticePost getNoticePost(int noticePostNo) throws Exception;

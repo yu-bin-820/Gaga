@@ -1,12 +1,14 @@
 package com.gaga.bo.service.chatbot;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -16,13 +18,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.gaga.bo.service.domain.Meeting;
+
 @RestController
 @RequestMapping("/rest/*")
 public class GptController {
 
 	@Value("${openai.apiUrl}")
 	private String openAIApiUrl;
-
+	
+	@Autowired
+	private GagaService gagaService;
+	
 	@PostMapping("gpt")
 	public String generateResponse(@org.springframework.web.bind.annotation.RequestBody String prompt, HttpSession session)
 	        throws ParseException {
@@ -50,7 +57,7 @@ public class GptController {
 	    JSONObject messageContent = new JSONObject();
 
 	    if (isFirstMessage) {
-	        String domainInformation = "reply in korean and You are a GaGaBot of socialling service like meeting, club for people connecting:";
+	        String domainInformation = "reply in korean and You are a GaGaBot of socialnetworking service GAGA, For connecting people with club and meeting:";
 	        String fullPrompt = domainInformation + " " + prompt;
 	        System.out.println("첫메시지");
 	        messageContent.put("role", "user");
@@ -86,4 +93,17 @@ public class GptController {
 
 	    return gptResponse;
 	    }
+	
+	/*
+	private String handleUserRequest(String prompt) {
+	    // "미팅" 또는 "모임"이라는 키워드가 포함된 경우
+	    if (prompt.contains("미팅") || prompt.contains("모임")) {
+	        // 해당 키워드로 미팅을 찾습니다.
+	        List<Meeting> meetings = gagaService.findMeeting(prompt, null, null);
+	        // 결과를 문자열 형태로 변환합니다.
+	        return meetings.toString();
+	    }
+	    // 기타 요청 처리...
+	}*/
+
 }

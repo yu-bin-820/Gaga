@@ -28,7 +28,9 @@ public interface AdminDao {
 	List<NoticePost> searchNoticePost(String searchKeyword, int searchCategoryNo) throws Exception;
 	
 	List<NoticePost> getLatestPostByCategoryNo(int lastPostId, int noticePostCategoryNo) throws Exception;
-		
+	
+	List<NoticePost> selectQnaByCategory(int qnaCategory) throws Exception;
+	
 	//#블랙리스트 
 	List<User> searchUser(String searchKeyword) throws Exception;
 	
