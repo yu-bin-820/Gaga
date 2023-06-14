@@ -1,11 +1,13 @@
 import { Box, Stack } from '@mui/system';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
 import { Paper, Typography } from '@mui/material';
 import SelectGender from '@components/common/SelectGender';
 import SelectAge from '@components/common/SelectAge';
+import PropTypes from 'prop-types';
 
-const AddMeetingFilter = () => {
+
+const AddMeetingFilter = ({setNextButtonDisable}) => {
 
     const {
         filterGender,
@@ -13,6 +15,14 @@ const AddMeetingFilter = () => {
         filterMaxAge,
         setField,
       } = useMeetingFormStore();
+
+      useEffect(() => {
+        if (filterGender) {
+          setNextButtonDisable(false);
+        } else {
+          setNextButtonDisable(true)
+        }
+      }, [setNextButtonDisable, filterGender]);
 
     const handleGenderChange = useCallback((gender) => {
         setField('filterGender', gender);
@@ -50,5 +60,9 @@ const AddMeetingFilter = () => {
         </Box>
     );
 };
+
+AddMeetingFilter.propTypes = {
+  setNextButtonDisable: PropTypes.bool,
+  };
 
 export default AddMeetingFilter;

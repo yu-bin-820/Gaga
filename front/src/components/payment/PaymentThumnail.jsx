@@ -52,46 +52,49 @@ const PaymentThumnail = ({ payment }) => {
         backgroundColor: '#ffffff',
       }}
     >
-      <Stack
+      <ImageListItem
         sx={{
-          width: '20%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          maxWidth: '100px',
+          maxHeight: '100px',
+          minWidth: '100px',
+          minHeight: '100px',
         }}
       >
-        <ImageListItem
-          sx={{
-            marginLeft: '5px',
-            maxWidth: '100px',
-            maxHeight: '100px',
-            minWidth: '100px',
-            minHeight: '100px',
-          }}
-        >
-          {meeting?.meetingImg ? (
-            <img
-              src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
-                meeting?.meetingImg
-              }`}
-              alt='noImg'
-              loading='lazy'
-              style={{ borderRadius: '5px' }}
-              onClick={onClickMeeting}
-            />
-          ) : (
-            <img
-              src={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=164&h=164&fit=crop&auto=format`}
-              style={{ borderRadius: '5px' }}
-              onClick={onClickMeeting}
-            />
-          )}
-        </ImageListItem>
-      </Stack>
+        {meeting?.meetingImg ? (
+          <img
+            src={`${import.meta.env.VITE_CDN_HOST}/upload_images/meeting/${
+              meeting?.meetingImg
+            }?type=f_sh&w=400&h=250&faceopt=true&sharp_amt=1.0`}
+            alt='noImg'
+            loading='lazy'
+            onClick={onClickMeeting}
+            style={{
+              borderRadius: '5px',
+              maxWidth: '100px',
+              maxHeight: '100px',
+              minWidth: '100px',
+              minHeight: '100px',
+            }}
+          />
+        ) : (
+          <img
+            src={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=164&h=164&fit=crop&auto=format`}
+            style={{
+              borderRadius: '5px',
+              maxWidth: '100px',
+              maxHeight: '100px',
+              minWidth: '100px',
+              minHeight: '100px',
+            }}
+            onClick={onClickMeeting}
+          />
+        )}
+      </ImageListItem>
+
       <Stack
         onClick={onClickPayment}
         sx={{
-          marginLeft: '15px',
+          marginLeft: '10px',
           flexGrow: 1,
           display: 'flex',
           justifyContent: 'space-between',
@@ -100,11 +103,11 @@ const PaymentThumnail = ({ payment }) => {
         }}
       >
         <Stack direction='column'>
-          <Stack direction='row' display='flex' spacing={2}>
+          <Stack direction='row' display='flex' spacing={1}>
             <Stack sx={{ minWidth: '50px' }}>모임명 </Stack>
             <Stack>{meeting?.meetingName}</Stack>
           </Stack>
-          <Stack direction='row' display='flex' spacing={2}>
+          <Stack direction='row' display='flex' spacing={1}>
             <Stack>참가비</Stack>
             <Stack> {meeting?.entryFee?.toLocaleString()}원</Stack>
           </Stack>

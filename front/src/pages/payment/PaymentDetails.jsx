@@ -99,21 +99,23 @@ const PaymentDetails = () => {
             <Stack direction='row' justifyItems='flex' alignItems='center'>
               <ImageListItem
                 sx={{
-                  marginLeft: '5px',
+                  borderRadius: '5px',
                   maxWidth: '100px',
                   maxHeight: '100px',
                   minWidth: '100px',
                   minHeight: '100px',
+                  marginRight: '5px',
                 }}
               >
                 {meeting?.meetingImg ? (
                   <img
                     src={`${
-                      import.meta.env.VITE_SPRING_HOST
-                    }/upload_images/meeting/${meeting?.meetingImg}`}
+                      import.meta.env.VITE_CDN_HOST
+                    }/upload_images/meeting/${
+                      meeting?.meetingImg
+                    }?type=f_sh&w=400&h=250&faceopt=true&sharp_amt=1.0`}
                     alt='noImg'
                     loading='lazy'
-                    style={{ borderRadius: '5px' }}
                     onClick={onClickMeeting}
                   />
                 ) : (

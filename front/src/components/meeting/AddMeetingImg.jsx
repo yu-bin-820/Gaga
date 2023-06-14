@@ -5,13 +5,22 @@ import {
   TextField,
 } from "@mui/material";
 import { Box, Stack } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import useMeetingFormStore from "@hooks/meeting/useMeetingFormStore";
+import PropTypes from 'prop-types';
 
-const AddMeetingImg = () => {
+const AddMeetingImg = ({setNextButtonDisable}) => {
   const { file, image, setField, meetingIntro, onChangeField } =
     useMeetingFormStore();
+
+    useEffect(() => {
+      if (meetingIntro) {
+        setNextButtonDisable(false);
+      } else {
+        setNextButtonDisable(true)
+      }
+    }, [setNextButtonDisable, meetingIntro]);
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -62,7 +71,7 @@ const AddMeetingImg = () => {
             <TextField
                 id="outlined-multiline-static"
                 name="meetingIntro"
-                placeholder="소개글을 입력해 주세요(선택)
+                placeholder="소개글을 입력해 주세요
 참가비가 있을 경우 참가비 정보도 함께 적어주세요!"
                 onChange={(e)=>onChangeField('meetingIntro',e)}
                 fullWidth
@@ -75,5 +84,9 @@ const AddMeetingImg = () => {
         </Box>
     );
 };
+
+AddMeetingImg.propTypes = {
+  setNextButtonDisable: PropTypes.bool,
+  };
 
 export default AddMeetingImg;

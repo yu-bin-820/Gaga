@@ -4,15 +4,26 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React, { useCallback, useEffect, useState } from 'react';
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
 import { Box, Stack } from '@mui/system';
-import { Button, Modal, Paper, TextField, Typography } from '@mui/material';
+import { Alert, Button, Modal, Paper, TextField, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
 
-const AddMeetingDate = () => {
+
+const AddMeetingDate = ({setNextButtonDisable}) => {
   const {
     meetingDate,
     meetingStartTime,
     meetingEndTime,
     setField
   } = useMeetingFormStore();
+
+  useEffect(() => {
+    if (meetingDate && meetingStartTime && meetingStartTime<meetingEndTime) {
+      setNextButtonDisable(false);
+    } else {
+      setNextButtonDisable(true)
+    }
+  }, [setNextButtonDisable, meetingDate, meetingStartTime, meetingEndTime]);
+
 
   const [showModal, setShowModal] = useState(false);
   const [selectedMeetingDate, setSelectedMeetingDate] = useState(meetingDate);
@@ -22,11 +33,13 @@ const AddMeetingDate = () => {
   }, [meetingDate]);
 
   const handleMeetingDateChange = useCallback((newValue) => {
-    if (newValue < new Date()) {
-      setShowModal(true);
-    } else {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); 
+    if (newValue >= today) {
       setSelectedMeetingDate(newValue);
       setField('meetingDate', newValue);
+    } else {
+      setShowModal(true);
     }
   }, [setField]);
 
@@ -77,6 +90,9 @@ const AddMeetingDate = () => {
               />
             </DemoItem>
           </LocalizationProvider>
+          {meetingStartTime > meetingEndTime && (
+          <Alert severity="error">모임 끝나는 시간을 모임 시작 시간 이후로 지정해 주세요!</Alert>
+          )}
         </Stack>
       </Box>
       <Paper variant="outlined" sx={{ margin: '5px', padding: '10px' }}>
@@ -116,5 +132,9 @@ const AddMeetingDate = () => {
     </Box>
   );
 };
+
+AddMeetingDate.propTypes = {
+  setNextButtonDisable: PropTypes.bool,
+  };
 
 export default AddMeetingDate;

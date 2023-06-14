@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import PropTypes from 'prop-types';
-import { Avatar, IconButton } from '@mui/material';
+import { Avatar, IconButton, Typography } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
 import { useCallback, useState } from 'react';
 import { Stack } from '@mui/system';
@@ -17,6 +17,7 @@ import fetcher from '@utils/fetcher';
 export default function UploadProfileImgDialog({ open, setOpen }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [fileSizeMB, setFileSizeMB] = useState(0);
 
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -31,28 +32,34 @@ export default function UploadProfileImgDialog({ open, setOpen }) {
     const file = event.target.files[0];
     setSelectedFile(file);
     setSelectedImage(URL.createObjectURL(file));
+
+    const sizeInMB = (file.size / (1024 * 1024)).toFixed(3);
+    setFileSizeMB(sizeInMB);
   };
 
   const submitUploadProfileImgDialog = useCallback(() => {
-    const formData = new FormData();
-    formData.append('file', selectedFile);
+    if (fileSizeMB <= 10) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
 
-    axios
-      .patch(
-        `${
-          import.meta.env.VITE_SPRING_HOST
-        }/rest/community/profileimg/userno/${myData?.userNo}`,
-        formData,
-        { withCredentials: true }
-      )
-      .then(() => {
-        setOpen(false);
-        mutateMe();
-      })
-      .catch((error) => {
-        console.dir(error);
-      });
-  }, [selectedFile, myData, mutateMe, setOpen]);
+      axios
+        .patch(
+          `${
+            import.meta.env.VITE_SPRING_HOST
+          }/rest/community/profileimg/userno/${myData?.userNo}`,
+          formData,
+          { withCredentials: true }
+        )
+        .then(() => {
+          setOpen(false);
+          mutateMe();
+        })
+        .catch((error) => {
+          console.dir(error);
+        });
+    }
+  }, [selectedFile, myData, mutateMe, setOpen, fileSizeMB]);
+
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
@@ -69,7 +76,16 @@ export default function UploadProfileImgDialog({ open, setOpen }) {
               src={selectedImage}
               alt="Selected Image Preview"
             />
+            <Typography variant="body2">
+              크기: {fileSizeMB} MB / 10 MB
+            </Typography>
+            {fileSizeMB > 10 && (
+              <Typography variant="body2" sx={{ color: 'orange' }}>
+                파일 용량을 초과하였습니다!
+              </Typography>
+            )}
 
+            {/* 파일 크기 표시 */}
             <Button
               variant="outlined"
               startIcon={<PhotoCamera />}

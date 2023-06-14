@@ -31,6 +31,7 @@ const ListMyConfirmClubThumnail = ({ club }) => {
   const onClickChatRoom = useCallback(
     (event) => {
       setField('shouldScroll', true);
+      setField('isInfiniteScroll', false);
       setField('chatRoomEntryNo', clubNo);
       setField('chatType', 1);
       setField('chatRoomLeader', club.clubLeaderNo);

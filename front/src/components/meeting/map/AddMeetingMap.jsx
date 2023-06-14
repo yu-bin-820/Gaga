@@ -1,14 +1,15 @@
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
 import { TextField } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCallback } from 'react';
 import AddMeetingMapDrawer from './AddMeetingMapDrawer';
 import MapIcon from '@mui/icons-material/Map';
 const { kakao } = window;
+import PropTypes from 'prop-types';
 
 
-const AddMeetingMap = () => {
+const AddMeetingMap = ({setNextButtonDisable}) => {
 
     const {
         meetingAddr,
@@ -18,6 +19,14 @@ const AddMeetingMap = () => {
         setField,
         onChangeField,
       } = useMeetingFormStore();
+
+      useEffect(() => {
+        if (meetingAddr) {
+          setNextButtonDisable(false);
+        } else {
+          setNextButtonDisable(true)
+        }
+      }, [setNextButtonDisable, meetingAddr, meetingDetailAddr]);
 
       const [position, setPosition] = useState()
 
@@ -33,8 +42,6 @@ const AddMeetingMap = () => {
         },
         []
       );
-
-
 
     const [ keyword, setKeyword] = useState()
     const [map, setMap] = useState()
@@ -53,13 +60,21 @@ const AddMeetingMap = () => {
           // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
           // LatLngBounds 객체에 좌표를 추가합니다
           const bounds = new kakao.maps.LatLngBounds()
-  
-          for (var i = 0; i < data.length; i++) {
+          let markers = []
 
+          for (var i = 0; i < data.length; i++) {
+            // @ts-ignore
+            markers.push({
+              position: {
+                lat: data[i].y,
+                lng: data[i].x,
+              },
+              content: data[i].place_name,
+            })
             // @ts-ignore
             bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x))
           }
-        //   setMarkers(markers)
+          // setMarkers(markers)
   
           // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
           map.setBounds(bounds)
@@ -164,5 +179,9 @@ const AddMeetingMap = () => {
         </Box>
     );
 };
+
+AddMeetingMap.propTypes = {
+  setNextButtonDisable: PropTypes.bool,
+  };
 
 export default AddMeetingMap;

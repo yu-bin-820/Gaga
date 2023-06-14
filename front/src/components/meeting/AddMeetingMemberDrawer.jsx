@@ -2,12 +2,12 @@ import { Button, Divider, Drawer, IconButton, Modal, Skeleton, Typography } from
 import { Box, Stack } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
 import AddMeetingMemberThumnail from './AddMeetingMemberThumnail';
-import { Payment } from '@mui/icons-material';
 import fetcher from '@utils/fetcher';
 import PropTypes from 'prop-types';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import axios from 'axios';
 import useSWR from 'swr';
+import Payment from '@pages/payment/Payment';
 
 const AddMeetingMemberDrawer = ({settingsAddMemberOpen, setSettingsAddMemberOpen, toggleSettingsAddMember, meetingNo}) => {
     const [meeting, setMeeting] = useState();
@@ -16,6 +16,11 @@ const AddMeetingMemberDrawer = ({settingsAddMemberOpen, setSettingsAddMemberOpen
         `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
         fetcher
         );
+
+        const {mutate: mutatePendingMemberList } = useSWR(
+            `${import.meta.env.VITE_SPRING_HOST}/rest/user/list/grouptype/2/no/${meetingNo}/state/1`,
+            fetcher
+          );
   
     useEffect(() => {
         axios
@@ -44,8 +49,10 @@ const AddMeetingMemberDrawer = ({settingsAddMemberOpen, setSettingsAddMemberOpen
                 await axios.post(
                     `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`,
                     data
-                ).then(
+                ).then(()=>{
                     setIsModalOpen(true)
+                    mutatePendingMemberList()
+                }
                 );
     
             } catch (error) {
@@ -162,10 +169,10 @@ const AddMeetingMemberDrawer = ({settingsAddMemberOpen, setSettingsAddMemberOpen
 };
 
 AddMeetingMemberDrawer.propTypes = {
-    settingsAddMemberOpen: PropTypes.bool.isRequired,
-    setSettingsAddMemberOpen: PropTypes.func.isRequired,
-    toggleSettingsAddMember: PropTypes.func.isRequired,
-    meetingNo: PropTypes.object.isRequired,
+    settingsAddMemberOpen: PropTypes.bool,
+    setSettingsAddMemberOpen: PropTypes.func,
+    toggleSettingsAddMember: PropTypes.func,
+    meetingNo: PropTypes.object,
     };
 
 export default AddMeetingMemberDrawer;

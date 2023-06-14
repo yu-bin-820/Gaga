@@ -47,10 +47,10 @@ const ListMeetingSearchBar = ({ keyword, handleKeywordChange, handleSubmit, top 
 };
 
 ListMeetingSearchBar.propTypes = {
-  keyword: PropTypes.object.isRequired,
-  handleKeywordChange: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  top: PropTypes.object.isRequired,
+  keyword: PropTypes.string,
+  handleKeywordChange: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  top: PropTypes.string,
 };
 
 export default ListMeetingSearchBar;

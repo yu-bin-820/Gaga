@@ -9,8 +9,10 @@ import dayjs from 'dayjs';
 import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
 import useSWR from 'swr';
+import PropTypes from 'prop-types';
 
-const AddMeeting1 = () => {
+
+const AddMeeting1 = ({setSettingsAddMeetingOpen, setActiveStep}) => {
   const [alignment, setAlignment] = useState(null);
   const [showEntryFee, setShowEntryFee] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,6 +23,9 @@ const AddMeeting1 = () => {
     if (newAlignment === "left") {
       setField("entryFee", "0");
     }
+    console.log("alignment",alignment)
+    console.log("newAlignment",newAlignment)
+
   };
 
   const {
@@ -48,7 +53,7 @@ const AddMeeting1 = () => {
     reset
   } = useMeetingFormStore();
 
-  const { data: myData, mutate: mutateMe } = useSWR(
+  const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
@@ -58,7 +63,7 @@ const AddMeeting1 = () => {
     event.preventDefault();
 
 
-    if (!filterTag || !meetingName || !meetingAddr || !meetingDate || !meetingStartTime) {
+    if (alignment==='right' && entryFee==('0'||null) ){
       setIsModalOpen(true);
       return;
     }
@@ -86,21 +91,23 @@ const AddMeeting1 = () => {
       formData.append('meetingLeaderNo', myData.userNo);
       formData.append('parentClubNo', parentClubNo);
       formData.append('parentMeetingNo', parentMeetingNo);
-
-      const response = await axios.post(
+      console.log('!!!!!!',formData)
+      await axios.post(
         `${import.meta.env.VITE_SPRING_HOST}/rest/meeting`,
         formData
-      );
-      reset();
-
-      console.log(response.data);
-      navigate(`/community/profile/mine`);
+      ).then((response)=>{
+        reset();
+        setActiveStep(0);
+        setSettingsAddMeetingOpen(false);
+        navigate(`/meeting/meetingno/${response.data}`);
+      });
+    
     } catch (error) {
       console.error(error);
     }
-  }, [filterTag, meetingName, meetingAddr,meetingDate, meetingStartTime, meetingEndTime, filterGender, 
+  }, [alignment, filterTag, meetingName, meetingAddr,meetingDate, meetingStartTime, meetingEndTime, filterGender, 
     filterMinAge, filterMaxAge, entryFee, file, mainCategoryNo, meetingDetailAddr, meetingIntro, meetingLat,
-     meetingLng, meetingMaxMemberNo, myData.userNo, navigate, parentClubNo, parentMeetingNo, reset]);
+     meetingLng, meetingMaxMemberNo, myData.userNo, navigate, parentClubNo, parentMeetingNo, reset, setSettingsAddMeetingOpen, setActiveStep]);
 
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
@@ -154,7 +161,7 @@ const AddMeeting1 = () => {
       <Modal open={isModalOpen} onClose={handleCloseModal}>
         <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'white', p: 3 }}>
           <Typography variant="body1" component="div" sx={{ mb: 2 }}>
-            모임 이름과 목적, 모임위치, 모임날짜 및 시간은 반드시 입력해주세요.
+            참가비가 있음을 선택할 경우 금액을 입력해 주세요.
           </Typography>
           <Button variant="contained" onClick={handleCloseModal}>확인</Button>
         </Box>
@@ -163,5 +170,9 @@ const AddMeeting1 = () => {
     </Box>
   );
 };
+AddMeeting1.propTypes = {
+  setSettingsAddMeetingOpen: PropTypes.func,
+  setActiveStep: PropTypes.func,
+  };
 
 export default AddMeeting1;
