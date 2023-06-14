@@ -24,6 +24,12 @@ const GetGroupChat = () => {
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+
+  const { data: roomLeaderData } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/userno/${chatRoomLeader}`,
+    fetcher
+  );
+
   const isMeeting = chatType === 2;
   const [socket, disconnect] = useSocket(isMeeting ? 'meeting' : 'club');
 
@@ -81,8 +87,8 @@ const GetGroupChat = () => {
     groupMessagesData ? groupMessagesData.flat().reverse() : []
     // groupMessagesData ? [...groupMessagesData] : []
   );
-
-  if (!groupMessagesData || !socket) {
+  console.log(chatRoomLeader, roomLeaderData);
+  if (!groupMessagesData || !socket || !roomLeaderData) {
     return <>로딩</>;
   }
 
@@ -93,7 +99,7 @@ const GetGroupChat = () => {
       <GetChatTop
         groupType={chatType}
         groupNo={chatRoomEntryNo}
-        groupLeader={chatRoomLeader}
+        groupLeader={roomLeaderData}
       />
       <Box ref={boxRef}>
         <ChatList chatData={chatData} setSize={setSize} />

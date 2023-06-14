@@ -1,18 +1,15 @@
-import { Avatar, Button, Divider, List, ListItem, Rating, SwipeableDrawer, TextField } from '@mui/material';
+import { Avatar, Button, Divider, Drawer, List, ListItem, Rating, TextField } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CancelIcon from '@mui/icons-material/Cancel';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router';
 import useInput from '@hooks/common/useInput';
 import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
 import PropTypes from 'prop-types';
 
-
-const UpdateMeetingReviewDrawer = ({settingsUpdateReviewOpen, setSettingsUpdateReviewOpen, toggleSettingsUpdateReview}) => {
-    const { reviewno } = useParams();
+const UpdateMeetingReviewDrawer = ({settingsUpdateReviewOpen, setSettingsUpdateReviewOpen, toggleSettingsUpdateReview, reviewno}) => {
     const [meetingReview, onChangeMeetingReview, setMeetingReview] = useInput({
       meetingScore: '',
       meetingReviewImg: '',
@@ -20,18 +17,12 @@ const UpdateMeetingReviewDrawer = ({settingsUpdateReviewOpen, setSettingsUpdateR
       meetingNo: '',
     });
   
-    const {data : meetingReviewList, mutate: mutateMeetingReviewList } = useSWR(
+    const {mutate: mutateMeetingReviewList } = useSWR(
       `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/${meetingReview?.meetingNo}`,
       fetcher
   );
   
-    const [selectedImage, setSelectedImage] = useState(
-      meetingReview?.meetingReviewImg
-        ? `${import.meta.env.VITE_CDN_HOST}/upload_images/meeting/${
-            meetingReview?.meetingReviewImg
-          }`
-        : null
-    );
+    const [selectedImage, setSelectedImage] = useState(    );
     const [selectedFile, setSelectedFile] = useState(null);
   
     const onChangeImg = (event) => {
@@ -50,9 +41,9 @@ const UpdateMeetingReviewDrawer = ({settingsUpdateReviewOpen, setSettingsUpdateR
           setMeetingReview(response.data);
           setSelectedImage(
             response.data?.meetingReviewImg
-              ? `${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
+              ? `${import.meta.env.VITE_CDN_HOST}/upload_images/meeting/${
                   response.data?.meetingReviewImg
-                }`
+                }?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`
               : null
           );
         })
@@ -60,10 +51,8 @@ const UpdateMeetingReviewDrawer = ({settingsUpdateReviewOpen, setSettingsUpdateR
           console.log(error);
         });
     }, [reviewno, setMeetingReview]);
-  
-    const navigate = useNavigate();
-  
-    const handleSubmit = useCallback(() => {
+    
+    const handleSubmit = useCallback((event) => {
       event.preventDefault();
   
       try {
@@ -87,16 +76,17 @@ const UpdateMeetingReviewDrawer = ({settingsUpdateReviewOpen, setSettingsUpdateR
             mutateMeetingReviewList()
           });
   
-        navigate(`/meeting/meetingno/${meetingReview.meetingNo}`);
+          setSettingsUpdateReviewOpen(false);
+
   
         console.log(response.data);
       } catch (error) {
         console.error(error);
       }
-    }, [meetingReview, selectedFile, navigate]);
+    }, [meetingReview, selectedFile, mutateMeetingReviewList, reviewno, setSettingsUpdateReviewOpen]);
 
     return (
-        <SwipeableDrawer
+        <Drawer
             anchor="right"
             open={settingsUpdateReviewOpen}
             onClose={toggleSettingsUpdateReview(false)}
@@ -109,7 +99,7 @@ const UpdateMeetingReviewDrawer = ({settingsUpdateReviewOpen, setSettingsUpdateR
                         onClick={() => {
                             setSettingsUpdateReviewOpen(false);
                         }}>
-                            확인
+                            닫기
                         </Button>
                         <Box
                             sx={{
@@ -223,14 +213,15 @@ const UpdateMeetingReviewDrawer = ({settingsUpdateReviewOpen, setSettingsUpdateR
             수정하기
           </Button>
         </Stack>
-        </SwipeableDrawer>
+        </Drawer>
     );
 };
 
 UpdateMeetingReviewDrawer.propTypes = {
-    settingsUpdateReviewOpen: PropTypes.object.isRequired,
-    setSettingsUpdateReviewOpen: PropTypes.object.isRequired,
-    toggleSettingsUpdateReview: PropTypes.object.isRequired,
+    settingsUpdateReviewOpen: PropTypes.bool.isRequired,
+    setSettingsUpdateReviewOpen: PropTypes.func.isRequired,
+    toggleSettingsUpdateReview: PropTypes.func.isRequired,
+    reviewno: PropTypes.object.isRequired,
     };
 
 export default UpdateMeetingReviewDrawer;

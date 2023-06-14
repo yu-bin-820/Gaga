@@ -5,7 +5,7 @@ import { Stack } from '@mui/system';
 import Payment from '@pages/payment/Payment';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import useSWR from 'swr';
 
@@ -14,7 +14,7 @@ const AddMeetingMember = () => {
   const [meeting, setMeeting] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-  const { data: myData, mutate: mutateMe } = useSWR(
+  const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
@@ -43,7 +43,7 @@ const AddMeetingMember = () => {
 
         console.log(data);
 
-        const response = await axios.post(
+        await axios.post(
           `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`,
           data
         );

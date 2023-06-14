@@ -142,7 +142,7 @@ const GetMyProfile = () => {
                 alt={myData?.nickName}
                 src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                   myData?.profileImg
-                }`}
+                }?type=f_sh&w=76&h=76&autorotate=false&faceopt=true&sharp_amt=1.0`}
                 sx={{ width: 76, height: 76, marginRight: '100px' }}
               />
             </div>
@@ -250,17 +250,17 @@ const GetMyProfile = () => {
               <CustomedImageListItem
                 src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                   myData?.activityImg
-                }`}
+                }?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`}
               />
               <CustomedImageListItem
                 src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                   myData?.activityImg2
-                }`}
+                }?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`}
               />
               <CustomedImageListItem
                 src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                   myData?.activityImg3
-                }`}
+                }?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`}
               />
             </ImageList>
           </Box>

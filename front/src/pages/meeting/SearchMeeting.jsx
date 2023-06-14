@@ -17,6 +17,18 @@ const SearchMeeting = () => {
     setField('currentPage', 1);
   }, [navigate, searchKeyword]);
 
+  const onKeydownChat = useCallback(
+    (e) => {
+      if (e.key === 'Enter') {
+         if (!e.shiftKey) {
+        e.preventDefault();
+        onClickSearch(e);
+         }
+      }
+    },
+    [onClickSearch]
+  );
+
   return (
     <div>
       <CommonTop />
@@ -34,6 +46,7 @@ const SearchMeeting = () => {
               variant="standard"
               value={searchKeyword}
               onChange={(e) => setField('searchKeyword', e.target.value)}
+              onKeyDown={onKeydownChat}
             />
           </Grid>
           <Grid item>

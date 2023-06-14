@@ -1,96 +1,91 @@
-import ClubThumbnail from '@components/club/ClubThumbnail';
-import MeetingThumbnail from '@components/meeting/MeetingThumnail';
-import useSearchClubFormStore from '@hooks/club/useSearchClubFormStore';
-import useSearchMeetingFormStore from '@hooks/meeting/useSearchMeetingFormStore';
 import CommonTop from '@layouts/common/CommonTop';
-import { Button } from '@mui/material';
 import { Box } from '@mui/system';
-import axios from 'axios';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useCallback, useRef } from 'react';
+import useSWRInfinite from 'swr/infinite';
+import fetcher from '@utils/fetcher';
+import useSearchClubFormStore from '@hooks/club/useSearchClubFormStore';
+import ClubThumbnail from '@components/club/ClubThumbnail';
+import useClubFormStore from '@hooks/club/useClubFormStore';
+import useClubStore from '@stores/club/useClubStore';
 
 const ListSearchClub = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [clubList, setClubList] = useState();
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const boxRef = useRef(null);
 
   const { searchKeyword } = useSearchClubFormStore();
 
-  useEffect(() => {
-    fetchData();
-  }, [searchKeyword]);
-
-  useEffect(() => {
-    // 스크롤 이벤트 리스너 등록
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      // 컴포넌트 언마운트 시 스크롤 이벤트 리스너 해제
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  const fetchData = async () => {
-    setLoading(true);
-    const data = {
-      currentPage: currentPage,
-      searchKeyword: searchKeyword,
-    };
-
-    console.log(data);
-
-    const response = await axios.post(
-      `${import.meta.env.VITE_SPRING_HOST}/rest/club/search`,
-      data
-    );
-    const newData = await response.data;
-
-    console.log(newData);
-
-    setClubList((prevData) => [...(prevData || []), ...newData]);
-    setCurrentPage((prevPage) => prevPage + 1);
-    setLoading(false);
-  };
-
-  const onClickClub = useCallback((event) => {
-    const { id } = event.target;
-    navigate(`/club/no/${id}`);
-  }, []);
-
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >= document.body.offsetHeight &&
-      !loading
-    ) {
-      fetchData();
+  const getKey = (index, prevPageData) => {
+    if (prevPageData && !prevPageData.length) {
+      return null;
     }
+
+    return `${import.meta.env.VITE_SPRING_HOST}/rest/club/search?page=${
+      index + 1
+    }&searchKeyword=${searchKeyword}`;
   };
+
+  const { data: clubListData, setSize } = useSWRInfinite(getKey, fetcher);
+
+  const onScroll = useCallback(
+    (e) => {
+      if (
+        e.currentTarget.scrollTop + e.currentTarget.clientHeight ==
+        e.currentTarget.scrollHeight
+      ) {
+        setSize((prevSize) => prevSize + 1).then(() => {
+          console.log(setSize);
+          const current = boxRef?.current;
+          if (current && e.currentTarget) {
+            const scrollTopOffset =
+              e.currentTarget.scrollHeight -
+              e.currentTarget.clientHeight -
+              current.scrollHeight;
+            current.scrollTo({ top: current.scrollTop + scrollTopOffset });
+          }
+        });
+      }
+    },
+    [boxRef, setSize]
+  );
+
+  const clubList = clubListData?.flat();
+
+  if (!clubList) {
+    return <>로딩중</>;
+  }
+
+  console.log(clubList);
 
   return (
-    <div style={{ backgroundColor: '#ededed' }}>
+    <Box
+      ref={boxRef}
+      onScroll={onScroll}
+      style={{
+        maxHeight: '100vh',
+        overflow: 'scroll',
+      }}
+    >
       <CommonTop />
-      <Box
-        sx={{
-          paddingTop: '64px',
-          paddingBottom: '1px',
-          marginBottom: '64px',
-          bgcolor: '#ededed',
-        }}
-      >
-        {clubList?.map((club, i) => (
-          <Box
-            key={i}
-            sx={{
-              marginRight: '10px',
-              marginLeft: '10px',
-              marginBottom: '5px',
-            }}
-          >
-            <ClubThumbnail club={club} />
-          </Box>
-        ))}
+      <Box></Box>
+      <Box sx={{ bgcolor: '#ededed' }}>
+        <Box
+          sx={{ paddingTop: '60px', paddingBottom: '5px', bgcolor: '#ededed' }}
+        >
+          {clubList?.map((club, i) => (
+            <Box
+              key={i}
+              sx={{
+                margin: 1,
+                borderRadius: 3,
+                minWidth: 300,
+                backgroundColor: '#ffffff',
+              }}
+            >
+              <ClubThumbnail club={club} />
+            </Box>
+          ))}
+        </Box>
       </Box>
-    </div>
+    </Box>
   );
 };
 

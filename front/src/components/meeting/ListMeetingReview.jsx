@@ -5,33 +5,39 @@ import React, { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
+import UpdateMeetingReviewDrawer from './UpdateMeetingReviewDrawer';
 
 
 const ListMeetingReview = () => {
     const { meetingno } = useParams();
     const navigate = useNavigate();
+    const [settingsUpdateReviewOpen, setSettingsUpdateReviewOpen] = useState(false);
+    const [ reviewNo, setReviewNo] = useState(0);
+
 
     const { data: myData, mutate: mutateMe } = useSWR(
         `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
         fetcher
         );
 
-    const [imageLoadingError, setImageLoadingError] = useState(false);
-
-    const handleImageError = useCallback(() => {
-      setImageLoadingError(true);
-    }, []);
-
-
     const {data : meetingReviewList, mutate: mutateMeetingReviewList } = useSWR(
         `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/${meetingno}`,
         fetcher
     );
 
-        const onClickUpdateMeetingReview = React.useCallback(()=>{
-            const { id } = event.target;
-            navigate(`/meeting/review/updatereview/reviewno/${id}`);
-            },[navigate]);
+    const onClickUpdateMeetingReview = useCallback((e) => {
+        // navigate('/settings');
+        const { id } = e.target;
+        console.log(id);
+        setReviewNo(id);
+        setSettingsUpdateReviewOpen(true);
+      }, []);
+      const toggleSettingsUpdateReview = useCallback(
+        (state) => () => {
+            setSettingsUpdateReviewOpen(state);
+        },
+        []
+      );
 
         const onClickDelete = useCallback(
             
@@ -48,13 +54,13 @@ const ListMeetingReview = () => {
                     const response = await axios.delete(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`, {
                         data: data,
                     });
-                    navigate(`/meeting/meetingno/${meetingno}`)
+                    mutateMeetingReviewList()
                     
                 } catch (error) {
                     console.error(error);
                 }
             },
-            [meetingno, navigate]
+            [mutateMeetingReviewList]
         );
         console.log(meetingReviewList)
 
@@ -108,8 +114,14 @@ const ListMeetingReview = () => {
                     </Stack>
                     )}
                     </Box>
-                    
                 ))}
+
+                <UpdateMeetingReviewDrawer
+                settingsUpdateReviewOpen={settingsUpdateReviewOpen}
+                setSettingsUpdateReviewOpen={setSettingsUpdateReviewOpen}
+                toggleSettingsUpdateReview={toggleSettingsUpdateReview} 
+                reviewno={reviewNo}
+                />
             </Box>
         </Box>
     );

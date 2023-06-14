@@ -43,9 +43,9 @@ const AddMeetingMemberThumnail = ({ meeting }) => {
       >
         {meeting?.meetingImg ? (
           <img
-            src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/meeting/${
+            src={`${import.meta.env.VITE_CDN_HOST}/upload_images/meeting/${
               meeting?.meetingImg
-            }`}
+            }?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`}
             alt='noImg'
             loading='lazy'
             style={{ borderRadius: '7px' }}

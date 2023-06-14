@@ -66,9 +66,9 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
         >
           {!isMe && isShowProfile && (
             <Avatar
-              src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+              src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                 data?.Sender.profile_img
-              }`}
+              }?type=f_sh&w=76&h=76&autorotate=false&faceopt=true&sharp_amt=1.0`}
               alt="Remy Sharp"
               sx={{ marginLeft: '10px' }}
             />
@@ -135,7 +135,9 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
               )}
               {data.content_type_no == 2 && (
                 <img
-                  src={`${import.meta.env.VITE_CDN_HOST}/${data.content}`}
+                  src={`${import.meta.env.VITE_CDN_HOST}/${
+                    data.content
+                  }?type=w&w=200`}
                   alt="error"
                   loading="lazy"
                   style={{

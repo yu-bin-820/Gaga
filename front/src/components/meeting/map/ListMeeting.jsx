@@ -1,5 +1,5 @@
-import { CircularProgress, Skeleton } from "@mui/material";
-import { Box, Stack } from "@mui/system";
+import { Skeleton } from "@mui/material";
+import { Box } from "@mui/system";
 import fetcher from "@utils/fetcher";
 import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -37,7 +37,7 @@ const ListMeeting = () => {
 
     const ps = new kakao.maps.services.Places()
 
-    ps.keywordSearch(keyword, (data, status, _pagination) => {
+    ps.keywordSearch(keyword, (data, status) => {
       if (status === kakao.maps.services.Status.OK) {
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가합니다
@@ -57,7 +57,7 @@ const ListMeeting = () => {
   }, [map, keyword])
   
 
-  const { data: myData, mutate: mutateMe } = useSWR(
+  const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
@@ -130,7 +130,7 @@ const ListMeeting = () => {
 
   if (!latitude || !longtitude) {
     return (
-      <Skeleton variant="rectangular" width={'100vw'} height={'100vh'} />
+      <Skeleton animation="wave" variant="rectangular" width={'100vw'} height={'100vh'} />
 
     );
   }
@@ -150,7 +150,7 @@ const ListMeeting = () => {
       <ListMeetingChip
         onClick={onClickMeetingSearch}
       />
-        {meetingList?.map((meeting, index) => (
+        {meetingList?.map((meeting) => (
           <EventMarkerContainer
             key={`EventMarkerContainer-${meeting.meetingNo}`}
             meetingLat={meeting.meetingLat}

@@ -58,7 +58,7 @@ const AddMeeting1 = () => {
     event.preventDefault();
 
 
-    if (!filterTag || !meetingName || !meetingAddr) {
+    if (!filterTag || !meetingName || !meetingAddr || !meetingDate || !meetingStartTime) {
       setIsModalOpen(true);
       return;
     }
@@ -154,7 +154,7 @@ const AddMeeting1 = () => {
       <Modal open={isModalOpen} onClose={handleCloseModal}>
         <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'white', p: 3 }}>
           <Typography variant="body1" component="div" sx={{ mb: 2 }}>
-            모임 이름과 목적, 모임위치는 반드시 입력해주세요.
+            모임 이름과 목적, 모임위치, 모임날짜 및 시간은 반드시 입력해주세요.
           </Typography>
           <Button variant="contained" onClick={handleCloseModal}>확인</Button>
         </Box>
