@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.gaga.bo.objectSotrage.S3Uploader;
 import com.gaga.bo.service.admin.AdminService;
 import com.gaga.bo.service.domain.NoticePost;
 import com.gaga.bo.service.domain.Report;
@@ -51,45 +52,12 @@ public class AdminRestController {
 	@Autowired
 	private ResourceLoader resourceLoader;
 
+	@Autowired
+	private S3Uploader s3Uploader;
+	
 	@Value("${fileUploadPath}")
 	String fileUploadPath;
-/*
-	@PostMapping("addNoticePost")
-	public void addNoticePost(
-			@ModelAttribute NoticePost noticePost, @RequestParam(value = "file", required = false) MultipartFile file,
-	                                             @RequestParam("noticePostTitle") String noticePostTitle,
-	                                             @RequestParam("noticePostText") String noticePostText,
-	                                             @RequestParam("noticePostCategory") int noticePostCategoryNo,
-	                                             @RequestParam("userNo") int userNo,
-	                                             HttpSession session) throws Exception {
 
-	    Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
-		File uploadDir = resource.getFile();
-		
-		File dir = new File(uploadDir, "admin");
-		    if (!dir.exists()) {
-		        dir.mkdirs();
-		    }
-
-		    
-	    if (file != null) {
-	        String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-	        String uuidFileName = UUID.randomUUID().toString() + ext;
-	        file.transferTo(new File(uploadDir, "admin/"+uuidFileName));
-	        noticePost.setNoticePostImg(uuidFileName);
-	    }
-	    noticePost.setNoticePostTitle(noticePostTitle);
-	    noticePost.setNoticePostText(noticePostText);
-	    
-	    noticePost.setNoticePostRegDate(LocalDateTime.now());
-	    noticePost.setNoticePostCategoryNo(noticePostCategoryNo);
-	    noticePost.setUserNo(userNo);
-	    adminService.addNoticePost(noticePost);
-	    int noticePostNo = noticePost.getNoticePostNo();
-	    System.out.println(noticePostNo + "노티스포스트남바");
-
-	}
-	*/
 	@PostMapping("addNoticePost")
 	public void addNoticePost(
 	        @ModelAttribute NoticePost noticePost,
@@ -101,13 +69,12 @@ public class AdminRestController {
 	        @RequestParam("userNo") int userNo,
 	        @RequestParam(value = "qnaCategory", required = false) Integer qnaCategory) throws Exception {
 
+		
 	    String uuidFileName = handleFileUpload(file);
 	    if (uuidFileName != null) {
 	        noticePost.setNoticePostImg(uuidFileName);
 	    }
-	    System.out.println(uuidFileName+"uuidFIle");
-	    System.out.println("noticePostCategoryNo :  ::: :::"+noticePostCategoryNo);
-	    System.out.println("thumbNail :  ::: :::"+thumbNailFile);
+
 	    if (noticePostCategoryNo == 1 && thumbNailFile != null) {
 	        String thumbNailName = handleFileUpload(thumbNailFile);
 	        if (thumbNailName != null) {
@@ -133,27 +100,23 @@ public class AdminRestController {
 	}
 	
 	public String handleFileUpload(MultipartFile file) throws Exception {
-	    if (file == null) {
+	    if (file  == null) {
 	        return null;
 	    }
-
+	    
 	    String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 	    String uuidFileName = UUID.randomUUID().toString() + ext;
 
-	    Resource resource = resourceLoader.getResource("classpath:" + fileUploadPath);
-	    File uploadDir = resource.getFile();
-	    File dir = new File(uploadDir, "admin");
-	    if (!dir.exists()) {
-	        dir.mkdirs();
-	    }
-
-	    file.transferTo(new File(dir, uuidFileName));
+	    // 생성된 파일 이름으로 S3에 파일 업로드
+	    String fileName = "admin/" + uuidFileName;
+	    s3Uploader.uploadFiles(file, fileName);
 
 	    return uuidFileName;
 	}
 	
 	@PutMapping(value = "updateNoticePost/noticePostNo/{noticePostNo}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<NoticePost> updateNoticePost(
+			@ModelAttribute NoticePost noticePost,
 	        @PathVariable int noticePostNo,
 	        @RequestParam(value = "file", required = false) MultipartFile file,
 	        @RequestParam("noticePostTitle") String noticePostTitle,
@@ -161,21 +124,34 @@ public class AdminRestController {
 	        @RequestParam("noticePostCategory") int noticePostCategoryNo,
 	        @RequestParam(value = "thumbNailFile", required = false) MultipartFile thumbNailFile,
 	        @RequestParam(value = "qnaCategory", required = false) Integer qnaCategory) throws Exception {
+		
+	    adminService.getNoticePost(noticePostNo);
 
-	    NoticePost noticePost = adminService.getNoticePost(noticePostNo);
-	    if (noticePost == null) {
-	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    }
 
-	    String uuidFileName = handleFileUpload(file);
-	    if (uuidFileName != null) {
+
+	    if (file != null) {
+	    	String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+			String uuidFileName = UUID.randomUUID().toString()+ext;
+	
+//			file.transferTo(new File(uploadDir,"community/"+uuidFileName));
+			String fileName = "admin/" + uuidFileName;
+	        String message = s3Uploader.uploadFiles(file, fileName);
+	        System.out.println(":: updateReport() S3 Message file :: "+message);
 	        noticePost.setNoticePostImg(uuidFileName);
 	    }
 
 	    if (noticePostCategoryNo == 1 && thumbNailFile != null) {
-	        String thumbNailName = handleFileUpload(thumbNailFile);
-	        if (thumbNailName != null) {
-	        	noticePost.setThumbNail(thumbNailName);
+	       
+	        if (thumbNailFile != null) {
+	        	String ext = thumbNailFile.getOriginalFilename().substring(thumbNailFile.getOriginalFilename().lastIndexOf("."));
+				String uuidThumbFileName = UUID.randomUUID().toString()+ext;
+		
+//				file.transferTo(new File(uploadDir,"community/"+uuidFileName));
+				
+				String fileName = "admin/" + uuidThumbFileName;
+		        String message = s3Uploader.uploadFiles(thumbNailFile, fileName);
+		        System.out.println(":: updateReport() S3 Message file :: "+message);
+	        	noticePost.setThumbNail(uuidThumbFileName);
 		    }	        
 	    }
 	    
@@ -278,6 +254,11 @@ public class AdminRestController {
 		}
 	}
 	
+	@GetMapping("selectQnaByCategory")
+    public List<NoticePost> selectQnaByCategory(@RequestParam("qnaCategory") int qnaCategory) throws Exception {
+        return adminService.selectQnaByCategory(qnaCategory);
+    }
+	
 	@GetMapping("searchBlackList")
 	public List<User> searchBlackList(@RequestParam("searchKeyword") String searchKeyword) throws Exception {
 	    System.out.println("서버로부터 날라온 키워드"+searchKeyword);
@@ -291,17 +272,12 @@ public class AdminRestController {
 	    String decodedKeyword = URLDecoder.decode(searchKeyword, "UTF-8");
 	    return adminService.searchUser(decodedKeyword);
 	}
-/*
-	@GetMapping("getUserList")
-	public ResponseEntity<List<User>> getUserList(@RequestParam int lastUserNo) throws Exception {
-		List<User> users = adminService.getUserList(lastUserNo);
-		return ResponseEntity.ok(users);
-	}
-	*/
+
 	@GetMapping("getUserList")
 	public List<User> getUserList(@RequestParam int lastUserNo) throws Exception {
         return adminService.getUserList(lastUserNo);
     }
+	
 	@GetMapping("getUser/userNo/{userNo}")
 	public ResponseEntity<User> getUser(@PathVariable int userNo) throws Exception {
 		User user = adminService.getUser(userNo);
@@ -329,26 +305,7 @@ public class AdminRestController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("블랙리스트 변경 중 오류가 발생했습니다.");
 		}
 	}
-/*
-	@GetMapping("getBlackListList")
-	public ResponseEntity<List<User>> getBlackListList(@RequestParam int lastUserNo) {
-		System.out.println("hi it is blackList");
-		try {
-			List<User> blacklist = adminService.getBlackListList(lastUserNo);
-			List<User> filteredBlacklist = new ArrayList<>();
 
-			for (User user : blacklist) {
-				int blackListNo = user.getBlacklist();
-				if (blackListNo != 0) {
-					filteredBlacklist.add(user);
-				}
-			}
-			return ResponseEntity.ok(filteredBlacklist);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-		}
-	}
-	*/
 	@GetMapping("getBlackListList")
 	public List<User> getBlackListList(@RequestParam int lastUserNo) throws Exception {
         return adminService.getBlackListList(lastUserNo);
@@ -366,11 +323,6 @@ public class AdminRestController {
 	}
 
 	// 신고게시판
-//	@GetMapping("getReportAdmin/{reportedNo}")
-//	public ResponseEntity<List<Report>> getReportAdmin(@PathVariable int reportedNo) throws Exception {
-//		List<Report> reports = adminService.getReportAdmin(reportedNo);
-//		return ResponseEntity.ok(reports);
-//	}
 
 	@GetMapping("getReportAdminList")
 	public ResponseEntity<List<Report>> getReportList(@RequestParam("userNo") int userNo,

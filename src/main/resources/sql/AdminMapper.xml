@@ -206,6 +206,12 @@
 		#{noticePostNo}
 	</delete>
 
+	<select id="selectQnaByCategory" parameterType="int" 	resultMap="noticePostResult">
+		select * from notice_posts 
+		where notice_post_category_no = 2 
+		and qna_category = #{qnaCategory}
+	</select>
+
 	<!-- 블랙리스트 CRUD -->
 	<insert id="addBlackList"
 		parameterType="com.gaga.bo.service.domain.User">
