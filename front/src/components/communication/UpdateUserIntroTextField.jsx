@@ -7,15 +7,16 @@ import useSWR from 'swr';
 import useInputOrigin from '@hooks/common/useInputOrigin';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import ClearIcon from '@mui/icons-material/Clear';
+import useLimitInput from '@hooks/common/useLimitInput';
 
 const UpdateUserIntroTextField = ({ isUpdateIntro, setIsUpdateIntro }) => {
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
-  const [userIntro, onChangeUserIntro, setUserIntro] = useInputOrigin(
-    myData?.userIntro
-  );
+  const [userIntro, onChangeUserIntro, setUserIntro, introLength] =
+    useLimitInput(myData?.userIntro, 60);
   const onClickUpdateIntro = useCallback(() => {
     axios
       .patch(
@@ -31,6 +32,11 @@ const UpdateUserIntroTextField = ({ isUpdateIntro, setIsUpdateIntro }) => {
         console.dir(error);
       });
   }, [isUpdateIntro, myData, userIntro, mutateMe, setIsUpdateIntro]);
+
+  const onClickCancelUpdateIntro = useCallback(() => {
+    setIsUpdateIntro(false);
+  }, [setIsUpdateIntro]);
+
   return (
     <Stack
       direction={'row'}
@@ -53,11 +59,19 @@ const UpdateUserIntroTextField = ({ isUpdateIntro, setIsUpdateIntro }) => {
         value={userIntro}
         onChange={onChangeUserIntro}
         autoFocus
+        helperText={`${introLength}/180 bytes`}
       />
-
-      <IconButton sx={{ marginLeft: 'auto' }} onClick={onClickUpdateIntro}>
-        <CheckIcon />
-      </IconButton>
+      <Stack>
+        <IconButton sx={{ marginLeft: 'auto' }} onClick={onClickUpdateIntro}>
+          <CheckIcon />
+        </IconButton>
+        <IconButton
+          sx={{ marginLeft: 'auto' }}
+          onClick={onClickCancelUpdateIntro}
+        >
+          <ClearIcon />
+        </IconButton>
+      </Stack>
     </Stack>
   );
 };
