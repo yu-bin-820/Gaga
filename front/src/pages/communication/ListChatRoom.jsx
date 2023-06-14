@@ -155,24 +155,22 @@ export default function ListChatRoom() {
                       ? {
                           chatRoomEntryNo: group.meeting_no,
                           chatType: 2,
-                          chatRoomLeader: group.MeetingLeader,
+                          chatRoomLeader: group.MeetingLeader.user_no,
                         }
                       : {
                           chatRoomEntryNo: group.club_no,
                           chatType: 1,
-                          chatRoomLeader: group.ClubLeader,
+                          chatRoomLeader: group.ClubLeader.user_no,
                         }
                   )}
                   onClick={onClickGroupChatOne}
                 >
                   <ChatItem
-                    avatar={`${
-                      import.meta.env.VITE_CDN_ORIGIN_HOST
-                    }/upload_images/${
+                    avatar={`${import.meta.env.VITE_CDN_HOST}/upload_images/${
                       group.meeting_name ? 'meeting' : 'club'
                     }/${
                       group.meeting_name ? group.meeting_img : group.club_img
-                    }`}
+                    }?type=f_sh&w=76&h=76&autorotate=false&faceopt=true&sharp_amt=1.0`}
                     alt={`${
                       import.meta.env.VITE_CDN_ORIGIN_HOST
                     }/uploads/group_alt.jpg`}
@@ -201,12 +199,12 @@ export default function ListChatRoom() {
                 >
                   <ChatItem
                     avatar={`${
-                      import.meta.env.VITE_CDN_ORIGIN_HOST
+                      import.meta.env.VITE_CDN_HOST
                     }/upload_images/user/${
                       direct.Receiver
                         ? direct.Receiver?.profile_img
                         : direct.Sender?.profile_img
-                    }`}
+                    }?type=f_sh&w=76&h=76&autorotate=false&faceopt=true&sharp_amt=1.0`}
                     alt={`${
                       import.meta.env.VITE_EXPRESS_HOST
                     }/uploads/user_alt.jpg`}

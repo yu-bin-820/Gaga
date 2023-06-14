@@ -36,7 +36,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
   );
 
   const isMeeting = groupType == 2;
-  const isLeader = myData?.userNo == groupLeader.user_no;
+  const isLeader = myData?.userNo == groupLeader.userNo;
 
   const { data: memberData } = useSWR(
     `${
@@ -182,7 +182,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
               <Divider />
               <ListItem
                 onClick={onClickChatMember}
-                data-value={groupLeader.user_no}
+                data-value={groupLeader.userNo}
               >
                 <Stack direction={'row'} spacing={2} alignItems={'center'}>
                   <Avatar
@@ -191,7 +191,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
                       groupLeader.profile_img
                     }`}
                   />
-                  <Typography>{groupLeader.nick_name}</Typography>
+                  <Typography>{groupLeader.nickName}</Typography>
                 </Stack>
               </ListItem>
               {memberData?.map((member, i) => (
