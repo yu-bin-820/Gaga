@@ -18,9 +18,18 @@ import { useNavigate, useParams } from 'react-router';
 import { Box } from '@mui/system';
 import DeleteClubDialog from '@components/club/DeleteClubDialog';
 import useUpdateClubFormStore from '@stores/club/useUpdateClubFormStore';
+import useCommunityStore from '@stores/communication/useCommunityStore';
 
 const GetClubTop = () => {
   const { clubNo } = useParams();
+
+  const {
+    setField,
+    prevChatRoomEntryNo,
+    prevChatType,
+    prevChatRoomLeader,
+    prevPath,
+  } = useCommunityStore();
 
   const { reset } = useUpdateClubFormStore();
 
@@ -47,6 +56,21 @@ const GetClubTop = () => {
     [navigate, reset, clubNo]
   );
 
+  const onClickPrev = useCallback(() => {
+    setField('chatRoomEntryNo', prevChatRoomEntryNo);
+    setField('chatType', prevChatType);
+    setField('chatRoomLeader', prevChatRoomLeader);
+
+    navigate(prevPath || -1);
+  }, [
+    prevPath,
+    prevChatRoomEntryNo,
+    prevChatType,
+    prevChatRoomLeader,
+    setField,
+    navigate,
+  ]);
+
   const [deleteClubDialogOpen, setDeleteClubDialogOpen] = useState(false);
 
   const onClickDeleteSelect = useCallback(() => {
@@ -63,11 +87,7 @@ const GetClubTop = () => {
       >
         <Container maxWidth='xl'>
           <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
-            <IconButton
-              onClick={() => {
-                navigate(-1);
-              }}
-            >
+            <IconButton onClick={onClickPrev}>
               <ArrowBackIosNewIcon />
             </IconButton>
 
