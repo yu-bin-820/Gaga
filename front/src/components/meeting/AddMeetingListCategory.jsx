@@ -1,11 +1,12 @@
 import { Box } from '@mui/system';
 import axios from 'axios';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
 import ListCategory from '../common/ListCategory';
+import PropTypes from 'prop-types';
 
 
-const AddMeetingListCategory = () => {
+const AddMeetingListCategory = ({setNextButtonDisable}) => {
 
     const {
         mainCategoryNo,
@@ -13,6 +14,15 @@ const AddMeetingListCategory = () => {
         onChangeField,
         setField
       } = useMeetingFormStore();  
+
+      useEffect(() => {
+        if (mainCategoryNo||filterTag) {
+          setNextButtonDisable(false);
+        } else {
+          setNextButtonDisable(true)
+        }
+      }, [mainCategoryNo, filterTag, setNextButtonDisable]);
+
     
       const handleSubCategoryClick = useCallback((subCategoryTag) => {
         setField('filterTag', subCategoryTag);
@@ -34,5 +44,9 @@ const AddMeetingListCategory = () => {
         </Box>
       );
     };
+
+    AddMeetingListCategory.propTypes = {
+      setNextButtonDisable: PropTypes.bool,
+      };
     
     export default AddMeetingListCategory;

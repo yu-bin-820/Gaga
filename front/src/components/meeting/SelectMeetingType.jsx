@@ -1,6 +1,7 @@
 import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
@@ -9,7 +10,7 @@ import AddMeetingParentsClub from './AddMeetingParentsClub';
 import AddMeetingInChatMeeting from './AddMeetingInChatMeeting';
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
 
-const SelectMeetingType = () => {
+const SelectMeetingType = ({setNextButtonDisable}) => {
   const [expanded, setExpanded] = React.useState(null);
 
   const {
@@ -18,6 +19,14 @@ const SelectMeetingType = () => {
     setField,
     onChangeField,
   } = useMeetingFormStore();
+
+  useEffect(() => {
+    if (expanded==='meeting'||(expanded==='parentClub'&&parentClubNo)||(expanded==='parentMeeting'&& parentMeetingNo)) {
+      setNextButtonDisable(false);
+    } else {
+      setNextButtonDisable(true)
+    }
+  }, [setNextButtonDisable, expanded, parentClubNo, parentMeetingNo]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : null);
@@ -47,14 +56,16 @@ const SelectMeetingType = () => {
       <h4>어떤 모임을 만들까요?</h4>
       <Box sx={{ margin: '10px' }}>
         <h5 style={{ color: 'gray' }}>
-        '모임'은 직접 만나 취향 활동을 함께할 수 있어요.
+          {"'모임'은 직접 만나 취향 활동을 함께할 수 있어요."}
           <br/>
-          장기간 함께 하는 공간을 원하실 경우 '클럽'으로 열어주세요!
+          {"장기간 함께 하는 공간을 원하실 경우 '클럽'으로 열어주세요!"}
         </h5>
         </Box>
       <Accordion 
-      expanded={expanded === 'panel1'} 
-      onChange={handleChange('panel1')}>
+      expanded={expanded === 'meeting'} 
+      onChange={handleChange('meeting')}
+      sx={{ backgroundColor: expanded === "meeting" ? "#e1ede7" : "white" }} 
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
@@ -82,5 +93,9 @@ const SelectMeetingType = () => {
     </Box>
   );
 };
+
+SelectMeetingType.propTypes = {
+  setNextButtonDisable: PropTypes.bool,
+  };
 
 export default SelectMeetingType;

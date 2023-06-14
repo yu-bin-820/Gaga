@@ -14,25 +14,17 @@ import NoMeeting from './NoMeeting';
 const ListMyMeeting = () => {
     
     const { userNo } = useParams();
-    const [meetingList, setMeetingList] = useState();
     const { data: myData } = useSWR(
         `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
         fetcher
         );
 
-    const isMyProfile = !(userNo);
+    const {data : meetingList } = useSWR(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${userNo ? userNo: myData?.userNo}`,
+        fetcher
+    );
 
-    useEffect(()=>{
-        axios
-            .get(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${userNo ? userNo: myData?.userNo}`)
-            .then((response)=>{
-                console.log(response.data);
-                setMeetingList(response.data);
-            })
-            .catch((error)=>{
-                console.log(error);
-            });
-    },[userNo, myData]);
+    const isMyProfile = !(userNo);
 
     return (
         <Box sx={{ marginBottom: '130px', backgroundColor: '#ededed' }}>

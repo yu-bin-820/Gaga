@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import MeetingThumbnail from './MeetingThumnail';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import useCommunityStore from '@stores/communication/useCommunityStore';
 
 const ListMyMeetingThumnail = ({ meeting }) => {
@@ -11,6 +11,7 @@ const ListMyMeetingThumnail = ({ meeting }) => {
     const currentDate = new Date();
     const meetingDateTime = new Date(`${meeting.meetingDate}T${meeting.meetingStartTime}`);
     const {setField} = useCommunityStore();
+    const location = useLocation();
 
     const isMeetingSuccessTime = currentDate >= meetingDateTime;
     const isMeetingSuccess = meeting.meetingSuccess === 2;
@@ -28,12 +29,15 @@ const ListMyMeetingThumnail = ({ meeting }) => {
         navigate(`/meeting/updatemeetingsuccess/meetingno/${meeting.meetingNo}`);
         },[meeting.meetingNo, navigate]);
 
-        const onClickChatRoom=useCallback(()=>{
-            setField('chatRoomEntryNo',meeting.meetingNo);
-            setField('chatType',2);
-            setField('chatRoomLeader',meeting.meetingLeaderNo)
-            navigate(`/chat/group/message/list`);
-        },[meeting.meetingLeaderNo, meeting.meetingNo, navigate, setField]);
+    const onClickChatRoom = useCallback(() => {
+        setField('shouldScroll', true);
+        setField('isInfiniteScroll', false);
+        setField('chatRoomEntryNo', meeting.meetingNo);
+        setField('chatType', 2);
+        setField('chatRoomLeader', meeting.meetingLeaderNo);
+        setField('prevGetGroupChatPath', location.pathname);
+        navigate(`/chat/group/message/list`);
+    }, [meeting,setField,location,navigate]);
 
     return (
         <div>

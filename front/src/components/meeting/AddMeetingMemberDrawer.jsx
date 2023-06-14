@@ -2,12 +2,12 @@ import { Button, Divider, Drawer, IconButton, Modal, Skeleton, Typography } from
 import { Box, Stack } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
 import AddMeetingMemberThumnail from './AddMeetingMemberThumnail';
-import { Payment } from '@mui/icons-material';
 import fetcher from '@utils/fetcher';
 import PropTypes from 'prop-types';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import axios from 'axios';
 import useSWR from 'swr';
+import Payment from '@pages/payment/Payment';
 
 const AddMeetingMemberDrawer = ({settingsAddMemberOpen, setSettingsAddMemberOpen, toggleSettingsAddMember, meetingNo}) => {
     const [meeting, setMeeting] = useState();

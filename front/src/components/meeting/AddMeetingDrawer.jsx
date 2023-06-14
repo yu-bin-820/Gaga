@@ -19,6 +19,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 const AddMeetingDrawer = ({settingsAddMeetingOpen, setSettingsAddMeetingOpen, toggleSettingsAddMeeting}) => {
     const theme = useTheme();
     const [activeStep, setActiveStep] = useState(0);
+    const [ nextButtonDisable, setNextButtonDisable ] = useState(false);
   
     const handleNext = () => {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -31,23 +32,24 @@ const AddMeetingDrawer = ({settingsAddMeetingOpen, setSettingsAddMeetingOpen, to
     function getStepContent(step) {
       switch (step) {
         case 0:
-          return <SelectMeetingType />;
+          return <SelectMeetingType setNextButtonDisable={setNextButtonDisable}/>;
         case 1:
-          return <AddMeetingListCategory />;
+          return <AddMeetingListCategory setNextButtonDisable={setNextButtonDisable}/>;
         case 2:
-          return <AddMeetingName />;
+          return <AddMeetingName setNextButtonDisable={setNextButtonDisable}/>;
         case 3:
-          return <AddMeetingImg />;
+          return <AddMeetingImg setNextButtonDisable={setNextButtonDisable}/>;
         case 4:
-          return <AddMeetingMap />;
+          return <AddMeetingMap setNextButtonDisable={setNextButtonDisable}/>;
         case 5:
-            return <AddMeetingDate />;
+            return <AddMeetingDate setNextButtonDisable={setNextButtonDisable}/>;
         case 6:
-          return <AddMeetingFilter />;
+          return <AddMeetingFilter setNextButtonDisable={setNextButtonDisable}/>;
         case 7:
             return <AddMeetingMaxMember />;
         case 8:
-          return <AddMeeting1 />;
+          return <AddMeeting1 setSettingsAddMeetingOpen={setSettingsAddMeetingOpen}
+          setActiveStep={setActiveStep}/>;
         default:
           throw new Error('Unknown step');
       }
@@ -83,7 +85,7 @@ const AddMeetingDrawer = ({settingsAddMeetingOpen, setSettingsAddMeetingOpen, to
                 <Button
                 size="small"
                 onClick={handleNext}
-                disabled={activeStep === 8}
+                disabled={activeStep === 8 || nextButtonDisable}
                 >
                 Next
                 {theme.direction === 'rtl' ? (

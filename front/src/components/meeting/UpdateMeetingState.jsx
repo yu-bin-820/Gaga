@@ -1,25 +1,25 @@
 import StyledToggleButtonGroup from '@components/common/StyledToggleButtonGroup';
-import { Button, TextField, ToggleButton } from '@mui/material';
+import { Button, ToggleButton } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import useUpdateMeetingFormStore from '@stores/meeting/useUpdateMeetingFormStore';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import React, { useCallback, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useCallback, useState } from 'react';
+import useSWR from 'swr';
+import PropTypes from 'prop-types';
+import { useParams } from 'react-router';
+import fetcher from '@utils/fetcher';
 
-const UpdateMeetingState = () => {
+const UpdateMeetingState = ({setSettingsUpdateMeetingOpen}) => {
     const { meetingno } = useParams();
 
     const handleAlignment = (event, newAlignment) => {
         setAlignment(newAlignment);
       };
 
-    const navigate = useNavigate();
-
     const {
         meetingName,
         meetingIntro,
-        meetingImg,
         meetingDate,
         meetingStartTime,
         meetingEndTime,
@@ -29,13 +29,15 @@ const UpdateMeetingState = () => {
         meetingMaxMemberNo,
         meetingState,
         file,
-        image,
         setField,
-        onChangeField,
       } =useUpdateMeetingFormStore();
 
       const [alignment, setAlignment] = useState(meetingState.toString());
 
+      const { mutate: mutateMeeting } = useSWR(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${meetingno}`,
+        fetcher
+    );
 
       const onClickMeetingState = (value) => {
         setField('meetingState', value);
@@ -64,16 +66,19 @@ const UpdateMeetingState = () => {
     
           console.log(formData);
     
-          const response = axios.patch(
+          axios.patch(
             `${import.meta.env.VITE_SPRING_HOST}/rest/meeting`,
             formData
+          ).then(
+            mutateMeeting()
           );
     
-          navigate(`/meeting/meetingno/${meetingno}`);
+          setSettingsUpdateMeetingOpen(false);
+
         } catch (error) {
           console.error(error);
         }
-      }, [meetingno, navigate, file, filterGender, filterMaxAge, filterMinAge, meetingDate, meetingEndTime, meetingIntro, meetingMaxMemberNo, meetingName, meetingStartTime, meetingState]);
+      }, [meetingno, file, filterGender, filterMaxAge, filterMinAge, meetingDate, meetingEndTime, meetingIntro, meetingMaxMemberNo, meetingName, meetingStartTime, meetingState, setSettingsUpdateMeetingOpen, mutateMeeting]);
 
 
     return (
@@ -119,5 +124,9 @@ const UpdateMeetingState = () => {
       </Box>
     );
 };
+
+UpdateMeetingState.propTypes = {
+  setSettingsUpdateMeetingOpen: PropTypes.func,
+  };
 
 export default UpdateMeetingState;
