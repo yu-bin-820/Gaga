@@ -126,7 +126,7 @@ function DeleteUser() {
 
   return (
     <div>
-      <CommonTop />
+      <CommonTop pageName="회원탈퇴"/>
       <Box
         display="flex"
         flexDirection="column"

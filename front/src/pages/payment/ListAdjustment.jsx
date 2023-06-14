@@ -80,7 +80,7 @@ const ListAdjustment = () => {
           <Stack sx={{ marginLeft: '10px', marginRight: '10px' }}>
             <h5>
               정산은 매주 화요일에 진행됩니다. <br />
-              문의사항은 Q&A 게시판을 이용해 주세요
+              문의사항은 Q&A 게시판을 이용해 주세요.
             </h5>
             {adjustmentList?.filter((meeting) => meeting.meetingSuccess === 2)
               .length === 0 && <NoPayment ment={'정산 내역이 없습니다.'} />}

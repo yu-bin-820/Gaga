@@ -39,7 +39,14 @@ import useCommunityStore from '@stores/communication/useCommunityStore';
 const ProfileTop = ({ userNo }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { prevProfilePath, setField } = useCommunityStore();
+  const {
+    prevProfilePath,
+    setField,
+    chatRoomEntryNo,
+    prevChatRoomEntryNo,
+    prevChatType,
+    prevChatRoomLeader,
+  } = useCommunityStore();
   const [duplicateReportDialogOpen, setDuplicateReportDialogOpen] =
     useState(false);
   const [deleteReportDialogOpen, setDeleteReportDialogOpen] = useState(false);
@@ -48,9 +55,9 @@ const ProfileTop = ({ userNo }) => {
     fetcher
   );
   const { data: reportData, mutate: mutateReport } = useSWR(
-    `${
-      import.meta.env.VITE_SPRING_HOST
-    }/rest/community/report/reportingno/${myData?.userNo}/reportedno/${userNo}`,
+    `${import.meta.env.VITE_SPRING_HOST}/rest/community/report/reportingno/${
+      myData?.userNo
+    }/reportedno/${userNo}`,
     fetcher
   );
 
@@ -83,9 +90,9 @@ const ProfileTop = ({ userNo }) => {
   const onClickDeleteReportConfirm = useCallback(() => {
     axios
       .delete(
-        `${
-          import.meta.env.VITE_SPRING_HOST
-        }/rest/community/report/reportno/${reportData?.reportNo}`,
+        `${import.meta.env.VITE_SPRING_HOST}/rest/community/report/reportno/${
+          reportData?.reportNo
+        }`,
         {
           withCredentials: true,
         }
@@ -102,11 +109,32 @@ const ProfileTop = ({ userNo }) => {
     onCloseDuplicateReportDialog,
   ]);
 
-  const onClickDirectMessage = useCallback(() => {
-    setField('chatRoomEntryNo', userNo);
-    navigate('/chat/direct/message/list');
-  }, [userNo, setField, navigate]);
+  const onClickDirectMessage = useCallback(
+    (e) => {
+      setField('shouldScroll', true);
+      setField('chatRoomEntryNo', userNo);
+      setField('prevChatRoomEntryNo', chatRoomEntryNo);
+      setField('prevGetDirectChatPath', location.pathname);
 
+      navigate('/chat/direct/message/list');
+    },
+    [userNo, setField, chatRoomEntryNo, location, navigate]
+  );
+
+  const onClickPrev = useCallback(() => {
+    setField('chatRoomEntryNo', prevChatRoomEntryNo);
+    setField('chatType', prevChatType);
+    setField('chatRoomLeader', prevChatRoomLeader);
+
+    navigate(prevProfilePath || -1);
+  }, [
+    prevProfilePath,
+    prevChatRoomEntryNo,
+    prevChatType,
+    prevChatRoomLeader,
+    setField,
+    navigate,
+  ]);
   if (!myData) {
     return <Navigate replace to={`/community/profile/userno/${userNo}`} />;
   }
@@ -125,11 +153,7 @@ const ProfileTop = ({ userNo }) => {
               disableGutters
               sx={{ display: 'flex', justifyContent: 'space-between' }}
             >
-              <IconButton
-                onClick={() => {
-                  navigate(prevProfilePath || -1);
-                }}
-              >
+              <IconButton onClick={onClickPrev}>
                 <ArrowBackIosNewIcon />
               </IconButton>
               {myData?.userNo != userNo && (

@@ -33,12 +33,15 @@ const AddClubMaxMember = () => {
     filterMinAge,
     filterMaxAge,
     clubMaxMemberNo,
+    parentClubNo,
+    parentMeetingNo,
     file,
     setField,
     onChangeField,
     reset,
   } = useClubFormStore();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const closeModal = () => {
     setOpenModal(false);
@@ -71,6 +74,11 @@ const AddClubMaxMember = () => {
     async (event) => {
       event.preventDefault();
 
+      if (!filterTag || !clubName) {
+        setIsModalOpen(true);
+        return;
+      }
+
       try {
         const formData = new FormData();
 
@@ -85,6 +93,8 @@ const AddClubMaxMember = () => {
         formData.append('filterMaxAge', filterMaxAge);
         formData.append('clubMaxMemberNo', clubMaxMemberNo);
         formData.append('clubLeaderNo', myData.userNo);
+        formData.append('parentClubNo', parentClubNo);
+        formData.append('parentMeetingNo', parentMeetingNo);
 
         const response = await axios.post(
           `${import.meta.env.VITE_SPRING_HOST}/rest/club`,
@@ -93,15 +103,36 @@ const AddClubMaxMember = () => {
 
         reset();
 
-        setOpenModal(true);
+        console.log('생기는 클럽 번호정보', response.data.clubNo);
 
-        console.log(response.data);
+        console.log('생기는 클럽 정보', response.data);
+        navigate(`/community/profile/mine`);
       } catch (error) {
         console.error(error);
       }
     },
-    [clubMaxMemberNo]
+    [
+      file,
+      mainCategoryNo,
+      filterTag,
+      clubName,
+      clubIntro,
+      clubRegion,
+      filterGender,
+      filterMinAge,
+      filterMaxAge,
+      clubMaxMemberNo,
+      myData?.userNo,
+      navigate,
+      parentClubNo,
+      parentMeetingNo,
+      reset,
+    ]
   );
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+  }, []);
 
   return (
     <Box sx={{ margin: '10px' }}>
@@ -151,10 +182,28 @@ const AddClubMaxMember = () => {
           생성하기
         </Button>
         <>
+          <Modal open={isModalOpen} onClose={handleCloseModal}>
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                bgcolor: 'white',
+                p: 3,
+              }}
+            >
+              <Typography variant='body1' component='div' sx={{ mb: 2 }}>
+                클럽 이름과 목적은 반드시 입력해주세요.
+              </Typography>
+              <Button variant='contained' onClick={handleCloseModal}>
+                확인
+              </Button>
+            </Box>
+          </Modal>
           <Modal
             open={openModal}
             onClose={closeModal}
-            aria-labelledby='modal-title'
             aria-describedby='modal-description'
           >
             <Box
@@ -167,9 +216,6 @@ const AddClubMaxMember = () => {
                 width: '50%',
               }}
             >
-              <Typography id='modal-title' variant='h6' component='h2'>
-                알림
-              </Typography>
               <Typography id='modal-description' sx={{ mt: 2 }}>
                 클럽 생성이 완료되었습니다.
               </Typography>

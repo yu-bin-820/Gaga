@@ -34,7 +34,7 @@ const ListMyClubThumnail = ({ club }) => {
       >
         <Stack spacing={0.8} paddingBottom={1}>
           <ClubThumbnail club={club} />
-          <Stack direction={'row'} justifyContent='center' spacing={1.5}>
+          <Stack direction={'row'} justifyContent='center' spacing={0.5}>
             <Button
               variant='outlined'
               sx={{ width: '180px' }}

@@ -16,6 +16,7 @@ import {
 import CssBaseline from "@mui/material/CssBaseline";
 import { Link } from "react-router-dom";
 import CommonTop from "@layouts/common/CommonTop";
+import AddNaverTop from "@layouts/user/AddNaverTop";
 import { useNavigate } from "react-router";
 import TermsOfGaga from "./TermsOfGaga";
 import useNaverFormStore from "@hooks/user/useNaverFormStore";
