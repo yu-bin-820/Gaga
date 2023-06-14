@@ -45,7 +45,7 @@ const ListMySuccessMeeting = ({ meeting }) => {
             meetingReviewList.some((meetingReview) => meetingReview.meetingReviewerNo === myData?.userNo)
         );
 
-        const isMeetingChatRoot = meeting.meetingState === 1 || 2;
+        const isMeetingChatRoot = (meeting.state === 2) && (meeting.meetingState === 2);
 
 
     const navigate = useNavigate();

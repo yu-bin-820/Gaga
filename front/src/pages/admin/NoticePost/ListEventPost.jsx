@@ -131,7 +131,7 @@ function ListEventPost() {
   };
 
   return (
-    <Box sx={{ marginTop: '64px', marginLeft: '10px', marginRight: '10px' }}>
+    <Box sx={{ marginTop: '14%', marginLeft: '1%', marginRight: '1%' }}>
       <CommonTop pageName="이벤트" prevPath="/community/profile/mine" />
       <AdminTabs />
       <Stack spacing={2.5}>
@@ -195,7 +195,7 @@ function ListEventPost() {
           </Box>
         )}
         <TableContainer component={Box}>
-          <Table sx={{ maxWidth: 360 }}>
+          <Table sx={{ maxWidth: 360, marginBottom: '0%'}}>
             <TableBody>
               <TableRow>
               <Grid container spacing={2}>
@@ -218,12 +218,12 @@ function ListEventPost() {
     <TableCell 
       align="right" 
       style={{ 
-        fontSize: '0.9rem', 
+        fontSize: '0.8rem', 
         borderBottom: '1px',
         whiteSpace: 'normal', 
         wordWrap: 'break-word',
         paddingLeft: '10px',
-        margin: '-10px', // 마진을 없애기 위해 0으로 설정
+        margin: '10px', // 마진을 없애기 위해 0으로 설정
       }}>
       {noticePost.noticePostRegDate.split('T')[0]}
     </TableCell>

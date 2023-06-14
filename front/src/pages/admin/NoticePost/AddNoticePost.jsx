@@ -43,7 +43,8 @@ const AddNoticePost = () => {
         useInput("");
     const [noticePostCategory, setNoticePostCategoryNo] = useState(0); // 카테고리 선택 상태값
     const [qnaCategory, setQnaCategory] = useState(0);
-
+    const [noticePost, setNoticePost] = useState({});
+    
     const { data: myData, mutate: mutateMe } = useSWR(
         `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
         fetcher
@@ -103,13 +104,28 @@ const AddNoticePost = () => {
         navigate,
     ]);
 
+    function getCategoryBack(noticePostCategoryNo) {
+        switch (noticePostCategoryNo) {
+          case 0:
+            return "Notice";
+          case 1:
+            return "Event";
+          case 2:
+            return "FAQ";
+          default:
+            return "";
+        }
+    }
+    const noticePostCategoryNo = noticePost.noticePostCategoryNo;
+    const prevPath = `/notice/list${getCategoryBack(noticePostCategoryNo)}Post`;
+    
     return (
         <Box
             sx={{ marginTop: "64px", marginLeft: "10px", marginRight: "10px" }}
         >
             <CommonTop
-                pageName="공지사항 작성"
-                prevPath="/notice/listNoticePost"
+                pageName="게시글 작성"
+                prevPath={prevPath}
             />
             <Stack spacing={2.5}>
                 <TextField
@@ -140,7 +156,7 @@ const AddNoticePost = () => {
                     <TextField
                         select
                         label="Q&A카테고리"
-                        value={noticePostCategory}
+                        value={qnaCategory}
                         onChange={(e) => setQnaCategory(Number(e.target.value))}
                     >
                         <MenuItem value={1}>회원</MenuItem>

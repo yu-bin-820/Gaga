@@ -153,7 +153,7 @@ function ListBlackList() {
   };
 
   return (
-    <Box sx={{ marginTop: "64px", marginLeft: "10px", marginRight: "10px" }}>
+    <Box sx={{ marginTop: "17%", marginLeft: "3%", marginRight: "3%" }}>
       <CommonTop pageName="블랙리스트" prevPath="/community/profile/mine" />
       <BlackListTabs />
       <Chatbot />
@@ -169,9 +169,9 @@ function ListBlackList() {
           <SearchTransition />
         </Box>
   
-        <Paper sx={{ maxWidth: '100%' }}>
+        <Paper sx={{ maxWidth: '99%' }}>
           <div style={{ overflowX: 'auto' }}>
-            <TableContainer sx={{ maxHeight: 540, tableLayout: 'auto', width: '100%' }}>
+            <TableContainer sx={{ maxHeight: '100%', tableLayout: 'auto', width: '100%' }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
@@ -188,13 +188,19 @@ function ListBlackList() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {blackList.map((user, index) => (
+                {blackList.length > 0 ? (
+                  blackList.map((user, index) => (
                     <TableRow hover role="checkbox" tabIndex={-1} key={user.userNo} onClick={() => handleBlackListClick(user.userNo)}>
-                      <TableCell style={{ width: '5%', maxWidth: '5vw' }}>{index + 1}</TableCell>
-                    <TableCell style={{ width: '10%', maxWidth: '10vw' }}>{user.userName}</TableCell>
-                <TableCell style={{ width: '25%', maxWidth: '25vw' }}>{user.blacklist === 1 ? "신고 누적 블랙리스트" : "관리자 블랙리스트"}</TableCell>
-       </TableRow>
-                  ))}
+                      <TableCell style={{ width: '5%', maxWidth: '5%' }}>{index + 1}</TableCell>
+                      <TableCell style={{ width: '5%', maxWidth: '5%' }}>{user.userName}</TableCell>
+                      <TableCell style={{ width: '25%', maxWidth: '25%' }}>{user.blacklist === 1 ? "신고 누적 블랙리스트" : "관리자 블랙리스트"}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={3} align="center">해당 검색에 대한 결과가 없습니다.</TableCell>
+                  </TableRow>
+                )}
                 </TableBody>
               </Table>
             </TableContainer>

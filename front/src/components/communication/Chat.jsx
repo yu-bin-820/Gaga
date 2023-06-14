@@ -34,9 +34,11 @@ const Chat = ({
 
   const messageColor = isMe ? 'black' : 'gray';
   const messageBackColor = isMe ? 'rgba(3, 102, 69, 0.15)' : '#ededed';
-  const sendTime = DateTime.fromISO(data.created_at).toLocaleString(
-    DateTime.TIME_SIMPLE
-  );
+  const sendTime = DateTime.fromFormat(
+    data.created_at,
+    'yyyy-MM-dd HH:mm:ss'
+  ).toLocaleString(DateTime.TIME_SIMPLE);
+  // const sendTime = data.created_at;
 
   const onClickChatMap = useCallback(() => {
     setField('lat', data.lat);

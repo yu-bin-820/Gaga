@@ -148,21 +148,21 @@ function ListQnaPost() {
   };
 
   return (
-    <Box sx={{ marginTop: '64px', marginLeft: '10px', marginRight: '10px' }}>
-      <CommonTop pageName="Q&A" prevPath="/community/profile/mine" />
+    <Box sx={{ marginTop: '14%', marginLeft: '1%', marginRight: '1%' }}>
+      <CommonTop pageName="자주 묻는 질문" prevPath="/community/profile/mine" />
       <AdminTabs />
       <Stack spacing={2.5}>
         {myData && myData.role == 1 && (
           <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', alignItems: 'center', margin: '10px' }}>
             {myData && myData.role == 1 && (
-              <>
-                <Link to="/notice/addNoticePost" style={{ marginLeft: '9px' }}>
-                  <Button variant="contained">Q&A 작성</Button>
+              
+                <Link to="/notice/addNoticePost" style={{ marginLeft: '2%', width: '35%' }}>
+                  <Button variant="contained">FAQ 작성</Button>
                 </Link>
-              </>
+
             )}
             <TextField
-              style={{ marginRight: '8px' }}
+              style={{ marginRight: '3%' }}
               type="text"
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
@@ -181,7 +181,7 @@ function ListQnaPost() {
         )}
         {myData && myData.role != 1 && (
           <TextField
-          
+          style={{ marginRight: '3%' }}
             type="text"
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
@@ -193,7 +193,7 @@ function ListQnaPost() {
                   <SearchIcon color="primary" style={{ marginRight: '-13px' }} />
                 </IconButton>
               ),
-              sx: { height: '38px', width: '180px', marginLeft : '170px', marginBottom: '-10px'},
+              sx: { height: '38px', width: '180px', marginLeft : '49%', marginBottom: '-10px'},
             }}
             
           />

@@ -98,7 +98,7 @@ useEffect(() => {
       case 1:
         return "이벤트";
       case 2:
-        return "Q&A";
+        return "FAQ";
       default:
         return "";
     }
@@ -157,7 +157,7 @@ const prevPath = `/notice/list${getCategoryBack(noticePostCategoryNo)}Post`;
         {noticePostCategory === 2 && (
                     <TextField
                         select
-                        label="Q&A카테고리"
+                        label="FAQ카테고리"
                         value={qnaCategory}
                         onChange={(e) => setQnaCategory(Number(e.target.value))}
                     >

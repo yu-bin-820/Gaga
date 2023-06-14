@@ -188,7 +188,17 @@ export default function ListChatRoom() {
                       group.meeting_name ? group.meeting_name : group.club_name
                     }
                     subtitle={group.last_message}
-                    date={new Date(group.last_message_time)}
+                    date={
+                      new Date(group.last_message_time)
+                      // group.last_message
+                      //   ? new Date(group.last_message_time)
+                      //   : new Date(
+                      //       new Date(group.last_message_time).toLocaleString(
+                      //         'en-US',
+                      //         { timeZone: 'UTC' }
+                      //       )
+                      //     )
+                    }
                     unread={group.unreadMessages}
                   />
                 </Box>

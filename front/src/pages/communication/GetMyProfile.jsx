@@ -1,15 +1,16 @@
 import ListMyMeeting from '@components/meeting/ListMyMeeting';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import EditIcon from '@mui/icons-material/Edit';
 import MainBottomNav from '@layouts/common/MainBottomNav';
 import MyProfileTop from '@layouts/communication/MyProfileTop';
 import {
   Avatar,
+  Badge,
   Button,
   Chip,
   IconButton,
   ImageList,
   LinearProgress,
-  TextField,
   Typography,
 } from '@mui/material';
 import { linearProgressClasses } from '@mui/material/LinearProgress';
@@ -22,12 +23,12 @@ import styled from '@emotion/styled';
 import UploadProfileImgDialog from '@components/communication/UploadProfileImgDialog';
 import UploadActivityImgDialog from '@components/communication/UploadActivityImgDialog';
 import CustomedImageListItem from '@components/common/CustomedImageListItem';
-import useInputOrigin from '@hooks/common/useInputOrigin';
-import CheckIcon from '@mui/icons-material/Check';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
 import axios from 'axios';
 import UpdateUserIntroTextField from '@components/communication/UpdateUserIntroTextField';
 import UpdateNickNameTextField from '@components/communication/UpdateNickNameTextField';
 import TitleListDialog from '@components/communication/TitleListDialog';
+import UpdateNickNameDialog from '@components/communication/UpdateNickNameDialog';
 
 const TeperatureLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -48,7 +49,8 @@ const GetMyProfile = () => {
   const [uploadActivityImgDialogOpen, setUploadActivityImgDialogOpen] =
     useState(false);
   const [isUpdateIntro, setIsUpdateIntro] = useState(false);
-  const [isUpdateNickName, setIsUpdateNickName] = useState(false);
+  const [updateNickNameDialogOpen, setUpdateNickNameDialogOpen] =
+    useState(false);
   const [updateMainTitleOpen, setUpdateMainTitleOpen] = useState(false);
 
   const { data: myData, mutate: mutateMe } = useSWR(
@@ -92,8 +94,8 @@ const GetMyProfile = () => {
   }, [isUpdateIntro]);
 
   const onClickUpdateNickName = useCallback(() => {
-    setIsUpdateNickName(!isUpdateNickName);
-  }, [isUpdateNickName]);
+    setUpdateNickNameDialogOpen(true);
+  }, []);
 
   const onClickUpdateMainTitle = useCallback(() => {
     axios
@@ -133,18 +135,34 @@ const GetMyProfile = () => {
           <Stack
             id={'profileTopContainer'}
             direction={'row'}
-            spacing={0}
+            spacing={8}
             alignItems={'center'}
             sx={{ maxWidth: '80vw' }}
           >
             <div onClick={onClickProfileImg}>
-              <Avatar
-                alt={myData?.nickName}
-                src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
-                  myData?.profileImg
-                }?type=f_sh&w=76&h=76&autorotate=false&faceopt=true&sharp_amt=1.0`}
-                sx={{ width: 76, height: 76, marginRight: '100px' }}
-              />
+              <Badge
+                overlap="circular"
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                badgeContent={
+                  <Box
+                    sx={{
+                      borderRadius: '20rem',
+                      padding: '3px',
+                      backgroundColor: 'grey',
+                    }}
+                  >
+                    <EditIcon sx={{ color: 'white', fontSize: 15 }} />
+                  </Box>
+                }
+              >
+                <Avatar
+                  alt={myData?.nickName}
+                  src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
+                    myData?.profileImg
+                  }?type=f_sh&w=76&h=76&autorotate=false&faceopt=true&sharp_amt=1.0`}
+                  sx={{ width: 76, height: 76 }}
+                />
+              </Badge>
             </div>
             <Stack
               direction="column"
@@ -156,20 +174,17 @@ const GetMyProfile = () => {
               <Typography sx={{ fontSize: 15 }}>
                 {myData?.mainTitleName}
               </Typography>
-              {!isUpdateNickName && (
-                <div onClick={onClickUpdateNickName}>
+
+              <div onClick={onClickUpdateNickName}>
+                <Stack direction={'row'}>
                   <Typography sx={{ fontSize: 20 }}>
                     {myData?.nickName}
                   </Typography>
-                </div>
-              )}
-
-              {isUpdateNickName && (
-                <UpdateNickNameTextField
-                  isUpdateNickName={isUpdateNickName}
-                  setIsUpdateNickName={setIsUpdateNickName}
-                />
-              )}
+                  <BorderColorIcon
+                    sx={{ marginTop: '8px', fontSize: 15, color: 'grey' }}
+                  />
+                </Stack>
+              </div>
             </Stack>
           </Stack>
         </Box>
@@ -282,6 +297,10 @@ const GetMyProfile = () => {
         setOpen={setUpdateMainTitleOpen}
         myData={myData}
         mutateMe={mutateMe}
+      />
+      <UpdateNickNameDialog
+        open={updateNickNameDialogOpen}
+        setOpen={setUpdateNickNameDialogOpen}
       />
     </>
   );
