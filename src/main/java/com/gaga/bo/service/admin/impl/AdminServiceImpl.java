@@ -146,4 +146,9 @@ public class AdminServiceImpl implements AdminService {
 	public List<Report> getReportList(int userNo, int role) throws Exception {
 		return adminDao.getReportList(userNo, role);
 	}
+	
+	@Override
+	public List<Report> searchReport(String searchKeyword) throws Exception {
+	    return adminDao.searchReport(searchKeyword);
+	}
 }

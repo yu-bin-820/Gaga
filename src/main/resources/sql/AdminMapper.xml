@@ -206,9 +206,10 @@
 		#{noticePostNo}
 	</delete>
 
-	<select id="selectQnaByCategory" parameterType="int" 	resultMap="noticePostResult">
-		select * from notice_posts 
-		where notice_post_category_no = 2 
+	<select id="selectQnaByCategory" parameterType="int"
+		resultMap="noticePostResult">
+		select * from notice_posts
+		where notice_post_category_no = 2
 		and qna_category = #{qnaCategory}
 	</select>
 
@@ -266,10 +267,10 @@
 		SELECT *
 		FROM users
 		WHERE
-		user_id = #{userId}
-		or nick_name = #{nickName}
-		or user_name =
-		#{userName}
+		user_id LIKE CONCAT ('%', #{userId} '%')
+		or nick_name LIKE CONCAT ('%',
+		#{nickName}, '%')
+		or user_name LIKE CONCAT ('%', #{userName}, '%')
 	</select>
 
 	<select id="getUser" parameterType="int"
@@ -347,5 +348,25 @@
 		</where>
 	</select>
 
+	<select id="searchReport" resultMap="reportResultMap">
+		SELECT
+		r.report_no,
+		r.reporting_no,
+		r.reported_no,
+		r.report_category_no,
+		r.report_date,
+		reporting.user_id AS reporting_id,
+		reported.user_id AS reported_id,
+		reporting.nick_name AS reporting_nick_name,
+		reported.nick_name AS reported_nick_name
+		FROM reports AS r
+		INNER JOIN users AS reporting ON r.reporting_no = reporting.user_no
+		INNER JOIN users AS reported ON r.reported_no = reported.user_no
+		WHERE
+		reported.user_id LIKE CONCAT ('%', #{userId}, '%')
+		or reporting.user_id LIKE CONCAT ('%', #{reporting_id}, '%')
+		or (reported.nick_name LIKE CONCAT ('%', #{userName}, '%') OR
+		reporting.nick_name LIKE CONCAT ('%', #{userName}, '%'))
+	</select>
 
 </mapper>

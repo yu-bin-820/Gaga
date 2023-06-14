@@ -64,7 +64,7 @@ public class GptController {
 	        messageContent.put("content", fullPrompt);
 	        isFirstMessage = false;
 	    } else if (prompt.contains("가가") || prompt.contains("GAGA")) {
-	        String fullPrompt = "GaGa(가치가자)는 클럽과 모임으로 이뤄진 소셜링 서비스입니다." + " " + prompt;
+	        String fullPrompt = "GaGa(가치가자)는 비트원에서 개발한 클럽과 모임으로 이뤄진 소셜링 서비스입니다. 언제나 어디에나 같이 가자는 뜻을 담으셨다고 해요!" + " " + prompt;
 	        System.out.println("가가에 관한 질문1");
 	        messageContent.put("role", "user");
 	        messageContent.put("content", fullPrompt);
