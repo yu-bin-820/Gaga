@@ -426,5 +426,5 @@ public class CommunityRestController {
 		communityService.deleteUserReview(userReview);
 		
 	}
-		
+	
 }
