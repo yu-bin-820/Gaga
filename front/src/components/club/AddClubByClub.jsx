@@ -54,9 +54,11 @@ const AddClubByClub = ({
 
   return (
     <Accordion
-      expanded={expanded === 'panel3'}
-      onChange={handleChange('panel3')}
-      sx={{ backgroundColor: expanded === 'panel3' ? '#f3f8f7' : '#ffffff' }}
+      expanded={expanded === 'parentClub'}
+      onChange={handleChange('parentClub')}
+      sx={{
+        backgroundColor: expanded === 'parentClub' ? '#f3f8f7' : '#ffffff',
+      }}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
@@ -65,12 +67,12 @@ const AddClubByClub = ({
       >
         <Stack>
           <Typography sx={{ width: '60%', flexShrink: 0 }}>
-            기존 클럽 기반 새 클럽
+            {'기존 클럽 기반 새 클럽'}
           </Typography>
           <Typography sx={{ color: 'text.secondary' }}>
-            기존 클럽 멤버를 초대하는 클럽을 열어요.
+            {' 기존 클럽 멤버를 초대하는 클럽을 열어요.'}
             <br />
-            클럽이 남아있는 경우에만 가능해요!
+            {'클럽이 남아있는 경우에만 가능해요!'}
           </Typography>
         </Stack>
       </AccordionSummary>
@@ -99,10 +101,9 @@ const AddClubByClub = ({
 };
 
 AddClubByClub.propTypes = {
-  expanded: PropTypes.object.isRequired,
-  handleChange: PropTypes.object.isRequired,
-  userNo: PropTypes.object.isRequired,
-  onParentClubNoClick: PropTypes.object.isRequired,
+  expanded: PropTypes.string,
+  handleChange: PropTypes.func,
+  userNo: PropTypes.number,
+  onParentClubNoClick: PropTypes.func,
 };
-
 export default AddClubByClub;

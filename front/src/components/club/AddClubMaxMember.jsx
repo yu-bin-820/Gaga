@@ -16,12 +16,17 @@ import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 const AddClubMaxMember = () => {
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+
+  //const [setActiveStep, setSetActiveStep] = useState(false);
+
+  //const [settingsAddClubOpen, setSettingsAddClubOpen] = useState(false);
 
   const {
     mainCategoryNo,
@@ -37,7 +42,6 @@ const AddClubMaxMember = () => {
     parentMeetingNo,
     file,
     setField,
-    onChangeField,
     reset,
   } = useClubFormStore();
 
@@ -96,17 +100,16 @@ const AddClubMaxMember = () => {
         formData.append('parentClubNo', parentClubNo);
         formData.append('parentMeetingNo', parentMeetingNo);
 
-        const response = await axios.post(
-          `${import.meta.env.VITE_SPRING_HOST}/rest/club`,
-          formData
-        );
+        console.log('!!!!!!', formData);
 
-        reset();
-
-        console.log('생기는 클럽 번호정보', response.data.clubNo);
-
-        console.log('생기는 클럽 정보', response.data);
-        navigate(`/community/profile/mine`);
+        await axios
+          .post(`${import.meta.env.VITE_SPRING_HOST}/rest/club`, formData)
+          .then((response) => {
+            reset();
+            //setActiveStep(0);
+            //setSettingsAddClubOpen(false);
+            navigate(`/club/no/${response.data}`);
+          });
       } catch (error) {
         console.error(error);
       }
@@ -127,6 +130,8 @@ const AddClubMaxMember = () => {
       parentClubNo,
       parentMeetingNo,
       reset,
+      //setSettingsAddClubOpen,
+      //setActiveStep,
     ]
   );
 
@@ -234,6 +239,11 @@ const AddClubMaxMember = () => {
       </Stack>
     </Box>
   );
+};
+
+AddClubMaxMember.propTypes = {
+  setSettingsAddClubOpen: PropTypes.func,
+  setActiveStep: PropTypes.func,
 };
 
 export default AddClubMaxMember;

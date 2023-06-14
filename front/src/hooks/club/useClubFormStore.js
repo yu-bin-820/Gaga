@@ -16,6 +16,7 @@ const clubField = {
   file: null,
   image: null,
   parentClubNo: 0,
+  parentMeetingNo: 0,
 };
 
 const useClubFormStore = create((set) => ({

@@ -1,6 +1,5 @@
 import { Avatar, Button, ImageListItem, TextField } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import useUpdateMeetingFormStore from '@stores/meeting/useUpdateMeetingFormStore';
 import React from 'react';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -26,7 +25,7 @@ const UpdateClubImg = () => {
   return (
     <Box sx={{ margin: '10px' }}>
       <h4>클럽의 소개를 수정해주세요!</h4>
-      <Stack direction='row' spacing={2} alignItems={'center'} marginLeft='5px'>
+      <Stack direction='row' spacing={2} alignItems='center' marginLeft='5px'>
         <Button
           variant='outlined'
           startIcon={
@@ -84,7 +83,7 @@ const UpdateClubImg = () => {
       <TextField
         id='outlined-multiline-static'
         name='clubIntro'
-        placeholder='소개글을 입력해 주세요(선택)'
+        placeholder='소개글을 입력해 주세요'
         onChange={(e) => onChangeField('clubIntro', e)}
         fullWidth
         multiline

@@ -8,12 +8,13 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import { Box, Stack } from '@mui/system';
+import { Box, Stack, minWidth } from '@mui/system';
 import axios from 'axios';
 import useClubFormStore from '@hooks/club/useClubFormStore';
 import PlaceIcon from '@mui/icons-material/Place';
+import PropTypes from 'prop-types';
 
-const AddClubRegionTest = () => {
+const AddClubRegion = ({ setNextButtonDisable }) => {
   const [sidoOptions, setSidoOptions] = useState([]);
   const [sigoonOptions, setSigoonOptions] = useState([]);
   const [selectedSido, setSelectedSido] = useState('');
@@ -21,6 +22,13 @@ const AddClubRegionTest = () => {
   const [finalValue, setFinalValue] = useState('');
   const { clubRegion, onChangeField, setClubRegion } = useClubFormStore();
 
+  useEffect(() => {
+    if (clubRegion) {
+      setNextButtonDisable(false);
+    } else {
+      setNextButtonDisable(true);
+    }
+  }, [setNextButtonDisable, clubRegion]);
   const hasValuesBeenSet = useRef(false);
 
   useEffect(() => {
@@ -124,9 +132,10 @@ const AddClubRegionTest = () => {
   return (
     <>
       <Box sx={{ margin: '10px' }}>
-        <h4>지역은 어디인가요?</h4>
-        <Stack sx={{ marginLeft: '15px', marginRight: '20px' }}>
-          <Box direction='row' display='flex'>
+        <h4>{'지역은 어디인가요?'}</h4>
+
+        <Stack direction='column' display='flex'>
+          <Box direction='row' display='flex' fullWidth>
             <PlaceIcon />
             <TextField
               fullWidth
@@ -138,8 +147,13 @@ const AddClubRegionTest = () => {
               value={finalValue}
             />
           </Box>
-          <Box direction='row' display='flex' marginTop={2} marginBottom={2}>
-            <Box width='45%' marginRight={5}>
+          <Stack
+            direction='row'
+            display='flex'
+            sx={{ marginTop: '30px', marginBottom: '2px' }}
+            spacing={3}
+          >
+            <Box width='47%'>
               <FormControl fullWidth>
                 <InputLabel id='sido-select-label'>시도 선택</InputLabel>
                 <Select
@@ -156,7 +170,7 @@ const AddClubRegionTest = () => {
                 </Select>
               </FormControl>
             </Box>
-            <Box width='45%'>
+            <Box width='47%'>
               <FormControl fullWidth>
                 <InputLabel id='sigoon-select-label'>
                   시군구 선택(미선택시 시도전체)
@@ -175,17 +189,25 @@ const AddClubRegionTest = () => {
                 </Select>
               </FormControl>
             </Box>
-          </Box>
+          </Stack>
 
-          <Grid item xs={12}>
-            <Button onClick={handleChooseClick} variant='contained'>
+          <Box>
+            <Button
+              onClick={handleChooseClick}
+              variant='contained'
+              sx={{ marginTop: '10px', marginLeft: '38%', minWidth: '100px' }}
+            >
               선택
             </Button>
-          </Grid>
+          </Box>
         </Stack>
       </Box>
     </>
   );
 };
 
-export default AddClubRegionTest;
+AddClubRegion.propTypes = {
+  setNextButtonDisable: PropTypes.bool,
+};
+
+export default AddClubRegion;

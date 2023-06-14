@@ -55,9 +55,11 @@ const AddClubByMeeting = ({
 
   return (
     <Accordion
-      expanded={expanded === 'panel2'}
-      onChange={handleChange('panel2')}
-      sx={{ backgroundColor: expanded === 'panel2' ? '#f3f8f7' : '#ffffff' }}
+      expanded={expanded === 'parentMeeting'}
+      onChange={handleChange('parentMeeting')}
+      sx={{
+        backgroundColor: expanded === 'parentMeeting' ? '#f3f8f7' : '#ffffff',
+      }}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
@@ -66,12 +68,12 @@ const AddClubByMeeting = ({
       >
         <Stack>
           <Typography sx={{ width: '100%', flexShrink: 0 }}>
-            모임 기반 클럽
+            {'모임 기반 클럽'}
           </Typography>
           <Typography sx={{ color: 'text.secondary' }}>
-            가입했거나 운영하는 모임의 멤버를 초대하는 클럽을 열어요.
+            {'가입했거나 운영하는 모임의 멤버를 초대하는 클럽을 열어요.'}
             <br />
-            채팅방이 남아있는 경우에만 가능해요!
+            {'채팅방이 남아있는 경우에만 가능해요!'}
           </Typography>
         </Stack>
       </AccordionSummary>
@@ -100,10 +102,10 @@ const AddClubByMeeting = ({
 };
 
 AddClubByMeeting.propTypes = {
-  expanded: PropTypes.object.isRequired,
-  handleChange: PropTypes.object.isRequired,
-  userNo: PropTypes.object.isRequired,
-  onParentMeetingNoClick: PropTypes.object.isRequired,
+  expanded: PropTypes.string,
+  handleChange: PropTypes.func,
+  userNo: PropTypes.number,
+  onParentMeetingNoClick: PropTypes.func,
 };
 
 export default AddClubByMeeting;

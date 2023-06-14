@@ -21,11 +21,15 @@ import {
 } from '@mui/material';
 import useCommonStore from '@stores/common/useCommonStore';
 import AddMeetingDrawer from '@components/meeting/AddMeetingDrawer';
+import AddClubDrawer from '@components/club/AddClubDrawer';
 export default function MainBottomNav({ pageName }) {
   const navigate = useNavigate();
 
   const [value, setValue] = React.useState(pageName);
-  const [settingsAddMeetingOpen, setSettingsAddMeetingOpen] = React.useState(false);
+  const [settingsAddMeetingOpen, setSettingsAddMeetingOpen] =
+    React.useState(false);
+
+  const [settingsAddClubOpen, setSettingsAddClubOpen] = React.useState(false);
 
   const [noProfileImgDialogOpen, setNoProfileImgDialogOpen] =
     React.useState(false);
@@ -110,6 +114,13 @@ export default function MainBottomNav({ pageName }) {
     []
   );
 
+  const toggleSettingsAddClub = React.useCallback(
+    (state) => () => {
+      setSettingsAddClubOpen(state);
+    },
+    []
+  );
+
   const onCloseNoProfileImgDialog = React.useCallback(() => {
     setNoProfileImgDialogOpen(false);
   }, []);
@@ -123,7 +134,7 @@ export default function MainBottomNav({ pageName }) {
       if (groupType == 'meeting') {
         setSettingsAddMeetingOpen(true);
       } else {
-        navigate('/club/addclub');
+        setSettingsAddClubOpen(true);
       }
     } else {
       setNoProfileImgDialogOpen(true);
@@ -152,31 +163,31 @@ export default function MainBottomNav({ pageName }) {
         onChange={handleChange}
       >
         <BottomNavigationAction
-          label="Home"
-          value="home"
+          label='Home'
+          value='home'
           icon={<HomeIcon />}
           onClick={onClickHome}
         />
 
         <BottomNavigationAction
-          label="Create"
-          value="create"
+          label='Create'
+          value='create'
           icon={<AddCircleOutlineIcon />}
           onClick={onClickAddGroup}
         />
         <BottomNavigationAction
-          label="Chat"
-          value="chat"
+          label='Chat'
+          value='chat'
           icon={
-            <Badge badgeContent={totalUnreads} color="error">
+            <Badge badgeContent={totalUnreads} color='error'>
               <QuestionAnswerIcon />
             </Badge>
           }
           onClick={onClickChat}
         />
         <BottomNavigationAction
-          label="Profile"
-          value="profile"
+          label='Profile'
+          value='profile'
           icon={<PersonIcon />}
           onClick={onClickProfile}
         />
@@ -195,8 +206,13 @@ export default function MainBottomNav({ pageName }) {
       <AddMeetingDrawer
         settingsAddMeetingOpen={settingsAddMeetingOpen}
         setSettingsAddMeetingOpen={setSettingsAddMeetingOpen}
-        toggleSettingsAddMeeting={toggleSettingsAddMeeting} 
-        />
+        toggleSettingsAddMeeting={toggleSettingsAddMeeting}
+      />
+      <AddClubDrawer
+        settingsAddClubOpen={settingsAddClubOpen}
+        setSettingsAddClubOpen={setSettingsAddClubOpen}
+        toggleSettingsAddClub={toggleSettingsAddClub}
+      />
     </>
   );
 }
