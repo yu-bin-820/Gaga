@@ -5,11 +5,15 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import { ImageListItem } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { isCancel } from 'axios';
+import Refund from '@components/payment/Refund';
+import PropTypes from 'prop-types';
 
 const PaymentDetails = () => {
   const { payNo } = useParams();
   const [meeting, setMeeting] = useState();
+  const [userNo, setUserNo] = useState();
+  const [meetingNo, setMeetingNo] = useState();
 
   const navigate = useNavigate();
 
@@ -19,6 +23,7 @@ const PaymentDetails = () => {
   );
 
   const isRefund = payData?.payState === 2;
+  const isCancled = payData?.payState === 3;
 
   useEffect(() => {
     axios
@@ -39,6 +44,14 @@ const PaymentDetails = () => {
   const onClickMeeting = useCallback((event) => {
     navigate(`/meeting/meetingno/${meeting?.meetingNo}`);
   }, []);
+
+  const onClickRefund = useCallback(
+    (event) => {
+      setUserNo(payData?.userNo);
+      setMeetingNo(payData?.meetingNo);
+    },
+    [payData]
+  );
 
   if (!payData) return <>로딩중</>;
 
@@ -62,7 +75,7 @@ const PaymentDetails = () => {
                 marginBottom: '2px',
               }}
             >
-              결제번호{payNo}
+              결제번호 {payNo}
             </Stack>
             <Stack
               sx={{
@@ -87,10 +100,10 @@ const PaymentDetails = () => {
               <ImageListItem
                 sx={{
                   marginLeft: '5px',
-                  maxWidth: '130px',
-                  maxHeight: '130px',
-                  minWidth: '130px',
-                  minHeight: '130px',
+                  maxWidth: '100px',
+                  maxHeight: '100px',
+                  minWidth: '100px',
+                  minHeight: '100px',
                 }}
               >
                 {meeting?.meetingImg ? (
@@ -159,15 +172,26 @@ const PaymentDetails = () => {
                     {new Date(payData.refundTime).toLocaleString()}
                   </Stack>
                 </>
+              ) : payData.payState === 3 ? (
+                '환불요청'
               ) : (
                 ''
               )}
             </Stack>
           </Box>
+          {isCancled ? (
+            <Refund userNo={payData.userNo} meetingNo={payData.meetingNo} />
+          ) : (
+            ''
+          )}
         </Stack>
       </Stack>
     </>
   );
+};
+
+PaymentDetails.propTypes = {
+  payData: PropTypes.object.isRequired,
 };
 
 export default PaymentDetails;

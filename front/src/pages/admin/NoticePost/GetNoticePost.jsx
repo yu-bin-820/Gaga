@@ -5,12 +5,26 @@ import { Box, Button, Typography, Paper, Grid, IconButton } from '@mui/material'
 import { Edit, Delete, List } from '@mui/icons-material';
 import InfoIcon from '@mui/icons-material/Info';
 import CommonTop from '@layouts/common/CommonTop';
-
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
 
 function GetNoticePost() {
   const [noticePost, setNoticePost] = useState({});
   const { noticePostNo } = useParams();
   const navigate = useNavigate();
+
+  const { data: myData, mutate: mutateMe } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+  );
+       
+  useEffect(() => {
+    if (myData) {
+      const { userNo, role } = myData;
+      console.log(userNo, role, '유저넘버랑 권한');
+     
+    }
+  }, [myData]);
 
   useEffect(() => {
     axios
@@ -48,15 +62,34 @@ function GetNoticePost() {
         return "";
     }
 }
+
+function getCategoryBack(noticePostCategoryNo) {
+    switch (noticePostCategoryNo) {
+      case 0:
+        return "Notice";
+      case 1:
+        return "Event";
+      case 2:
+        return "Qna";
+      default:
+        return "";
+    }
+}
+const noticePostCategoryNo = noticePost.noticePostCategoryNo;
+const prevPath = `/notice/list${getCategoryBack(noticePostCategoryNo)}Post`;
+
   const handleUpdate = () => {
     navigate(`/notice/updateNoticePost/noticePostNo/${noticePostNo}`, { state: { noticePost } });
+  };
+  const handleList = () => {
+    navigate(`/notice/listNoticePost`, { state: { noticePost } });
   };
 
   return (
     <Box sx={{ margin: '1rem', padding: '0.1rem', paddingTop: '0.9rem',backgroundColor: '#f5f5f5', borderRadius: '10px' }}>
     <CommonTop
               pageName= {getCategoryText(noticePost.noticePostCategoryNo) + " 조회"}
-              prevPath="/notice/listNoticePost"
+              prevPath={prevPath}
           />
     <Typography variant="h4" gutterBottom style={{ display: 'flex', alignItems: 'center' }}>
       
@@ -64,10 +97,10 @@ function GetNoticePost() {
     <Paper elevation={3} sx={{ padding: '1rem', backgroundColor: '#ffffff', borderRadius: '10px', marginTop: '35px' , marginBottom: '1rem' }}>
       <Grid container spacing={2}>
         <Grid item xs={12} md={2}>
-          <Typography variant="body1" >게시글 번호 {noticePost.noticePostNo}</Typography>
+          <Typography variant="body1" >GAGA 운영자</Typography>
         </Grid>
         <Grid item xs={12} md={2}>
-          <Typography variant="body1" style={{ fontWeight: 'bold' }}>게시글 카테고리 :{getCategoryText(noticePost.noticePostCategoryNo)}</Typography>
+          <Typography variant="body1" style={{ fontWeight: 'bold' }}>카테고리 : {getCategoryText(noticePost.noticePostCategoryNo)}</Typography>
 
         </Grid>
         <Grid item xs={12} md={2}>
@@ -79,15 +112,20 @@ function GetNoticePost() {
           <Typography variant="body1">{noticePost.noticePostText}</Typography>
           {noticePost.noticePostImg && (
   <img
-    src={`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getImage/${noticePost.noticePostImg}`}
+    src={`${import.meta.env.VITE_CDN_HOST}/upload_images/admin/${noticePost.noticePostImg}?type=f_sh&w=400&h=250&faceopt=true&sharp_amt=1.0`}
     alt="공지사항 이미지"
-    style={{ maxWidth: '100%', maxHeight: '30vh', marginTop: '1rem' }}
+    style={{  maxWidth: '83vw',
+    display: 'block',
+    objectFit: 'contain',
+maxHeight: 'auto'}}
   />
 )}
         </Grid>
       </Grid>
     </Paper>
     <Grid container justifyContent="center" alignItems="center" spacing={3}>
+    {myData && myData.role == 1 && (
+        <>
       <Grid item>
         <Button variant="contained" color="primary" startIcon={<Edit />} onClick={handleUpdate} style={{ fontWeight: 'bold' }}>
           수정
@@ -98,8 +136,10 @@ function GetNoticePost() {
           삭제
         </Button>
       </Grid>
+      </>
+    )}
       <Grid item>
-        <Button variant="contained" color="primary" startIcon={<List />} onClick={handleDelete} style={{ fontWeight: 'bold' }}>
+        <Button variant="contained" color="primary" startIcon={<List />} onClick={handleList} style={{ fontWeight: 'bold' }}>
           목록
         </Button>
       </Grid>

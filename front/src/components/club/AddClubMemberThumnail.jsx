@@ -1,33 +1,14 @@
-import {
-  Avatar,
-  AvatarGroup,
-  Chip,
-  ImageListItem,
-  Typography,
-} from '@mui/material';
+import { ImageListItem, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import React from 'react';
-import { styled } from '@mui/system';
 import PropTypes from 'prop-types';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-
-const StyledAvatarGroup = styled(AvatarGroup)({
-  '& .MuiAvatar-root': {
-    width: 24,
-    height: 24,
-    fontSize: 12,
-  },
-});
-
-const CenteredText = styled('h5')({
-  display: 'flex',
-  alignItems: 'center',
-});
+import WcIcon from '@mui/icons-material/Wc';
+import ManIcon from '@mui/icons-material/Man';
+import WomanIcon from '@mui/icons-material/Woman';
 
 const AddClubMemberThumnail = ({ club }) => {
-  const { clubName, clubRegion, clubMaxMemberNo } = club;
+  const { clubName, clubRegion, clubMaxMemberNo, filterGender } = club;
 
   return (
     <Box
@@ -63,7 +44,6 @@ const AddClubMemberThumnail = ({ club }) => {
           >
             {clubName}
           </Box>
-
           <Box
             sx={{ color: 'text.secondary', display: 'inline', fontSize: 12 }}
           ></Box>
@@ -73,6 +53,17 @@ const AddClubMemberThumnail = ({ club }) => {
               <Typography sx={{ fontSize: 12 }}>{club?.clubRegion}</Typography>
             </Stack>
           </Stack>
+          <Box>
+            {filterGender === 0 ? (
+              <WcIcon />
+            ) : filterGender === 1 ? (
+              <ManIcon />
+            ) : filterGender === 2 ? (
+              <WomanIcon />
+            ) : (
+              ''
+            )}
+          </Box>
         </Box>
       </Stack>
     </Box>
@@ -80,12 +71,7 @@ const AddClubMemberThumnail = ({ club }) => {
 };
 
 AddClubMemberThumnail.propTypes = {
-  club: PropTypes.shape({
-    filterTag: PropTypes.string.isRequired,
-    clubName: PropTypes.string.isRequired,
-    clubRegion: PropTypes.string.isRequired,
-    clubMaxMemberNo: PropTypes.number.isRequired,
-  }).isRequired,
+  club: PropTypes.object.isRequired,
 };
 
 export default AddClubMemberThumnail;

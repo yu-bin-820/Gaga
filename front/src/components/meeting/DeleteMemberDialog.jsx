@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import useSWR from 'swr';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -15,6 +15,15 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+
+  const isOneDayBefore = () => {
+    const currentDate = new Date();
+    const meetingDate = new Date(meeting?.meetingDate);
+    const differenceInTime = meetingDate - currentDate;
+    const differenceInDays = differenceInTime / (1000 * 60 * 60 * 24);
+
+    return differenceInDays <= 1;
+  };
 
   const onClickDeleteMember = useCallback(
     async (event) => {
@@ -84,6 +93,21 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
     [meeting?.meetingNo, myData?.userNo, setOpen]
   );
 
+  const handleRefundAlert = () => {
+    if (meeting.entryFee === 0 || isOneDayBefore()) {
+      onClickDeleteMember();
+    } else {
+      if (
+        window.confirm(
+          '모임 하루 전은 환불이 불가합니다. 그래도 취소하시겠습니까?'
+        )
+      ) {
+        onClickDeleteMember();
+      } else {
+        onClickDeleteMemberRefund();
+      }
+    }
+  };
   return (
     <Dialog open={open} onClose={handleClose} sx={{ padding: '20px' }}>
       <Typography variant='h6' sx={{ fontSize: '16px', padding: '20px' }}>
@@ -106,11 +130,7 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
           <Button
             variant='contained'
             sx={{ width: '100px' }}
-            onClick={
-              meeting.entryFee === 0
-                ? onClickDeleteMember
-                : onClickDeleteMemberRefund
-            }
+            onClick={handleRefundAlert}
           >
             예
           </Button>

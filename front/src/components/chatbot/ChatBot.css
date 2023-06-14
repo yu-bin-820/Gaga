@@ -2,7 +2,7 @@
 
 .toggleChatBot {
     position: fixed;
-    bottom: 62px;
+    bottom: 63px;
     right: 15px;
     background-color: #036635;
     border: none;
@@ -84,13 +84,14 @@
 }
 
 .chat-message.user {
-    align-self: flex-end;
+    justify-content: flex-end;
     text-align: right;
     background-color: #e68031;
     border-radius: 12px;
     padding: 3px 5px;
     margin-left: 30px;
-    min-height: 50px;
+    min-height: 30px;
+    min-width: 20px;
     width: 90%; 
     word-wrap: break-word;
     padding-top: 0.1px;
@@ -98,18 +99,20 @@
 }
 
 .chat-message.bot {
-    align-self: flex-start;
+    justify-content: flex-start;
     text-align: left;
     background-color: #6d9ee8;
     border-radius: 12px;
     padding: 3px 5px;
     margin-right: 30px;
     margin-top: 10px;
-    min-height: 50px;
+    min-height: 10px;
     width: 90%; 
     word-wrap: break-word;
     padding-top: 0.1px;
     padding-bottom: 0.1px;
+    min-height: 30px;
+    display: inline-block;
 }
 
 .chat-input {

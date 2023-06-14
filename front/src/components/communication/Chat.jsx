@@ -1,18 +1,23 @@
-import { FC, useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
-import { Alert, Avatar, Stack, Typography } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import { Avatar, Stack, Typography } from '@mui/material';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import PropTypes from 'prop-types';
-import { Box, display } from '@mui/system';
+import { Box } from '@mui/system';
 import { DateTime } from 'luxon';
-import ChatMap from './ChatMap';
-import { StaticMap } from 'react-kakao-maps-sdk';
 import ChatStaticMap from './ChatStaticMap';
 import useChatMapStore from '@stores/communication/useChatMapStore';
+import MeetingThumbnail from '@components/meeting/MeetingThumnail';
+import ChatMeetingThumnail from './ChatMeetingThumnail';
 
-const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
+const Chat = ({
+  data,
+  //prevMinute,
+  nextMinute,
+  prevUserNo,
+  nextUserNo,
+}) => {
   const { setField } = useChatMapStore();
   const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -22,6 +27,7 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
   // console.log('!!!', data.data);
   const minute = DateTime.fromISO(data.created_at).minute;
   const isNotice = data.content_type_no === 101;
+  const isNewGroupLink = data.content_type_no === 102;
   const isMe = myData?.userNo === data.sender_no;
   const isShowProfile = data.sender_no != prevUserNo;
   const isShowTime = minute !== nextMinute || data.sender_no != nextUserNo;
@@ -66,9 +72,9 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
         >
           {!isMe && isShowProfile && (
             <Avatar
-              src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/user/${
+              src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                 data?.Sender.profile_img
-              }`}
+              }?type=f_sh&w=76&h=76&autorotate=false&faceopt=true&sharp_amt=1.0`}
               alt="Remy Sharp"
               sx={{ marginLeft: '10px' }}
             />
@@ -135,9 +141,9 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
               )}
               {data.content_type_no == 2 && (
                 <img
-                  src={`${import.meta.env.VITE_CDN_ORIGIN_HOST}/${
+                  src={`${import.meta.env.VITE_CDN_HOST}/${
                     data.content
-                  }`}
+                  }?type=w&w=200`}
                   alt="error"
                   loading="lazy"
                   style={{
@@ -173,6 +179,31 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
                 </div>
               )}
 
+              {isNewGroupLink && (
+                <Box
+                  sx={{
+                    backgroundColor: `${messageBackColor}`,
+                    borderRadius: '0.5rem',
+                    padding: '10px',
+                  }}
+                >
+                  <Typography color={`${messageColor}`}>
+                    새로운 모임에 참여해 보세요
+                  </Typography>
+                  <Box
+                    sx={{
+                      backgroundColor: `white`,
+                      borderRadius: '0.5rem',
+                      border: `1px solid ${messageBackColor}`,
+                      padding: '10px',
+                      maxWidth: '200px',
+                    }}
+                  >
+                    <ChatMeetingThumnail meeting={JSON.parse(data?.content)} />
+                  </Box>
+                </Box>
+              )}
+
               <Stack marginTop="auto">
                 {!isMe && isShowTime && (
                   <Typography sx={{ fontSize: 12, color: 'grey' }}>
@@ -205,7 +236,7 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
 };
 Chat.propTypes = {
   data: PropTypes.object,
-  prevMinute: PropTypes.number,
+  // prevMinute: PropTypes.number,
   nextMinute: PropTypes.number,
   prevUserNo: PropTypes.number,
   nextUserNo: PropTypes.number,

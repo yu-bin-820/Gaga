@@ -78,7 +78,7 @@ const ListClubMember = () => {
   return (
     <>
       <CommonTop />
-      <Box>
+      <Box marginTop='64px' marginLeft='10px'>
         <h5>신청 멤버</h5>
         {pendingMemberList?.map((pendingMember, i) => (
           <Box key={i}>
