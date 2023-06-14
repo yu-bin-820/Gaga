@@ -106,5 +106,54 @@ public class AlarmAspect {
         System.out.println(" :: 확정 멤버 aop :: groupChatRes :: "+groupChatResponse.getBody());
 
 	}
+	
+	@AfterReturning(pointcut = "execution(* com.gaga.bo.web..*.addMeeting(..))", returning = "result")
+	public void afterAddMeeting(JoinPoint joinPoint, Object result ) throws Exception {
+		System.out.println(" :: afterAddMeeting ::");
+		Object[] args = joinPoint.getArgs();
+		
+		Meeting argMeeting = (Meeting)args[0];
+
+		
+		Meeting meeting = meetingService.getMeeting((Integer)result);
+		String groupChatUrl = expressHost+"/rest/chat";
+		
+		System.out.println(" :: result meetingNo :: " + (Integer)result);
+		System.out.println(" :: meeting :: " + meeting);
+		
+		Map<String, Object> req = new HashMap<String,Object>();
+        
+		if (argMeeting.getParentClubNo() != 0) {
+			
+			groupChatUrl += "/club/message";
+			meeting.setParentClubNo(argMeeting.getParentClubNo());
+			req.put("groupNo", meeting.getParentClubNo());
+			
+		} else if (argMeeting.getParentMeetingNo() != 0 ) {
+			
+			groupChatUrl += "/meeting/message";
+			meeting.setParentMeetingNo(argMeeting.getParentMeetingNo());
+			req.put("groupNo", meeting.getParentMeetingNo());
+			
+		}
+		
+		if(meeting.getParentClubNo() != 0 || meeting.getParentMeetingNo() != 0) {
+			
+			System.out.println(groupChatUrl);
+			
+			req.put("senderNo", meeting.getMeetingLeaderNo());
+			req.put("content", meeting);
+			req.put("contentTypeNo", 102);
+			RestTemplate restTemplate = new RestTemplate();
+					
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			
+			HttpEntity<Map<String, Object>> groupChatEntity = new HttpEntity<Map<String, Object>>(req, headers);
+	        ResponseEntity<String> groupChatRes = restTemplate.postForEntity(groupChatUrl, groupChatEntity, String.class);
+	                
+	        System.out.println(" :: 타 모임 기반 aop :: res :: " + groupChatRes.getBody());
+		}
+	}
 
 }
