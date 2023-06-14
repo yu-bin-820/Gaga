@@ -316,7 +316,7 @@ router.get('/chat/group/list/userno/:userNo', async (req, res, next) => {
         console.log(group.dataValues.unreadMessages);
       }
       const groups = unsortedGroups.sort(
-        (a, b) => b.last_message_time - a.last_message_time
+        (a, b) => new Date(b.last_message_time) - new Date(a.last_message_time)
       );
 
       return res.json({

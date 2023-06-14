@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "nodemon app.js",
     "start": "nodemon"
   },
   "main": "app.js",
