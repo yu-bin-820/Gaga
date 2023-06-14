@@ -129,7 +129,7 @@ function ListNoticePost() {
   };
 
   return (
-<Box sx={{ marginTop: '64px', marginLeft: '10px', marginRight: '10px' }}>
+    <Box sx={{ marginTop: '14%', marginLeft: '1%', marginRight: '1%' }}>
       <CommonTop pageName="공지사항" prevPath="/community/profile/mine" />
       <AdminTabs />
       <Stack spacing={2.5}>

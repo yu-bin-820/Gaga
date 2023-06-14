@@ -16,31 +16,35 @@ const QACategoryButtonGroup = ({ onChange }) => {
 
   return (
     <Box>
-      <Stack direction="row" spacing={2} sx={{ mb: 2, justifyContent: 'center' }} >
+      <Stack direction="row" spacing={3.3} sx={{ mb: 2, justifyContent: 'center', marginTop:'1%'}} >
         {categoryValues.slice(0, 3).map((value, index) => (
           <Button
             variant="contained"
             color="primary"
             key={value}
             onClick={() => onChange(value)}
-            startIcon={categoryIcons[index]}
-            sx={{ width: '27%'}}
+            sx={{ width: '25%', flexDirection: 'column'}} // flexDirection 추가
           >
-            {categoryTexts[index]}
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '-1%' }}>
+              {categoryIcons[index]}
+              {categoryTexts[index]}
+            </Box>
           </Button>
         ))}
       </Stack>
-      <Stack direction="row" spacing={2} sx={{  justifyContent: 'center'}}>
+      <Stack direction="row" spacing={3.3} sx={{  justifyContent: 'center', marginBottom: '-1%'}}>
         {categoryValues.slice(3).map((value, index) => (
           <Button
             variant="contained"
             color="primary"
             key={value}
             onClick={() => onChange(value)}
-            startIcon={categoryIcons[index+3]}
-            sx={{ width: '27%' }}
+            sx={{ width: '25%', flexDirection: 'column', }} // flexDirection 추가
           >
-            {categoryTexts[index+3]}
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              {categoryIcons[index+3]}
+              {categoryTexts[index+3]}
+            </Box>
           </Button>
         ))}
       </Stack>

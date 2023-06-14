@@ -37,14 +37,14 @@ export default function BlackListTabs() {
   return (
     <Box sx={{  width: '100%', typography: 'body3',alignItems: "center", display: "flex", justifyContent: "center"  }}>
       <TabContext value={value} >
-        <Box sx={{ paddingRight: '5px', borderBottom: 2,  borderColor: 'divider', width: 1800, alignItems: "center", display: "flex", justifyContent: "center"   }}>
+        <Box sx={{ paddingRight: '1%', borderBottom: 2,  borderColor: 'divider', width: '95%', alignItems: "center", display: "flex", justifyContent: "center"   }}>
         <TabList
             onChange={handleChange}
             aria-label="lab API tabs example"
           >
-            <Tab style={{ fontSize: '18px', margin:'10px' }} label="Notice" value="1" component={Link} to="/notice/listNoticePost" />
-            <Tab style={{ fontSize: '18px', margin:'10px'}}  label="Event" value="2" component={Link} to="/notice/listEventPost" />
-            <Tab style={{ fontSize: '18px', margin:'10px' }} label="Q&A" value="3" component={Link} to="/notice/listQnaPost" />
+            <Tab style={{ fontSize: '20px', margin:'10px' }} label="Notice" value="1" component={Link} to="/notice/listNoticePost" />
+            <Tab style={{ fontSize: '20px', margin:'10px'}}  label="Event" value="2" component={Link} to="/notice/listEventPost" />
+            <Tab style={{ fontSize: '20px', margin:'10px' }} label="FAQ" value="3" component={Link} to="/notice/listQnaPost" />
           </TabList>
         </Box>        
       </TabContext>

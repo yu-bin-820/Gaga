@@ -8,8 +8,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    max-width: 500px; /* 원하는 너비로 설정하세요 */
+    width: 90%;
+    max-width: 300px; /* 원하는 너비로 설정하세요 */
     margin: 0 auto;
   }
   
