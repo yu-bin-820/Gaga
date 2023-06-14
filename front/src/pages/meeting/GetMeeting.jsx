@@ -1,7 +1,6 @@
 import ListMeetingReview from '@components/meeting/ListMeetingReview';
 import { Box, Button, Skeleton, Typography } from '@mui/material';
-import axios from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useParams } from 'react-router';
 import PeopleIcon from '@mui/icons-material/People';
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
@@ -23,12 +22,13 @@ import AddMeetingMemberDrawer from '@components/meeting/AddMeetingMemberDrawer';
 const GetMeeting = () => {
   
   const { meetingno } = useParams();
-  const [meeting, setMeeting] = useState();
-  const [pendingMemberList, setPendingMemberList] = useState();
-  const [confirmedMemberList, setConfirMemberList] = useState();
   const [isMeetingMemberOpen, setIsMeetingMemberOpen] = useState(false);
   const [settingsAddMemberOpen, setSettingsAddMemberOpen] = useState(false);
 
+  const {data : meeting } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${meetingno}`,
+    fetcher
+);
 
   const [settingsMapOpen, setSettingsMapOpen] = useState(false);
 
@@ -56,49 +56,15 @@ const GetMeeting = () => {
     fetcher
   );
 
-  useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${meetingno}`)
-      .then((response) => {
-        console.log(response.data);
-        setMeeting(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [meetingno]);
+  const {data : confirmedMemberList } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/list/grouptype/2/no/${meetingno}/state/2`,
+    fetcher
+);
 
-  useEffect(() => {
-    axios
-      .get(
-        `${
-          import.meta.env.VITE_SPRING_HOST
-        }/rest/user/list/grouptype/2/no/${meetingno}/state/2`
-      )
-      .then((response) => {
-        console.log(response.data);
-        setConfirMemberList(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [meetingno]);
-
-  useEffect(() => {
-    axios
-      .get(
-        `${
-          import.meta.env.VITE_SPRING_HOST
-        }/rest/user/list/grouptype/2/no/${meetingno}/state/1`
-      )
-      .then((response) => {
-        console.log(response.data);
-        setPendingMemberList(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [meetingno]);
+const {data : pendingMemberList } = useSWR(
+  `${import.meta.env.VITE_SPRING_HOST}/rest/user/list/grouptype/2/no/${meetingno}/state/2`,
+  fetcher
+);
 
   const onClickAddMember = useCallback(
     () => {

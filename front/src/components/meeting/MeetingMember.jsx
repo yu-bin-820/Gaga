@@ -1,20 +1,24 @@
 import { Avatar, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import React, { useCallback } from 'react';
-import { Navigate, useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import PropTypes from 'prop-types';
+import useCommunityStore from '@stores/communication/useCommunityStore';
 
 
 const MeetingMember = ({ member }) => {
     const { userNo, nickName, profileImg, userIntro} = member;
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const {setField} = useCommunityStore();
 
     const onClickProfileImg = useCallback(
       (e) => {
+				setField('prevProfilePath', location.pathname);
         navigate(`/community/profile/userno/${e.currentTarget.dataset.value}`);
       },
-      [navigate]
+      [navigate,setField,location]
     );
 
     return (

@@ -40,7 +40,10 @@ const AddMeetingParentsClub = ({ expanded, handleChange, userNo, onParentClubNoC
 
 
   return (
-    <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+    <Accordion 
+    expanded={expanded === 'parentClub'} 
+    onChange={handleChange('parentClub')}
+    sx={{ backgroundColor: expanded === "parentClub" ? "#e1ede7" : "white" }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2bh-content" id="panel2bh-header">
         <Stack>
           <Typography sx={{ width: '33%', flexShrink: 0 }}>클럽 기반 모임</Typography>
@@ -72,10 +75,10 @@ const AddMeetingParentsClub = ({ expanded, handleChange, userNo, onParentClubNoC
 };
 
 AddMeetingParentsClub.propTypes = {
-  expanded: PropTypes.object.isRequired,
-  handleChange: PropTypes.object.isRequired,
-  userNo: PropTypes.object.isRequired,
-  onParentClubNoClick: PropTypes.object.isRequired,
+  expanded: PropTypes.string,
+  handleChange: PropTypes.func,
+  userNo: PropTypes.number,
+  onParentClubNoClick: PropTypes.func,
 };
 
 export default AddMeetingParentsClub;

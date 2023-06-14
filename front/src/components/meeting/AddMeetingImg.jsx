@@ -5,13 +5,22 @@ import {
   TextField,
 } from "@mui/material";
 import { Box, Stack } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import useMeetingFormStore from "@hooks/meeting/useMeetingFormStore";
+import PropTypes from 'prop-types';
 
-const AddMeetingImg = () => {
+const AddMeetingImg = ({setNextButtonDisable}) => {
   const { file, image, setField, meetingIntro, onChangeField } =
     useMeetingFormStore();
+
+    useEffect(() => {
+      if (meetingIntro) {
+        setNextButtonDisable(false);
+      } else {
+        setNextButtonDisable(true)
+      }
+    }, [setNextButtonDisable, meetingIntro]);
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -75,5 +84,9 @@ const AddMeetingImg = () => {
         </Box>
     );
 };
+
+AddMeetingImg.propTypes = {
+  setNextButtonDisable: PropTypes.bool,
+  };
 
 export default AddMeetingImg;

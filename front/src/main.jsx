@@ -11,14 +11,9 @@ import theme from './theme.js';
 import ErrorPage from '@pages/common/ErrorPage.jsx';
 import Main from '@pages/common/Main.jsx';
 import GetMeeting from '@pages/meeting/GetMeeting.jsx';
-import UpdateMeeting from '@pages/meeting/UpdateMeeting.jsx';
-import AddMeeting from '@pages/meeting/AddMeeting.jsx';
-import AddMeetingMember from '@pages/meeting/AddMeetingMember.jsx';
 import GetMyProfile from '@pages/communication/GetMyProfile.jsx';
 import ListMeetingMember from '@pages/meeting/ListMeetingMember.jsx';
 import UpdateMeetingSuccess from '@pages/meeting/UpdateMeetingSuccess.jsx';
-import AddMeetingReveiw from '@pages/meeting/AddMeetingReveiw.jsx';
-import UpdateMeetingReview from '@pages/meeting/UpdateMeetingReview.jsx';
 import ListChatRoom from '@pages/communication/ListChatRoom.jsx';
 import GetDirectChat from '@pages/communication/GetDirectChat.jsx';
 import GetGroupChat from '@pages/communication/GetGroupChat.jsx';
@@ -143,16 +138,8 @@ const router = createBrowserRouter([
         path: 'meeting',
         children: [
           {
-            path: 'addmeeting',
-            element: <AddMeeting />,
-          },
-          {
             path: 'meetingno/:meetingno',
             element: <GetMeeting />,
-          },
-          {
-            path: 'updatemeeting/:meetingno',
-            element: <UpdateMeeting />,
           },
           {
             path: 'updatemeetingsuccess/meetingno/:meetingno',
@@ -162,25 +149,8 @@ const router = createBrowserRouter([
             path: 'member',
             children: [
               {
-                path: 'addmember/:meetingno',
-                element: <AddMeetingMember />,
-              },
-              {
                 path: 'listmember/meetingno/:meetingno',
                 element: <ListMeetingMember />,
-              },
-            ],
-          },
-          {
-            path: 'review',
-            children: [
-              {
-                path: 'addreview/meetingno/:meetingno',
-                element: <AddMeetingReveiw />,
-              },
-              {
-                path: 'updatereview/reviewno/:reviewno',
-                element: <UpdateMeetingReview />,
               },
             ],
           },

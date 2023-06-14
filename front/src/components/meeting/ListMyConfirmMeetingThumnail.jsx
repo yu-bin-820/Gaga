@@ -1,19 +1,16 @@
 import { Button } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useCallback, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import MeetingThumbnail from './MeetingThumnail';
 import PropTypes from 'prop-types';
-import axios from 'axios';
-import useSWR from 'swr';
-import fetcher from '@utils/fetcher';
 import DeleteMemberDialog from './DeleteMemberDialog';
 import useCommunityStore from '@stores/communication/useCommunityStore';
 
 
 const ListMyConfirmMeetingThumnail = ({ meeting }) => {
 
-    const { meetingNo } = meeting;
+    const location = useLocation();
     const {setField} = useCommunityStore();
 
     const [deleteMemberDialogOpen, setDeleteMemberDialogOpen] =
@@ -22,21 +19,19 @@ const ListMyConfirmMeetingThumnail = ({ meeting }) => {
 
     const navigate = useNavigate();
 
-    const { data: myData, mutate: mutateMe } = useSWR(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
-        fetcher
-        );
-
     const onClickDeleteMember = useCallback(() => {
         setDeleteMemberDialogOpen(true);
     }, []);
 
-    const onClickChatRoom=useCallback(()=>{
-        setField('chatRoomEntryNo',meetingNo);
-        setField('chatType',2);
-        setField('chatRoomLeader',meeting.meetingLeaderNo)
-        navigate(`/chat/group/message/list`);
-    },[meetingNo, meeting, setField, navigate]);
+    const onClickChatRoom = useCallback(() => {
+		setField('shouldScroll', true);
+		setField('isInfiniteScroll', false);
+        setField('chatRoomEntryNo', meeting.meetingNo);
+        setField('chatType', 2);
+        setField('chatRoomLeader', meeting.meetingLeaderNo);
+		setField('prevGetGroupChatPath', location.pathname);
+    navigate(`/chat/group/message/list`);
+  }, [meeting,setField,location, navigate]);
 
     return (
         <div>

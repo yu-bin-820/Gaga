@@ -65,8 +65,8 @@ const EventMarkerContainer = ({ meetingLat, meetingLng, meeting }) => {
 };
 
 EventMarkerContainer.propTypes = {
-  meetingLat: PropTypes.object.isRequired,
-  meetingLng: PropTypes.object.isRequired,
+  meetingLat: PropTypes.number,
+  meetingLng: PropTypes.number,
   meeting : PropTypes.object.isRequired,
 };
 

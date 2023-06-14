@@ -582,10 +582,18 @@ router.post('/chat/meeting/message', async (req, res, next) => {
     const meeting = await Meeting.findOne({
       where: { meeting_no: req.body.groupNo },
     });
+
+    let content = req.body.content;
+
+    if (typeof content === 'object' && content !== null) {
+      // content가 객체인 경우에만 stringify를 사용합니다.
+      content = JSON.stringify(content);
+    }
+
     const roomMessage = await RoomMessage.create({
       sender_no: req.body.senderNo,
       meeting_no: req.body.groupNo,
-      content: req.body.content,
+      content: content,
       content_type_no: req.body.contentTypeNo,
       lat: req.body.lat,
       lng: req.body.lng,
@@ -612,7 +620,16 @@ router.post('/chat/meeting/message', async (req, res, next) => {
       // .emit('message', roomMessageWithUser);
       .emit('message', 'ok');
 
-    let lastMessage = req.body.content;
+    let lastMessage = null;
+
+    if (typeof JSON.parse(content) !== 'object' && content !== null) {
+      lastMessage = content;
+    }
+
+    if (typeof JSON.parse(content) === 'object' && content !== null) {
+      // content가 객체인 경우에만 stringify를 사용합니다.
+      lastMessage = '(새 모임 참여링크)';
+    }
 
     if (req.body.contentTypeNo === 2) {
       lastMessage = '(사진)';

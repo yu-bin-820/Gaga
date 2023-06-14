@@ -33,7 +33,7 @@ const NoMeeting = ({ment}) => {
 };
 
 NoMeeting.propTypes = {
-    ment: PropTypes.object.isRequired,
+    ment: PropTypes.string.isRequired,
   };
 
 

@@ -1,12 +1,23 @@
 import useMeetingFormStore from '@hooks/meeting/useMeetingFormStore';
 import { TextField, Stack } from '@mui/material';
 import { Box } from '@mui/system';
+import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 
-const AddMeetingName = () => {
+
+const AddMeetingName = ({setNextButtonDisable}) => {
     const {
         meetingName,
         onChangeField
       } = useMeetingFormStore();
+
+      useEffect(() => {
+        if (meetingName) {
+          setNextButtonDisable(false);
+        } else {
+          setNextButtonDisable(true)
+        }
+      }, [setNextButtonDisable, meetingName]);
 
     return (
         <Box sx={{margin: '5px'}}>
@@ -27,5 +38,9 @@ const AddMeetingName = () => {
         </Box>
     );
 };
+
+AddMeetingName.propTypes = {
+    setNextButtonDisable: PropTypes.bool,
+    };
 
 export default AddMeetingName;

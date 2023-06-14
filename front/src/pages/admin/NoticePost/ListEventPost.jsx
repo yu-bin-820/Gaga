@@ -135,7 +135,7 @@ function ListEventPost() {
       <CommonTop pageName="이벤트" prevPath="/community/profile/mine" />
       <AdminTabs />
       <Stack spacing={2.5}>
-      
+      {myData && myData.role == 1 && (
       <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', alignItems: 'center', margin: '10px' }}>
       {myData && myData.role == 1 && (
              <>
@@ -160,7 +160,24 @@ function ListEventPost() {
     }}
   />
 </Box>
-
+      )}
+       {myData && myData.role != 1 && (
+  <TextField
+    type="text"
+    value={searchKeyword}
+    onChange={(e) => setSearchKeyword(e.target.value)}
+    onKeyPress={handleKeyPress}
+    placeholder="제목, 내용 검색" // 여기에 placeholder를 추가했습니다.
+    InputProps={{
+      endAdornment: (
+        <IconButton onClick={handleSearch}> {/* 버튼을 IconButton으로 변경하고, variant를 제거했습니다. */}
+          <SearchIcon color="primary" style={{ marginRight: '-13px' }} /> {/* 검색 아이콘을 사용했습니다. 필요하면 이를 변경하실 수 있습니다. */}
+        </IconButton>
+      ),
+      sx: { height: '38px', width: '180px', marginLeft : '180px', marginBottom: '-35px'},
+    }}
+  />
+       )}
        
         <List component="nav">
         {Array.isArray(noticePosts) ? noticePosts.map((noticePost, index) => (
@@ -170,7 +187,8 @@ function ListEventPost() {
         {noticePost.thumbNail && (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <img
-              src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/admin/${noticePost.thumbNail}`}
+              src={`${import.meta.env.VITE_CDN_HOST}/upload_images/admin/${noticePost.thumbNail}?type=sh&sharp_amt=1.0`}
+              loading="lazy"
               alt="추가예정입니다."
               style={{ minWidth:'110%', minHeight:'10px', maxHeight: '15%', maxWidth: '110%', display: 'block' }}
             />
@@ -186,12 +204,12 @@ function ListEventPost() {
       component="th"  
       scope="row" 
       style={{ 
-        fontSize: '0.8rem', 
-        borderBottom: '1px', 
+        fontSize: '1rem', 
+        borderBottom: '0px', 
         whiteSpace: 'normal', 
         wordWrap: 'break-word',
-        paddingRight: '10px',
-        margin: '-10px', // 마진을 없애기 위해 0으로 설정
+        paddingLeft: '0px',
+        margin: '-1px', // 마진을 없애기 위해 0으로 설정
       }}>
       {noticePost.noticePostTitle}
     </TableCell>
@@ -200,7 +218,7 @@ function ListEventPost() {
     <TableCell 
       align="right" 
       style={{ 
-        fontSize: '0.8rem', 
+        fontSize: '0.9rem', 
         borderBottom: '1px',
         whiteSpace: 'normal', 
         wordWrap: 'break-word',

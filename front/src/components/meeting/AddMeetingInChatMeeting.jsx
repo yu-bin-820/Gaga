@@ -34,14 +34,15 @@ const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo, onParentMeeti
         onParentMeetingNoClick(meetingNo); 
       };
 
-      console.log(userNo)
-
       if (!meetingList) {
         return <>로딩중</>;
       }
 
     return (
-        <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+        <Accordion 
+        expanded={expanded === 'parentMeeting'} 
+        onChange={handleChange('parentMeeting')}
+        sx={{ backgroundColor: expanded === "parentMeeting" ? "#e1ede7" : "white" }} >
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel3bh-content" id="panel3bh-header">
           <Stack>
           <Typography sx={{ width: '100%', flexShrink: 0 }}>기존 모임 기반 새 모임</Typography>
@@ -76,10 +77,10 @@ const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo, onParentMeeti
 };
 
 AddMeetingInChatMeeting.propTypes = {
-  expanded: PropTypes.object.isRequired,
-  handleChange: PropTypes.object.isRequired,
-  userNo: PropTypes.object.isRequired,
-  onParentMeetingNoClick: PropTypes.object.isRequired,
+  expanded: PropTypes.string,
+  handleChange: PropTypes.func,
+  userNo: PropTypes.number,
+  onParentMeetingNoClick: PropTypes.func,
 };
 
 export default AddMeetingInChatMeeting;

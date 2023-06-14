@@ -120,10 +120,10 @@ const ListCategory = ({ onMainCategoryChange, onSubCategoryClick, mainCategoryNo
 };
 
 ListCategory.propTypes = {
-  onMainCategoryChange: PropTypes.object.isRequired,
-  onSubCategoryClick: PropTypes.object.isRequired,
-  mainCategoryNo: PropTypes.object.isRequired,
-  subCategoryTag: PropTypes.object.isRequired,
+  onMainCategoryChange: PropTypes.func,
+  onSubCategoryClick: PropTypes.func,
+  mainCategoryNo: PropTypes.number,
+  subCategoryTag: PropTypes.string,
 };
 
 export default ListCategory;

@@ -142,8 +142,8 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
 
 DeleteMemberDialog.propTypes = {
   meeting: PropTypes.object.isRequired,
-  open: PropTypes.object.isRequired,
-  setOpen: PropTypes.object.isRequired,
+  open: PropTypes.bool.isRequired,
+  setOpen: PropTypes.func.isRequired,
 };
 
 export default DeleteMemberDialog;

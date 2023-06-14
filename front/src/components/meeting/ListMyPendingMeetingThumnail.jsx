@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { Box, Stack } from '@mui/system';
 import MeetingThumbnail from './MeetingThumnail';
 import { Button } from '@mui/material';
@@ -10,6 +10,8 @@ import useCommunityStore from '@stores/communication/useCommunityStore';
 
 
 const ListMyPendingMeetingThumnail = ({ meeting }) => {
+
+    const location = useLocation();
 
     const {setField} = useCommunityStore();
 
@@ -22,13 +24,17 @@ const ListMyPendingMeetingThumnail = ({ meeting }) => {
             setDeleteMemberDialogOpen(true);
         }, []);
 
-    const onClickDirectChat = useCallback(
-        (e) => {
-        setField('chatRoomEntryNo', meeting?.meetingLeaderNo);
-        navigate('/chat/direct/message/list');
-        },
-        [navigate, setField, meeting?.meetingLeaderNo]
-    );
+        const onClickDirectChat = useCallback(
+            () => {
+            setField('shouldScroll', true);
+            setField('isInfiniteScroll', false);
+            setField('chatRoomEntryNo', meeting?.meetingLeaderNo);
+            setField('prevGetDirectChatPath', location.pathname);
+        
+            navigate('/chat/direct/message/list');
+            },
+            [navigate, setField, location, meeting]
+        );
 
     return (
         <div>
