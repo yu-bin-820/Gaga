@@ -1,6 +1,7 @@
 package com.gaga.bo.web.user;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -96,9 +97,13 @@ public class UserRestController {
 //	        System.out.println("화면에서 입력한 비밀번호 암호화한거"+passwordEncoder.encode(user.getPassword()));
 	        
 	        if (passwordMatch) {
+	        	
 	            session.setAttribute("user", dbUser);
+	            System.out.println("비밀번호가 일치함"+dbUser);
 	            return new ResponseEntity<>(dbUser, HttpStatus.OK);
-	        } 
+	        } else {
+	        	System.out.println("비밀번호가 일치하지않음");
+	        }
 	    }
 	    
 	    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -192,8 +197,22 @@ public class UserRestController {
 	public ResponseEntity<User> updateUser(@RequestBody User user,HttpSession session) throws Exception {
 		System.out.println("/rest/user/updateUser : POST");
 
-		String encodedPassword = passwordEncoder.encode(user.getPassword());
-		user.setPassword(encodedPassword);
+	    // 사용자로부터 전달받은 비밀번호가 비어있지 않은 경우에만 비밀번호를 업데이트하고,
+	    // 그렇지 않은 경우에는 기존의 비밀번호를 유지합니다.
+		 if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+		        String encodedPassword = passwordEncoder.encode(user.getPassword());
+		        user.setPassword(encodedPassword);
+		    } else {
+		        user.setPassword(null);
+		    }
+//	    if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+//	      String encodedPassword = passwordEncoder.encode(user.getPassword());
+//	      user.setPassword(encodedPassword);
+//	    } else {
+//	      // 데이터베이스에서 기존 사용자를 찾아 기존 비밀번호를 설정합니다.
+//	      User existingUser = userService.getUserById(user.getUserId());
+//	      user.setPassword(existingUser.getPassword());
+//	    }
 		userService.updateUser(user);
 		System.out.println();
 		session.setAttribute("user", user);
@@ -330,12 +349,29 @@ public class UserRestController {
 //	    System.out.println("phoneAuthOk session ID: " + session.getId());
 //	    return false;
 //	}
-	@PostMapping(value= "/phoneNo")
+	@PostMapping(value= "/phoneNo")		//핸드폰 인증
 	public String phoneNo(@RequestBody Map<String, String> body) throws Exception{
 		String userPhoneNo=body.get("phoneNo");
 		String phoneAuthCode= userService.sendRandomSmsMessage(userPhoneNo);
+		System.out.println("인증요청옴"+body.get("phoneNo"));
 		return phoneAuthCode;
 	}
+//	@PostMapping(value = "/mailAuth") // 이메일 인증, 회원 아이디(이메일)에 대해 인증 코드 발송
+//	public ResponseEntity<Map<String, Object>> mailConfirm(@RequestBody Map<String, String> body) throws Exception {
+//	    String userEmail = body.get("email");
+//	    String emailAuthCode = userService.sendEmailContent(userEmail);
+//	    System.out.println("사용자에게 발송한 인증코드 ==> " + emailAuthCode);
+//
+//	    // 현재 시간에서 5분 후의 시간을 계산합니다.
+//	    LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(5);
+//
+//	    // 인증 코드와 만료 시간을 함께 클라이언트에게 전달합니다.
+//	    Map<String, Object> response = new HashMap<>();
+//	    response.put("emailAuthCode", emailAuthCode);
+//	    response.put("expirationTime", expirationTime);
+//
+//	    return new ResponseEntity<>(response, HttpStatus.OK);
+//	}
 	@PostMapping(value = "/mailAuth") 		//이메일 인증, 회원 아이디(이메일)에 대해 인증 코드 발송
 	public String mailConfirm(@RequestBody Map<String, String> body) throws Exception {
 	    String userEmail = body.get("email");

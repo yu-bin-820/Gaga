@@ -131,7 +131,9 @@
 	<update id="updateUser" parameterType="user">
 	    UPDATE users SET
 	        user_id = #{userId},
-	        password = #{password},
+	        <if test="password != null">       
+            		password = #{password},
+      		</if>
 	        user_name = #{userName},
 	        birthday = #{birthday},
 	        gender = #{gender},
