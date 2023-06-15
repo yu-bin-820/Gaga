@@ -22,6 +22,13 @@ const UpdateMeetingSuccess = () => {
     fetcher
   );
 
+  const { data: meetingData, mutate: mutateMeeting } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${meetingno}`,
+    fetcher
+  );
+
+  const isNeedAdjustment = meetingData?.entryFee != 0;
+
   const [bankName, setBankName] = useState(myData ? myData.bankName : '');
   const [accountNo, setAccountNo] = useState(myData ? myData.accountNo : '');
   const handleBankInfoChange = (bankName, accountNo) => {
