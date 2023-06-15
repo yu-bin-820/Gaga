@@ -1,7 +1,7 @@
 import ListMeetingReview from '@components/meeting/ListMeetingReview';
 import { Box, Button, Grid, Paper, Skeleton, Typography } from '@mui/material';
 import { useCallback, useState } from 'react';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import PeopleIcon from '@mui/icons-material/People';
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -22,8 +22,11 @@ import Face3Icon from '@mui/icons-material/Face3';
 import Face6Icon from '@mui/icons-material/Face6';
 import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
 import MemberListTapview from '@components/meeting/MemberListTapview';
+import useMeetingPathStore from '@stores/meeting/useMeetingPathStore';
 
 const GetMeeting = () => {
+
+  const {prevMeetingPath} = useMeetingPathStore();
   
   const { meetingno } = useParams();
   const [isMeetingMemberOpen, setIsMeetingMemberOpen] = useState(false);
@@ -115,7 +118,7 @@ const {data : pendingMemberList } = useSWR(
   }
   return (
     <>
-      {isUserLeader && !isMeetingSuccessful ? <GetMeetingTop /> : <CommonTop />}
+      {isUserLeader && !isMeetingSuccessful ? <GetMeetingTop /> : <CommonTop prevPath={prevMeetingPath}/>}
       <Box
         sx={{
           marginTop: '64px',
