@@ -4,7 +4,7 @@ import {create} from 'zustand';
 const userField={
     userNo:'',
     userId: '',
-    password: '',
+    // password: '',
     userName: '',
     birthday: null,
     gender: 1,
@@ -16,6 +16,7 @@ const userField={
     activityImg3: '',
     userIntro: '',
     mainTitleNo: 0,
+    mainTitleName:'',
     bankCode: '',
     bankName: '',
     accountNo: '',

@@ -6,16 +6,22 @@ import {
 import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
 import PeopleIcon from '@mui/icons-material/People';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import SmallChip from './SmallChip';
+import useMeetingPathStore from '@stores/meeting/useMeetingPathStore';
 
 
 const MeetingThumbnail = ({ meeting }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { setField } = useMeetingPathStore();
+
+
 
   const onClickMeeting = useCallback(() => {
+    setField('prevMeetingPath', location.pathname);
     navigate(`/meeting/meetingno/${meeting?.meetingNo}`);
-  }, [meeting?.meetingNo, navigate]);
+  }, [meeting?.meetingNo, navigate, location.pathname, setField]);
 
   const truncatedName = meeting?.meetingName?.length > 13
   ? `${meeting?.meetingName.slice(0, 13)}...`

@@ -214,7 +214,11 @@ export default function ListChatRoom() {
                     padding: '5px',
                     minWidth: '100%',
                   }}
-                  data-value={direct.receiver_no}
+                  data-value={
+                    direct.Receiver
+                      ? direct.Receiver?.user_no
+                      : direct.Sender?.user_no
+                  }
                   onClick={onClickDirectChat}
                 >
                   <ChatItem

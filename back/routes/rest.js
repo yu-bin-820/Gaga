@@ -903,7 +903,7 @@ router.get('/chat/direct/list/userno/:userNo', async (req, res, next) => {
 
       const finalList = sortedAndUniqueList.sort((a, b) => {
         // 최신 메시지가 먼저 오도록 created_at 기준으로 정렬합니다.
-        return b.created_at - a.created_at;
+        return new Date(b.created_at) - new Date(a.created_at);
       });
       console.log(sendDirectMessageList);
       res.json(finalList);
