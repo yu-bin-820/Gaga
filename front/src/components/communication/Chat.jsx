@@ -25,7 +25,10 @@ const Chat = ({
   );
   // console.log('!!!', myData);
   // console.log('!!!', data.data);
-  const minute = DateTime.fromISO(data.created_at).minute;
+  const minute = DateTime.fromFormat(
+    data.created_at,
+    'yyyy-MM-dd HH:mm:ss'
+  ).minute;
   const isNotice = data.content_type_no === 101;
   const isNewGroupLink = data.content_type_no === 102;
   const isMe = myData?.userNo === data.sender_no;

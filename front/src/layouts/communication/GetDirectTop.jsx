@@ -107,7 +107,7 @@ const GetDirectTop = ({ receiverNo }) => {
                   alt={myData?.nickName}
                   src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                     myData?.profileImg
-                  }`}
+                  }?type=f_sh&w=76&h=76&autorotate=false&faceopt=true&sharp_amt=1.0`}
                 />
                 <Typography>{myData?.nickName} (나)</Typography>
               </Stack>
@@ -119,7 +119,7 @@ const GetDirectTop = ({ receiverNo }) => {
                   alt={userData?.nickName}
                   src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                     userData?.profileImg
-                  }`}
+                  }?type=f_sh&w=76&h=76&autorotate=false&faceopt=true&sharp_amt=1.0`}
                 />
                 <Typography>{userData?.nickName}</Typography>
               </Stack>
