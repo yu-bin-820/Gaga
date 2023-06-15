@@ -83,13 +83,13 @@ const ListMyMeeting = () => {
 
             <h5 style={{margin:'1px'}}>성사된 모임</h5>
 
-            {meetingList?.filter(meeting => meeting?.state === ( 2) && ( meeting.meetingState ===2 || meeting.meetingState ===3)).length === 0 && (
+            {meetingList?.filter(meeting => meeting?.state === ( 2) && ( meeting.meetingState ===2 || meeting.meetingState ===3) &&(meeting.meetingSuccess ===2)).length === 0 && (
                 <NoMeeting 
                 ment={'성사된 모임이 없습니다'}/>
             )}
 
             {meetingList?.map((meeting, i) => {
-                if (meeting?.state === ( 2 || 3) && ( meeting.meetingState ===2 || meeting.meetingState ===3)) {
+                if (meeting?.state === ( 2 || 3) && ( meeting.meetingState ===2 || meeting.meetingState ===3) &&(meeting.meetingSuccess ===2)) {
                 return (
                     <Box key={i} sx={{ margin: '3px' }}>
                     {!isMyProfile&&(<ListMeetingProfile />)}
