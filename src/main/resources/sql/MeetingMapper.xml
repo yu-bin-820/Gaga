@@ -209,14 +209,24 @@
     m.adjustment_state,
     m.account_no,
     m.bank_name,
-    mb.state,
-    (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND meeting_no = m.meeting_no) AS count
-  FROM meetings AS m
-  INNER JOIN members mb ON m.meeting_no = mb.meeting_no
-  WHERE mb.user_no = #{userNo}
-  AND mb.state IN (1, 2)
+    (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND meeting_no = m.meeting_no) AS count,
+    mb.state
+  FROM meetings m
+  LEFT JOIN 
+  	(SELECT meeting_no, user_no, state
+  		FROM members
+  		WHERE user_no = #{userNo}) mb 
+  ON 
+  	m.meeting_no = mb.meeting_no
+  WHERE 
+  	mb.user_no = #{userNo}
   OR 
-   m.meeting_leader_no = #{userNo}
+  	m.meeting_leader_no = #{userNo}
+  AND
+  	m.meeting_state IN (1, 2)
+  AND
+  	(mb.state IN (2) OR mb.state IS NULL)
+  ORDER BY m.meeting_success ASC, m.meeting_date ASC
 </select>
   
   
@@ -243,6 +253,7 @@
     filter_min_age,
     filter_max_age,
     main_category_no,
+    meeting_success,
     filter_tag,
     (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND meeting_no = m.meeting_no) AS count
   FROM
@@ -271,20 +282,20 @@
    </select>
    
      <!-- 미팅 리스트 검색 구현 (getMeetingListByKeyword)-->
-   <select id="getMeetingListByKeyword" parameterType="search" resultMap="meetingResultMap">
+	<select id="getMeetingListByKeyword" parameterType="search" resultMap="meetingResultMap">
 	  SELECT *,
-	  (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND meeting_no = m.meeting_no) AS count
+	  (SELECT COUNT(*) + 1 FROM members WHERE state = 2 AND meeting_no = m.meeting_no) AS count
 	  FROM meetings AS m
-	  WHERE meeting_addr LIKE CONCAT('%', #{searchKeyword}, '%')
+	  WHERE (meeting_addr LIKE CONCAT('%', #{searchKeyword}, '%')
 	     OR meeting_detail_addr LIKE CONCAT('%', #{searchKeyword}, '%')
 	     OR meeting_name LIKE CONCAT('%', #{searchKeyword}, '%')
-	     OR meeting_intro LIKE CONCAT('%', #{searchKeyword}, '%')
+	     OR meeting_intro LIKE CONCAT('%', #{searchKeyword}, '%') )
 	     AND meeting_state = 1
-	  LIMIT #{startRowNum}, #{pageSize}
+	  LIMIT #{pageSize} OFFSET ${(currentPage - 1) * pageSize}
 	</select>
   
   <!-- 미팅 생성 -->
-<insert id="addMeeting" parameterType="Meeting">
+<insert id="addMeeting" parameterType="Meeting" useGeneratedKeys="true" keyProperty="meetingNo" keyColumn="meeting_no">
   INSERT INTO meetings (
     entry_fee,
     meeting_date,

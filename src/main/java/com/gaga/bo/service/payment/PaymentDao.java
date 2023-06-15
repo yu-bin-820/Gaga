@@ -28,8 +28,11 @@ public interface PaymentDao {
 	//SELECT LIST
 	public List<Payment> getAllPaymentList() throws Exception;
 	
-	//UPDATE 1: 결제완료 2: 환불완료
+	//UPDATE 1: 결제완료 2: 환불완료 3: 환불대기
 	public void updatePayment(String payNo) throws Exception;
+	
+	//UPDATE 참여거절, 내보내기 회원에게 환불
+	public void deleteMemberRefund(Map<String, Integer> map) throws Exception;
 	
 	//정산
 	//SELECT LIST 정산정보 전체 목록 조회(이후 상태별 조회)

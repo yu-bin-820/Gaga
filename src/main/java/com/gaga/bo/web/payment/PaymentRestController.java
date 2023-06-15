@@ -92,6 +92,14 @@ public class PaymentRestController {
 		paymentService.updatePayment(payNo);
 	}
 	
+	@PatchMapping("refund/delete")
+	public void deleteMemberRefund(@RequestBody Map<String, Integer> member) throws Exception{
+		
+		System.out.println("참여 취소, 내보내기 회원에게 환불 Ctrl");
+		
+		paymentService.deleteMemberRefund(member);
+	} 
+	
 	@GetMapping("list/{userNo}")
 	public List<Payment> getPaymentList(@PathVariable int userNo) throws Exception{
 		
@@ -145,7 +153,7 @@ public class PaymentRestController {
 	}
 	
 	@PostMapping("refund")
-	public ResponseEntity<String> refundTest(@RequestBody Map<String, String> requestData) throws Exception {
+	public ResponseEntity<String> refund(@RequestBody Map<String, String> requestData) throws Exception {
 
 	    String merchantUid = requestData.get("merchant_uid");
 
@@ -175,6 +183,8 @@ public class PaymentRestController {
 	        if (responseEntity.getStatusCode() == HttpStatus.OK) {
 	        	
 	        	paymentService.updatePayment(merchantUid);
+	        	
+	        	System.out.println("결제 번호는? "+ merchantUid);
          	
 	        	System.out.println("환불처리가 성공적으로 진행되었습니다.");
 	        	

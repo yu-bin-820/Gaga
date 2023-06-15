@@ -90,7 +90,7 @@ public class CommunityRestController {
 		
 		System.out.println("profileImg 변경 후 :: " + user);
 		session.setAttribute("user", user);
-	}
+	} 
 	
 	@PatchMapping("activityimg/userno/{userNo}")
 	public void updateActivityImg(
@@ -426,5 +426,5 @@ public class CommunityRestController {
 		communityService.deleteUserReview(userReview);
 		
 	}
-		
+	
 }

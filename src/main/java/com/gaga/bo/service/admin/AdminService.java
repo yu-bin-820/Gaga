@@ -10,9 +10,13 @@ public interface AdminService {
 	
 	void addNoticePost(NoticePost noticePost) throws Exception;
 	
-	List<NoticePost> getNoticePostList() throws Exception;
+	List<NoticePost> getNoticePostList(int noticePostCategoryNo) throws Exception;
 	
 	List<NoticePost> getNoticePostListByCategoryNo(int noticePostCategoryNo, int lastPostId) throws Exception;
+	
+	List<NoticePost> getLatestPostByCategoryNo(int lastPostId, int noticePostCategoryNo) throws Exception;
+	
+	List<NoticePost> selectQnaByCategory(int qnaCategory) throws Exception;
 	
 	int getLatestPostId() throws Exception;
 	
@@ -22,7 +26,7 @@ public interface AdminService {
 
 	void deleteNoticePost(int noticePostNo) throws Exception;
 	
-	List<NoticePost> searchNoticePost(String searchKeyword) throws Exception;
+	List<NoticePost> searchNoticePost(String searchKeyword, int searchCategoryNo) throws Exception;
 	
 	//블랙리스트 게시판
 	void addBlackList(int userNo) throws Exception;
@@ -44,13 +48,9 @@ public interface AdminService {
 	public List<User> searchBlackList(String searchKeyword);
 	
 	//신고게시판
-	//List<Report> getReportAdmin(int reportedNo) throws Exception;
-    
-//	List<Report> getReportAdminList() throws Exception;
-    
-	
 	Report getReport(int reportNo) throws Exception;
 
 	List<Report> getReportList(int userNo, int role) throws Exception;
 	
+	List<Report> searchReport(String searchKeyword) throws Exception;
 }
