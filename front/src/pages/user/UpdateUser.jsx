@@ -30,7 +30,7 @@ const UpdateUser = () => {
   const {
     userNo,
     userId,
-    password,
+    // password,
     userName,
     birthday,
     gender = 1,
@@ -92,7 +92,7 @@ const UpdateUser = () => {
     if (myData) {
       setField("userNo", myData.userNo);
       setField("userId", myData.userId);
-      setField("password", myData.password);
+      // setField("password", myData.password);
       setField("userName", myData.userName);
       setField("birthday", dayjs(myData.birthday).format("YYYY-MM-DD"));
       setField("gender", myData.gender);
@@ -134,7 +134,7 @@ const UpdateUser = () => {
         {
           userNo,
           userId,
-          password,
+          // password,
           userName,
           birthday: dayjs(birthday).format("YYYY-MM-DD"),
           gender,
@@ -173,7 +173,7 @@ const UpdateUser = () => {
       console.error(error);
       alert("오류가 발생했습니다. 다시 시도해 주세요.");
     }
-  }, [userId, password, userName, birthday, gender, nickName, phoneNo]);
+  }, [userId, userName, birthday, gender, nickName, phoneNo]);
 
   function isValidEmail(email) {
     const re =
