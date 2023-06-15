@@ -1,6 +1,5 @@
 import { Chip } from '@mui/material';
 import PropTypes from 'prop-types';
-import React from 'react';
 
 const ListMeetingChip = ({ onClick }) => (
     <Chip

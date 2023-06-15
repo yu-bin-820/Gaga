@@ -98,18 +98,33 @@ useEffect(() => {
       case 1:
         return "이벤트";
       case 2:
-        return "Q&A";
+        return "FAQ";
       default:
         return "";
     }
 }
+
+function getCategoryBack(noticePostCategoryNo) {
+    switch (noticePostCategoryNo) {
+      case 0:
+        return "Notice";
+      case 1:
+        return "Event";
+      case 2:
+        return "Qna";
+      default:
+        return "";
+    }
+}
+const noticePostCategoryNo = noticePost.noticePostCategoryNo;
+const prevPath = `/notice/list${getCategoryBack(noticePostCategoryNo)}Post`;
 
   return (
     <Box sx={{ marginTop: '64px', marginLeft: '10px', marginRight: '10px' }}>
       <Typography variant="h5" gutterBottom>
       <CommonTop
               pageName= {getCategoryText(noticePost.noticePostCategoryNo) + " 수정"}
-              prevPath="/notice/listNoticePost"
+              prevPath= {prevPath}
           />
       </Typography>
       <Stack spacing={2}>
@@ -142,8 +157,8 @@ useEffect(() => {
         {noticePostCategory === 2 && (
                     <TextField
                         select
-                        label="Q&A카테고리"
-                        value={noticePostCategory}
+                        label="FAQ카테고리"
+                        value={qnaCategory}
                         onChange={(e) => setQnaCategory(Number(e.target.value))}
                     >
                         <MenuItem value={1}>회원</MenuItem>

@@ -27,7 +27,10 @@ const PaymentFail = () => {
 
         <CheckCircleIcon color='error' sx={{ fontSize: '60px' }} />
 
-        <h5>{nickName}님 결제가 정상적으로 처리되지 않았습니다. </h5>
+        <h5>
+          {nickName}님의 결제가
+          <br /> 정상적으로 처리되지 않았습니다.{' '}
+        </h5>
 
         <Stack sx={{ marginTop: '20px' }} direction='row' spacing={2}>
           <Button

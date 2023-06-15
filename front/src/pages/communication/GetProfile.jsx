@@ -1,10 +1,6 @@
-import ListMyMeeting from '@components/meeting/ListMyMeeting';
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import MainBottomNav from '@layouts/common/MainBottomNav';
 import ProfileTop from '@layouts/communication/ProfileTop';
 import {
   Avatar,
-  BottomNavigation,
   Button,
   Chip,
   Dialog,
@@ -12,9 +8,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
   ImageList,
-  ImageListItem,
   LinearProgress,
   Typography,
 } from '@mui/material';
@@ -25,11 +19,10 @@ import useSWR from 'swr';
 import ProfileMeetingClubTabs from '@components/communication/ProfileMeetingClubTabs';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { useLocation, useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import AddUserReviewDialog from '@components/communication/AddUserReviewDialog';
 import CustomedImageListItem from '@components/common/CustomedImageListItem';
 import axios from 'axios';
-import useCommunityStore from '@stores/communication/useCommunityStore';
 
 const TemperatureLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -45,9 +38,6 @@ const TemperatureLinearProgress = styled(LinearProgress)(({ theme }) => ({
 }));
 
 const GetProfile = () => {
-  const navigate = useNavigate();
-  const { setField } = useCommunityStore();
-
   const [addUserReviewDialogOpen, setAddUserReviewDialogOpen] = useState(false);
   const [duplicateUserReviewDialogOpen, setDuplicateUserReviewDialogOpen] =
     useState(false);
@@ -56,7 +46,7 @@ const GetProfile = () => {
 
   const { userNo } = useParams();
 
-  const { data: myData, mutate: mutateMe } = useSWR(
+  const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );

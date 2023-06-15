@@ -57,78 +57,96 @@ function GetNoticePost() {
       case 1:
         return "이벤트";
       case 2:
-        return "Q&A";
+        return "FAQ";
       default:
         return "";
     }
 }
+
+function getCategoryBack(noticePostCategoryNo) {
+    switch (noticePostCategoryNo) {
+      case 0:
+        return "Notice";
+      case 1:
+        return "Event";
+      case 2:
+        return "Qna";
+      default:
+        return "";
+    }
+}
+const noticePostCategoryNo = noticePost.noticePostCategoryNo;
+const prevPath = `/notice/list${getCategoryBack(noticePostCategoryNo)}Post`;
+
   const handleUpdate = () => {
     navigate(`/notice/updateNoticePost/noticePostNo/${noticePostNo}`, { state: { noticePost } });
   };
   const handleList = () => {
-    navigate(`/notice/listNoticePost`, { state: { noticePost } });
+    navigate(`/notice/list${getCategoryBack(noticePostCategoryNo)}Post`);
   };
 
   return (
-    <Box sx={{ margin: '1rem', padding: '0.1rem', paddingTop: '0.9rem',backgroundColor: '#f5f5f5', borderRadius: '10px' }}>
-    <CommonTop
-              pageName= {getCategoryText(noticePost.noticePostCategoryNo) + " 조회"}
-              prevPath="/notice/listNoticePost"
-          />
-    <Typography variant="h4" gutterBottom style={{ display: 'flex', alignItems: 'center' }}>
-      
-    </Typography>
-    <Paper elevation={3} sx={{ padding: '1rem', backgroundColor: '#ffffff', borderRadius: '10px', marginTop: '35px' , marginBottom: '1rem' }}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={2}>
-          <Typography variant="body1" >게시글 번호 {noticePost.noticePostNo}</Typography>
+    <Box sx={{ margin: '0.5rem', padding: '0rem', paddingTop: '0.9rem', backgroundColor: '#ffffff', borderRadius: '0px' }}>
+      <CommonTop
+        pageName={getCategoryText(noticePost.noticePostCategoryNo) + " 조회"}
+        prevPath={prevPath}
+      />
+  
+      <Box sx={{ padding: '1rem', backgroundColor: '#ffffff',  marginTop: '35px', marginBottom: '1rem', boxShadow: 'none',  minWidth:'10rem', borderBottom: '0.2px solid gray' }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h7" style={{ fontWeight: 'bold' }}> 
+              [{getCategoryText(noticePost.noticePostCategoryNo)}] {noticePost.noticePostTitle}
+            </Typography>
+            <Typography variant="body1" style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>GAGA 운영자</span>
+              <span>{noticePost.noticePostRegDate ? noticePost.noticePostRegDate.split('T')[0] : ''}</span>
+            </Typography>
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={2}>
-          <Typography variant="body1" style={{ fontWeight: 'bold' }}>게시글 카테고리 :{getCategoryText(noticePost.noticePostCategoryNo)}</Typography>
-
+      </Box>
+  
+      <Box sx={{ padding: '1rem', backgroundColor: '#ffffff', borderRadius: '0px', marginTop: '15px', marginBottom: '1rem', boxShadow: 'none' }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="body1">
+              {noticePost.noticePostText ? noticePost.noticePostText.split('\n').map((line, i) => (
+                <div key={i}>{line}</div>
+              )) : ''}
+            </Typography>
+            {noticePost.noticePostImg && (
+              <img
+                src={`${import.meta.env.VITE_CDN_HOST}/upload_images/admin/${noticePost.noticePostImg}?type=sh&sharp_amt=1.0`}
+                alt="공지사항 이미지"
+                style={{ maxWidth: '83vw', display: 'block', objectFit: 'contain', maxHeight: 'auto' }}
+              />
+            )}
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={2}>
-          <Typography variant="body1" style={{ fontWeight: 'bold' }}></Typography>
-          <Typography variant="body1" style={{ fontWeight: 'bold' }} >{noticePost.noticePostTitle}</Typography>
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <Typography variant="body1" style={{ fontWeight: 'bold' }}></Typography>
-          <Typography variant="body1">{noticePost.noticePostText}</Typography>
-          {noticePost.noticePostImg && (
-  <img
-    src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/admin/${noticePost.noticePostImg}`}
-    alt="공지사항 이미지"
-    style={{  maxWidth: '90vw',
-    maxHeight: '30vh',
-    display: 'block',
-    margin: '0 auto',}}
-  />
-)}
+      </Box>
+  
+      <Grid container justifyContent="center" alignItems="center" spacing={3}>
+        {myData && myData.role == 1 && (
+          <>
+            <Grid item>
+              <Button variant="contained" color="primary" startIcon={<Edit />} onClick={handleUpdate} style={{ fontWeight: 'bold' }}>
+                수정
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button variant="contained" color="primary" startIcon={<Delete />} onClick={handleDelete} style={{ fontWeight: 'bold' }}>
+                삭제
+              </Button>
+            </Grid>
+          </>
+        )}
+        <Grid item>
+          <Button variant="contained" color="primary" startIcon={<List />} onClick={handleList} style={{ fontWeight: 'bold' }}>
+            목록
+          </Button>
         </Grid>
       </Grid>
-    </Paper>
-    <Grid container justifyContent="center" alignItems="center" spacing={3}>
-    {myData && myData.role == 1 && (
-        <>
-      <Grid item>
-        <Button variant="contained" color="primary" startIcon={<Edit />} onClick={handleUpdate} style={{ fontWeight: 'bold' }}>
-          수정
-        </Button>
-      </Grid>
-      <Grid item>
-        <Button variant="contained" color="primary" startIcon={<Delete />} onClick={handleDelete} style={{ fontWeight: 'bold' }}>
-          삭제
-        </Button>
-      </Grid>
-      </>
-    )}
-      <Grid item>
-        <Button variant="contained" color="primary" startIcon={<List />} onClick={handleList} style={{ fontWeight: 'bold' }}>
-          목록
-        </Button>
-      </Grid>
-    </Grid>
-  </Box>
-);
-}
-export default GetNoticePost;
+    </Box>
+  );
+  }
+  export default GetNoticePost;

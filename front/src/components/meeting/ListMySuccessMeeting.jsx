@@ -1,7 +1,7 @@
 import fetcher from '@utils/fetcher';
 import { useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import axios from 'axios';
 import MeetingThumbnail from './MeetingThumnail';
 import { Box, Stack } from '@mui/system';
@@ -9,6 +9,7 @@ import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 import UpdateMeetingReviewDrawer from './UpdateMeetingReviewDrawer';
 import AddMeetingReviewDrawer from './AddMeetingReviewDrawer';
+import useCommunityStore from '@stores/communication/useCommunityStore';
 
 
 const ListMySuccessMeeting = ({ meeting }) => {
@@ -18,7 +19,8 @@ const ListMySuccessMeeting = ({ meeting }) => {
     const [ reviewNo, setReviewNo] = useState(0);
     const [settingsUpdateReviewOpen, setSettingsUpdateReviewOpen] = useState(false);
     const [settingsAddReviewOpen, setSettingsAddReviewOpen] = useState(false);
-
+    const {setField} = useCommunityStore();
+    const location = useLocation();
 
     const { data: myData } = useSWR(
         `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -43,7 +45,7 @@ const ListMySuccessMeeting = ({ meeting }) => {
             meetingReviewList.some((meetingReview) => meetingReview.meetingReviewerNo === myData?.userNo)
         );
 
-        const isMeetingChatRoot = meeting.meetingState === 1 || 2;
+        const isMeetingChatRoot = (meeting.state === 2) && (meeting.meetingState === 2);
 
 
     const navigate = useNavigate();
@@ -76,9 +78,14 @@ const ListMySuccessMeeting = ({ meeting }) => {
         []
       );
 
-    const onClickChatRoom=useCallback(()=>{
-        navigate(`/meeting/member/listmember/meetingno/${meeting?.meetingNo}`);
-    },[meeting?.meetingNo, navigate]);
+      const onClickChatRoom = useCallback(() => {
+		setField('shouldScroll', true);
+        setField('chatRoomEntryNo', meeting.meetingNo);
+        setField('chatType', 2);
+        setField('chatRoomLeader', meeting.meetingLeaderNo);
+		setField('prevGetGroupChatPath', location.pathname);
+    navigate(`/chat/group/message/list`);
+  }, [meeting,setField,location,navigate]);
 
     console.log(isMeetingReview)
 

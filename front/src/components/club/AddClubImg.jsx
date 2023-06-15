@@ -6,13 +6,22 @@ import {
   Typography,
 } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import useClubFormStore from '@hooks/club/useClubFormStore';
+import PropTypes from 'prop-types';
 
-const AddClubImg = () => {
+const AddClubImg = ({ setNextButtonDisable }) => {
   const { file, image, setField, clubIntro, onChangeField } =
     useClubFormStore();
+
+  useEffect(() => {
+    if (clubIntro) {
+      setNextButtonDisable(false);
+    } else {
+      setNextButtonDisable(true);
+    }
+  }, [setNextButtonDisable, clubIntro]);
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -66,7 +75,7 @@ const AddClubImg = () => {
       <TextField
         id='outlined-multiline-static'
         name='clubIntro'
-        placeholder='소개글을 입력해 주세요(선택)'
+        placeholder='소개글을 입력해 주세요'
         onChange={(e) => onChangeField('clubIntro', e)}
         fullWidth
         multiline
@@ -75,6 +84,10 @@ const AddClubImg = () => {
       />
     </Box>
   );
+};
+
+AddClubImg.propTypes = {
+  setNextButtonDisable: PropTypes.bool,
 };
 
 export default AddClubImg;

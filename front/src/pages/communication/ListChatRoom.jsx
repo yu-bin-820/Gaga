@@ -63,9 +63,15 @@ export default function ListChatRoom() {
       const selectedData = JSON.parse(e.currentTarget.dataset.value);
       console.log(selectedData.chatRoomEntryNo);
       setField('shouldScroll', true);
+
       setField('chatRoomEntryNo', selectedData.chatRoomEntryNo);
       setField('chatType', selectedData.chatType);
       setField('chatRoomLeader', selectedData.chatRoomLeader);
+
+      setField('prevChatRoomEntryNo', selectedData.chatRoomEntryNo);
+      setField('prevChatType', selectedData.chatType);
+      setField('prevChatRoomLeader', selectedData.chatRoomLeader);
+
       setField('prevGetGroupChatPath', location.pathname);
 
       navigate(`/chat/group/message/list`);
@@ -76,7 +82,11 @@ export default function ListChatRoom() {
   const onClickDirectChat = useCallback(
     (e) => {
       setField('shouldScroll', true);
+
       setField('chatRoomEntryNo', e.currentTarget.dataset.value);
+
+      setField('prevChatRoomEntryNo', e.currentTarget.dataset.value);
+
       setField('prevGetDirectChatPath', location.pathname);
 
       navigate('/chat/direct/message/list');
@@ -178,7 +188,17 @@ export default function ListChatRoom() {
                       group.meeting_name ? group.meeting_name : group.club_name
                     }
                     subtitle={group.last_message}
-                    date={new Date(group.last_message_time)}
+                    date={
+                      new Date(group.last_message_time)
+                      // group.last_message
+                      //   ? new Date(group.last_message_time)
+                      //   : new Date(
+                      //       new Date(group.last_message_time).toLocaleString(
+                      //         'en-US',
+                      //         { timeZone: 'UTC' }
+                      //       )
+                      //     )
+                    }
                     unread={group.unreadMessages}
                   />
                 </Box>

@@ -8,6 +8,7 @@ import { useNavigate, useParams } from 'react-router';
 import { Box } from '@mui/system';
 import DeleteMeetingDialog from '@components/meeting/DeleteMeetingDialog';
 import useUpdateMeetingFormStore from '@stores/meeting/useUpdateMeetingFormStore';
+import UpdateMeetingDrawer from '@components/meeting/UpdateMeetingDrawer';
 
 const GetMeetingTop = () => {
     const { meetingno } = useParams();
@@ -16,7 +17,7 @@ const GetMeetingTop = () => {
 
   const navigate = useNavigate();
 
-
+  const [settingsUpdateMeetingOpen, setSettingsUpdateMeetingOpen] = useState(false);
   const [leaderMenuOpen, setLeaderMenuOpen] = useState(false);
 
   const onClickLeaderMenu = useCallback(() => {
@@ -33,11 +34,19 @@ const toggleLeaderMenuOpen = useCallback(
 
 const onClickUpdate = useCallback(()=>{
   reset();
-  navigate(`/meeting/updatemeeting/${ meetingno }`);
-},[navigate, reset, meetingno]);
+  setSettingsUpdateMeetingOpen(true);
+  setLeaderMenuOpen(false);
+},[reset]);
 
 const [deleteMeetingDialogOpen, setDeleteMeetingDialogOpen] =
 useState(false);
+
+const toggleSettingsUpdateMeeting = useCallback(
+  (state) => () => {
+    setSettingsUpdateMeetingOpen(state);
+  },
+  []
+);
 
 
 const onClickDeleteSelect = useCallback(() => {
@@ -91,6 +100,12 @@ const onClickDeleteSelect = useCallback(() => {
         open={deleteMeetingDialogOpen}
         setOpen={setDeleteMeetingDialogOpen}
       />
+      <UpdateMeetingDrawer
+        settingsUpdateMeetingOpen={settingsUpdateMeetingOpen}
+        setSettingsUpdateMeetingOpen={setSettingsUpdateMeetingOpen}
+        toggleSettingsUpdateMeeting={toggleSettingsUpdateMeeting} 
+        meetingno={meetingno}
+        />
 
     </>
     

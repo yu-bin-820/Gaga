@@ -1,4 +1,4 @@
-import { Avatar, Button, Divider, Drawer, List, ListItem, Rating, TextField } from '@mui/material';
+import { Avatar, Button, Divider, Drawer, IconButton, Rating, TextField } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -8,6 +8,8 @@ import useInput from '@hooks/common/useInput';
 import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
 import PropTypes from 'prop-types';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+
 
 const UpdateMeetingReviewDrawer = ({settingsUpdateReviewOpen, setSettingsUpdateReviewOpen, toggleSettingsUpdateReview, reviewno}) => {
     const [meetingReview, onChangeMeetingReview, setMeetingReview] = useInput({
@@ -92,27 +94,18 @@ const UpdateMeetingReviewDrawer = ({settingsUpdateReviewOpen, setSettingsUpdateR
             onClose={toggleSettingsUpdateReview(false)}
             onOpen={toggleSettingsUpdateReview(true)}
         >
-            <Box sx={{ minWidth: '100vw' }}>
-                <List>
-                    <ListItem>
-                        <Button
-                        onClick={() => {
-                            setSettingsUpdateReviewOpen(false);
-                        }}>
-                            닫기
-                        </Button>
-                        <Box
-                            sx={{
-                                minWidth: 'calc(100vw - 108px)',
-                                display: 'flex',
-                                justifyContent: 'center',
-                            }}
-                        >
-                        </Box>
-                    </ListItem>
-                    <Divider />
-                </List>
-            </Box>
+          <Stack
+            direction={'row'}
+            alignItems={'center'}
+            sx={{ height: '55px', minWidth: '100vw' }}
+          >
+            <IconButton
+            onClick={() => {
+              setSettingsUpdateReviewOpen(false);}}>
+              <ArrowBackIosNewIcon />
+            </IconButton>
+          </Stack>
+          <Divider />
             <Stack direction={'row'} spacing={3} sx={{ marginBottom: '30px' }}>
           <Button
             variant="outlined"

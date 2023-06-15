@@ -2,13 +2,14 @@ import StyledToggleButtonGroup from '@components/common/StyledToggleButtonGroup'
 import { Button, TextField, ToggleButton } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import useUpdateClubFormStore from '@stores/club/useUpdateClubFormStore';
-import useUpdateMeetingFormStore from '@stores/meeting/useUpdateMeetingFormStore';
+import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import dayjs from 'dayjs';
 import React, { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
+import useSWR from 'swr';
+import PropTypes from 'prop-types';
 
-const UpdateClubState = () => {
+const UpdateClubState = ({ setSettingsUpdateClubOpen }) => {
   const { clubNo } = useParams();
 
   const handleAlignment = (event, newAlignment) => {
@@ -20,71 +21,69 @@ const UpdateClubState = () => {
   const {
     clubName,
     clubIntro,
-    clubImg,
-    clubRegion,
     filterGender,
     filterMinAge,
     filterMaxAge,
-    filterTag,
     clubMaxMemberNo,
     clubState,
     file,
-    image,
     setField,
-    onChangeField,
   } = useUpdateClubFormStore();
 
   const [alignment, setAlignment] = useState(clubState.toString());
+
+  const { mutate: mutateClub } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/club/no/${clubNo}`,
+    fetcher
+  );
 
   const onClickClubState = (value) => {
     setField('clubState', value);
   };
 
-  const handleSubmit = useCallback(() => {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
 
-    try {
-      const formData = new FormData();
+      try {
+        const formData = new FormData();
 
-      formData.append('file', file);
-      formData.append('clubName', clubName);
-      formData.append('clubIntro', clubIntro);
-      formData.append('clubRegion', clubRegion);
-      formData.append('filterTag', filterTag);
-      formData.append('filterGender', filterGender);
-      formData.append('filterMinAge', filterMinAge);
-      formData.append('filterMaxAge', filterMaxAge);
-      formData.append('clubMaxMemberNo', clubMaxMemberNo);
-      formData.append('clubState', clubState);
-      formData.append('clubNo', clubNo);
+        formData.append('file', file);
+        formData.append('clubName', clubName);
+        formData.append('clubIntro', clubIntro);
+        formData.append('filterGender', filterGender);
+        formData.append('filterMinAge', filterMinAge);
+        formData.append('filterMaxAge', filterMaxAge);
+        formData.append('clubMaxMemberNo', clubMaxMemberNo);
+        formData.append('clubState', clubState);
+        formData.append('clubNo', clubNo);
 
-      console.log(clubRegion);
+        console.log(formData);
 
-      console.log(formData);
+        axios
+          .patch(`${import.meta.env.VITE_SPRING_HOST}/rest/club`, formData)
+          .then(mutateClub());
 
-      const response = axios.patch(
-        `${import.meta.env.VITE_SPRING_HOST}/rest/club`,
-        formData
-      );
-
-      navigate(`/club/no/${clubNo}`);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [
-    clubNo,
-    navigate,
-    file,
-    filterGender,
-    filterMaxAge,
-    filterMinAge,
-    filterTag,
-    clubRegion,
-    clubIntro,
-    clubMaxMemberNo,
-    clubName,
-    clubState,
-  ]);
+        setSettingsUpdateClubOpen(false);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [
+      clubNo,
+      navigate,
+      file,
+      filterGender,
+      filterMaxAge,
+      filterMinAge,
+      clubIntro,
+      clubMaxMemberNo,
+      clubName,
+      clubState,
+      setSettingsUpdateClubOpen,
+      mutateClub,
+    ]
+  );
 
   return (
     <Box sx={{ margin: '10px' }}>
@@ -133,6 +132,10 @@ const UpdateClubState = () => {
       </Stack>
     </Box>
   );
+};
+
+UpdateClubState.propTypes = {
+  setSettingsUpdateClubOpen: PropTypes.func,
 };
 
 export default UpdateClubState;

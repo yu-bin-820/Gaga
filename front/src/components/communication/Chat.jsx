@@ -1,18 +1,23 @@
-import { FC, useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
-import { Alert, Avatar, Stack, Typography } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import { Avatar, Stack, Typography } from '@mui/material';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import PropTypes from 'prop-types';
-import { Box, display } from '@mui/system';
+import { Box } from '@mui/system';
 import { DateTime } from 'luxon';
-import ChatMap from './ChatMap';
-import { StaticMap } from 'react-kakao-maps-sdk';
 import ChatStaticMap from './ChatStaticMap';
 import useChatMapStore from '@stores/communication/useChatMapStore';
+import MeetingThumbnail from '@components/meeting/MeetingThumnail';
+import ChatMeetingThumnail from './ChatMeetingThumnail';
 
-const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
+const Chat = ({
+  data,
+  //prevMinute,
+  nextMinute,
+  prevUserNo,
+  nextUserNo,
+}) => {
   const { setField } = useChatMapStore();
   const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -22,15 +27,18 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
   // console.log('!!!', data.data);
   const minute = DateTime.fromISO(data.created_at).minute;
   const isNotice = data.content_type_no === 101;
+  const isNewGroupLink = data.content_type_no === 102;
   const isMe = myData?.userNo === data.sender_no;
   const isShowProfile = data.sender_no != prevUserNo;
   const isShowTime = minute !== nextMinute || data.sender_no != nextUserNo;
 
   const messageColor = isMe ? 'black' : 'gray';
   const messageBackColor = isMe ? 'rgba(3, 102, 69, 0.15)' : '#ededed';
-  const sendTime = DateTime.fromISO(data.created_at).toLocaleString(
-    DateTime.TIME_SIMPLE
-  );
+  const sendTime = DateTime.fromFormat(
+    data.created_at,
+    'yyyy-MM-dd HH:mm:ss'
+  ).toLocaleString(DateTime.TIME_SIMPLE);
+  // const sendTime = data.created_at;
 
   const onClickChatMap = useCallback(() => {
     setField('lat', data.lat);
@@ -173,6 +181,31 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
                 </div>
               )}
 
+              {isNewGroupLink && (
+                <Box
+                  sx={{
+                    backgroundColor: `${messageBackColor}`,
+                    borderRadius: '0.5rem',
+                    padding: '10px',
+                  }}
+                >
+                  <Typography color={`${messageColor}`}>
+                    새로운 모임에 참여해 보세요
+                  </Typography>
+                  <Box
+                    sx={{
+                      backgroundColor: `white`,
+                      borderRadius: '0.5rem',
+                      border: `1px solid ${messageBackColor}`,
+                      padding: '10px',
+                      maxWidth: '200px',
+                    }}
+                  >
+                    <ChatMeetingThumnail meeting={JSON.parse(data?.content)} />
+                  </Box>
+                </Box>
+              )}
+
               <Stack marginTop="auto">
                 {!isMe && isShowTime && (
                   <Typography sx={{ fontSize: 12, color: 'grey' }}>
@@ -205,7 +238,7 @@ const Chat = ({ data, prevMinute, nextMinute, prevUserNo, nextUserNo }) => {
 };
 Chat.propTypes = {
   data: PropTypes.object,
-  prevMinute: PropTypes.number,
+  // prevMinute: PropTypes.number,
   nextMinute: PropTypes.number,
   prevUserNo: PropTypes.number,
   nextUserNo: PropTypes.number,

@@ -70,9 +70,9 @@ const ClubThumbnail = ({ club }) => {
           >
             {club?.clubImg ? (
               <img
-                src={`${import.meta.env.VITE_SPRING_HOST}/upload_images/club/${
+                src={`${import.meta.env.VITE_CDN_HOST}/upload_images/club/${
                   club?.clubImg
-                }`}
+                }?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`}
                 alt='noImg'
                 loading='lazy'
                 onError={handleImageError}

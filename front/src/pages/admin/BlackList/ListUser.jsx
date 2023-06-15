@@ -4,15 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Box, Stack, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import CommonTop from '@layouts/common/CommonTop';
-import { styled } from '@mui/system';
-import Collapse from '@mui/material/Collapse';
 import BlackListTabs from '@components/admin/BlackListTabs';
 import Chatbot from '@components/chatbot/ChatBot';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
 
-const AnimatedTextField = styled(TextField)`
-  transition: all 600ms ease-in-out;
-  width: 200px;
-`;
 
 function ListUser() {
   const [userList, setUserList] = useState([]);
@@ -26,6 +22,25 @@ function ListUser() {
   const handleUserClick = (userNo) => {
     navigate(`/blackList/getUser/userNo/${userNo}`);
   };
+
+  const { data: myData, mutate: mutateMe } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+  );
+
+  useEffect(() => {
+    if (myData) {
+      const { userNo, role } = myData;
+      console.log(userNo, role, '유저넘버랑 권한');    
+
+
+    if (role !== 1) {
+        alert("권한이 없습니다.");
+        window.history.back();
+    }
+}
+  }, [myData]);
+
 
   useEffect(() => {
     if (lastUserNo !== null) {
@@ -110,7 +125,7 @@ function ListUser() {
   };
 
   return (
-    <Box sx={{ marginTop: "64px", marginLeft: "10px", marginRight: "10px" }}>
+    <Box sx={{ marginTop: "17%", marginLeft: "3%", marginRight: "3%" }}>
       <CommonTop pageName="회원 목록" prevPath="/community/profile/mine" />
       <Chatbot />
       <BlackListTabs />
@@ -124,30 +139,25 @@ function ListUser() {
         }}
       >
         <Box sx={{ flexGrow: 1 }} />
-        <IconButton onClick={() => setSearchOpen(!isSearchOpen)}>
-          <SearchIcon />
-        </IconButton>
+        
       </Box>
-      <Collapse in={isSearchOpen}>
-        <AnimatedTextField
-          type="text"
-          value={searchKeyword}
-          onChange={(e) => setSearchKeyword(e.target.value)}
-          onKeyPress={handleKeyPress}
-          style={{ marginRight: "0.5rem", width: "11rem", height: "5rem" }}
-          InputProps={{
-            endAdornment: (
-              <Button
-                variant="contained"
-                onClick={handleSearch}
-                sx={{ fontSize: '0.75rem', minWidth: '4rem' }}
-              >
-                검색
-              </Button>
-            ),
-          }}
-        />
-      </Collapse>
+
+      <TextField
+              style={{ marginLeft:'43.1%', justifyContent:'flex-end', marginRight: '3%' }}
+              type="text"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="이름, 닉네임등 검색"
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={handleSearch} >
+                    <SearchIcon color="primary" style={{ marginRight: '-13px' }} />
+                  </IconButton>
+                ),
+                sx: { height: '38px', width: '200px' },
+              }}
+            />
   
       <TableContainer>
         <Table>
