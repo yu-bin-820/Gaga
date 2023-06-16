@@ -12,7 +12,7 @@ public interface ClubService {
 	
 	//클럽관리
 	//클럽 생성
-	public void addClub(Club club) throws Exception;
+	public int addClub(Club club) throws Exception;
 	
 	//클럽 상세 조회 
 	public Club getClub(int clubNo) throws Exception;

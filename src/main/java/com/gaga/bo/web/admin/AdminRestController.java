@@ -338,20 +338,6 @@ public class AdminRestController {
 		}
 	}
 
-//	@GetMapping("getReportAdminList")
-//	public ResponseEntity<List<Report>> getReportAdminList(@RequestParam(required = false) Integer lastId) throws Exception {
-//	    System.out.println("Received lastId: " + lastId);
-//	    System.out.println("did u call me??????????????");			
-//	    
-//	    List<Report> reports = adminService.getReportAdminList();
-//
-//	    if (!reports.isEmpty()) {
-//	        return ResponseEntity.ok(reports);
-//	    }
-//
-//	    return ResponseEntity.notFound().build();
-//	}
-//	
 	@GetMapping("getReportAdmin/reportNo/{reportNo}")
 	public Report getReport(@PathVariable("reportNo") int reportNo) throws Exception {
 
@@ -359,5 +345,12 @@ public class AdminRestController {
 		System.out.println(":: getReport :: " + report);
 
 		return report;
+	}
+	
+	@GetMapping("searchReport")
+	public List<Report> searchReport(@RequestParam("searchKeyword") String searchKeyword) throws Exception {
+		System.out.println("서버로부터 날라온 신고 키워드"+searchKeyword);
+	    String decodedKeyword = URLDecoder.decode(searchKeyword, "UTF-8");
+	    return adminService.searchReport(decodedKeyword);
 	}
 }

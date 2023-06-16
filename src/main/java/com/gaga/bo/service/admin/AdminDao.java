@@ -58,4 +58,6 @@ public interface AdminDao {
     Report getReport(int reportNo) throws Exception;
     
     List<Report> getReportList(int userNo, int role) throws Exception;
+    
+    List<Report> searchReport(String searchKeyword) throws Exception;
 }

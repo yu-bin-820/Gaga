@@ -29,15 +29,19 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
-	public void addClub(Club club) throws Exception {
+	public int addClub(Club club) throws Exception {
 
 		System.out.println("클럽 생성 서비스");
 		
-		clubDao.addClub(club);
+		int a = clubDao.addClub(club);
+		
+		int clubNo = club.getClubNo();
 
-		System.out.println("생성은 잘 됐는지?");
+		System.out.println("a는 뭐야?"+a);
+		System.out.println("생성은 잘 됐는지?"+clubNo);
 		// TODO Auto-generated method stub
 
+		return clubNo;
 	}
 	
 	 @Override 

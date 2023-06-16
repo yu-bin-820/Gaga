@@ -49,6 +49,7 @@ public class ClubRestController {
 	@Value("${fileUploadPath}")
 	String fileUploadPath;
 	
+	@Autowired
 	@Value("${pageSize}")
 	int pageSize;	
 
@@ -67,7 +68,7 @@ public class ClubRestController {
 	//클럽관리
 	
 	@PostMapping("")
-	public void addClub(@ModelAttribute Club club,
+	public int addClub(@ModelAttribute Club club,
 				 		   @RequestParam(value = "file", required = false) MultipartFile file
 						   ) throws Exception{
 		
@@ -90,8 +91,12 @@ public class ClubRestController {
 		
 		System.out.println("img변경 후 : "+club);
 		
-
-		clubService.addClub(club);
+		int clubNo = clubService.addClub(club);
+		
+		System.out.println("clubNo : "+clubNo);
+		
+		return clubNo;
+	
 
 	}
 	
@@ -198,25 +203,25 @@ public class ClubRestController {
 	}
 	
 	@GetMapping("search")
-	public List<Club> getSearchClubList(@ModelAttribute Search search) throws Exception{
+	public List<Club> getSearchClubList(@RequestParam int page, @RequestParam String searchKeyword) throws Exception{
 		
 		System.out.println("클럽 목록 검색 Ctrl");
 		
-		if(search.getCurrentPage() ==0 ){
-			search.setCurrentPage(1);
-		}
+		System.out.println("page: " + page);
+	    System.out.println("searchKeyword: " + searchKeyword);
 		
-		System.out.println("searchClub : " + search);
-		
-		search.setPageSize(pageSize);
-		
-		System.out.println(search.getStartRowNum());
-		
-		List<Club> list = clubService.getSearchClubList(search);
-		
-		//System.out.println(list);
-		
-		return list;
+		 Search search = new Search();
+		 search.setCurrentPage(page);
+		 search.setSearchKeyword(searchKeyword);
+		 search.setPageSize(pageSize);
+		    
+		 System.out.println("search: " + search);
+
+		 List<Club> list = clubService.getSearchClubList(search);
+		 
+		 System.out.println(list);
+		 
+		 return list;
 	}
 	
 	@PostMapping("list/filter")

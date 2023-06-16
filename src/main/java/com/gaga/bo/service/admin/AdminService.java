@@ -48,13 +48,9 @@ public interface AdminService {
 	public List<User> searchBlackList(String searchKeyword);
 	
 	//신고게시판
-	//List<Report> getReportAdmin(int reportedNo) throws Exception;
-    
-//	List<Report> getReportAdminList() throws Exception;
-    
-	
 	Report getReport(int reportNo) throws Exception;
 
 	List<Report> getReportList(int userNo, int role) throws Exception;
 	
+	List<Report> searchReport(String searchKeyword) throws Exception;
 }

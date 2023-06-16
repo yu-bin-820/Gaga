@@ -93,19 +93,12 @@
 	  WHERE pay_no = #{payNo}
 	</update>
 	
-	<!-- 환불알림 목록 SQL-->
-	<select id="offerRefund" resultMap="paymentResultMap">
-		SELECT m.meeting_no, m.user_no
-		FROM members m
-		WHERE m.meeting_no IN ( SELECT meeting_no 
-	    						FROM meetings 
-	   						    WHERE meeting_state = 4 
-	    							  AND entry_fee != 0 
-	    							  AND meeting_success != 2)
-	</select>
-
-	
-	
+	<update id="deleteMemberRefund" parameterType="Map">
+	 UPDATE payments
+	 SET pay_state = 3
+	 WHERE meeting_no = #{meetingNo:INTEGER} AND user_no = #{userNo:INTEGER} AND pay_state=1
+	</update>
+		
 	<!-- 정산 SQL -->
 	<!-- SQL : SELECT --> <!-- 1 :진행중 2: 성사 -->
 	<select id="getAllAdjustmentList" resultMap="meetingResultMap">
