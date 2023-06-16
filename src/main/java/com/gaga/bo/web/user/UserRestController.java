@@ -92,9 +92,9 @@ public class UserRestController {
 	    if (dbUser != null) {
 	        // 회원의 입력 비밀번호와 데이터베이스에 저장된 해시화된 비밀번호를 비교
 	        boolean passwordMatch = passwordEncoder.matches(user.getPassword(), dbUser.getPassword());
-//	        System.out.println("화면에서 입력한 비밀번호: " + user.getPassword());
-//	        System.out.println("디비에서 가져온 비밀번호 암호화한거"+dbUser.getPassword());
-//	        System.out.println("화면에서 입력한 비밀번호 암호화한거"+passwordEncoder.encode(user.getPassword()));
+	        System.out.println("화면에서 입력한 비밀번호: " + user.getPassword());
+	        System.out.println("디비에서 가져온 비밀번호 암호화한거"+dbUser.getPassword());
+	        System.out.println("화면에서 입력한 비밀번호 암호화한거"+passwordEncoder.encode(user.getPassword()));
 	        
 	        if (passwordMatch) {
 	        	
@@ -199,12 +199,12 @@ public class UserRestController {
 
 	    // 사용자로부터 전달받은 비밀번호가 비어있지 않은 경우에만 비밀번호를 업데이트하고,
 	    // 그렇지 않은 경우에는 기존의 비밀번호를 유지합니다.
-		 if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-		        String encodedPassword = passwordEncoder.encode(user.getPassword());
-		        user.setPassword(encodedPassword);
-		    } else {
-		        user.setPassword(null);
-		    }
+//		 if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+//		        String encodedPassword = passwordEncoder.encode(user.getPassword());
+//		        user.setPassword(encodedPassword);
+//		    } else {
+//		        user.setPassword(null);
+//		    }
 //	    if (user.getPassword() != null && !user.getPassword().isEmpty()) {
 //	      String encodedPassword = passwordEncoder.encode(user.getPassword());
 //	      user.setPassword(encodedPassword);
@@ -214,10 +214,39 @@ public class UserRestController {
 //	      user.setPassword(existingUser.getPassword());
 //	    }
 		userService.updateUser(user);
-		System.out.println();
 		session.setAttribute("user", user);
 
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
+	}
+	
+	@PostMapping("/updatePassword")
+	public ResponseEntity<User> updatePassword(@RequestBody User user, HttpSession session) throws Exception{
+	    System.out.println("/rest/user/updatePassword : POST");
+	    
+	    // 핸드폰 번호로 기존 사용자 정보를 가져옵니다.
+	    User dBUser = userService.getUserByPhoneNo(user.getPhoneNo());
+	    
+	    
+	    if (dBUser != null) {
+	        // 사용자로부터 전달받은 비밀번호를 암호화하여 설정합니다.
+	        String encodedPassword = passwordEncoder.encode(user.getPassword());
+	        dBUser.setPassword(encodedPassword);
+	        System.out.println(dBUser.getUserId());
+	        System.out.println(dBUser.getPhoneNo());
+	        System.out.println("화면에서 사용자가 변경할 비밀번호"+user.getPassword());
+	        System.out.println("인코딩된 비밀번호"+encodedPassword);
+//	        System.out.println(user.getUserId());
+	        System.out.println(user.getPhoneNo());
+	        // 사용자 정보를 업데이트합니다.
+	        userService.updatePassword(dBUser);
+	        
+	        session.setAttribute("user", dBUser);
+	        
+	        return new ResponseEntity<>(dBUser, HttpStatus.OK);
+	    } else {
+	        // 핸드폰 번호에 해당하는 사용자를 찾을 수 없는 경우
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
 	}
 	
 	@PostMapping("/deleteUser")
