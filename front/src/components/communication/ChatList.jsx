@@ -124,12 +124,18 @@ const ChatList = ({ chatData, setSize }) => {
                 data={message}
                 prevMinute={
                   j !== 0
-                    ? DateTime.fromISO(messages[j - 1].created_at).minute
+                    ? DateTime.fromFormat(
+                        messages[j - 1].created_at,
+                        'yyyy-MM-dd HH:mm:ss'
+                      ).minute
                     : null
                 }
                 nextMinute={
                   j !== messages?.length - 1
-                    ? DateTime.fromISO(messages[j + 1].created_at).minute
+                    ? DateTime.fromFormat(
+                        messages[j + 1].created_at,
+                        'yyyy-MM-dd HH:mm:ss'
+                      ).minute
                     : null
                 }
                 prevUserNo={j !== 0 ? messages[j - 1].sender_no : null}

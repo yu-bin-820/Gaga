@@ -189,7 +189,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
                     alt={groupLeader.nick_name}
                     src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
                       groupLeader.profile_img
-                    }`}
+                    }?type=f_sh&w=76&h=76&autorotate=false&faceopt=true&sharp_amt=1.0`}
                   />
                   <Typography>{groupLeader.nickName}</Typography>
                 </Stack>
@@ -205,7 +205,9 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
                       alt={member.nickName}
                       src={`${
                         import.meta.env.VITE_CDN_HOST
-                      }/upload_images/user/${member.profileImg}`}
+                      }/upload_images/user/${
+                        member.profileImg
+                      }?type=f_sh&w=76&h=76&autorotate=false&faceopt=true&sharp_amt=1.0`}
                     />
                     <Typography>{member.nickName}</Typography>
                   </Stack>

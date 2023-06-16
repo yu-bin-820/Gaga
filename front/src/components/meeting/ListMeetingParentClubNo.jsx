@@ -46,7 +46,7 @@ const ListMeetingParentClubNo = () => {
 
   return (
     <Box>
-      <Box>
+      <Box display='flex' flexDirection='column' gap={2}>
         {meetingList?.map((meeting, i) => (
           <Box key={i}>
             <MeetingThumbnail
