@@ -45,9 +45,9 @@ const AddClubDrawer = ({
           <AddClubListCategory setNextButtonDisable={setNextButtonDisable} />
         );
       case 2:
-        return <AddClubRegion setNextButtonDisable={setNextButtonDisable} />;
-      case 3:
         return <AddClubName setNextButtonDisable={setNextButtonDisable} />;
+      case 3:
+        return <AddClubRegion setNextButtonDisable={setNextButtonDisable} />;
       case 4:
         return <AddClubImg setNextButtonDisable={setNextButtonDisable} />;
       case 5:

@@ -1,7 +1,13 @@
-import { Button, Dialog, DialogActions, Typography } from '@mui/material';
-import { Stack } from '@mui/system';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  Modal,
+  Typography,
+} from '@mui/material';
+import { Box, Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import useSWR from 'swr';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -15,6 +21,13 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
+
+  const [openModal, setOpenModal] = useState(false);
+
+  const closeModal = () => {
+    setOpenModal(false);
+    setOpen(false);
+  };
 
   const onClickDeleteMember = useCallback(
     async (event) => {
@@ -67,12 +80,12 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
         );
 
         if (postResponseTwo.status === 200) {
-          alert('환불 요청이 성공하였습니다.');
+          setOpenModal(true);
+
           const deleteResponse = await axios.delete(
             `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`,
             { data: data } // userData를 delete 요청에 사용
           );
-          setOpen(false);
         } else {
           alert('환불 요청이 실패하였습니다.');
         }
@@ -114,6 +127,36 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
           >
             예
           </Button>
+          <Modal
+            open={openModal}
+            onClose={closeModal}
+            aria-describedby='modal-description'
+          >
+            <Box
+              sx={{
+                p: 4,
+                backgroundColor: 'white',
+                borderRadius: 2,
+                mx: 'auto',
+                my: '20%',
+                width: '50%',
+              }}
+            >
+              <Typography id='modal-description' sx={{ mt: 2 }}>
+                환불이 성공적으로 <br />
+                처리되었습니다.
+              </Typography>
+              <Button
+                onClick={() => {
+                  closeModal();
+                }}
+                style={{ alignSelf: 'flex-end', marginTop: 16 }}
+                variant='contained'
+              >
+                확인
+              </Button>
+            </Box>
+          </Modal>
         </Stack>
       </DialogActions>
     </Dialog>

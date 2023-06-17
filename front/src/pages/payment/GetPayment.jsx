@@ -9,7 +9,7 @@ import axios, { isCancel } from 'axios';
 import Refund from '@components/payment/Refund';
 import PropTypes from 'prop-types';
 
-const PaymentDetails = () => {
+const GetPayment = () => {
   const { payNo } = useParams();
   const [meeting, setMeeting] = useState();
   const [userNo, setUserNo] = useState();
@@ -133,7 +133,7 @@ const PaymentDetails = () => {
                 </Stack>
                 <Stack direction='row' display='flex' spacing={3}>
                   <Stack>참가비</Stack>
-                  <Stack> {meeting?.entryFee}</Stack>
+                  <Stack> {meeting?.entryFee?.toLocaleString()}원</Stack>
                 </Stack>
                 <Stack direction='row' display='flex' spacing={1}>
                   <Stack sx={{ minWidth: '70px' }}>모임날짜 </Stack>
@@ -192,8 +192,8 @@ const PaymentDetails = () => {
   );
 };
 
-PaymentDetails.propTypes = {
+GetPayment.propTypes = {
   payData: PropTypes.object.isRequired,
 };
 
-export default PaymentDetails;
+export default GetPayment;

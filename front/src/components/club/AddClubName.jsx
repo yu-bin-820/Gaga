@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 const AddClubName = ({ setNextButtonDisable }) => {
-  const { clubName, onChangeField } = useClubFormStore();
+  const { clubName, clubRegion, onChangeField } = useClubFormStore();
 
   useEffect(() => {
     if (clubName) {
@@ -14,6 +14,7 @@ const AddClubName = ({ setNextButtonDisable }) => {
       setNextButtonDisable(true);
     }
   }, [setNextButtonDisable, clubName]);
+
   return (
     <Box sx={{ margin: '10px' }}>
       <h4>클럽의 이름을 정해주세요!</h4>

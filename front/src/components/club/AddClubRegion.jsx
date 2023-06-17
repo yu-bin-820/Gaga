@@ -8,19 +8,17 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import { Box, Stack, minWidth } from '@mui/system';
-import axios from 'axios';
+import { Box, Stack } from '@mui/system';
 import useClubFormStore from '@hooks/club/useClubFormStore';
 import PlaceIcon from '@mui/icons-material/Place';
 import PropTypes from 'prop-types';
+import fetcher from '@utils/fetcher';
+import useSWR from 'swr';
 
 const AddClubRegion = ({ setNextButtonDisable }) => {
-  const [sidoOptions, setSidoOptions] = useState([]);
-  const [sigoonOptions, setSigoonOptions] = useState([]);
-  const [selectedSido, setSelectedSido] = useState('');
-  const [selectedSigoon, setSelectedSigoon] = useState('');
-  const [finalValue, setFinalValue] = useState('');
-  const { clubRegion, onChangeField, setClubRegion } = useClubFormStore();
+  const [selectedSido, setSelectedSido] = useState(null);
+  const [sigunguCode, setSigungunCode] = useState('');
+  const { clubRegion, onChangeField, setField } = useClubFormStore();
 
   useEffect(() => {
     if (clubRegion) {
@@ -29,105 +27,34 @@ const AddClubRegion = ({ setNextButtonDisable }) => {
       setNextButtonDisable(true);
     }
   }, [setNextButtonDisable, clubRegion]);
-  const hasValuesBeenSet = useRef(false);
 
-  useEffect(() => {
-    if (
-      !hasValuesBeenSet.current ||
-      (typeof finalValue !== 'undefined' && finalValue !== clubRegion)
-    ) {
-      setClubRegion(finalValue);
-      hasValuesBeenSet.current = true;
-    }
-  }, [finalValue, clubRegion, setClubRegion]);
+  const { data: sidoData } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/club/region/sido`,
+    fetcher
+  );
 
-  useEffect(() => {
-    if (typeof finalValue !== 'undefined' && finalValue !== clubRegion) {
-      setClubRegion(finalValue);
-    }
-  }, [finalValue, clubRegion, setClubRegion]);
-
-  useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_SPRING_HOST}/rest/club/region/sigu`)
-      .then((response) => {
-        let options = [{ value: '', label: '시도선택' }];
-        response.data.response.result.featureCollection.features.forEach(
-          (f) => {
-            console.log('f:', f);
-            let 행정구역코드 = f.properties.ctprvn_cd;
-            let 행정구역명 = f.properties.ctp_kor_nm;
-            options.push({
-              value: 행정구역코드,
-              label: 행정구역명,
-            });
-          }
-        );
-        setSidoOptions(options);
-      })
-      .catch((error) => {
-        console.error('error:', error);
-      });
-  }, []);
-
-  useEffect(() => {
-    if (!selectedSido) return;
-
-    axios
-      .get(
-        `${
+  const { data: sigunguData } = useSWR(
+    selectedSido
+      ? `${
           import.meta.env.VITE_SPRING_HOST
         }/rest/club/region/sigungu/${selectedSido}`
-      )
-      .then((response) => {
-        let options = [{ value: '', label: '시군구선택' }];
-        response.data.response.result.featureCollection.features.forEach(
-          (f) => {
-            let 행정구역코드 = f.properties.sig_cd;
-            let 행정구역명 = f.properties.sig_kor_nm;
-            options.push({
-              value: 행정구역코드,
-              label: 행정구역명,
-            });
-          }
-        );
-        setSigoonOptions(options);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [selectedSido]);
+      : null,
+    fetcher
+  );
 
-  const handleSidoChange = (event) => {
-    let thisVal = event.target.value;
-    setSelectedSido(thisVal);
-  };
+  const sidoList =
+    sidoData &&
+    sidoData.admVOList.admVOList.map((sido) => ({
+      value: sido.admCode,
+      label: sido.admCodeNm,
+    }));
 
-  const handleSigoonChange = (event) => {
-    let thisVal = event.target.value;
-    setSelectedSigoon(thisVal);
-  };
-
-  const handleChooseClick = () => {
-    let selectedTextOne = '';
-    let selectedTextTwo = '';
-
-    if (selectedSido) {
-      selectedTextOne =
-        sidoOptions.find((option) => option.value === selectedSido)?.label ||
-        '';
-    }
-
-    if (selectedSigoon) {
-      selectedTextTwo =
-        sigoonOptions.find((option) => option.value === selectedSigoon)
-          ?.label || '';
-    }
-
-    let finalValue = `${selectedTextOne} ${selectedTextTwo}`;
-    console.log(finalValue);
-    setFinalValue(finalValue);
-  };
+  const sigunguList =
+    sigunguData &&
+    sigunguData.admVOList.admVOList.map((item) => ({
+      value: item.admCode,
+      label: item.lowestAdmCodeNm,
+    }));
 
   return (
     <>
@@ -144,7 +71,7 @@ const AddClubRegion = ({ setNextButtonDisable }) => {
               placeholder='예시: 서울특별시 강남구'
               required
               variant='standard'
-              value={finalValue}
+              value={clubRegion}
             />
           </Box>
           <Stack
@@ -158,13 +85,21 @@ const AddClubRegion = ({ setNextButtonDisable }) => {
                 <InputLabel id='sido-select-label'>시도 선택</InputLabel>
                 <Select
                   labelId='sido-select-label'
-                  value={selectedSido}
-                  onChange={handleSidoChange}
+                  id='sido_code'
+                  value={selectedSido || ''}
+                  onChange={(e) => {
+                    setSelectedSido(e.target.value);
+                    const selectedSidoLabel = sidoList.find(
+                      (sido) => sido.value === e.target.value
+                    )?.label;
+                    setField('clubRegion', selectedSidoLabel);
+                  }}
                   label='시도 선택'
                 >
-                  {sidoOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  <MenuItem value=''>시도 선택</MenuItem>
+                  {sidoList?.map((sido) => (
+                    <MenuItem key={sido.value} value={sido.value}>
+                      {sido.label}
                     </MenuItem>
                   ))}
                 </Select>
@@ -172,18 +107,36 @@ const AddClubRegion = ({ setNextButtonDisable }) => {
             </Box>
             <Box width='47%'>
               <FormControl fullWidth>
-                <InputLabel id='sigoon-select-label'>
+                <InputLabel id='sigungu-select-label'>
                   시군구 선택(미선택시 시도전체)
                 </InputLabel>
                 <Select
-                  labelId='sigoon-select-label'
-                  value={selectedSigoon}
-                  onChange={handleSigoonChange}
+                  labelId='sigungu-select-label'
+                  id='sigoon_code'
+                  value={sigunguCode || ''}
+                  onChange={(e) => {
+                    setSigungunCode(e.target.value);
+                    const selectedSigunguLabel = sigunguList.find(
+                      (sigungu) => sigungu.value === e.target.value
+                    )?.label;
+                    setField(
+                      'clubRegion',
+                      `${
+                        sidoList.find((sido) => sido.value === selectedSido)
+                          ?.label
+                      } ${selectedSigunguLabel || ''}`
+                    );
+                  }}
                   label='시군구 선택(미선택시 시도전체)'
                 >
-                  {sigoonOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  <MenuItem value=''>시군구 선택</MenuItem>
+                  {sigunguList?.map((sigungu) => (
+                    <MenuItem
+                      key={sigungu.value}
+                      value={sigungu.value}
+                      name={sigungu.label}
+                    >
+                      {sigungu.label}
                     </MenuItem>
                   ))}
                 </Select>
@@ -191,15 +144,7 @@ const AddClubRegion = ({ setNextButtonDisable }) => {
             </Box>
           </Stack>
 
-          <Box>
-            <Button
-              onClick={handleChooseClick}
-              variant='contained'
-              sx={{ marginTop: '10px', marginLeft: '38%', minWidth: '100px' }}
-            >
-              선택
-            </Button>
-          </Box>
+          <Box></Box>
         </Stack>
       </Box>
     </>
@@ -207,7 +152,7 @@ const AddClubRegion = ({ setNextButtonDisable }) => {
 };
 
 AddClubRegion.propTypes = {
-  setNextButtonDisable: PropTypes.bool,
+  setNextButtonDisable: PropTypes.func,
 };
 
 export default AddClubRegion;

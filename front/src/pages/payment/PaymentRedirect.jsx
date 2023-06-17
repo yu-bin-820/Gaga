@@ -83,7 +83,7 @@ const PaymentRedirect = () => {
                 모 임 명 : {data?.meetingName}
               </Typography>
               <Typography variant='h7' component='div'>
-                참 가 비 : {data?.entryFee}원
+                참 가 비 : {data?.entryFee?.toLocaleString()}원
               </Typography>
             </Box>
           </Stack>
