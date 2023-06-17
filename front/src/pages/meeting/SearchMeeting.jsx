@@ -1,7 +1,7 @@
 import CommonTop from '@layouts/common/CommonTop';
 import { Grid, IconButton, TextField, Tooltip } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router';
 import useSearchMeetingFormStore from '@hooks/meeting/useSearchMeetingFormStore';
@@ -9,13 +9,13 @@ import useSearchMeetingFormStore from '@hooks/meeting/useSearchMeetingFormStore'
 const SearchMeeting = () => {
   const navigate = useNavigate();
 
-  const { searchKeyword, currentPage, setField } = useSearchMeetingFormStore();
+  const { searchKeyword, setField } = useSearchMeetingFormStore();
 
   const onClickSearch = useCallback(() => {
     navigate(`/meeting/meetinglist`);
     console.log(searchKeyword);
     setField('currentPage', 1);
-  }, [navigate, searchKeyword]);
+  }, [navigate, searchKeyword, setField]);
 
   const onKeydownChat = useCallback(
     (e) => {

@@ -1,5 +1,5 @@
 import ListMeetingReview from '@components/meeting/ListMeetingReview';
-import { Box, Button, Grid, Paper, Skeleton, Typography } from '@mui/material';
+import { Box, Button, Grid,  Skeleton, Typography } from '@mui/material';
 import { useCallback, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
 import PeopleIcon from '@mui/icons-material/People';
@@ -14,7 +14,6 @@ import CommonTop from '@layouts/common/CommonTop';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import SmallChip from '@components/meeting/SmallChip';
-import IsMeetingMemberDialog from '@components/meeting/IsMeetingMemberDialog';
 import GetMeetingStaticMapDrawer from '@components/meeting/map/GetMeetingStaticMapDrawer';
 import PaymentIcon from '@mui/icons-material/Payment';
 import AddMeetingMemberDrawer from '@components/meeting/AddMeetingMemberDrawer';
@@ -23,13 +22,15 @@ import Face6Icon from '@mui/icons-material/Face6';
 import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
 import MemberListTapview from '@components/meeting/MemberListTapview';
 import useMeetingPathStore from '@stores/meeting/useMeetingPathStore';
+import { differenceInYears } from 'date-fns'; 
+import UnMatchedFilterMeeting from '@components/meeting/UnMatchedFilterMeeting';
 
 const GetMeeting = () => {
 
   const {prevMeetingPath} = useMeetingPathStore();
   
   const { meetingno } = useParams();
-  const [isMeetingMemberOpen, setIsMeetingMemberOpen] = useState(false);
+  const [unMatcheOpen, setUnMatcheOpen] = useState(false);
   const [settingsAddMemberOpen, setSettingsAddMemberOpen] = useState(false);
 
   const {data : meeting } = useSWR(
@@ -40,7 +41,6 @@ const GetMeeting = () => {
   const [settingsMapOpen, setSettingsMapOpen] = useState(false);
 
   const onClickSettings = useCallback(() => {
-    // navigate('/settings');
     setSettingsMapOpen(true);
   }, []);
 
@@ -73,25 +73,25 @@ const {data : pendingMemberList } = useSWR(
   fetcher
 );
 
+const myAge = differenceInYears(new Date(), new Date(myData?.birthday));
+
+const isFilterMatched = (
+  (meeting?.filterGender === 0 || meeting?.filterGender === myData?.filterGender) &&
+  (meeting?.filterMinAge <= myAge && myAge <= meeting?.filterMaxAge)
+);
+
   const onClickAddMember = useCallback(
     () => {
-      const isUserInConfirmedMembers = confirmedMemberList?.some(
-        (confirmedMember) => confirmedMember.userNo === myData?.userNo
-      );
 
-      const isUserInPendingMembers = pendingMemberList?.some(
-        (pendingMember) => pendingMember.userNo === myData?.userNo
-      );
-
-      if (!isUserInConfirmedMembers && !isUserInPendingMembers) {
+      if (isFilterMatched) {
 
         setSettingsAddMemberOpen(true);
 
       } else {
-        setIsMeetingMemberOpen(true);
+        setUnMatcheOpen(true);
       }
     },
-    [confirmedMemberList, myData?.userNo, pendingMemberList]
+    [isFilterMatched]
   );
 
   const toggleSettingsAddMember = useCallback(
@@ -116,15 +116,22 @@ const {data : pendingMemberList } = useSWR(
 
     );
   }
+
+  const isUserInConfirmedMembers = confirmedMemberList?.some(
+    (confirmedMember) => confirmedMember.userNo === myData?.userNo
+  );
+
+  const isUserInPendingMembers = pendingMemberList?.some(
+    (pendingMember) => pendingMember.userNo === myData?.userNo
+  );
+
   return (
-    <>
+    <Box sx={{ bgcolor: '#ededed' }}>
       {isUserLeader && !isMeetingSuccessful ? <GetMeetingTop /> : <CommonTop prevPath={prevMeetingPath}/>}
       <Box
         sx={{
           marginTop: '64px',
           marginBottom: '64px',
-          marginLeft: '10px',
-          marginRight: '10px',
         }}
       >
         {meeting?.meetingImg ? (
@@ -151,9 +158,12 @@ const {data : pendingMemberList } = useSWR(
               minHeight: '250px'}}
           />
         )}
-
         <Stack spacing={1}>
-          <Box>
+          <Box
+            sx={{
+              padding: '10px',
+              bgcolor: 'white',
+            }}>
             <Stack direction={'row'} spacing={1}>
             <SmallChip label={meeting?.filterTag} />
             {meeting.meetingSuccess===2 &&
@@ -169,19 +179,30 @@ const {data : pendingMemberList } = useSWR(
                 }}
               />}
             </Stack>
-          </Box>
           <Typography variant="h6" component="h2" id="date-selection-error-modal">
             {meeting?.meetingName}
           </Typography>
-
-          <h5>모임 리더</h5>
+          </Box>
+          <Box
+            sx={{
+              paddingLeft: '10px',
+              paddeingRight: '10px',
+              paddeingBottom: '10px',
+              bgcolor: 'white',
+            }}>
+          <h5 style={{margin: '0'}}>모임 리더</h5>
           <MeetingMember member={leaderData} />
-
-          <h5>참여 조건</h5>
+          </Box>
+          <Box
+            sx={{
+              paddingLeft: '10px',
+              paddeingRight: '10px',
+              bgcolor: 'white',
+            }}>
+          <h5 style={{margin: '0'}}>참여 조건</h5>
           <Grid container
                           sx={{
                             display: 'flex',
-                            border: '2px solid #c7c7c7',
                             width: '95vw',
                             height: 60,
                           }}>
@@ -234,7 +255,14 @@ const {data : pendingMemberList } = useSWR(
           </Box>
           </Grid>
           </Grid>
-
+          </Box>
+          <Box
+            sx={{
+              paddingLeft: '10px',
+              paddeingRight: '10px',
+              bgcolor: 'white',
+            }}>
+          <h5 style={{margin: '0'}}>모임 정보</h5>
           <Stack direction={'row'} spacing={1} alignItems={'center'}>
             <PeopleIcon />
             <Typography sx={{ fontSize: 13 }}>
@@ -264,18 +292,34 @@ const {data : pendingMemberList } = useSWR(
               {meeting?.meetingStartTime} ~ {meeting?.meetingEndTime}
             </Typography>
           </Stack>
-
-          <Typography sx={{ fontSize: 16 }}>모임 소개</Typography>
+          </Box>
+          <Box
+            sx={{
+              paddingLeft: '10px',
+              paddeingRight: '10px',
+              bgcolor: 'white',
+            }}>
+          <h5 style={{margin: '0'}}>모임 소개</h5>
 
           <Typography sx={{ fontSize: 13 }}>
             {meeting?.meetingIntro?.split('\n').map((line, i) => (
                 <div key={i}>{line}</div>
               ))}
             </Typography>
-
+          </Box>
+          <Box
+            sx={{
+              bgcolor: 'white',
+            }}>
+          <Box
+            sx={{
+              paddingLeft: '10px',
+              paddeingRight: '10px',
+            }}>
+          <h5 style={{margin: '0'}}>모임 위치</h5>
           <Stack direction={'row'} spacing={1} alignItems={'center'}>
             <LocationOnIcon />
-          <Stack spacing={1}>
+          <Stack spacing={0.1}>
           <Typography sx={{ fontSize: 13 }}>
               {meeting?.meetingAddr}
             </Typography>
@@ -284,16 +328,22 @@ const {data : pendingMemberList } = useSWR(
             </Typography>
           </Stack>
           </Stack>
-        </Stack>
-        <br />
-        {meeting && (
+          </Box>
+          {meeting && (
           <Box onClick={onClickSettings}>
             <GetMeetingStaticMap meeting={meeting} />
           </Box>
         )}
-        <Box>
-        <MemberListTapview confirmedMemberList={confirmedMemberList} pendingMemberList={pendingMemberList}/>
-        </Box>
+        <Box
+          sx={{
+            paddingBottom: '20px',
+            bgcolor: 'white',
+          }}>
+          <MemberListTapview confirmedMemberList={confirmedMemberList} pendingMemberList={pendingMemberList}/>
+          </Box>
+          </Box>
+        </Stack>
+
         { meeting.meetingSuccess === 2 &&(
         <>
           <h5>리뷰</h5>
@@ -307,20 +357,31 @@ const {data : pendingMemberList } = useSWR(
           alignItems="center"
           sx={{ position: 'fixed', bottom: 5, left: 0, right: 0 }}
         >
-          {!isUserLeader && !isMeetingSuccessful && myData &&(
+        {!isUserLeader && !isMeetingSuccessful && myData && (
+          (isUserInConfirmedMembers || isUserInPendingMembers) ? (
             <Button
               variant="contained"
               sx={{ width: '85vw', borderRadius: '50px' }}
-              onClick={onClickAddMember}
+              disabled
             >
               참여하기
             </Button>
-          )}
+          ) : (
+              <Button
+                variant="contained"
+                sx={{ width: '85vw', borderRadius: '50px' }}
+                onClick={onClickAddMember}
+              >
+                참여하기
+              </Button>
+          )
+        )}
+          
         </Stack>
       </Box>
-      <IsMeetingMemberDialog
-        open={isMeetingMemberOpen}
-        setOpen={setIsMeetingMemberOpen}
+      <UnMatchedFilterMeeting
+        open={unMatcheOpen}
+        setOpen={setUnMatcheOpen}
       />
       <GetMeetingStaticMapDrawer
         meeting={meeting}
@@ -334,7 +395,7 @@ const {data : pendingMemberList } = useSWR(
         toggleSettingsAddMember={toggleSettingsAddMember} 
         meetingNo={meetingno}
         />      
-    </>
+    </Box>
   );
 };
 

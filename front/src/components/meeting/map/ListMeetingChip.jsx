@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const ListMeetingChip = ({ onClick }) => (
     <Chip
       color="primary"
-      size="small"
+      size="large"
       onClick={onClick}
       label='이 위치 모임'
       sx={{
