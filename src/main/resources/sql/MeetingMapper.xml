@@ -205,27 +205,27 @@
     m.filter_max_age,
     m.main_category_no,
     m.filter_tag,
-    m.adjustment_time,
-    m.adjustment_state,
-    m.account_no,
-    m.bank_name,
     (SELECT COUNT(*) +1 FROM members WHERE state = 2 AND meeting_no = m.meeting_no) AS count,
     mb.state
   FROM meetings m
   LEFT JOIN 
-  	(SELECT meeting_no, user_no, state
-  		FROM members
-  		WHERE user_no = #{userNo}) mb 
+    (SELECT meeting_no, user_no, state
+      FROM members
+      WHERE user_no = #{userNo}) mb 
   ON 
-  	m.meeting_no = mb.meeting_no
+    m.meeting_no = mb.meeting_no
   WHERE 
-  	mb.user_no = #{userNo}
-  OR 
-  	m.meeting_leader_no = #{userNo}
-  AND
-  	m.meeting_state IN (1, 2)
-  AND
-  	(mb.state IN (2) OR mb.state IS NULL)
+    (
+      mb.user_no = #{userNo}
+      AND
+      (mb.state IN (2) OR mb.state IS NULL)
+    )
+    OR 
+    (
+      m.meeting_leader_no = #{userNo}
+      AND
+      m.meeting_state IN (1, 2)
+    )
   ORDER BY m.meeting_success ASC, m.meeting_date ASC
 </select>
   
@@ -378,7 +378,7 @@
   UPDATE meetings
   SET
     meeting_success = 2,
-    meeting_state = 1,
+    meeting_state = 2,
     account_no = #{accountNo},
     bank_name = #{bankName}
   WHERE

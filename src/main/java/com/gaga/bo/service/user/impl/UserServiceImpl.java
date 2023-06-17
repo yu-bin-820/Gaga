@@ -79,6 +79,12 @@ public class UserServiceImpl implements UserService {
 	public void updateUser(User user) throws Exception {
 		userDao.updateUser(user);
 	}
+	
+	@Override
+	public void updatePassword(User user) throws Exception {
+		userDao.updatePassword(user);
+		
+	}
 
 	public void deleteUser(User user) throws Exception {
 		userDao.deleteUser(user);
@@ -399,6 +405,7 @@ public class UserServiceImpl implements UserService {
 
         return emailVerificationCode; // 메일로 사용자에게 보낸 인증코드를 서버로 반환! 인증코드 일치여부를 확인하기 위함 
     }
+
 
 }
 

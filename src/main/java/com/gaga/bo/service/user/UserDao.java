@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.gaga.bo.service.domain.User;
 
@@ -19,6 +20,8 @@ public interface UserDao {
 	public User getUserByPhoneNo(String phoneNo) throws Exception;
 	
 	public void updateUser(User user) throws Exception;
+	
+	public void updatePassword(User user) throws Exception;
 		
 	public void deleteUser(User user) throws Exception;
 	
