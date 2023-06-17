@@ -135,9 +135,9 @@ const ProfileTop = ({ userNo }) => {
     setField,
     navigate,
   ]);
-  if (!myData) {
-    return <Navigate replace to={`/community/profile/userno/${userNo}`} />;
-  }
+  // if (!myData) {
+  //   return <Navigate replace to={`/community/profile/userno/${userNo}`} />;
+  // }
 
   return (
     <>

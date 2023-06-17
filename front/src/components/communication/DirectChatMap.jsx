@@ -150,8 +150,10 @@ const DirectChatMap = ({
       <MapMarker position={{ lat: markerLat, lng: markerLng }} />
 
       <CustomOverlayMap
+        clickable
         position={{ lat: markerLat, lng: markerLng }}
-        yAnchor={1.7}
+        yAnchor={2.2}
+        xAnchor={0.6}
       >
         <div onClick={onClickLocationSubmit}>
           <Box
