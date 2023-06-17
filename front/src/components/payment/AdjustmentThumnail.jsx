@@ -124,7 +124,7 @@ const AdjustmentThumnail = ({ meeting }) => {
           {meeting.meetingSuccess === 1 ? (
             '모임성사전'
           ) : meeting.meetingSuccess === 2 ? (
-            <>모임성사</>
+            <>성사완료</>
           ) : (
             ''
           )}

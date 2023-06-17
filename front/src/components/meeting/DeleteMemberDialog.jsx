@@ -1,5 +1,11 @@
-import { Button, Dialog, DialogActions, Typography } from '@mui/material';
-import { Stack } from '@mui/system';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  Modal,
+  Typography,
+} from '@mui/material';
+import { Box, Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
 import React, { useCallback, useState } from 'react';
 import useSWR from 'swr';
@@ -16,13 +22,11 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
     fetcher
   );
 
-  const isOneDayBefore = () => {
-    const currentDate = new Date();
-    const meetingDate = new Date(meeting?.meetingDate);
-    const differenceInTime = meetingDate - currentDate;
-    const differenceInDays = differenceInTime / (1000 * 60 * 60 * 24);
+  const [openModal, setOpenModal] = useState(false);
 
-    return differenceInDays <= 1;
+  const closeModal = () => {
+    setOpenModal(false);
+    setOpen(false);
   };
 
   const onClickDeleteMember = useCallback(
@@ -76,12 +80,12 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
         );
 
         if (postResponseTwo.status === 200) {
-          alert('환불 요청이 성공하였습니다.');
+          setOpenModal(true);
+
           const deleteResponse = await axios.delete(
             `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`,
             { data: data } // userData를 delete 요청에 사용
           );
-          setOpen(false);
         } else {
           alert('환불 요청이 실패하였습니다.');
         }
@@ -93,21 +97,6 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
     [meeting?.meetingNo, myData?.userNo, setOpen]
   );
 
-  const handleRefundAlert = () => {
-    if (meeting.entryFee === 0 || isOneDayBefore()) {
-      onClickDeleteMember();
-    } else {
-      if (
-        window.confirm(
-          '모임 하루 전은 환불이 불가합니다. 그래도 취소하시겠습니까?'
-        )
-      ) {
-        onClickDeleteMember();
-      } else {
-        onClickDeleteMemberRefund();
-      }
-    }
-  };
   return (
     <Dialog open={open} onClose={handleClose} sx={{ padding: '20px' }}>
       <Typography variant='h6' sx={{ fontSize: '16px', padding: '20px' }}>
@@ -130,10 +119,44 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
           <Button
             variant='contained'
             sx={{ width: '100px' }}
-            onClick={handleRefundAlert}
+            onClick={
+              meeting.entryFee === 0
+                ? onClickDeleteMember
+                : onClickDeleteMemberRefund
+            }
           >
             예
           </Button>
+          <Modal
+            open={openModal}
+            onClose={closeModal}
+            aria-describedby='modal-description'
+          >
+            <Box
+              sx={{
+                p: 4,
+                backgroundColor: 'white',
+                borderRadius: 2,
+                mx: 'auto',
+                my: '20%',
+                width: '50%',
+              }}
+            >
+              <Typography id='modal-description' sx={{ mt: 2 }}>
+                환불이 성공적으로 <br />
+                처리되었습니다.
+              </Typography>
+              <Button
+                onClick={() => {
+                  closeModal();
+                }}
+                style={{ alignSelf: 'flex-end', marginTop: 16 }}
+                variant='contained'
+              >
+                확인
+              </Button>
+            </Box>
+          </Modal>
         </Stack>
       </DialogActions>
     </Dialog>
@@ -142,8 +165,8 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
 
 DeleteMemberDialog.propTypes = {
   meeting: PropTypes.object.isRequired,
-  open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired,
+  open: PropTypes.object.isRequired,
+  setOpen: PropTypes.object.isRequired,
 };
 
 export default DeleteMemberDialog;

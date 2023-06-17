@@ -31,11 +31,11 @@ const UpdateAccount = () => {
 
   const onButtonClick = async () => {
     try {
-      const { password, ...myDataWithoutPassword } = myData;
+      // const { password, ...myDataWithoutPassword } = myData;
       const response = await axios.post(
         `${import.meta.env.VITE_SPRING_HOST}/rest/user/updateUser`,
         {
-          ...myDataWithoutPassword,
+          ...myData,
           bankName,
           accountNo,
         },
