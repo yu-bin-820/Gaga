@@ -27,8 +27,6 @@ const UpdateMeetingSuccess = () => {
     fetcher
   );
 
-  const isNeedAdjustment = meetingData?.entryFee != 0;
-
   const [bankName, setBankName] = useState(myData ? myData.bankName : '');
   const [accountNo, setAccountNo] = useState(myData ? myData.accountNo : '');
   const handleBankInfoChange = (bankName, accountNo) => {

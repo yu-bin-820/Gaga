@@ -188,7 +188,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
                   <Avatar
                     alt={groupLeader.nick_name}
                     src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
-                      groupLeader.profile_img
+                      groupLeader.profileImg
                     }?type=f_sh&w=76&h=76&autorotate=false&faceopt=true&sharp_amt=1.0`}
                   />
                   <Typography>{groupLeader.nickName}</Typography>
