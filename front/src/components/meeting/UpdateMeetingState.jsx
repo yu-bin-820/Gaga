@@ -69,9 +69,9 @@ const UpdateMeetingState = ({setSettingsUpdateMeetingOpen}) => {
           axios.patch(
             `${import.meta.env.VITE_SPRING_HOST}/rest/meeting`,
             formData
-          ).then(
-            mutateMeeting()
-          );
+          ).then(() => {
+            mutateMeeting();
+          });
     
           setSettingsUpdateMeetingOpen(false);
 

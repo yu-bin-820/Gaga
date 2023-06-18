@@ -106,7 +106,6 @@ const ListMeeting = () => {
       tag2: myData?.filterTag2,
       tag3: myData?.filterTag3,
       birthday: myData?.birthday,
-      age: 21,
       swLat: state.swLat,
       swLng: state.swLng,
       neLat: state.neLat,

@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, ToggleButton, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Skeleton, ToggleButton, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -35,7 +35,10 @@ const AddMeetingInChatMeeting = ({ expanded, handleChange, userNo, onParentMeeti
       };
 
       if (!meetingList) {
-        return <>로딩중</>;
+        return (
+          <Skeleton animation="wave" variant="rectangular" width={'100vw'} height={'100vh'} />
+    
+        );
       }
 
     return (

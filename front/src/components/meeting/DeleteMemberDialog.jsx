@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import useSWR from 'swr';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -11,9 +11,14 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
     setOpen(false);
   };
 
-  const { data: myData, mutate: mutateMe } = useSWR(
+  const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
+  );
+
+  const {mutate : mutateMyMeetingList } = useSWR(
+      `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${myData?.userNo}`,
+      fetcher
   );
 
   const onClickDeleteMember = useCallback(
@@ -28,18 +33,19 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
 
         console.log(data);
 
-        const response = await axios
+        await axios
           .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`, {
             data: data,
           })
           .then(() => {
             setOpen(false);
+            mutateMyMeetingList();
           });
       } catch (error) {
         console.error(error);
       }
     },
-    [meeting?.meetingNo, myData?.userNo, setOpen]
+    [meeting?.meetingNo, myData?.userNo, setOpen, mutateMyMeetingList]
   );
 
   const onClickDeleteMemberRefund = useCallback(
@@ -73,6 +79,7 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
             { data: data } // userData를 delete 요청에 사용
           );
           setOpen(false);
+          mutateMyMeetingList();
         } else {
           alert('환불 요청이 실패하였습니다.');
         }
@@ -81,7 +88,7 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
         alert('환불 요청 중 오류가 발생하였습니다.');
       }
     },
-    [meeting?.meetingNo, myData?.userNo, setOpen]
+    [meeting?.meetingNo, myData?.userNo, setOpen, mutateMyMeetingList]
   );
 
   return (

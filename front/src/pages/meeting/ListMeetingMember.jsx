@@ -12,7 +12,12 @@ import useSWR from 'swr';
 const ListMeetingMember = () => {
   const { meetingno } = useParams();
 
-  const {data : meeting } = useSWR(
+  const { data: myData } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+    );
+
+  const {data : meeting , mutate : mutateMeeting } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${meetingno}`,
     fetcher
 );
@@ -30,6 +35,11 @@ const ListMeetingMember = () => {
       }/rest/user/list/grouptype/2/no/${meetingno}/state/2`,
       fetcher
     );
+
+    const {mutate : mutateMyMeetingList } = useSWR(
+      `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${myData?.userNo}`,
+      fetcher
+  );
 
   const onClickUpdateMember = useCallback(
     async (event) => {
@@ -53,12 +63,14 @@ const ListMeetingMember = () => {
           .then(() => {
             mutateConfirmedMemberList();
             mutatePendingMemberList();
+            mutateMeeting();
+            mutateMyMeetingList();
           });
       } catch (error) {
         console.error(error);
       }
     },
-    [meetingno, mutateConfirmedMemberList, mutatePendingMemberList]
+    [meetingno, mutateConfirmedMemberList, mutatePendingMemberList, mutateMeeting, mutateMyMeetingList]
   );
 
   const onClickDeleteMember = useCallback(
@@ -81,6 +93,8 @@ const ListMeetingMember = () => {
           .then(() => {
             mutateConfirmedMemberList();
             mutatePendingMemberList();
+            mutateMeeting();
+            mutateMyMeetingList();
           });
 
         await axios.patch(

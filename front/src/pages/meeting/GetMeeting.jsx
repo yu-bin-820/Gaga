@@ -344,12 +344,19 @@ const isFilterMatched = (
           </Box>
         </Stack>
 
+        <Box
+            sx={{
+              paddingLeft: '10px',
+              paddeingRight: '10px',
+              bgcolor: 'white',
+            }}>
         { meeting.meetingSuccess === 2 &&(
         <>
           <h5>리뷰</h5>
           <ListMeetingReview />
         </>
         )}
+        </Box>
         <Stack
           spacing={0}
           direction="row"
