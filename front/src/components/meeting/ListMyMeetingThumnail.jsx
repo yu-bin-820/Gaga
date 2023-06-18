@@ -99,10 +99,10 @@ const ListMyMeetingThumnail = ({ meeting }) => {
       >
         <Stack spacing={0.8}>
           <MeetingThumbnail meeting={meeting} />
-          <Stack direction={'row'} justifyContent='center' spacing={1.5}>
+          <Stack direction={'row'} justifyContent="center" spacing={1.5}>
             {!isMeetingSuccessTime && !isMeetingSuccess && (
               <Button
-                variant='outlined'
+                variant="outlined"
                 sx={{ width: '180px' }}
                 onClick={onClickListMeetingMember}
               >
@@ -111,7 +111,7 @@ const ListMyMeetingThumnail = ({ meeting }) => {
             )}
             {isMeetingSuccessTime && !isMeetingSuccess && (
               <Button
-                variant='outlined'
+                variant="outlined"
                 sx={{ width: '180px' }}
                 onClick={onClickMeetingSuccess}
               >
@@ -120,7 +120,7 @@ const ListMyMeetingThumnail = ({ meeting }) => {
             )}
             {isMeetingChatRoot && (
               <Button
-                variant='outlined'
+                variant="outlined"
                 sx={{ width: '180px' }}
                 onClick={onClickChatRoom}
               >
@@ -133,8 +133,8 @@ const ListMyMeetingThumnail = ({ meeting }) => {
       <Modal
         open={openModal}
         onClose={closeModal}
-        aria-labelledby='modal-title'
-        aria-describedby='modal-description'
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
       >
         <Box
           sx={{
@@ -146,10 +146,10 @@ const ListMyMeetingThumnail = ({ meeting }) => {
             width: '50%',
           }}
         >
-          <Typography id='modal-title' variant='h6' component='h2'>
+          <Typography id="modal-title" variant="h6" component="h2">
             알림
           </Typography>
-          <Typography id='modal-description' sx={{ mt: 2 }}>
+          <Typography id="modal-description" sx={{ mt: 2 }}>
             모임이 성사되었습니다.
           </Typography>
           <Button
@@ -157,7 +157,7 @@ const ListMyMeetingThumnail = ({ meeting }) => {
               closeModal();
             }}
             style={{ alignSelf: 'flex-end', marginTop: 16 }}
-            variant='contained'
+            variant="contained"
           >
             확인
           </Button>

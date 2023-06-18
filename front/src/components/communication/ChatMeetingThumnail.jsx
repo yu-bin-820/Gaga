@@ -3,15 +3,22 @@ import { ImageListItem, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
 import PeopleIcon from '@mui/icons-material/People';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import SmallChip from '@components/meeting/SmallChip';
+import useMeetingPathStore from '@stores/meeting/useMeetingPathStore';
 
 const ChatMeetingThumnail = ({ meeting }) => {
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const { prevMeetingPath, setField } = useMeetingPathStore();
   const onClickMeeting = useCallback(() => {
+    const isArray = Array.isArray(prevMeetingPath);
+    setField(
+      'prevMeetingPath',
+      isArray ? [...prevMeetingPath, location.pathname] : [location.pathname]
+    );
     navigate(`/meeting/meetingno/${meeting?.meetingNo}`);
-  }, [meeting?.meetingNo, navigate]);
+  }, [meeting?.meetingNo, navigate, prevMeetingPath, location, setField]);
 
   const truncatedName =
     meeting?.meetingName?.length > 20

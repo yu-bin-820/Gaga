@@ -5,9 +5,9 @@ const useCommunityStore = create((set) => ({
   chatType: 0,
   chatRoomLeader: 0,
 
-  prevChatRoomEntryNo: 0,
-  prevChatType: 0,
-  prevChatRoomLeader: 0,
+  prevChatRoomEntryNo: [],
+  prevChatType: [],
+  prevChatRoomLeader: [],
 
   reportNo: 0,
   reportCategory: [
@@ -21,9 +21,10 @@ const useCommunityStore = create((set) => ({
     '기타',
   ],
   profileUserNo: 0,
-  prevProfilePath: '',
-  prevGetGroupChatPath: '',
-  prevGetDirectChatPath: '',
+
+  prevProfilePath: [],
+  prevGetGroupChatPath: [],
+  prevGetDirectChatPath: [],
   prevPath: '',
 
   // setChatRoomEntryNo: (chatRoomEntryNo) =>

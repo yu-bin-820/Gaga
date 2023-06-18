@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './ChatBot.css';
+import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
@@ -10,9 +11,11 @@ import SmartToyRoundedIcon from '@mui/icons-material/SmartToyRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import PsychologyRoundedIcon from '@mui/icons-material/PsychologyRounded';
 import EmailIcon from '@mui/icons-material/Email';
-import { Backdrop, Fade, Modal } from '@mui/material';
-
-//import { fetchGptResponse } from './gptapi';
+import { Backdrop, Fade } from '@mui/material';
+import Stack from '@mui/material/Stack';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
+import HelpModal from './HelpModal';
 
 function Chatbot() {
   const [inputText, setInputText] = useState('');
@@ -20,7 +23,8 @@ function Chatbot() {
   const [isVisible, setIsVisible] = useState(false);
   const [isGptMode, setIsGptMode] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const [helpModalOpen, setHelpModalOpen] = React.useState(false);
 
   const chatMessagesRef = useRef(null);
   const messageEndRef = useRef(null);
@@ -41,12 +45,24 @@ function Chatbot() {
     }
   }
 
+  const { data: myData, mutate: mutateMe } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+  );
+       
+  useEffect(() => {
+    if (myData) {
+      const { userNo, role } = myData;
+      console.log(userNo, role, '유저넘버랑 권한');    
+    }
+  }, [myData]);
+
   const handleOpenEvent = async () => {
     console.log("메시지 출발합니다");
 	const apiUrl = `${import.meta.env.VITE_SPRING_HOST}/rest/chatbot`;
 	const requestBodyWelcome = {
         version: "v2",
-        userId: "nuWelcomeUserUserSuperUser",
+        userId: myData ? myData.userName : "사용자",
         timestamp: new Date().getTime(),
         bubbles: [],
         event: "open",
@@ -70,65 +86,52 @@ function Chatbot() {
             throw new Error(jsonData.error);
           }
       
-          let botMessage = jsonObject.data.bubbles[0].data.description;
-          let botMessage2 = jsonObject.data.bubbles[1].data.contentTable;
-          let botMessage3 = jsonObject.data.bubbles[1].data;
-          let contentTable = jsonObject.data.bubbles[1].data.contentTable;
-
-          contentTable.forEach((row, rowIndex) => {
-            row.forEach((item, itemIndex) => {
-            // 이제 각 아이템에 대한 데이터를 다룰 수 있습니다.
-            console.log(item.data.title); // 아이템 제목 출력
-            console.log(item.data.data.action.data.url); // 아이템 URL 출력
+          jsonObject.data.bubbles.forEach((bubble, index) => {
+            if (index === 0) {
+              // 첫 번째 버블: 웰컴 메시지
+              const message = {
+                type: 'bot',
+                text: bubble.data.description,
+              };
+              setMessages(prevMessages => [...prevMessages, message]);
+            } else if (bubble.type === 'template') {
+              // 두 번째 버블: 링크 목록
+              const buttons = [];
+              bubble.data.contentTable.forEach((row) => {
+                row.forEach((item) => {
+                    const title = item.data.title; // 링크의 설명
+                    let url = (item.data.data.action.data.url); // 링크의 URL
+                    console.log(url);
+                  
+                    buttons.push({ title, url });
         });
-    });
-         
-          if (jsonObject.data.bubbles.length > 1) {
-            if (jsonObject.data.bubbles[1].type === 'MULTILINKS') {
-              let links = jsonObject.data.bubbles[1].data.component.list;
-              botMessage += '\n다음 옵션 중 하나를 선택해주세요:\n';
-              links.forEach((link, index) => {
-                botMessage += `${index + 1}. ${link.title}\n`;
-              });
-            }
-          }
-   
-          console.log(botMessage, '@@@jsonObject.data.bubbles[0].data.description@@@');
+      });
+      const message = {
+        type: 'bot',
+        text: bubble.data.cover.data.description, //  멀티버튼 상단 텍스트
+        buttons, // 버튼들
+      };
+      setMessages(prevMessages => [...prevMessages, message]);
+    }
+  });
       
-
-          const botMessageObject = { type: 'bot', text: botMessage };
-          setMessages([...messages, botMessageObject]);
-
           return null;
-
-          
         } catch (error) {
           console.error('handleOpenEvent 오류:', error);
           throw error;
         }
       };
 
-  const handleOutsideClick = (event) => {
-    if (!event.target.closest('.chat-container') && isVisible) {
-      toggleChatBot();
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleOutsideClick);
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    };
-  }, [isVisible]);
   
 //HELP버튼 >> 추후 모달창으로 수정? 
   const handleHelpClick = () => {
     console.log("메시지 출발합니다"); 
-    setIsModalOpen(true); // 모달 창 열기
-  };
+    setHelpModalOpen(true);
+};
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+const handleClose = (event) => {
+    event.stopPropagation();
+    setHelpModalOpen(false);
   };
 
   useEffect(() => {
@@ -143,8 +146,6 @@ function Chatbot() {
     }
   };
   
-
-
   function delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
@@ -246,7 +247,7 @@ const handleSendMessage = async (text) => {
     const apiUrl = `${import.meta.env.VITE_SPRING_HOST}/rest/chatbot`;
     const requestBody = {
         version: 'v2',
-        userId: 'UserUserSuperUser',
+        userId: myData ? myData.userName : "사용자",
         timestamp: new Date().getTime(),
         inputText: text,
         bubbles: [
@@ -307,52 +308,102 @@ const handleSendMessage = async (text) => {
               <div className="chat-header">
                   {/* 챗봇 창 상단에 HELP 버튼 추가 */}
                   <IconButton className="help-button" onClick={handleHelpClick} sx={{color : 'white'}}>
-                      <HelpOutlineIcon onClick={handleHelpClick} />
-                  </IconButton>
-                  
+  <HelpOutlineIcon />
+  <HelpModal open={helpModalOpen} handleClose={handleClose} />
+</IconButton>
                   <div style={{ textAlign: "left", color: "white", marginRight: "119px" }} >
                   <h3>GAGABOT</h3>
                   </div>
               </div>
               <div className="chat-messages" id="chatMessages" >
-                  {messages.map((message, index) => (
-                      <div
-                          key={index}
-                          className={`chat-message ${message.type}`}
-                          style={{ marginBottom: "12px" }}
-                      >
-                          <h5 style={{ margin: "5px" }}>
-                              {message.type === "user" ? "당신" : "GAGABOT"}
-                          </h5>
-                          <p>
-    {message.text.replace(/\./g, '.\n').split('\n').map((line, i) => <React.Fragment key={i}>{line}<br /></React.Fragment>)}
-    {message.text.includes("죄송") && (
-        <Button variant="contained" 
-            onClick={() => window.location.href = 'mailto:thega4004@naver.com'} 
-            style={{display: 'block', margin: 'auto', marginTop: '-0px', fontSize: '12px' , width: '99px' }}
-        >
-            <EmailIcon style={{fontSize: '14px' }}/> 문의하기
-        </Button>
-    )}
-</p>
-                          {message.type === "bot" && message.bubbles && (
-                              <div>
-                                  {message.bubbles.map(
-                                      (bubble, bubbleIndex) => {
-                                          if (bubbleIndex === 0) {
-                                              // 첫 번째 버블: 웰컴 메시지
-                                              return (
-                                                  <p key={bubbleIndex}>
-                                                      {bubble.data.description}
-                                                  </p>
-                                              );
-                                          } 
-                                      }
-                                  )}
-                              </div>
-                          )}
+              {messages.map((message, index) => (
+  <div key={index} className={`chat-message ${message.type}`} style={{ marginBottom: "12px" }}>
+    <h5 style={{ margin: "5px" }}>
+      {message.type === "user" ? myData ? myData.userName : "사용자" : "GAGABOT"}
+    </h5>
+    <p>
+      {message.type === 'bot' && message.buttons ? (
+        <div>
+          <p>{message.text}</p>
+          {message.buttons.map((button, buttonIndex) => (
+            <Button 
+              key={buttonIndex} 
+              variant="contained" 
+              color="primary" 
+              onClick={() => {
+                const url = new URL(button.url);
+                navigate(url.pathname);
+              }}
+            >
+              {button.title}
+            </Button>
+          ))}
+        </div>
+      ) : (
+        isGptMode ? 
+        message.text.replace(/\./g, '.\n').split('\n').map((line, i) => <React.Fragment key={i}>{line}<br /></React.Fragment>)
+        : message.text
+      )}
+{message.text.includes("죄송"||"문의") && (
+  <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+    <Button 
+      variant="contained" 
+      onClick={() => window.location.href = 'mailto:thega4004@naver.com'} 
+      style={{fontSize: '11px', width: '25%'}}
+    >
+      <EmailIcon style={{fontSize: '11px'}}/> 문의
+    </Button>
+    <Button 
+      variant="contained" 
+      onClick={() => navigate('/notice/ListQnaPost')}
+      style={{fontSize: '11px', width: '25%'}}
+    >
+     FAQ
+    </Button>
+  </div>
+)}
+    </p>
+    {message.type === "bot" && message.bubbles && (
+      <div>
+      {message.bubbles.map(
+          (bubble, bubbleIndex) => {
+              if (bubbleIndex === 0) {
+                  // 첫 번째 버블: 웰컴 메시지
+                  return (
+                      <p key={bubbleIndex}>
+                          {bubble.data.description}
+                      </p>
+                  );
+              } else if (bubble.type === 'template') {
+                  // 두 번째 버블: 링크 목록
+                  return (
+                      <div key={bubbleIndex}>
+                          <p>{bubble.data.cover.data.description}</p>
+  
+                          <Stack spacing={1} direction="column">
+                              {bubble.data.contentTable.flat().map((cell, cellIndex) => {
+                                  const url = new URL(cell.data.data.action.data.url).pathname; // 셀의 URL
+                                  return (
+                                      <Button 
+                                          key={cellIndex} 
+                                          variant="contained" 
+                                          sx={{ justifyContent: 'center', bgcolor: '#3eb394', padding: '0px', maxWidth: '30px' }} 
+                                          onClick={() => navigate(url)} // 이동하려는 URL을 경로로 사용
+                                      >
+                                          {cell.data.title}
+                                      </Button>
+                                  );
+                              })}
+                          </Stack>
                       </div>
-                  ))}
+                  )
+              }
+          }
+      )}
+  </div>
+    )}
+  </div>
+))}
                   {isTyping && <p className="typing-indicator">챗봇 응답 중...</p>}
                   <div ref={messageEndRef} />
               </div>

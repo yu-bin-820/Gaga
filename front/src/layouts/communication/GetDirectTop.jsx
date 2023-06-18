@@ -31,7 +31,14 @@ const GetDirectTop = ({ receiverNo }) => {
     fetcher
   );
 
-  const { setField, prevGetDirectChatPath } = useCommunityStore();
+  const {
+    setField,
+    prevGetDirectChatPath,
+    prevProfilePath,
+    prevChatRoomEntryNo,
+    prevChatType,
+    prevChatRoomLeader,
+  } = useCommunityStore();
   const location = useLocation();
   const navigate = useNavigate();
   const [chatMenuOpen, setChatMenuOpen] = useState(false);
@@ -42,10 +49,10 @@ const GetDirectTop = ({ receiverNo }) => {
   }, []);
   const onClickChatMember = useCallback(
     (e) => {
-      setField('prevProfilePath', location.pathname);
+      setField('prevProfilePath', [...prevProfilePath, location.pathname]);
       navigate(`/community/profile/userno/${e.currentTarget.dataset.value}`);
     },
-    [navigate, setField, location]
+    [navigate, setField, location, prevProfilePath]
   );
 
   const toggleChatMenuOpen = useCallback(
@@ -54,7 +61,45 @@ const GetDirectTop = ({ receiverNo }) => {
     },
     []
   );
+  const onClickPrevDirect = useCallback(() => {
+    const prevPath = prevGetDirectChatPath[prevGetDirectChatPath.length - 1];
+    const isArray = Array.isArray(prevChatRoomEntryNo);
+    const isPrevPathArray = Array.isArray(prevGetDirectChatPath);
+    console.log('isArray', isArray);
+    console.log('isPrevPathArray', isPrevPathArray);
+    console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
+    console.log('prevChatType', prevChatType);
+    console.log('prevChatRoomLeader', prevChatRoomLeader);
 
+    setField('prevChatRoomEntryNo', prevChatRoomEntryNo.pop());
+    setField('prevChatType', prevChatType.pop());
+    setField('prevChatRoomLeader', prevChatRoomLeader.pop());
+    setField(
+      'chatRoomEntryNo',
+      prevChatRoomEntryNo[prevChatRoomEntryNo.length - 1]
+    );
+    setField('chatType', prevChatType[prevChatType.length - 1]);
+    setField(
+      'chatRoomLeader',
+      prevChatRoomLeader[prevChatRoomLeader.length - 1]
+    );
+    setField('prevGetDirectChatPath', prevGetDirectChatPath.pop());
+
+    console.log('isArray', isArray);
+    console.log('isPrevPathArray', isPrevPathArray);
+    console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
+    console.log('prevChatType', prevChatType);
+    console.log('prevChatRoomLeader', prevChatRoomLeader);
+
+    navigate(prevPath || -1);
+  }, [
+    prevGetDirectChatPath,
+    setField,
+    prevChatType,
+    prevChatRoomLeader,
+    prevChatRoomEntryNo,
+    navigate,
+  ]);
   return (
     <Box>
       <AppBar
@@ -68,11 +113,7 @@ const GetDirectTop = ({ receiverNo }) => {
             disableGutters
             sx={{ display: 'flex', justifyContent: 'space-between' }}
           >
-            <IconButton
-              onClick={() => {
-                navigate(prevGetDirectChatPath || -1);
-              }}
-            >
+            <IconButton onClick={onClickPrevDirect}>
               <ArrowBackIosNewIcon />
             </IconButton>
 
@@ -134,7 +175,7 @@ const GetDirectTop = ({ receiverNo }) => {
 };
 
 GetDirectTop.propTypes = {
-  receiverNo: PropTypes.number,
+  receiverNo: PropTypes.string,
 };
 
 export default GetDirectTop;
