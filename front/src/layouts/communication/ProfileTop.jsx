@@ -112,54 +112,51 @@ const ProfileTop = ({ userNo }) => {
     onCloseDuplicateReportDialog,
   ]);
 
-  const onClickDirectMessage = useCallback(
-    (e) => {
-      const isArray = Array.isArray(prevChatRoomEntryNo);
-      const isPrevPathArray = Array.isArray(prevGetDirectChatPath);
-      console.log('isArray', isArray);
-      console.log('isPrevPathArray', isPrevPathArray);
-      console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
-      console.log('prevChatType', prevChatType);
-      console.log('prevChatRoomLeader', prevChatRoomLeader);
-      setChatField('shouldScroll', true);
-      setField('chatRoomEntryNo', userNo);
+  const onClickDirectMessage = useCallback(() => {
+    const isArray = Array.isArray(prevChatRoomEntryNo);
+    const isPrevPathArray = Array.isArray(prevGetDirectChatPath);
+    console.log('isArray', isArray);
+    console.log('isPrevPathArray', isPrevPathArray);
+    console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
+    console.log('prevChatType', prevChatType);
+    console.log('prevChatRoomLeader', prevChatRoomLeader);
+    setChatField('shouldScroll', true);
+    setField('chatRoomEntryNo', userNo);
 
-      setField(
-        'prevChatRoomEntryNo',
-        isArray ? [...prevChatRoomEntryNo, userNo] : [userNo]
-      );
-      setField('prevChatType', isArray ? [...prevChatType, 3] : [3]);
-      setField(
-        'prevChatRoomLeader',
-        isArray ? [...prevChatRoomLeader, myData?.userNo] : [myData?.userNo]
-      );
+    setField(
+      'prevChatRoomEntryNo',
+      isArray ? [...prevChatRoomEntryNo, userNo] : [userNo]
+    );
+    setField('prevChatType', isArray ? [...prevChatType, 3] : [3]);
+    setField(
+      'prevChatRoomLeader',
+      isArray ? [...prevChatRoomLeader, myData?.userNo] : [myData?.userNo]
+    );
 
-      setField(
-        'prevGetDirectChatPath',
-        isPrevPathArray
-          ? [...prevGetDirectChatPath, location.pathname]
-          : [location.pathname]
-      );
-      console.log('isArray', isArray);
-      console.log('isPrevPathArray', isPrevPathArray);
-      console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
-      console.log('prevChatType', prevChatType);
-      console.log('prevChatRoomLeader', prevChatRoomLeader);
-      navigate('/chat/direct/message/list');
-    },
-    [
-      userNo,
-      setField,
-      location,
-      navigate,
-      prevChatRoomEntryNo,
-      prevGetDirectChatPath,
-      prevChatRoomLeader,
-      prevChatType,
-      myData,
-      setChatField,
-    ]
-  );
+    setField(
+      'prevGetDirectChatPath',
+      isPrevPathArray
+        ? [...prevGetDirectChatPath, location.pathname]
+        : [location.pathname]
+    );
+    console.log('isArray', isArray);
+    console.log('isPrevPathArray', isPrevPathArray);
+    console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
+    console.log('prevChatType', prevChatType);
+    console.log('prevChatRoomLeader', prevChatRoomLeader);
+    navigate('/chat/direct/message/list');
+  }, [
+    userNo,
+    setField,
+    location,
+    navigate,
+    prevChatRoomEntryNo,
+    prevGetDirectChatPath,
+    prevChatRoomLeader,
+    prevChatType,
+    myData,
+    setChatField,
+  ]);
 
   const onClickPrev = useCallback(() => {
     const isPrevPathArray = Array.isArray(prevProfilePath);
@@ -203,7 +200,7 @@ const ProfileTop = ({ userNo }) => {
               <IconButton onClick={onClickPrev}>
                 <ArrowBackIosNewIcon />
               </IconButton>
-              {myData?.userNo != userNo && (
+              {myData?.userNo && myData?.userNo != userNo && (
                 <>
                   <IconButton
                     sx={{ marginLeft: 'auto' }}

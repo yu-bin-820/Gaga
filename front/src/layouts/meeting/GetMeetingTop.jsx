@@ -69,14 +69,14 @@ const GetMeetingTop = ({ prevPath }) => {
     // setField('chatType', prevChatType);
     // setField('chatRoomLeader', prevChatRoomLeader);
     const tempPrev = isPrevPathArray ? prevPath[prevPath.length - 1] : prevPath;
-    console.log('GetMeetingCommonTopPrevPath', prevPath);
+    console.log('GetMeetingTopPrevPath', prevPath);
 
     if (isPrevPathArray) {
       setMeetingField('prevMeetingPath', prevPath.pop());
     }
-    console.log('pop()GetMeetingCommonTopPrevPath', prevPath);
+    console.log('pop()GetMeetingTopPrevPath', prevPath);
 
-    console.log('GetMeetingCommonTopTempPrev', tempPrev);
+    console.log('GetMeetingTopTempPrev', tempPrev);
     navigate(tempPrev || -1);
   }, [
     prevPath,

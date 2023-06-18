@@ -18,6 +18,7 @@ import WcIcon from '@mui/icons-material/Wc';
 import ManIcon from '@mui/icons-material/Man';
 import WomanIcon from '@mui/icons-material/Woman';
 import AddClubMemberDrawer from '@components/club/AddClubMemberDrawer';
+import useClubStore from '@stores/club/useClubStore';
 
 const GetClub = () => {
   const { clubNo } = useParams();
@@ -30,7 +31,7 @@ const GetClub = () => {
 
   const location = useLocation();
   const { setField } = useCommunityStore();
-
+  const { prevClubPath } = useClubStore();
   const { data: myData, mutate: mutateMe } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
@@ -162,7 +163,11 @@ const GetClub = () => {
   }
   return (
     <>
-      {isClubLeader ? <GetClubTop /> : <CommonTop />}
+      {isClubLeader ? (
+        <GetClubTop />
+      ) : (
+        <CommonTop prevPath={prevClubPath} pageType="club" />
+      )}
       <Box
         sx={{
           marginTop: '64px',
@@ -176,8 +181,8 @@ const GetClub = () => {
             src={`${import.meta.env.VITE_CDN_HOST}/upload_images/club/${
               club?.clubImg
             }?type=f_sh&w=400&h=250&faceopt=true&sharp_amt=1.0`}
-            alt='noImg'
-            loading='lazy'
+            alt="noImg"
+            loading="lazy"
             onError={handleImageError}
             style={{
               maxWidth: '100%',
@@ -189,8 +194,8 @@ const GetClub = () => {
         ) : (
           <img
             src={`https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c`}
-            alt='noImg'
-            loading='lazy'
+            alt="noImg"
+            loading="lazy"
             style={{
               maxWidth: '100%',
               maxHeight: '250px',
@@ -203,15 +208,15 @@ const GetClub = () => {
           <Stack margin={1} spacing={2}>
             <ClubMember member={leaderData} />
           </Stack>
-          <Typography variant='h3' sx={{ fontSize: 16 }}>
+          <Typography variant="h3" sx={{ fontSize: 16 }}>
             {club?.clubName}
           </Typography>
-          <Stack direction='row' alignItems='center' spacing={5}>
-            <Box direction='row' spacing={0} alignItems='left'>
+          <Stack direction="row" alignItems="center" spacing={5}>
+            <Box direction="row" spacing={0} alignItems="left">
               <ClubSmallChip label={club?.filterTag} />
             </Box>
 
-            <Box direction='row' spacing={0} alignItems='left'>
+            <Box direction="row" spacing={0} alignItems="left">
               <ClubSmallChip
                 label={club?.clubState === 2 ? '모집완료' : '모집중'}
                 sx={{
@@ -230,15 +235,15 @@ const GetClub = () => {
               ''
             )}
           </Stack>
-          <Stack direction='row' alignItems='center' spacing={5}>
-            <Stack direction='row' spacing={1} alignItems={'center'}>
+          <Stack direction="row" alignItems="center" spacing={5}>
+            <Stack direction="row" spacing={1} alignItems={'center'}>
               <PeopleIcon />
               <Typography sx={{ fontSize: 13 }}>
                 {club?.memberCount}/{club?.clubMaxMemberNo}
               </Typography>
             </Stack>
 
-            <Stack direction='row' spacing={1} alignItems={'center'}>
+            <Stack direction="row" spacing={1} alignItems={'center'}>
               <LocationOnIcon />
               <Typography sx={{ fontSize: 13 }}>{club?.clubRegion}</Typography>
             </Stack>
@@ -264,7 +269,7 @@ const GetClub = () => {
 
         {!myData && (
           <Button
-            variant='contained'
+            variant="contained"
             onClick={onClickLogin}
             sx={{ width: '95vw', borderRadius: '50px', marginTop: '10px' }}
           >
@@ -273,7 +278,7 @@ const GetClub = () => {
         )}
         {myData && !myData?.profileImg && (
           <Button
-            variant='contained'
+            variant="contained"
             onClick={onClickRegistProfile}
             sx={{ width: '95vw', borderRadius: '50px', marginTop: '10px' }}
           >
@@ -283,7 +288,7 @@ const GetClub = () => {
 
         {myData && myData?.profileImg && !isClubLeader && (
           <Button
-            variant='contained'
+            variant="contained"
             sx={{ width: '95vw', borderRadius: '50px', marginTop: '10px' }}
             onClick={onClickAddMember}
           >

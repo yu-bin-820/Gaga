@@ -20,16 +20,8 @@ import useClubStore from '@stores/club/useClubStore';
 const ClubThumbnail = ({ club }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setField } = useClubStore();
+  const { setField, prevClubPath } = useClubStore();
   const [imageLoadingError, setImageLoadingError] = useState(false);
-
-  const onClickClub = useCallback(
-    (e) => {
-      setField('prevClubPath', location.pathname);
-      navigate(`/club/no/${clubNo}`);
-    },
-    [navigate, club]
-  );
 
   const handleImageError = useCallback(() => {
     setImageLoadingError(true);
@@ -45,6 +37,20 @@ const ClubThumbnail = ({ club }) => {
     clubState,
     filterGender,
   } = club;
+
+  const onClickClub = useCallback(
+    (e) => {
+      const isPrevPathArray = Array.isArray(prevClubPath);
+      setField(
+        'prevClubPath',
+        isPrevPathArray
+          ? [...prevClubPath, location.pathname]
+          : [location.pathname]
+      );
+      navigate(`/club/no/${clubNo}`);
+    },
+    [navigate, clubNo, setField, location, prevClubPath]
+  );
   return (
     <Box
       sx={{
@@ -57,7 +63,7 @@ const ClubThumbnail = ({ club }) => {
       }}
     >
       <Stack spacing={0.8}>
-        <Stack direction='row' spacing={2}>
+        <Stack direction="row" spacing={2}>
           <ImageListItem
             id={club.clubNo}
             onClick={onClickClub}
@@ -73,8 +79,8 @@ const ClubThumbnail = ({ club }) => {
                 src={`${import.meta.env.VITE_CDN_HOST}/upload_images/club/${
                   club?.clubImg
                 }?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`}
-                alt='noImg'
-                loading='lazy'
+                alt="noImg"
+                loading="lazy"
                 onError={handleImageError}
                 style={{ borderRadius: '5px' }}
               />
@@ -86,10 +92,10 @@ const ClubThumbnail = ({ club }) => {
             )}
           </ImageListItem>
           <Stack spacing={0.5}>
-            <Stack direction='row' alignItems='center' spacing={2}>
-              <ClubSmallChip label={club?.filterTag} size='small' />
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <ClubSmallChip label={club?.filterTag} size="small" />
               <ClubSmallChip
-                size='small'
+                size="small"
                 label={club?.clubState === 1 ? '모집중' : '모집완료'}
                 sx={{
                   backgroundColor:
@@ -102,13 +108,13 @@ const ClubThumbnail = ({ club }) => {
             >
               {clubName}
             </Stack>
-            <Stack direction='row' spacing={1} alignItems={'center'}>
+            <Stack direction="row" spacing={1} alignItems={'center'}>
               <Place />
               <Typography sx={{ fontSize: 12, spacing: 1 }}>
                 {clubRegion}
               </Typography>
             </Stack>
-            <Stack direction='row' spacing={1} alignItems={'center'}>
+            <Stack direction="row" spacing={1} alignItems={'center'}>
               <PeopleIcon />
               <Typography sx={{ fontSize: 13 }}>
                 {memberCount}/{clubMaxMemberNo}

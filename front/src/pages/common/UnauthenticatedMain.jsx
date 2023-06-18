@@ -17,16 +17,6 @@ const UnauthenticatedMain = () => {
 
   const navigate = useNavigate();
 
-  const onClickLogOut = useCallback(async () => {
-    await axios
-      .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/user/logout`, {
-        withCredentials: true,
-      })
-      .then(() => {
-        mutateMe();
-      });
-  }, [mutateMe]);
-
   const onClickLogin = useCallback(() => {
     navigate('/user/login');
   }, [navigate]);

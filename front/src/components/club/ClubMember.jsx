@@ -11,14 +11,28 @@ const ClubMember = ({ member }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { setField } = useCommunityStore();
+  const { setField, prevProfilePath } = useCommunityStore();
 
   const onClickProfileImg = useCallback(
     (e) => {
-      setField('prevProfilePath', location.pathname);
+      const isArray = Array.isArray(prevProfilePath);
+      console.log('getMeetingMeetingMemberClickIsArray', isArray);
+      console.log(
+        'getMeetingMeetingMemberClickPrevProfilePath',
+        prevProfilePath
+      );
+
+      setField(
+        'prevProfilePath',
+        isArray ? [...prevProfilePath, location.pathname] : [location.pathname]
+      );
+      console.log(
+        'getMeetingMeetingMemberClick...PrevProfilePathAdd',
+        prevProfilePath
+      );
       navigate(`/community/profile/userno/${e.currentTarget.dataset.value}`);
     },
-    [navigate, setField, location]
+    [navigate, setField, location, prevProfilePath]
   );
 
   return (
@@ -46,7 +60,7 @@ const ClubMember = ({ member }) => {
               sx={{ width: 40, height: 40 }}
             />
           </div>
-          <Stack direction='column' spacing={0} alignItems='left'>
+          <Stack direction="column" spacing={0} alignItems="left">
             <Typography sx={{ fontSize: 15 }}>{nickName}</Typography>
             <Typography sx={{ fontSize: 10 }}>{userIntro}</Typography>
           </Stack>
