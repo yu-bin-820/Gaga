@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
@@ -35,6 +35,7 @@ import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
 import SendIcon from '@mui/icons-material/Send';
 import PropTypes from 'prop-types';
 import useCommunityStore from '@stores/communication/useCommunityStore';
+import useChatMapStore from '@stores/communication/useChatMapStore';
 
 const ProfileTop = ({ userNo }) => {
   const navigate = useNavigate();
@@ -48,6 +49,7 @@ const ProfileTop = ({ userNo }) => {
     prevChatRoomLeader,
     prevGetDirectChatPath,
   } = useCommunityStore();
+  const { setField: setChatField } = useChatMapStore();
   const [duplicateReportDialogOpen, setDuplicateReportDialogOpen] =
     useState(false);
   const [deleteReportDialogOpen, setDeleteReportDialogOpen] = useState(false);
@@ -119,7 +121,7 @@ const ProfileTop = ({ userNo }) => {
       console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
       console.log('prevChatType', prevChatType);
       console.log('prevChatRoomLeader', prevChatRoomLeader);
-      setField('shouldScroll', true);
+      setChatField('shouldScroll', true);
       setField('chatRoomEntryNo', userNo);
 
       setField(
@@ -155,19 +157,31 @@ const ProfileTop = ({ userNo }) => {
       prevChatRoomLeader,
       prevChatType,
       myData,
+      setChatField,
     ]
   );
 
   const onClickPrev = useCallback(() => {
     const isPrevPathArray = Array.isArray(prevProfilePath);
-
+    console.log('ProfileTopprevProfilePath', prevProfilePath);
+    if (!isPrevPathArray) {
+      setField('prevProfilePath', [prevProfilePath]);
+    }
     const prevPath = isPrevPathArray
       ? prevProfilePath[prevProfilePath.length - 1]
       : prevProfilePath;
 
-    setField('prevProfilePath', isPrevPathArray ? prevProfilePath.pop() : []);
+    if (isPrevPathArray) {
+      setField('prevProfilePath', prevProfilePath.slice(0, -1));
+    }
+    console.log('ProfileTopPrevPath', prevPath);
+    console.log('pop()ProfileTopprevProfilePath', prevProfilePath);
     navigate(prevPath);
   }, [prevProfilePath, setField, navigate]);
+
+  useEffect(() => {
+    console.log('ProfileTopprevProfilePath', prevProfilePath);
+  }, [prevProfilePath]);
   // if (!myData) {
   //   return <Navigate replace to={`/community/profile/userno/${userNo}`} />;
   // }

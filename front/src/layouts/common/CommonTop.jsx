@@ -8,22 +8,40 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/system';
 import PropTypes from 'prop-types';
 import useCommunityStore from '@stores/communication/useCommunityStore';
-const CommonTop = ({ pageName, prevPath }) => {
+import useMeetingPathStore from '@stores/meeting/useMeetingPathStore';
+const CommonTop = ({ pageName, prevPath, pageType }) => {
   const navigate = useNavigate();
-  const { setField, prevChatRoomEntryNo, prevChatType, prevChatRoomLeader } =
-    useCommunityStore();
-  const onClickPrev = useCallback(() => {
-    setField('chatRoomEntryNo', prevChatRoomEntryNo);
-    setField('chatType', prevChatType);
-    setField('chatRoomLeader', prevChatRoomLeader);
-
-    navigate(prevPath || -1);
-  }, [
-    prevPath,
+  const {
+    setField: setCommunityField,
     prevChatRoomEntryNo,
     prevChatType,
     prevChatRoomLeader,
-    setField,
+  } = useCommunityStore();
+  const { setField: setMeetingField } = useMeetingPathStore();
+  const onClickPrev = useCallback(() => {
+    const isPrevPathArray = Array.isArray(prevPath);
+    // setField('chatRoomEntryNo', prevChatRoomEntryNo);
+    // setField('chatType', prevChatType);
+    // setField('chatRoomLeader', prevChatRoomLeader);
+    const tempPrev = isPrevPathArray ? prevPath[prevPath.length - 1] : prevPath;
+    console.log('GetMeetingCommonTopPrevPath', prevPath);
+
+    if (isPrevPathArray) {
+      if (pageType === 'meeting') {
+        setMeetingField('prevMeetingPath', prevPath.pop());
+      }
+    }
+    console.log('pop()GetMeetingCommonTopPrevPath', prevPath);
+
+    console.log('GetMeetingCommonTopTempPrev', tempPrev);
+    navigate(tempPrev || -1);
+  }, [
+    prevPath,
+    // prevChatRoomEntryNo,
+    // prevChatType,
+    // prevChatRoomLeader,
+    pageType,
+    setMeetingField,
     navigate,
   ]);
   return (
@@ -64,6 +82,7 @@ const CommonTop = ({ pageName, prevPath }) => {
 };
 CommonTop.propTypes = {
   pageName: PropTypes.string,
-  prevPath: PropTypes.string,
+  prevPath: PropTypes.array,
+  pageType: PropTypes.string,
 };
 export default CommonTop;

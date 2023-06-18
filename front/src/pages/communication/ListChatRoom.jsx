@@ -13,6 +13,7 @@ import MainBottomNav from '@layouts/common/MainBottomNav';
 import ListChatRoomTop from '@layouts/communication/ListChatRoomTop.jsx';
 import { Badge } from '@mui/material';
 import { useCallback, useState } from 'react';
+import useChatMapStore from '@stores/communication/useChatMapStore';
 
 export default function ListChatRoom() {
   const navigate = useNavigate();
@@ -25,6 +26,8 @@ export default function ListChatRoom() {
     prevGetDirectChatPath,
     setField,
   } = useCommunityStore();
+
+  const { setField: setChatField } = useChatMapStore();
 
   const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -71,12 +74,14 @@ export default function ListChatRoom() {
       console.log(selectedData.chatRoomEntryNo);
       const isArray = Array.isArray(prevChatRoomEntryNo);
       const isPrevPathArray = Array.isArray(prevGetGroupChatPath);
+
       console.log('isArray', isArray);
       console.log('isPrevPathArray', isPrevPathArray);
       console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
       console.log('prevChatType', prevChatType);
       console.log('prevChatRoomLeader', prevChatRoomLeader);
-      setField('shouldScroll', true);
+
+      setChatField('shouldScroll', true);
 
       setField('chatRoomEntryNo', selectedData.chatRoomEntryNo);
       setField('chatType', selectedData.chatType);
@@ -124,6 +129,7 @@ export default function ListChatRoom() {
       prevChatType,
       prevChatRoomLeader,
       prevGetGroupChatPath,
+      setChatField,
     ]
   );
 
@@ -136,20 +142,27 @@ export default function ListChatRoom() {
       console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
       console.log('prevChatType', prevChatType);
       console.log('prevChatRoomLeader', prevChatRoomLeader);
-      setField('shouldScroll', true);
+      setChatField('shouldScroll', true);
 
       setField('chatRoomEntryNo', e.currentTarget.dataset.value);
 
-      setField('prevChatRoomEntryNo', [
-        ...prevChatRoomEntryNo,
-        e.currentTarget.dataset.value,
-      ]);
-      setField('prevChatType', [...prevChatType, 3]);
-      setField('prevChatRoomLeader', [...prevChatRoomLeader, myData?.userNo]);
-      setField('prevGetDirectChatPath', [
-        ...prevGetDirectChatPath,
-        location.pathname,
-      ]);
+      setField(
+        'prevChatRoomEntryNo',
+        isArray
+          ? [...prevChatRoomEntryNo, e.currentTarget.dataset.value]
+          : [e.currentTarget.dataset.value]
+      );
+      setField('prevChatType', isArray ? [...prevChatType, 3] : [3]);
+      setField(
+        'prevChatRoomLeader',
+        isArray ? [...prevChatRoomLeader, myData?.userNo] : [myData?.userNo]
+      );
+      setField(
+        'prevGetDirectChatPath',
+        isPrevPathArray
+          ? [...prevGetDirectChatPath, location.pathname]
+          : [location.pathname]
+      );
       console.log('------------------------------------------');
       console.log('isArray', isArray);
       console.log('isPrevPathArray', isPrevPathArray);
@@ -164,7 +177,7 @@ export default function ListChatRoom() {
       location,
       prevChatRoomEntryNo,
       prevGetDirectChatPath,
-
+      setChatField,
       prevChatRoomLeader,
       prevChatType,
       myData,

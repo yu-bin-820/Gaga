@@ -75,7 +75,12 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
   }, []);
   const onClickChatMember = useCallback(
     (e) => {
-      setField('prevProfilePath', [...prevProfilePath, location.pathname]);
+      const isArray = Array.isArray(prevProfilePath);
+      setField(
+        'prevProfilePath',
+        isArray ? [...prevProfilePath, location.pathname] : [location.pathname]
+      );
+      console.log('GetChatTopPrevProfilePath', prevProfilePath);
       navigate(`/community/profile/userno/${e.currentTarget.dataset.value}`);
     },
     [navigate, setField, location, prevProfilePath]
