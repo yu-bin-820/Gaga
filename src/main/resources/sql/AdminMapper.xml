@@ -107,6 +107,7 @@
 			jdbcType="VARCHAR" />
 	</resultMap>
 
+
 	<!-- 관리자게시판 -->
 	<insert id="addNoticePost"
 		parameterType="com.gaga.bo.service.domain.NoticePost">
@@ -358,15 +359,17 @@
 		reporting.user_id AS reporting_id,
 		reported.user_id AS reported_id,
 		reporting.nick_name AS reporting_nick_name,
-		reported.nick_name AS reported_nick_name
+		reported.nick_name AS
+		reported_nick_name
 		FROM reports AS r
-		INNER JOIN users AS reporting ON r.reporting_no = reporting.user_no
-		INNER JOIN users AS reported ON r.reported_no = reported.user_no
+		INNER JOIN users AS reporting ON
+		r.reporting_no = reporting.user_no
+		INNER JOIN users AS reported ON
+		r.reported_no = reported.user_no
 		WHERE
-		reported.user_id LIKE CONCAT ('%', #{userId}, '%')
-		or reporting.user_id LIKE CONCAT ('%', #{reporting_id}, '%')
-		or (reported.nick_name LIKE CONCAT ('%', #{userName}, '%') OR
-		reporting.nick_name LIKE CONCAT ('%', #{userName}, '%'))
+		reported.user_id LIKE
+		CONCAT('%', #{searchKeyword}, '%') or
+		r.report_content LIKE CONCAT('%', #{searchKeyword}, '%') or
+		reporting.user_id LIKE CONCAT('%', #{searchKeyword}, '%')
 	</select>
-
 </mapper>

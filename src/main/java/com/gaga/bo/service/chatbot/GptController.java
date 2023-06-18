@@ -68,6 +68,14 @@ public class GptController {
 	        System.out.println("가가에 관한 질문1");
 	        messageContent.put("role", "user");
 	        messageContent.put("content", fullPrompt);
+	    } else if (prompt.contains("모임") || prompt.contains("클럽") || prompt.contains("미팅")) {
+	        String fullPrompt = "클럽과 모임이 궁금하시군요, 클럽과 모임은 저희 GAGA서비스에서 필터와 지도, 검색으로 쉽게 찾으실 수 있어요, 자신의 관심사, 나이, 성별등을"
+	        		+ "직접 입력해서 맞춤으로 검색하실수 있게끔 필터를 설정하실 수 있고, 첫 화면의 지도기능을 사용해서 인근의 모임정보를 쉽게 얻으실 수 있습니다."
+	        		+ "혹시 아직 마음에 드는 클럽이나 모임을 찾지 못하셨다면, 이번에 한번 직접 클럽장이나 모임장이 되어보는건 어떨까요? 모임이나 클럽을 만들어서 운영하는 것으로"
+	        		+ "얻을 수 있는 타이틀도 있으니 이번 기회에 새롭게 원하시는 모임이나 클럽을 직접 만들어 보시는것도 나쁘지 않겠네요! 좋은 하루 보내시고 원하시는 즐거운 만남이 있기를 소망합니다! 가치가자!! GAGA!" + " " + prompt;
+	        System.out.println("모임, 클럽에 관한 질문1");
+	        messageContent.put("role", "user");
+	        messageContent.put("content", fullPrompt);
 	    } else {
 	    	System.out.println("그냥질문!");
 	        messageContent.put("role", "user");

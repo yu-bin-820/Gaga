@@ -323,7 +323,6 @@ public class AdminRestController {
 	}
 
 	// 신고게시판
-
 	@GetMapping("getReportAdminList")
 	public ResponseEntity<List<Report>> getReportList(@RequestParam("userNo") int userNo,
 			@RequestParam("role") int role) {
