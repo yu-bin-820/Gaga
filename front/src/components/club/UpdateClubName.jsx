@@ -1,7 +1,6 @@
 import { TextField } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import useUpdateClubFormStore from '@stores/club/useUpdateClubFormStore';
-import useUpdateMeetingFormStore from '@stores/meeting/useUpdateMeetingFormStore';
 import React from 'react';
 
 const UpdateClubName = () => {

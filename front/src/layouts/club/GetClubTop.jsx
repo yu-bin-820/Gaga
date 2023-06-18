@@ -19,6 +19,7 @@ import { Box } from '@mui/system';
 import DeleteClubDialog from '@components/club/DeleteClubDialog';
 import useUpdateClubFormStore from '@stores/club/useUpdateClubFormStore';
 import useCommunityStore from '@stores/communication/useCommunityStore';
+import UpdateClubDrawer from '@components/club/UpdateClubDrawer';
 
 const GetClubTop = () => {
   const { clubNo } = useParams();
@@ -35,6 +36,7 @@ const GetClubTop = () => {
 
   const navigate = useNavigate();
 
+  const [settingsUpdateClubOpen, setSettingsUpdateClubOpen] = useState(false);
   const [leaderMenuOpen, setLeaderMenuOpen] = useState(false);
 
   const onClickLeaderMenu = useCallback(() => {
@@ -49,12 +51,20 @@ const GetClubTop = () => {
     []
   );
 
-  const onClickUpdate = useCallback(
-    (MouseEvent) => {
-      navigate(`/club/updateclub/${clubNo}`);
+  const [deleteClubDialogOpen, setDeleteClubDialogOpen] = useState(false);
+
+  const toggleSettingsUpdateClub = useCallback(
+    (state) => () => {
+      setSettingsUpdateClubOpen(state);
     },
-    [navigate, reset, clubNo]
+    []
   );
+
+  const onClickUpdate = useCallback(() => {
+    reset();
+    setSettingsUpdateClubOpen(true);
+    setLeaderMenuOpen(false);
+  }, [reset]);
 
   const onClickPrev = useCallback(() => {
     setField('chatRoomEntryNo', prevChatRoomEntryNo);
@@ -71,8 +81,6 @@ const GetClubTop = () => {
     navigate,
   ]);
 
-  const [deleteClubDialogOpen, setDeleteClubDialogOpen] = useState(false);
-
   const onClickDeleteSelect = useCallback(() => {
     setDeleteClubDialogOpen(true);
   }, []);
@@ -87,7 +95,11 @@ const GetClubTop = () => {
       >
         <Container maxWidth='xl'>
           <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
-            <IconButton onClick={onClickPrev}>
+            <IconButton
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
               <ArrowBackIosNewIcon />
             </IconButton>
 
@@ -124,6 +136,12 @@ const GetClubTop = () => {
       <DeleteClubDialog
         open={deleteClubDialogOpen}
         setOpen={setDeleteClubDialogOpen}
+      />
+      <UpdateClubDrawer
+        settingsUpdateClubOpen={settingsUpdateClubOpen}
+        setSettingsUpdateClubOpen={setSettingsUpdateClubOpen}
+        toggleSettingsUpdateClub={toggleSettingsUpdateClub}
+        clubNo={clubNo}
       />
     </>
   );

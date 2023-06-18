@@ -1,15 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTheme } from '@emotion/react';
-import SelectMeetingType from './SelectMeetingType';
-import AddMeetingListCategory from './AddMeetingListCategory';
-import AddMeetingName from './AddMeetingName';
-import AddMeetingImg from './AddMeetingImg';
-import AddMeetingMap from './map/AddMeetingMap';
-import AddMeetingDate from './AddMeetingDate';
-import AddMeetingFilter from './AddMeetingFilter';
-import AddMeetingMaxMember from './AddMeetingMaxMember';
-import AddMeeting1 from './AddMeeting1';
 import {
   Button,
   Divider,
@@ -25,6 +16,8 @@ import AddClubListCategory from './AddClubListCategory';
 import AddClubName from './AddClubName';
 import AddClubImg from './AddClubImg';
 import AddClubFilter from './AddClubFilter';
+import AddClubMaxMember from './AddClubMaxMember';
+import AddClubRegion from './AddClubRegion';
 
 const AddClubDrawer = ({
   settingsAddClubOpen,
@@ -33,6 +26,7 @@ const AddClubDrawer = ({
 }) => {
   const theme = useTheme();
   const [activeStep, setActiveStep] = useState(0);
+  const [nextButtonDisable, setNextButtonDisable] = useState(false);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -45,17 +39,26 @@ const AddClubDrawer = ({
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <SelectClubType />;
+        return <SelectClubType setNextButtonDisable={setNextButtonDisable} />;
       case 1:
-        return <AddClubListCategory />;
+        return (
+          <AddClubListCategory setNextButtonDisable={setNextButtonDisable} />
+        );
       case 2:
-        return <AddClubName />;
+        return <AddClubName setNextButtonDisable={setNextButtonDisable} />;
       case 3:
-        return <AddClubImg />;
+        return <AddClubRegion setNextButtonDisable={setNextButtonDisable} />;
       case 4:
-        return <AddClubFilter />;
+        return <AddClubImg setNextButtonDisable={setNextButtonDisable} />;
       case 5:
-        return <AddMeetingMaxMember />;
+        return <AddClubFilter setNextButtonDisable={setNextButtonDisable} />;
+      case 6:
+        return (
+          <AddClubMaxMember
+            setSettingsAddClubOpen={setSettingsAddClubOpen}
+            setActiveStep={setActiveStep}
+          />
+        );
       default:
         throw new Error('Unknown step');
     }
@@ -85,7 +88,7 @@ const AddClubDrawer = ({
       <Box>
         <MobileStepper
           variant='progress'
-          steps={6}
+          steps={7}
           position='static'
           activeStep={activeStep}
           sx={{ maxWidth: 500, flexGrow: 1 }}
@@ -93,7 +96,7 @@ const AddClubDrawer = ({
             <Button
               size='small'
               onClick={handleNext}
-              disabled={activeStep === 5}
+              disabled={activeStep === 6 || nextButtonDisable}
             >
               Next
               {theme.direction === 'rtl' ? (

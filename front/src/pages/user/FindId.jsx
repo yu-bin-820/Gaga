@@ -4,6 +4,7 @@ import axios from "axios";
 import React, { useState, useCallback } from "react";
 import CommonTop from "@layouts/common/CommonTop";
 import Typography from "@mui/material/Typography";
+import { Card, CardContent } from '@mui/material';
 
 const FindId = () => {
   const [phoneNo, setPhoneNo] = useState("");
@@ -65,7 +66,7 @@ const FindId = () => {
 
   return (
     <>
-      <CommonTop pageName="아이디 찾기"/>
+      <CommonTop pageName="아이디 찾기" />
       <Typography
         style={{ color: "black", marginTop: "100px", textAlign: "center" }}
       >
@@ -114,7 +115,7 @@ const FindId = () => {
         <Button
           onClick={handlePhoneVerification}
           disabled={!/^\d{6}$/.test(phoneVerificationCode)}
-          sx={{marginBottom: "10px" }}
+          sx={{ marginBottom: "10px" }}
         >
           인증번호 확인
         </Button>
@@ -125,8 +126,23 @@ const FindId = () => {
         >
           아이디 찾기
         </Button>
-
-        {userId && <p>당신의 아이디는 {userId}입니다.</p>}
+{/* 
+        {userId && <p>당신의 아이디는 {userId}입니다.</p>} */}
+        {userId && (
+          <Card>
+            <CardContent>
+              {/* <Typography variant="h6" component="div">
+                당신의 아이디는
+              </Typography> */}
+              <Typography variant="h6" component="div" color="primary">
+                {userId}
+              </Typography>
+              {/* <Typography variant="h6" component="div">
+                입니다.
+              </Typography> */}
+            </CardContent>
+          </Card>
+        )}
       </Box>
     </>
   );

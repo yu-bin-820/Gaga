@@ -7,7 +7,6 @@ const clubField = {
   filterGender: '',
   filterMinAge: '',
   filterMaxAge: '',
-  filterTag: '',
   meetingMaxMemberNo: null,
   clubState: null,
   file: null,

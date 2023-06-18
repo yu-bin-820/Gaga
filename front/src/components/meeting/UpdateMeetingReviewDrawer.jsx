@@ -182,7 +182,6 @@ const UpdateMeetingReviewDrawer = ({settingsUpdateReviewOpen, setSettingsUpdateR
         </Stack>
         <TextField
           fullWidth
-          label="meetingReviewContent"
           name="meetingReviewContent"
           onChange={onChangeMeetingReview}
           multiline

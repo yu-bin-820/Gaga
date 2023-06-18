@@ -1,10 +1,19 @@
 import useClubFormStore from '@hooks/club/useClubFormStore';
 import { TextField } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import React from 'react';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 
-const AddClubName = () => {
-  const { clubName, onChangeField } = useClubFormStore();
+const AddClubName = ({ setNextButtonDisable }) => {
+  const { clubName, clubRegion, onChangeField } = useClubFormStore();
+
+  useEffect(() => {
+    if (clubName) {
+      setNextButtonDisable(false);
+    } else {
+      setNextButtonDisable(true);
+    }
+  }, [setNextButtonDisable, clubName]);
 
   return (
     <Box sx={{ margin: '10px' }}>
@@ -22,6 +31,10 @@ const AddClubName = () => {
       </Stack>
     </Box>
   );
+};
+
+AddClubName.propTypes = {
+  setNextButtonDisable: PropTypes.bool,
 };
 
 export default AddClubName;

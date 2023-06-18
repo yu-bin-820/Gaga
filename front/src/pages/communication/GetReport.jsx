@@ -22,19 +22,19 @@ const GetReport = () => {
   const { reportNo, reportCategory, prevPath } = useCommunityStore();
   const [deleteReportDialogOpen, setDeleteReportDialogOpen] = useState(false);
 
-  const { data: myData, mutate: mutateMe } = useSWR(
+  const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
-  const { data: reportData, mutate: mutateReport } = useSWR(
+  const { data: reportData } = useSWR(
     `${
       import.meta.env.VITE_SPRING_HOST
     }/rest/community/report/reportno/${reportNo}`,
     fetcher
   );
 
-  const { data: reportListData, mutate: mutateReportList } = useSWR(
+  const { mutate: mutateReportList } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/community/report/list/userno/${
       myData?.userNo
     }/role/${myData?.role}`,
@@ -122,7 +122,7 @@ const GetReport = () => {
                 {reportData?.reportImg && (
                   <img
                     src={`${
-                      import.meta.env.VITE_CDN_ORGIN_HOST
+                      import.meta.env.VITE_CDN_ORIGIN_HOST
                     }/upload_images/community/${reportData?.reportImg}`}
                     loading="lazy"
                     style={{

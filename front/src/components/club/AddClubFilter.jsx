@@ -1,13 +1,22 @@
 import { Box, Stack } from '@mui/system';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Paper, Typography } from '@mui/material';
 import SelectGender from '@components/common/SelectGender';
 import SelectAge from '@components/common/SelectAge';
 import useClubFormStore from '@hooks/club/useClubFormStore';
+import PropTypes from 'prop-types';
 
-const AddClubFilter = () => {
+const AddClubFilter = ({ setNextButtonDisable }) => {
   const { filterGender, filterMinAge, filterMaxAge, setField } =
     useClubFormStore();
+
+  useEffect(() => {
+    if (filterGender) {
+      setNextButtonDisable(false);
+    } else {
+      setNextButtonDisable(true);
+    }
+  }, [setNextButtonDisable, filterGender]);
 
   const handleGenderChange = useCallback(
     (gender) => {
@@ -49,4 +58,7 @@ const AddClubFilter = () => {
   );
 };
 
+AddClubFilter.propTypes = {
+  setNextButtonDisable: PropTypes.bool,
+};
 export default AddClubFilter;

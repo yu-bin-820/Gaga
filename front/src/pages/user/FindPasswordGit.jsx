@@ -56,14 +56,14 @@ const FindPassword = () => {
       if (userResponse.data) {
         const user = userResponse.data;
         const updateResponse = await axios.post(
-          `${import.meta.env.VITE_SPRING_HOST}/rest/user/updatePassword`, //여기수정
+          `${import.meta.env.VITE_SPRING_HOST}/rest/user/updateUser`,
           {
-            phoneNo: phoneNo,                                                 //여기수정
+            ...user,
             password: newPassword,
           }
         );
 
-        if (updateResponse.status === 200) {
+        if (updateResponse.status === 201) {
           alert("비밀번호가 변경되었습니다."); //비밀번호 변경 완료 알림 추가
           navigate("/");
           

@@ -3,8 +3,7 @@ import { Stack } from '@mui/system';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
-const IsMeetingMemberDialog = ({ open, setOpen}) => {
+const UnMatchedFilterMeeting = ({ open, setOpen}) => {
 
     const handleClose = () => {
         setOpen(false);
@@ -18,7 +17,7 @@ const IsMeetingMemberDialog = ({ open, setOpen}) => {
             <Typography
             variant="h6" 
             sx={{ fontSize: '16px', padding: '20px' }}>
-                이미 참여한 모임입니다.
+                참여할 수 없는 모임입니다.
             </Typography>
             <DialogActions>
             <Stack
@@ -38,9 +37,9 @@ const IsMeetingMemberDialog = ({ open, setOpen}) => {
     );
 };
 
-IsMeetingMemberDialog.propTypes = {
+UnMatchedFilterMeeting.propTypes = {
     open: PropTypes.object.isRequired,
     setOpen: PropTypes.object.isRequired,
   };
 
-export default IsMeetingMemberDialog;
+export default UnMatchedFilterMeeting;

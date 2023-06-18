@@ -76,14 +76,14 @@ const PaymentRedirect = () => {
         <Stack sx={{ marginTop: '100px', alignItems: 'center' }}>
           <h2>결제 완료</h2>
           <CheckCircleIcon color='primary' sx={{ fontSize: '60px' }} />
-          <h3>{data.nickName}님 결제가 정상적으로 처리되었습니다.</h3>
+          <h3>{data?.nickName}님의 결제가 정상적으로 처리되었습니다.</h3>
           <Stack sx={{ marginTop: '20px', alignItems: 'center' }}>
             <Box alignItems='center'>
               <Typography variant='h7' component='div'>
-                모 임 명 : {data.meetingName}
+                모 임 명 : {data?.meetingName}
               </Typography>
               <Typography variant='h7' component='div'>
-                참 가 비 : {data.entryFee}원
+                참 가 비 : {data?.entryFee?.toLocaleString()}원
               </Typography>
             </Box>
           </Stack>
