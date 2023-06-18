@@ -46,6 +46,7 @@ const ProfileTop = ({ userNo }) => {
     prevChatRoomEntryNo,
     prevChatType,
     prevChatRoomLeader,
+    prevGetDirectChatPath,
   } = useCommunityStore();
   const [duplicateReportDialogOpen, setDuplicateReportDialogOpen] =
     useState(false);
@@ -111,30 +112,62 @@ const ProfileTop = ({ userNo }) => {
 
   const onClickDirectMessage = useCallback(
     (e) => {
+      const isArray = Array.isArray(prevChatRoomEntryNo);
+      const isPrevPathArray = Array.isArray(prevGetDirectChatPath);
+      console.log('isArray', isArray);
+      console.log('isPrevPathArray', isPrevPathArray);
+      console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
+      console.log('prevChatType', prevChatType);
+      console.log('prevChatRoomLeader', prevChatRoomLeader);
       setField('shouldScroll', true);
       setField('chatRoomEntryNo', userNo);
-      setField('prevChatRoomEntryNo', chatRoomEntryNo);
-      setField('prevGetDirectChatPath', location.pathname);
 
+      setField(
+        'prevChatRoomEntryNo',
+        isArray ? [...prevChatRoomEntryNo, userNo] : [userNo]
+      );
+      setField('prevChatType', isArray ? [...prevChatType, 3] : [3]);
+      setField(
+        'prevChatRoomLeader',
+        isArray ? [...prevChatRoomLeader, myData?.userNo] : [myData?.userNo]
+      );
+
+      setField(
+        'prevGetDirectChatPath',
+        isPrevPathArray
+          ? [...prevGetDirectChatPath, location.pathname]
+          : [location.pathname]
+      );
+      console.log('isArray', isArray);
+      console.log('isPrevPathArray', isPrevPathArray);
+      console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
+      console.log('prevChatType', prevChatType);
+      console.log('prevChatRoomLeader', prevChatRoomLeader);
       navigate('/chat/direct/message/list');
     },
-    [userNo, setField, chatRoomEntryNo, location, navigate]
+    [
+      userNo,
+      setField,
+      location,
+      navigate,
+      prevChatRoomEntryNo,
+      prevGetDirectChatPath,
+      prevChatRoomLeader,
+      prevChatType,
+      myData,
+    ]
   );
 
   const onClickPrev = useCallback(() => {
-    setField('chatRoomEntryNo', prevChatRoomEntryNo);
-    setField('chatType', prevChatType);
-    setField('chatRoomLeader', prevChatRoomLeader);
+    const isPrevPathArray = Array.isArray(prevProfilePath);
 
-    navigate(prevProfilePath || -1);
-  }, [
-    prevProfilePath,
-    prevChatRoomEntryNo,
-    prevChatType,
-    prevChatRoomLeader,
-    setField,
-    navigate,
-  ]);
+    const prevPath = isPrevPathArray
+      ? prevProfilePath[prevProfilePath.length - 1]
+      : prevProfilePath;
+
+    setField('prevProfilePath', isPrevPathArray ? prevProfilePath.pop() : []);
+    navigate(prevPath);
+  }, [prevProfilePath, setField, navigate]);
   // if (!myData) {
   //   return <Navigate replace to={`/community/profile/userno/${userNo}`} />;
   // }

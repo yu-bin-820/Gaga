@@ -17,7 +17,14 @@ import { useCallback, useState } from 'react';
 export default function ListChatRoom() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setField } = useCommunityStore();
+  const {
+    prevChatRoomEntryNo,
+    prevChatType,
+    prevChatRoomLeader,
+    prevGetGroupChatPath,
+    prevGetDirectChatPath,
+    setField,
+  } = useCommunityStore();
 
   const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
@@ -62,36 +69,106 @@ export default function ListChatRoom() {
     (e) => {
       const selectedData = JSON.parse(e.currentTarget.dataset.value);
       console.log(selectedData.chatRoomEntryNo);
+      const isArray = Array.isArray(prevChatRoomEntryNo);
+      const isPrevPathArray = Array.isArray(prevGetGroupChatPath);
+      console.log('isArray', isArray);
+      console.log('isPrevPathArray', isPrevPathArray);
+      console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
+      console.log('prevChatType', prevChatType);
+      console.log('prevChatRoomLeader', prevChatRoomLeader);
       setField('shouldScroll', true);
 
       setField('chatRoomEntryNo', selectedData.chatRoomEntryNo);
       setField('chatType', selectedData.chatType);
       setField('chatRoomLeader', selectedData.chatRoomLeader);
 
-      setField('prevChatRoomEntryNo', selectedData.chatRoomEntryNo);
-      setField('prevChatType', selectedData.chatType);
-      setField('prevChatRoomLeader', selectedData.chatRoomLeader);
+      setField(
+        'prevChatRoomEntryNo',
+        isArray
+          ? [...prevChatRoomEntryNo, selectedData.chatRoomEntryNo]
+          : [selectedData.chatRoomEntryNo]
+      );
+      setField(
+        'prevChatType',
+        isArray
+          ? [...prevChatType, selectedData.chatType]
+          : [selectedData.chatType]
+      );
+      setField(
+        'prevChatRoomLeader',
+        isArray
+          ? [...prevChatRoomLeader, selectedData.chatRoomLeader]
+          : [selectedData.chatRoomLeader]
+      );
 
-      setField('prevGetGroupChatPath', location.pathname);
-
+      setField(
+        'prevGetGroupChatPath',
+        isPrevPathArray
+          ? [...prevGetGroupChatPath, location.pathname]
+          : [location.pathname]
+      );
+      console.log(prevChatRoomEntryNo, prevChatRoomLeader, prevChatType);
+      console.log('----------------------------------------------------');
+      console.log('isArray', isArray);
+      console.log('isPrevPathArray', isPrevPathArray);
+      console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
+      console.log('prevChatType', prevChatType);
+      console.log('prevChatRoomLeader', prevChatRoomLeader);
       navigate(`/chat/group/message/list`);
     },
-    [setField, navigate, location]
+    [
+      setField,
+      navigate,
+      location,
+      prevChatRoomEntryNo,
+      prevChatType,
+      prevChatRoomLeader,
+      prevGetGroupChatPath,
+    ]
   );
 
   const onClickDirectChat = useCallback(
     (e) => {
+      const isArray = Array.isArray(prevChatRoomEntryNo);
+      const isPrevPathArray = Array.isArray(prevGetDirectChatPath);
+      console.log('isArray', isArray);
+      console.log('isPrevPathArray', isPrevPathArray);
+      console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
+      console.log('prevChatType', prevChatType);
+      console.log('prevChatRoomLeader', prevChatRoomLeader);
       setField('shouldScroll', true);
 
       setField('chatRoomEntryNo', e.currentTarget.dataset.value);
 
-      setField('prevChatRoomEntryNo', e.currentTarget.dataset.value);
-
-      setField('prevGetDirectChatPath', location.pathname);
-
+      setField('prevChatRoomEntryNo', [
+        ...prevChatRoomEntryNo,
+        e.currentTarget.dataset.value,
+      ]);
+      setField('prevChatType', [...prevChatType, 3]);
+      setField('prevChatRoomLeader', [...prevChatRoomLeader, myData?.userNo]);
+      setField('prevGetDirectChatPath', [
+        ...prevGetDirectChatPath,
+        location.pathname,
+      ]);
+      console.log('------------------------------------------');
+      console.log('isArray', isArray);
+      console.log('isPrevPathArray', isPrevPathArray);
+      console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
+      console.log('prevChatType', prevChatType);
+      console.log('prevChatRoomLeader', prevChatRoomLeader);
       navigate('/chat/direct/message/list');
     },
-    [navigate, setField, location]
+    [
+      navigate,
+      setField,
+      location,
+      prevChatRoomEntryNo,
+      prevGetDirectChatPath,
+
+      prevChatRoomLeader,
+      prevChatType,
+      myData,
+    ]
   );
 
   console.log(groupsData);
