@@ -131,7 +131,9 @@
 	<update id="updateUser" parameterType="user">
 	    UPDATE users SET
 	        user_id = #{userId},
-	        password = #{password},
+	        <!-- <if test="password != null">       
+            		password = #{password},
+      		</if> -->
 	        user_name = #{userName},
 	        birthday = #{birthday},
 	        gender = #{gender},
@@ -184,6 +186,12 @@
 	        filter_tag2 = CONCAT('out_', filter_tag2),
 	        filter_tag3 = CONCAT('out_', filter_tag3)
 	    WHERE user_no = #{userNo}
+	</update>
+	
+	<update id="updatePassword" parameterType="user">
+	    UPDATE users SET
+	        password = #{password}
+	    WHERE phone_no = #{phoneNo}
 	</update>
 	
 	<select id="getGroupMemberList" parameterType="map" resultMap="userResultMap">

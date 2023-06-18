@@ -30,6 +30,8 @@ public interface UserService {
 	
 	public void updateUser(User user) throws Exception;
 	
+	public void updatePassword(User user) throws Exception;
+	
 	public boolean checkDuplication(String userId) throws Exception;
 	
 	public void deleteUser(User user) throws Exception;

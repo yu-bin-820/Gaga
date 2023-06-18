@@ -92,13 +92,13 @@ public class PaymentRestController {
 		paymentService.updatePayment(payNo);
 	}
 	
-	@GetMapping("refund/offer")
-	public List<Payment> offerRefund() throws Exception{
+	@PatchMapping("refund/delete")
+	public void deleteMemberRefund(@RequestBody Map<String, Integer> member) throws Exception{
 		
-		System.out.println("참가비 있는 미팅 삭제, 미성사 등으로 인한 환불요청 목록 Ctrl");
+		System.out.println("참여 취소, 내보내기 회원에게 환불 Ctrl");
 		
-		return paymentService.offerRefund();
-	}
+		paymentService.deleteMemberRefund(member);
+	} 
 	
 	@GetMapping("list/{userNo}")
 	public List<Payment> getPaymentList(@PathVariable int userNo) throws Exception{

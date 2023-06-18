@@ -25,8 +25,8 @@ public interface PaymentService {
 	//결제 내역 수정(환불)
 	public void updatePayment(String payNo) throws Exception;
 	
-	//참가비 있는 미팅 삭제, 미성사 등으로 인한 환불요청 목록
-	public List<Payment> offerRefund() throws Exception;
+	//참여거절, 내보내기 회원에게 환불
+	public void deleteMemberRefund(Map<String, Integer> map) throws Exception;
 	
 	//모임, 유저번호로 결제번호 가져오기
 	public String getPayNoByUserMeeting(Map<String, Object> refund) throws Exception;

@@ -1,7 +1,9 @@
 package com.gaga.bo.web.club;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gaga.bo.objectSotrage.S3Uploader;
@@ -49,6 +52,7 @@ public class ClubRestController {
 	@Value("${fileUploadPath}")
 	String fileUploadPath;
 	
+	@Autowired
 	@Value("${pageSize}")
 	int pageSize;	
 
@@ -63,11 +67,14 @@ public class ClubRestController {
     public void setS3Uploader(S3Uploader s3Uploader) {
         this.s3Uploader = s3Uploader;
     }
+    
+    //공간정보포탈 API 호출
+    private RestTemplate restTemplate;
 	
 	//클럽관리
 	
 	@PostMapping("")
-	public void addClub(@ModelAttribute Club club,
+	public int addClub(@ModelAttribute Club club,
 				 		   @RequestParam(value = "file", required = false) MultipartFile file
 						   ) throws Exception{
 		
@@ -90,8 +97,12 @@ public class ClubRestController {
 		
 		System.out.println("img변경 후 : "+club);
 		
-
-		clubService.addClub(club);
+		int clubNo = clubService.addClub(club);
+		
+		System.out.println("clubNo : "+clubNo);
+		
+		return clubNo;
+	
 
 	}
 	
@@ -104,68 +115,67 @@ public class ClubRestController {
 	 * clubService.addClub(club); }
 	 */
 	
-	@GetMapping("/region/sigu")
-    public ResponseEntity<String> getSiGu() {
-	    String key = "CEB52025-E065-364C-9DBA-44880E3B02B8";
-	    //String ip = "192.168.0.4"; 
-	    String url = "https://api.vworld.kr/req/data?key="+key+"&domain=http://localhost:8080&service=data&version=2.0&request=getfeature&format=json&size=1000&page=1&geometry=false&attribute=true&crs=EPSG:3857&geomfilter=BOX(13663271.680031825,3894007.9689600193,14817776.555251127,4688953.0631258525)&data=LT_C_ADSIDO_INFO";
-	    
-	    	
-	    System.out.println("시구정보 받아오기 잘됨?" + url);
-	    try {
-	        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-	        connection.setRequestMethod("GET");
-	        int responseCode = connection.getResponseCode();
-
-	        if (responseCode == HttpURLConnection.HTTP_OK) {
-	            try (InputStream responseStream = connection.getInputStream()) {
-	                byte[] buffer = new byte[1024];
-	                StringBuilder responseBuilder = new StringBuilder();
-	                int bytesRead;
-	                while ((bytesRead = responseStream.read(buffer)) != -1) {
-	                    responseBuilder.append(new String(buffer, 0, bytesRead));
-	                }
-	                System.out.println("성공했을때는 여기야");
-	                return ResponseEntity.ok(responseBuilder.toString());
-	            }
-	        } else {
-	            System.out.println("Error: " + responseCode);
-	            return ResponseEntity.status(responseCode).body("Failed to retrieve region information.");
-	        }
-	    } catch (Exception e) {
-	        System.out.println("Exception: " + e.getMessage());
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while retrieving region information.");
-	    }
-	}
 	
-	@GetMapping("/region/sigungu/{sigu}")
-    public ResponseEntity<String> getSiGunGu(@PathVariable int sigu) {
-	    String key = "CEB52025-E065-364C-9DBA-44880E3B02B8";
-	    //String ip = "192.168.0.4"; 
-	    String url = "https://api.vworld.kr/req/data?key="+key+"&domain=http://localhost:8080&service=data"
-	    		+ "&version=2.0&request=getfeature&format=json"
-	    		+ "&size=1000&page=1&geometry=false&attribute=true&crs=EPSG:3857"
-	    		+ "&geomfilter=BOX(13663271.680031825,3894007.9689600193,14817776.555251127,4688953.0631258525)"
-	    		+ "&data=LT_C_ADSIGG_INFO&attrfilter=sig_cd:like:"+sigu;
-	    
-	    	
-	    System.out.println("시군구 정보 받아오기 잘됨?" + url);
+	@GetMapping("/region/sido")
+    public ResponseEntity<String> getSido() {
+        String sidoKey = "12685d425f1af0872d756c";
+        String sidoUrl = "http://openapi.nsdi.go.kr/nsdi/eios/service/rest/AdmService/admCodeList.json" + "?authkey=" + sidoKey;
+
+        System.out.println("공간정보포탈 시도 API 호출" + sidoUrl);
+
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(sidoUrl).openConnection();
+            connection.setRequestMethod("GET");
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuilder content = new StringBuilder();
+
+                while ((inputLine = in.readLine()) != null) {
+                    content.append(inputLine);
+                }
+
+                in.close();
+                connection.disconnect();
+
+                return ResponseEntity.ok(content.toString());
+            } else {
+                System.out.println("Error: " + responseCode);
+                return ResponseEntity.status(responseCode).body("Failed to retrieve Sido information.");
+            }
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while retrieving Sido information.");
+        }
+    }
+	
+	@GetMapping("/region/sigungu/{sido}")
+	public ResponseEntity<String> getSigungu(@PathVariable int sido) {
+	    String sigunguKey = "b0888bae39fbd0463a9252";
+	    String sigunguUrl = String.format("http://openapi.nsdi.go.kr/nsdi/eios/service/rest/AdmService/admSiList.json?authkey=%s&admCode=%02d", sigunguKey, sido);
+
+	    System.out.println("공간정보포탈 시군구 API 호출: " + sigunguUrl);
+
 	    try {
-	        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+	        HttpURLConnection connection = (HttpURLConnection) new URL(sigunguUrl).openConnection();
 	        connection.setRequestMethod("GET");
 	        int responseCode = connection.getResponseCode();
 
 	        if (responseCode == HttpURLConnection.HTTP_OK) {
-	            try (InputStream responseStream = connection.getInputStream()) {
-	                byte[] buffer = new byte[1024];
-	                StringBuilder responseBuilder = new StringBuilder();
-	                int bytesRead;
-	                while ((bytesRead = responseStream.read(buffer)) != -1) {
-	                    responseBuilder.append(new String(buffer, 0, bytesRead));
-	                }
-	                System.out.println("성공했을때는 여기야");
-	                return ResponseEntity.ok(responseBuilder.toString());
+	            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	            String inputLine;
+	            StringBuilder content = new StringBuilder();
+
+	            while ((inputLine = in.readLine()) != null) {
+	                content.append(inputLine);
 	            }
+
+	            in.close();
+	            connection.disconnect();
+
+	            return ResponseEntity.ok(content.toString());
 	        } else {
 	            System.out.println("Error: " + responseCode);
 	            return ResponseEntity.status(responseCode).body("Failed to retrieve region information.");
@@ -198,25 +208,25 @@ public class ClubRestController {
 	}
 	
 	@GetMapping("search")
-	public List<Club> getSearchClubList(@ModelAttribute Search search) throws Exception{
+	public List<Club> getSearchClubList(@RequestParam int page, @RequestParam String searchKeyword) throws Exception{
 		
 		System.out.println("클럽 목록 검색 Ctrl");
 		
-		if(search.getCurrentPage() ==0 ){
-			search.setCurrentPage(1);
-		}
+		System.out.println("page: " + page);
+	    System.out.println("searchKeyword: " + searchKeyword);
 		
-		System.out.println("searchClub : " + search);
-		
-		search.setPageSize(pageSize);
-		
-		System.out.println(search.getStartRowNum());
-		
-		List<Club> list = clubService.getSearchClubList(search);
-		
-		//System.out.println(list);
-		
-		return list;
+		 Search search = new Search();
+		 search.setCurrentPage(page);
+		 search.setSearchKeyword(searchKeyword);
+		 search.setPageSize(pageSize);
+		    
+		 System.out.println("search: " + search);
+
+		 List<Club> list = clubService.getSearchClubList(search);
+		 
+		 System.out.println(list);
+		 
+		 return list;
 	}
 	
 	@PostMapping("list/filter")

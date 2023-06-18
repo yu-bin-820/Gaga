@@ -36,7 +36,7 @@
 
 	<!-- 클럽관리 -->
 	<!-- SQL : INSERT -->
-	<insert id="addClub" parameterType="club" useGeneratedKeys="true" keyProperty="clubNo" >
+	<insert id="addClub" parameterType="Club" useGeneratedKeys="true" keyProperty="clubNo" keyColumn="club_no">
 	  INSERT 
 	  INTO clubs (club_name, club_intro, club_leader_no, club_max_member_no, club_state, club_reg_date,
 	    club_img, club_region, filter_gender, filter_min_age, filter_max_age, filter_tag, main_category_no)
@@ -67,7 +67,7 @@
 		         OR LOWER(REPLACE(club_name, ' ', '')) LIKE CONCAT('%', LOWER(REPLACE(#{searchKeyword}, ' ', '')), '%')
 		         OR LOWER(REPLACE(club_intro, ' ', '')) LIKE CONCAT('%', LOWER(REPLACE(#{searchKeyword}, ' ', '')), '%'))
 			 	 AND club_state = 1
-		LIMIT #{startRowNum} , #{pageSize}
+		LIMIT #{pageSize} OFFSET ${(currentPage - 1) * pageSize}
 	</select>
 
   
@@ -158,11 +158,9 @@
 		    club_max_member_no = #{clubMaxMemberNo:INTEGER},
 		    club_state = #{clubState:INTEGER},
 		    club_img = #{clubImg:VARCHAR},
-		    club_region = #{clubRegion:VARCHAR},
 		    filter_gender = #{filterGender:INTEGER},
 		    filter_min_age = #{filterMinAge:INTEGER},
 		    filter_max_age = #{filterMaxAge:INTEGER},
-		    filter_tag = #{filterTag:VARCHAR}
 		</set>
 		WHERE club_no = #{clubNo:INTEGER}
 	</update>
