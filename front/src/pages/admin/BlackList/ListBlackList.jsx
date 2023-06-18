@@ -23,8 +23,8 @@ function ListBlackList() {
 
   const columns = [
     { id: 'index', label: 'No', minWidth: 50 },
-    { id: 'userName', label: 'Name', minWidth: 170 },
-    { id: 'blackList', label: 'Reason', minWidth: 170 },
+    { id: 'userName', label: 'Name', minWidth: 130 },
+    { id: 'blackList', label: 'Reason', minWidth: 130 },
   ];
 
   const handleBlackListClick = (userNo) => {
@@ -124,92 +124,73 @@ function ListBlackList() {
     };
 
     return (
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Collapse in={isSearchOpen}>
-          <AnimatedTextField
-            type="text"
-            size="small"
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-            onKeyPress={handleKeyPress}
-            style={{ marginRight: "0.2rem" }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
+        <Box sx={{ marginTop: "17%", marginLeft: "3%", marginRight: "3%" }}>
+        <CommonTop pageName="블랙리스트" prevPath="/community/profile/mine" />
+        <BlackListTabs />
+        <Chatbot />
+        <Stack>
+          <Box sx={{ justifyContent: "flex-end", mb: "1rem", alignItems: "center" }}>
+            <TextField
+              style={{ marginLeft: '41.1%', justifyContent: 'flex-end', marginRight: '3%', marginTop:'2%' , marginBottom:'-4%'}}
+              type="text"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="블랙리스트 검색"
+              InputProps={{
+                endAdornment: (
                   <IconButton onClick={handleSearch}>
-                    <SearchIcon />
+                    <SearchIcon color="primary" style={{ marginRight: '-13px' }} />
                   </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Collapse>
-       
-        <IconButton onClick={handleSearchIconClick}>
-          <SearchIcon />
-        </IconButton>
+                ),
+                sx: { height: '38px', width: '200px' },
+              }}
+            />
+          </Box>
+
+          <Paper sx={{ maxWidth: '100%' }}>
+            <div style={{ overflowX: 'auto' }}>
+              <TableContainer sx={{ maxHeight: '100%', tableLayout: 'auto', width: '100%' }}>
+                <Table stickyHeader aria-label="sticky table">
+                  <TableHead>
+                    <TableRow>
+                      {columns.map((column) => (
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          style={{ minWidth: column.minWidth }}
+                          sx={{ color: "white", backgroundColor: "primary.main" }}
+                        >
+                          {column.label}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {blackList.length > 0 ? (
+                      blackList.map((user, index) => (
+                        <TableRow hover role="checkbox" tabIndex={-1} key={user.userNo} onClick={() => handleBlackListClick(user.userNo)}>
+                          <TableCell sx={{ marginRight: '-5%', width: '1%', maxWidth: '1%' }}>{index + 1}</TableCell>
+                          <TableCell sx={{ width: '5%', maxWidth: '5%' }}>{user.userName}</TableCell>
+                          <TableCell sx={{ width: '25%', maxWidth: '25%' }}>{user.blacklist === 1 ? "신고누적 블랙리스트" : "관리자 블랙리스트"}</TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={3} align="center">해당 검색에 대한 결과가 없습니다.</TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+          </Paper>
+          {isLoading && <Typography align="center">로딩 중...</Typography>}
+        </Stack>
       </Box>
     );
-  };
-
-  return (
-    <Box sx={{ marginTop: "17%", marginLeft: "3%", marginRight: "3%" }}>
-      <CommonTop pageName="블랙리스트" prevPath="/community/profile/mine" />
-      <BlackListTabs />
-      <Chatbot />
-      <Stack>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginBottom: "1rem",
-            alignItems: "center",
-          }}
-        >
-          <SearchTransition />
-        </Box>
-  
-        <Paper sx={{ maxWidth: '99%' }}>
-          <div style={{ overflowX: 'auto' }}>
-            <TableContainer sx={{ maxHeight: '100%', tableLayout: 'auto', width: '100%' }}>
-              <Table stickyHeader aria-label="sticky table">
-                <TableHead>
-                  <TableRow>
-                    {columns.map((column) => (
-                      <TableCell
-                        key={column.id}
-                        align={column.align}
-                        style={{ minWidth: column.minWidth }}
-                        sx={{ color: "white", backgroundColor: "primary.main" }}
-                      >
-                        {column.label}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                {blackList.length > 0 ? (
-                  blackList.map((user, index) => (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={user.userNo} onClick={() => handleBlackListClick(user.userNo)}>
-                      <TableCell style={{ width: '5%', maxWidth: '5%' }}>{index + 1}</TableCell>
-                      <TableCell style={{ width: '5%', maxWidth: '5%' }}>{user.userName}</TableCell>
-                      <TableCell style={{ width: '25%', maxWidth: '25%' }}>{user.blacklist === 1 ? "신고 누적 블랙리스트" : "관리자 블랙리스트"}</TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={3} align="center">해당 검색에 대한 결과가 없습니다.</TableCell>
-                  </TableRow>
-                )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
-        </Paper>
-        {isLoading && <Typography align="center">Loading...</Typography>}
-      </Stack>
-    </Box>
-  );
+  }
+  return <SearchTransition />;
 }
 
 export default ListBlackList;
