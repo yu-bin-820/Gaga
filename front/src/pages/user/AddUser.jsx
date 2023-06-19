@@ -37,14 +37,14 @@ const AddUser = () => {
     reset,
   } = useUserFormStore();
 
-  const [emailVerified, setEmailVerified] = useState(true);         ////
-  const [phoneVerified, setPhoneVerified] = useState(true);       /////
-  const [isNameValid, setIsNameValid] = useState(true);         //////
-  const [isNicknameValid, setIsNicknameValid] = useState(true);       /////
-  const [isGenderValid, setIsGenderValid] = useState(true);       /////
-  const [isBirthdayValid, setIsBirthdayValid] = useState(true);     //////
-  const [agreeTerms, setAgreeTerms] = useState(true);         //////
-  const [isUserIdValid, setIsUserIdValid] = useState(true);         ///////
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [phoneVerified, setPhoneVerified] = useState(false);
+  const [isNameValid, setIsNameValid] = useState(false);
+  const [isNicknameValid, setIsNicknameValid] = useState(false);
+  const [isGenderValid, setIsGenderValid] = useState(false);
+  const [isBirthdayValid, setIsBirthdayValid] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [isUserIdValid, setIsUserIdValid] = useState(false);
 
   const handleNameChange = (e) => {
     onChangeField("userName", e);
@@ -97,10 +97,10 @@ const AddUser = () => {
     const age = dayjs().diff(dayjs(birthday), "year");
 
     // 나이가 14세 미만인 경우 가입을 제한합니다.
-    // if (age < 14) {                                                                      /////////////////////
-    //   alert("14세 미만은 가입할 수 없습니다.");
-    //   return;
-    // }
+    if (age < 14) {
+      alert("14세 미만은 가입할 수 없습니다.");
+      return;
+    }
     try {
       const formData = new FormData();
       formData.append("userId", userId);
@@ -236,7 +236,7 @@ const AddUser = () => {
   // 핸드폰 인증 부분
   const [phoneAuthCode, setPhoneAuthCode] = useState(null);
   const [phoneVerificationCode, setPhoneVerificationCode] = useState("");
-  const [phoneAuthCodeSent, setPhoneAuthCodeSent] = useState(true);             ////////
+  const [phoneAuthCodeSent, setPhoneAuthCodeSent] = useState(false);
 
   const handlePhoneAuthRequest = async () => {
     try {
@@ -526,7 +526,7 @@ const AddUser = () => {
             autoComplete="userName"
             inputProps={{
               minLength: 2, // 최소 2글자
-              // maxLength: 6, // 최대 6글자            ////
+              maxLength: 6, // 최대 6글자
               pattern: "^[ㄱ-ㅎ가-힣]*$", // 한글만 입력 가능한 정규식 패턴
             }}
           />
