@@ -55,10 +55,16 @@ useEffect(() => {
     setNoticePost((prevNoticePost) => ({
       ...prevNoticePost,
       [name]: value,
+      previousFile: prevNoticePost.file,
+      previousImage: prevNoticePost.image,
     }));
   };
 
   const handleFileChange = (event) => {
+    if (!event.target.files.length) {
+      // 파일이 선택되지 않았을 때는 아무것도 하지 않습니다.
+      return;
+    }
     const file = event.target.files[0];
     setSelectedFile(file);
     setSelectedImage(URL.createObjectURL(file));
@@ -66,7 +72,9 @@ useEffect(() => {
 
   const handleUpdate = () => {
     const formData = new FormData();
-    formData.append('file', selectedFile);
+    if (selectedFile) {
+        formData.append('file', selectedFile);
+    }
     formData.append('noticePostTitle', noticePost.noticePostTitle);
     formData.append('noticePostText', noticePost.noticePostText);
     formData.append('noticePostCategory', noticePost.noticePostCategoryNo); // 변경된 필드명
@@ -119,6 +127,10 @@ function getCategoryBack(noticePostCategoryNo) {
 const noticePostCategoryNo = noticePost.noticePostCategoryNo;
 const prevPath = `/notice/list${getCategoryBack(noticePostCategoryNo)}Post`;
 
+useEffect(() => {
+    setNoticePostCategoryNo(noticePost.noticePostCategoryNo);
+}, [noticePost.noticePostCategoryNo]);
+
   return (
     <Box sx={{ marginTop: '64px', marginLeft: '10px', marginRight: '10px' }}>
       <Typography variant="h5" gutterBottom>
@@ -169,30 +181,28 @@ const prevPath = `/notice/list${getCategoryBack(noticePostCategoryNo)}Post`;
                         <MenuItem value={6}>기타</MenuItem>
                     </TextField>
                 )}
-        <ImageList cols={1} rowHeight={180}>
-          <ImageListItem key="Update Image">
-            {selectedImage ? (
-              <img src={selectedImage} alt="" />
-            ) : (
-              <Button
-                variant="outlined"
-                startIcon={<PhotoCamera />}
-                color="primary"
-                component="label"
-              >
-                이미지 업로드
-                <input
-                  hidden
-                  accept="image/*"
-                  type="file"
-                  onChange={handleFileChange} // 변경된 이벤트 핸들러 사용
-                />
-              </Button>
-            )}
-            
-          </ImageListItem>
-          
-        </ImageList>
+<ImageList cols={1} rowHeight={180}>
+  <ImageListItem key="Update Image">
+    {selectedImage || noticePost.image ? (
+      <img src={selectedImage || noticePost.file} alt="" />
+    ) : (
+      <Button
+        variant="outlined"
+        startIcon={<PhotoCamera />}
+        color="primary"
+        component="label"
+      >
+        이미지 수정
+        <input
+          hidden
+          accept="image/*"
+          type="file"
+          onChange={handleFileChange}
+        />
+      </Button>
+    )}
+  </ImageListItem>
+</ImageList>
         {noticePostCategory === 1 && (
   <Button
     variant="outlined"
@@ -200,7 +210,7 @@ const prevPath = `/notice/list${getCategoryBack(noticePostCategoryNo)}Post`;
     color="primary"
     component="label"
   >
-    썸네일 업로드
+    썸네일 수정
     <input
       hidden
       accept="image/*"

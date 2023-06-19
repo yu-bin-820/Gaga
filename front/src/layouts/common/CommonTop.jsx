@@ -1,29 +1,53 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { Button, IconButton, Typography } from '@mui/material';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { IconButton, Typography } from '@mui/material';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/system';
 import PropTypes from 'prop-types';
-import useCommunityStore from '@stores/communication/useCommunityStore';
-const CommonTop = ({ pageName, prevPath }) => {
+// import useCommunityStore from '@stores/communication/useCommunityStore';
+import useMeetingPathStore from '@stores/meeting/useMeetingPathStore';
+import useClubStore from '@stores/club/useClubStore';
+const CommonTop = ({ pageName, prevPath, pageType }) => {
   const navigate = useNavigate();
-  const { setField, prevChatRoomEntryNo, prevChatType, prevChatRoomLeader } =
-    useCommunityStore();
+  // const {
+  //   setField: setCommunityField,
+  //   prevChatRoomEntryNo,
+  //   prevChatType,
+  //   prevChatRoomLeader,
+  // } = useCommunityStore();
+  const { setField: setMeetingField } = useMeetingPathStore();
+  const { setField: setClubField } = useClubStore();
   const onClickPrev = useCallback(() => {
-    setField('chatRoomEntryNo', prevChatRoomEntryNo);
-    setField('chatType', prevChatType);
-    setField('chatRoomLeader', prevChatRoomLeader);
+    const isPrevPathArray = Array.isArray(prevPath);
+    // setField('chatRoomEntryNo', prevChatRoomEntryNo);
+    // setField('chatType', prevChatType);
+    // setField('chatRoomLeader', prevChatRoomLeader);
+    const tempPrev = isPrevPathArray ? prevPath[prevPath.length - 1] : prevPath;
+    console.log('CommonTopPrevPath', prevPath);
 
-    navigate(prevPath || -1);
+    if (isPrevPathArray) {
+      if (pageType === 'meeting') {
+        setMeetingField('prevMeetingPath', prevPath.pop());
+      }
+      if (pageType === 'club') {
+        setClubField('prevClubPath', prevPath.pop());
+      }
+    }
+    console.log('pop()CommonTopPrevPath', prevPath);
+
+    console.log('CommonTopTempPrev', tempPrev);
+    navigate(tempPrev || -1);
   }, [
     prevPath,
-    prevChatRoomEntryNo,
-    prevChatType,
-    prevChatRoomLeader,
-    setField,
+    // prevChatRoomEntryNo,
+    // prevChatType,
+    // prevChatRoomLeader,
+    pageType,
+    setMeetingField,
+    setClubField,
     navigate,
   ]);
   return (
@@ -64,6 +88,7 @@ const CommonTop = ({ pageName, prevPath }) => {
 };
 CommonTop.propTypes = {
   pageName: PropTypes.string,
-  prevPath: PropTypes.string,
+  prevPath: PropTypes.array,
+  pageType: PropTypes.string,
 };
 export default CommonTop;

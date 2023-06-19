@@ -15,7 +15,6 @@ import { useTheme } from '@emotion/react';
 import CommonTop from '@layouts/common/CommonTop';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import UpdateClubName from '@components/club/UpdateClubName';
-import UpdateClubRegion from '@components/club/UpdateClubRegion';
 import UpdateClubImg from '@components/club/UpdateClubImg';
 import UpdateClubFilter from '@components/club/UpdateClubFilter';
 import UpdateClubMaxMember from '@components/club/UpdateClubMaxMember';

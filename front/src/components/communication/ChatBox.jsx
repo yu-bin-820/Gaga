@@ -1,25 +1,15 @@
-import {
-  FormEvent,
-  useCallback,
-  FC,
-  ChangeEvent,
-  KeyboardEvent,
-  useState,
-} from 'react';
+import { useCallback, useState } from 'react';
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  ListItemIcon,
-  ListItemText,
   Stack,
   Typography,
 } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
-import LeftDrawer from './LeftDrawer';
 import PropTypes from 'prop-types';
 import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/system';
@@ -34,7 +24,6 @@ import axios from 'axios';
 import useInputOrigin from '@hooks/common/useInputOrigin';
 import LocationDrawer from './LocationDrawer';
 import useChatMapStore from '@stores/communication/useChatMapStore';
-import useCommunityStore from '@stores/communication/useCommunityStore';
 
 const ChatBox = ({ senderNo, groupNo, mutateGroupMessages, groupType }) => {
   const [chat, onChangeChat, setChat] = useInputOrigin('');

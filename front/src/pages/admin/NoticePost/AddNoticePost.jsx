@@ -1,5 +1,6 @@
 import { PhotoCamera } from "@mui/icons-material";
 import {
+    Alert,
     Button,
     ImageList,
     ImageListItem,
@@ -16,6 +17,7 @@ import useSWR from "swr";
 import fetcher from "@utils/fetcher";
 import CommonTop from "@layouts/common/CommonTop";
 import CreateIcon from "@mui/icons-material/Create";
+
 
 const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);
@@ -63,12 +65,22 @@ const AddNoticePost = () => {
     }, [myData]);
 
     const submitNoticePost = useCallback(() => {
+        if (!noticePostTitle) {
+            alert("제목은 반드시 작성해주셔야 합니다.");
+            return;
+        }
+
+        if (!noticePostText) {
+            alert("내용은 반드시 작성해주셔야 합니다.");
+            return;
+        }
         const formData = new FormData();
         console.log(myData?.userNo, "유저넘인 섭밋");
         formData.append("file", selectedFile);
         if (noticePostCategory === 1) {
             formData.append("thumbNailFile", selectedThumbNailFile);
         }
+        
         formData.append("noticePostCategory", noticePostCategory);
         formData.append("noticePostTitle", noticePostTitle);
         formData.append("noticePostText", noticePostText);
@@ -90,7 +102,7 @@ const AddNoticePost = () => {
                 console.log(response.data, "캐리");
                 const noticePostNo = response.data;
                 //navigate(`/notice/getNoticePost/noticePostNo/${noticePostNo}`);
-                navigate(`/notice/listNoticePost`);
+                navigate(`/notice/list${getCategoryBack(noticePostCategoryNo)}Post`);
             })
             .catch((error) => {
                 console.error(error);
@@ -104,16 +116,23 @@ const AddNoticePost = () => {
         navigate,
     ]);
 
+    useEffect(() => {
+        setNoticePost({
+          noticePostCategoryNo: noticePostCategory,
+        });
+      }, [noticePostCategory]);
+
     function getCategoryBack(noticePostCategoryNo) {
+
         switch (noticePostCategoryNo) {
           case 0:
             return "Notice";
           case 1:
             return "Event";
           case 2:
-            return "FAQ";
+            return "Qna";
           default:
-            return "";
+            return "Notice";
         }
     }
     const noticePostCategoryNo = noticePost.noticePostCategoryNo;
@@ -150,12 +169,12 @@ const AddNoticePost = () => {
                 >
                     <MenuItem value={0}>공지사항</MenuItem>
                     <MenuItem value={1}>이벤트</MenuItem>
-                    <MenuItem value={2}>QnA</MenuItem>
+                    <MenuItem value={2}>FAQ</MenuItem>
                 </TextField>
                 {noticePostCategory === 2 && (
                     <TextField
                         select
-                        label="Q&A카테고리"
+                        label="FAQ카테고리"
                         value={qnaCategory}
                         onChange={(e) => setQnaCategory(Number(e.target.value))}
                     >

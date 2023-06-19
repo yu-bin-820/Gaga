@@ -17,10 +17,15 @@ const AddMeetingMemberDrawer = ({settingsAddMemberOpen, setSettingsAddMemberOpen
         fetcher
         );
 
-        const {mutate: mutatePendingMemberList } = useSWR(
+    const {mutate: mutatePendingMemberList } = useSWR(
             `${import.meta.env.VITE_SPRING_HOST}/rest/user/list/grouptype/2/no/${meetingNo}/state/1`,
             fetcher
-          );
+        );
+        
+        const {mutate : mutateMyMeetingList } = useSWR(
+            `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${myData?.userNo}`,
+            fetcher
+        );
   
     useEffect(() => {
         axios
@@ -52,6 +57,8 @@ const AddMeetingMemberDrawer = ({settingsAddMemberOpen, setSettingsAddMemberOpen
                 ).then(()=>{
                     setIsModalOpen(true)
                     mutatePendingMemberList()
+                    mutateMyMeetingList()
+                    
                 }
                 );
     
@@ -59,7 +66,7 @@ const AddMeetingMemberDrawer = ({settingsAddMemberOpen, setSettingsAddMemberOpen
                 console.error(error);
             }
         },
-        [meeting, myData.userNo]
+        [meeting, myData.userNo, mutateMyMeetingList, mutatePendingMemberList ]
     );
   
     const handleCloseModal = useCallback(() => {
@@ -143,7 +150,9 @@ const AddMeetingMemberDrawer = ({settingsAddMemberOpen, setSettingsAddMemberOpen
             )}
             </Stack>
         </Box>
-        <Modal open={isModalOpen} onClose={handleCloseModal}>
+        <Modal open={isModalOpen} onClose={handleCloseModal}
+                aria-labelledby="child-modal-title"
+                aria-describedby="child-modal-description">
             <Box
             sx={{
                 position: 'absolute',

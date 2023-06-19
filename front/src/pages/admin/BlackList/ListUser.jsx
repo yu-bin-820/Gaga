@@ -19,6 +19,7 @@ function ListUser() {
   const [isSearchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
   const [value, setValue] = React.useState('2');
+
   const handleUserClick = (userNo) => {
     navigate(`/blackList/getUser/userNo/${userNo}`);
   };
@@ -104,6 +105,10 @@ function ListUser() {
   };
 
   const handleSearch = async () => {
+    if (!searchKeyword || searchKeyword.trim() === '') {
+        alert('검색어를 입력해주세요.');
+        return;
+      }
     if (searchKeyword.length > 0) {
       try {
         const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/searchUser`, {
@@ -143,12 +148,12 @@ function ListUser() {
       </Box>
 
       <TextField
-              style={{ marginLeft:'43.1%', justifyContent:'flex-end', marginRight: '3%' }}
+              style={{ marginLeft:'42.1%', justifyContent:'flex-end', marginRight: '3%' , marginTop:'-2%'}}
               type="text"
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="이름, 닉네임등 검색"
+              placeholder="회원 정보 검색"
               InputProps={{
                 endAdornment: (
                   <IconButton onClick={handleSearch} >
@@ -176,12 +181,12 @@ function ListUser() {
                 No
               </TableCell>
               <TableCell
-                style={{ minWidth: 65, fontWeight: "bold" }}
+                style={{ minWidth: 55, fontWeight: "bold" }}
               >
                 Name
               </TableCell>
               <TableCell
-                style={{ minWidth: 120, fontWeight: "bold" }}
+                style={{ minWidth: 100, fontWeight: "bold" }}
               >
                 JoinDay
               </TableCell>
@@ -199,10 +204,10 @@ function ListUser() {
                 <TableCell style={{ minWidth: 20 }}>
                   {index + 1}
                 </TableCell>
-                <TableCell style={{ minWidth: 65 }}>
+                <TableCell style={{ minWidth: 55 }}>
                   {user.userName}
                 </TableCell>
-                <TableCell style={{ minWidth: 120 }}>
+                <TableCell style={{ minWidth: 100 }}>
                   {new Date(user.joinDay).toLocaleDateString("ko-KR", {
                     year: "numeric",
                     month: "long",

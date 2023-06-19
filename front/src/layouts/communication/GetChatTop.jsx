@@ -56,7 +56,14 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
 
   // console.log(groupData);
 
-  const { setField, prevGetGroupChatPath } = useCommunityStore();
+  const {
+    setField,
+    prevGetGroupChatPath,
+    prevProfilePath,
+    prevChatRoomEntryNo,
+    prevChatType,
+    prevChatRoomLeader,
+  } = useCommunityStore();
   const location = useLocation();
   const navigate = useNavigate();
   const [chatMenuOpen, setChatMenuOpen] = useState(false);
@@ -68,10 +75,15 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
   }, []);
   const onClickChatMember = useCallback(
     (e) => {
-      setField('prevProfilePath', location.pathname);
+      const isArray = Array.isArray(prevProfilePath);
+      setField(
+        'prevProfilePath',
+        isArray ? [...prevProfilePath, location.pathname] : [location.pathname]
+      );
+      console.log('GetChatTopPrevProfilePath', prevProfilePath);
       navigate(`/community/profile/userno/${e.currentTarget.dataset.value}`);
     },
-    [navigate, setField, location]
+    [navigate, setField, location, prevProfilePath]
   );
 
   const toggleChatMenuOpen = useCallback(
@@ -124,6 +136,63 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
       });
   }, [groupNo, navigate, myData]);
 
+  const onClickPrevChat = useCallback(() => {
+    const isArray = Array.isArray(prevChatRoomEntryNo);
+    const isPrevPathArray = Array.isArray(prevGetGroupChatPath);
+    console.log('isArray', isArray);
+    console.log('isPrevPathArray', isPrevPathArray);
+    console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
+    console.log('prevChatType', prevChatType);
+    console.log('prevChatRoomLeader', prevChatRoomLeader);
+
+    setField(
+      'chatRoomEntryNo',
+      isArray
+        ? prevChatRoomEntryNo[prevChatRoomEntryNo.length - 1]
+        : prevChatRoomEntryNo
+    );
+    setField(
+      'chatType',
+      isArray ? prevChatType[prevChatType.length - 1] : prevChatType
+    );
+    setField(
+      'chatRoomLeader',
+      isArray
+        ? prevChatRoomLeader[prevChatRoomLeader.length - 1]
+        : prevChatRoomLeader
+    );
+    if (isArray) {
+      setField('prevChatRoomEntryNo', prevChatRoomEntryNo.pop());
+      setField('prevChatType', prevChatType.pop());
+      setField('prevChatRoomLeader', prevChatRoomLeader.pop());
+    }
+
+    const prevPath = isPrevPathArray
+      ? prevGetGroupChatPath[prevGetGroupChatPath.length - 1]
+      : prevGetGroupChatPath;
+
+    if (isPrevPathArray) {
+      setField('prevGetGroupChatPath', prevGetGroupChatPath.pop());
+    }
+
+    console.log('prevPath', prevPath);
+    console.log('--------------------------------------------------');
+    console.log('isArray', isArray);
+    console.log('isPrevPathArray', isPrevPathArray);
+    console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
+    console.log('prevChatType', prevChatType);
+    console.log('prevChatRoomLeader', prevChatRoomLeader);
+
+    navigate(prevPath);
+  }, [
+    prevGetGroupChatPath,
+    setField,
+    navigate,
+    prevChatRoomEntryNo,
+    prevChatRoomLeader,
+    prevChatType,
+  ]);
+
   return (
     <>
       <Box sx={{ overflow: 'hidden' }}>
@@ -138,11 +207,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
               disableGutters
               sx={{ display: 'flex', justifyContent: 'space-between' }}
             >
-              <IconButton
-                onClick={() => {
-                  navigate(prevGetGroupChatPath || -1);
-                }}
-              >
+              <IconButton onClick={onClickPrevChat}>
                 <ArrowBackIosNewIcon />
               </IconButton>
 
@@ -188,7 +253,7 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
                   <Avatar
                     alt={groupLeader.nick_name}
                     src={`${import.meta.env.VITE_CDN_HOST}/upload_images/user/${
-                      groupLeader.profile_img
+                      groupLeader.profileImg
                     }?type=f_sh&w=76&h=76&autorotate=false&faceopt=true&sharp_amt=1.0`}
                   />
                   <Typography>{groupLeader.nickName}</Typography>

@@ -9,6 +9,7 @@ import CommonTop from '@layouts/common/CommonTop';
 import AdminTabs from '@components/admin/AdminTabs';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
+import Chatbot from '@components/chatbot/ChatBot';
 
 function ListNoticePost() {
   const [noticePosts, setNoticePosts] = useState([]);
@@ -109,6 +110,10 @@ function ListNoticePost() {
   }, [hasMore, isLoading, lastPostId]);
 
   const handleSearch = async () => {
+    if (!searchKeyword || searchKeyword.trim() === '') {
+        alert('검색어를 입력해주세요.');
+        return;
+      }
     try {
       const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/searchNoticePost`, {
         params: {
@@ -130,6 +135,7 @@ function ListNoticePost() {
 
   return (
     <Box sx={{ marginTop: '14%', marginLeft: '1%', marginRight: '1%' }}>
+        <Chatbot />
       <CommonTop pageName="공지사항" prevPath="/community/profile/mine" />
       <AdminTabs />
       <Stack spacing={2.5}>

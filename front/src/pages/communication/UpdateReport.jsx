@@ -22,10 +22,6 @@ import useSWR from 'swr';
 const UpdateReport = () => {
   const navigate = useNavigate();
   const { reportNo, reportCategory } = useCommunityStore();
-  const { data: myData, mutate: mutateMe } = useSWR(
-    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
-    fetcher
-  );
 
   const { data: reportData, mutate: mutateReport } = useSWR(
     `${
@@ -36,21 +32,21 @@ const UpdateReport = () => {
 
   const [selectedImage, setSelectedImage] = useState(
     reportData?.reportImg
-      ? `${import.meta.env.VITE_CDN_HOST}/upload_images/community/${
+      ? `${import.meta.env.VITE_CDN_ORIGIN_HOST}/upload_images/community/${
           reportData?.reportImg
         }`
       : null
   );
   const [selectedImage2, setSelectedImage2] = useState(
     reportData?.reportImg2
-      ? `${import.meta.env.VITE_CDN_HOST}/upload_images/community/${
+      ? `${import.meta.env.VITE_CDN_ORIGIN_HOST}/upload_images/community/${
           reportData?.reportImg2
         }`
       : null
   );
   const [selectedImage3, setSelectedImage3] = useState(
     reportData?.reportImg3
-      ? `${import.meta.env.VITE_CDN_HOST}/upload_images/community/${
+      ? `${import.meta.env.VITE_CDN_ORIGIN_HOST}/upload_images/community/${
           reportData?.reportImg3
         }`
       : null

@@ -5,7 +5,7 @@ import { Paper, Typography, List, ListItem, ListItemText, Divider, ListItemIcon,
 import { AccountCircle, Face, Person as Nickname, Thermostat as Temperature } from '@mui/icons-material';
 import CommonTop from '@layouts/common/CommonTop';
 import { Box } from '@mui/system';
-
+import TodayIcon from '@mui/icons-material/Today';
 function GetBlackList() {
   const { userNo } = useParams();
   const [user, setUser] = useState(null);
@@ -38,6 +38,7 @@ const toggleBlacklist = async () => {
   }
       const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/getUser/userNo/${userNo}`);
       setUser(response.data);
+
       setIsBlacklisted(response.data.blacklist === 2);
     } catch (error) {
       console.error(error);
@@ -53,14 +54,15 @@ const toggleBlacklist = async () => {
               pageName="블랙리스트 상세조회"
               prevPath="/blackList/listBlackList"
           />
-          <Typography variant="h5" component="h2">
-              블랙리스트 {user.userName} 의 정보
+          <Typography variant="h5" component="h3">
+          🚫블랙리스트 {user.userName} 상세조회
           </Typography>
-          <Typography>
+          <Typography component="h6">
+            <br />
               {user.userName} 님은
-              {user.blackListInfo === 1
-                  ? " 신고 누적으로 인한 블랙리스트 상태입니다."
-                  : " 관리자에 의해 블랙리스트 상태입니다."}
+              {user.blacklist === 1
+                  ? " 신고 누적 블랙리스트 상태입니다."
+                  : " 관리자 블랙리스트 상태입니다."}
           </Typography>
           <List>
               <ListItem>
@@ -86,9 +88,9 @@ const toggleBlacklist = async () => {
               <Divider variant="inset" component="li" />
               <ListItem>
                   <ListItemIcon>
-                      <Temperature />
+                      <TodayIcon />
                   </ListItemIcon>
-                  <ListItemText primary="온도" secondary={user.temperature} />
+                  <ListItemText primary="생년월일" secondary={user.birthday} />
               </ListItem>
               {/* 추가적인 유저 정보 표시 */}
               <Divider variant="inset" component="li" />

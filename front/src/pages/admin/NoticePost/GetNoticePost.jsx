@@ -38,12 +38,14 @@ function GetNoticePost() {
   }, [noticePostNo]);
 
   const handleDelete = () => {
-    if (window.confirm('정말로 공지사항을 삭제하시겠습니까?')) {
+    const categoryNo = noticePost.noticePostCategoryNo; // noticePost 객체에서 categoryNo 값을 가져옴
+    const noticePostCategoryNo = noticePost.noticePostCategoryNo;
+    if (window.confirm(`정말로 이 ${getCategoryText(categoryNo)}글을 삭제하시겠습니까?`)) {
       axios
         .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/deleteNoticePost/noticePostNo/${noticePostNo}`)
         .then(() => {
           console.log('공지사항 삭제 완료');
-          navigate('/notice/listNoticePost');
+          navigate(`/notice/list${getCategoryBack(noticePostCategoryNo)}Post`);
         })
         .catch((error) => {
           console.error(error);
@@ -57,7 +59,7 @@ function GetNoticePost() {
       case 1:
         return "이벤트";
       case 2:
-        return "FAQ";
+        return "자주묻는 질문";
       default:
         return "";
     }

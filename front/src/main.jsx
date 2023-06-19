@@ -71,7 +71,7 @@ import Payment from '@pages/payment/Payment.jsx';
 import PaymentRedirect from '@pages/payment/PaymentRedirect.jsx';
 import PaymentFail from '@pages/payment/PaymentFail.jsx';
 import ListAdjustment from '@pages/payment/ListAdjustment.jsx';
-import PaymentDetails from '@pages/payment/PaymentDetails.jsx';
+import GetPayment from '@pages/payment/GetPayment.jsx';
 
 const router = createBrowserRouter([
   {
@@ -193,7 +193,7 @@ const router = createBrowserRouter([
               { path: 'list', element: <ListReport /> },
               {
                 path: 'add',
-                element: <CommonTop pageName="회원 신고하기" />,
+                element: <CommonTop pageName='회원 신고하기' />,
                 children: [
                   {
                     path: 'category/reportedno/:reportedNo',
@@ -345,7 +345,7 @@ const router = createBrowserRouter([
           },
           {
             path: 'details/:payNo',
-            element: <PaymentDetails />,
+            element: <GetPayment />,
           },
 
           {

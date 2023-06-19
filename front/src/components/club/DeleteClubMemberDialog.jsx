@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import fetcher from '@utils/fetcher';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import useSWR from 'swr';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -16,26 +16,38 @@ const DeleteClubMemberDialog = ({ open, setOpen, club }) => {
     fetcher
   );
 
-  const onClickDeleteMember = useCallback(async (event) => {
-    event.preventDefault();
+  const [openModal, setOpenModal] = useState(false);
 
-    try {
-      const data = {
-        clubNo: club.clubNo,
-        userNo: myData.userNo,
-      };
+  const closeModal = () => {
+    setOpenModal(false);
+    setOpen(false);
+  };
 
-      console.log(data);
+  const onClickDeleteMember = useCallback(
+    async (event) => {
+      event.preventDefault();
 
-      const response = await axios
-        .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`, {
-          data: data,
-        })
-        .then(() => {});
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+      try {
+        const data = {
+          clubNo: club?.clubNo,
+          userNo: myData?.userNo,
+        };
+
+        console.log(data);
+
+        const response = await axios
+          .delete(`${import.meta.env.VITE_SPRING_HOST}/rest/club/member`, {
+            data: data,
+          })
+          .then(() => {
+            setOpen(false);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [club?.clubNo, myData?.userNo, setOpen]
+  );
 
   return (
     <Dialog open={open} onClose={handleClose} sx={{ padding: '20px' }}>
@@ -71,6 +83,8 @@ const DeleteClubMemberDialog = ({ open, setOpen, club }) => {
 
 DeleteClubMemberDialog.propTypes = {
   club: PropTypes.object.isRequired,
+  open: PropTypes.object.isRequired,
+  setOpen: PropTypes.object.isRequired,
 };
 
 export default DeleteClubMemberDialog;
