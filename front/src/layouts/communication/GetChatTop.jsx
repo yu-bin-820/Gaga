@@ -147,19 +147,34 @@ const GetChatTop = ({ groupType, groupNo, groupLeader }) => {
 
     setField(
       'chatRoomEntryNo',
-      prevChatRoomEntryNo[prevChatRoomEntryNo.length - 1]
+      isArray
+        ? prevChatRoomEntryNo[prevChatRoomEntryNo.length - 1]
+        : prevChatRoomEntryNo
     );
-    setField('chatType', prevChatType[prevChatType.length - 1]);
+    setField(
+      'chatType',
+      isArray ? prevChatType[prevChatType.length - 1] : prevChatType
+    );
     setField(
       'chatRoomLeader',
-      prevChatRoomLeader[prevChatRoomLeader.length - 1]
+      isArray
+        ? prevChatRoomLeader[prevChatRoomLeader.length - 1]
+        : prevChatRoomLeader
     );
-    setField('prevChatRoomEntryNo', isArray ? prevChatRoomEntryNo.pop() : []);
-    setField('prevChatType', isArray ? prevChatType.pop() : []);
-    setField('prevChatRoomLeader', isArray ? prevChatRoomLeader.pop() : []);
+    if (isArray) {
+      setField('prevChatRoomEntryNo', prevChatRoomEntryNo.pop());
+      setField('prevChatType', prevChatType.pop());
+      setField('prevChatRoomLeader', prevChatRoomLeader.pop());
+    }
 
-    const prevPath = prevGetGroupChatPath[prevGetGroupChatPath.length - 1];
-    setField('prevGetGroupChatPath', prevGetGroupChatPath.pop());
+    const prevPath = isPrevPathArray
+      ? prevGetGroupChatPath[prevGetGroupChatPath.length - 1]
+      : prevGetGroupChatPath;
+
+    if (isPrevPathArray) {
+      setField('prevGetGroupChatPath', prevGetGroupChatPath.pop());
+    }
+
     console.log('prevPath', prevPath);
     console.log('--------------------------------------------------');
     console.log('isArray', isArray);

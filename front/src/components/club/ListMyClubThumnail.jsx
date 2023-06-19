@@ -1,36 +1,87 @@
 import { Box, Stack } from '@mui/system';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useLocation, useNavigate } from 'react-router';
 import ClubThumbnail from './ClubThumbnail';
-import useCommonStore from '@stores/common/useCommonStore';
+
+import useCommunityStore from '@stores/communication/useCommunityStore';
+import useChatMapStore from '@stores/communication/useChatMapStore';
 
 const ListMyClubThumnail = ({ club }) => {
-  const { state, clubState, clubNo, clubLeaderNo } = club;
-  const { setField } = useCommonStore();
+  const { clubNo } = club;
+  const {
+    setField: setCommunityField,
+    prevChatRoomEntryNo,
+    prevGetGroupChatPath,
+    prevChatType,
+    prevChatRoomLeader,
+  } = useCommunityStore();
+  const { setField: setChatField } = useChatMapStore();
 
   const location = useLocation();
 
   const navigate = useNavigate();
 
-  const onClickListClubMember = useCallback((event) => {
-    const { id } = event.target;
+  const onClickListClubMember = useCallback(() => {
     navigate(`/club/member/listmember/clubno/${clubNo}`);
-  }, []);
+  }, [clubNo, navigate]);
 
-  const onClickChatRoom = useCallback(
-    (event) => {
-      setField('shouldScroll', true);
-      setField('isInfiniteScroll', false);
-      setField('chatRoomEntryNo', club.clubNo);
-      setField('chatType', 1);
-      setField('chatRoomLeader', club.clubLeaderNo);
-      setField('prevGetGroupChatPath', location.pathname);
-      navigate(`/chat/group/message/list`);
-    },
-    [club, setField, location, navigate]
-  );
+  const onClickChatRoom = useCallback(() => {
+    setChatField('shouldScroll', true);
+    setChatField('infiniteScroll', false);
+    const isArray = Array.isArray(prevChatRoomEntryNo);
+    const isPrevPathArray = Array.isArray(prevGetGroupChatPath);
+
+    console.log('isArray', isArray);
+    console.log('isPrevPathArray', isPrevPathArray);
+    console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
+    console.log('prevChatType', prevChatType);
+    console.log('prevChatRoomLeader', prevChatRoomLeader);
+
+    setCommunityField('chatRoomEntryNo', club?.clubNo);
+    setCommunityField('chatType', 1);
+    setCommunityField('chatRoomLeader', club?.clubLeaderNo);
+
+    setCommunityField(
+      'prevChatRoomEntryNo',
+      isArray ? [...prevChatRoomEntryNo, club?.clubNo] : [club?.clubNo]
+    );
+    setCommunityField('prevChatType', isArray ? [...prevChatType, 1] : [1]);
+    setCommunityField(
+      'prevChatRoomLeader',
+      isArray
+        ? [...prevChatRoomLeader, club?.clubLeaderNo]
+        : [club?.clubLeaderNo]
+    );
+
+    setCommunityField(
+      'prevGetGroupChatPath',
+      isPrevPathArray
+        ? [...prevGetGroupChatPath, location.pathname]
+        : [location.pathname]
+    );
+
+    console.log(prevChatRoomEntryNo, prevChatRoomLeader, prevChatType);
+    console.log('----------------------------------------------------');
+    console.log('isArray', isArray);
+    console.log('isPrevPathArray', isPrevPathArray);
+    console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
+    console.log('prevChatType', prevChatType);
+    console.log('prevChatRoomLeader', prevChatRoomLeader);
+
+    navigate(`/chat/group/message/list`);
+  }, [
+    club,
+    setChatField,
+    setCommunityField,
+    location,
+    navigate,
+    prevChatRoomEntryNo,
+    prevChatType,
+    prevChatRoomLeader,
+    prevGetGroupChatPath,
+  ]);
 
   return (
     <div>
@@ -42,16 +93,16 @@ const ListMyClubThumnail = ({ club }) => {
       >
         <Stack spacing={0.8} paddingBottom={1}>
           <ClubThumbnail club={club} />
-          <Stack direction={'row'} justifyContent='center' spacing={0.5}>
+          <Stack direction={'row'} justifyContent="center" spacing={0.5}>
             <Button
-              variant='outlined'
+              variant="outlined"
               sx={{ width: '180px' }}
               onClick={onClickListClubMember}
             >
               멤버목록
             </Button>
             <Button
-              variant='outlined'
+              variant="outlined"
               sx={{ width: '180px' }}
               onClick={onClickChatRoom}
             >

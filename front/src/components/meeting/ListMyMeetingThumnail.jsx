@@ -16,10 +16,21 @@ const ListMyMeetingThumnail = ({ meeting }) => {
   );
   const { setField } = useCommunityStore();
   const location = useLocation();
+
+  const { data: myData } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
+    fetcher
+    );
+
   const { mutate: mutateMeeting } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${meeting?.meetingNo}`,
     fetcher
   );
+
+  const { mutate: mutateMeetingLsit } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${myData?.userNo}`,
+    fetcher
+);
 
   const isMeetingSuccessTime = currentDate >= meetingDateTime;
   const isMeetingSuccess = meeting.meetingSuccess === 2;
@@ -41,6 +52,8 @@ const ListMyMeetingThumnail = ({ meeting }) => {
   const onClickMeetingSuccess = useCallback(async () => {
     if (isEntryFee) {
       navigate(`/meeting/updatemeetingsuccess/meetingno/${meeting.meetingNo}`);
+      mutateMeeting();
+      mutateMeetingLsit();
     } else {
       const data = {
         meetingNo: meeting.meetingNo,
@@ -55,12 +68,13 @@ const ListMyMeetingThumnail = ({ meeting }) => {
         if (response.status === 200) {
           setOpenModal(true);
           mutateMeeting();
+          mutateMeetingLsit();
         }
       } catch (error) {
         console.error('Error updating meeting:', error);
       }
     }
-  }, [meeting.meetingNo, navigate, isEntryFee, mutateMeeting]);
+  }, [meeting.meetingNo, navigate, isEntryFee, mutateMeeting, mutateMeetingLsit]);
 
   const onClickChatRoom = useCallback(() => {
     setField('shouldScroll', true);

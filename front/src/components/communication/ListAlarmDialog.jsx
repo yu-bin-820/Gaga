@@ -2,27 +2,46 @@ import { Divider, Typography } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Box } from '@mui/system';
+import useMeetingPathStore from '@stores/meeting/useMeetingPathStore';
 import fetcher from '@utils/fetcher';
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import useSWR from 'swr';
 
 const ListAlarmDialog = ({ anchorEl, setAnchorEl, alarmData }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const open = Boolean(anchorEl);
 
   const handleClose = () => {
     setAnchorEl(null);
   };
 
+  const { setField: setMeetingPathField, prevMeetingPath } =
+    useMeetingPathStore();
+
   const onClickAlramContent = useCallback(
     (e) => {
       if (e.currentTarget.dataset.value) {
+        //link 경로가 있을 경유
+        if (e.currentTarget.dataset.value.includes('meeting')) {
+          //경로가 미팅 상세보기일 경우
+          const isArray = Array.isArray(prevMeetingPath);
+          console.log('MeetingThumbNailIsArray', isArray);
+
+          setMeetingPathField(
+            'prevMeetingPath',
+            isArray
+              ? [...prevMeetingPath, location.pathname]
+              : [location.pathname]
+          );
+        }
+
         navigate(e.currentTarget.dataset.value);
       }
     },
-    [navigate]
+    [navigate, prevMeetingPath, setMeetingPathField, location]
   );
 
   // console.log(alarmData);

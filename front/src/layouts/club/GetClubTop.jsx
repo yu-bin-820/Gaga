@@ -20,17 +20,16 @@ import DeleteClubDialog from '@components/club/DeleteClubDialog';
 import useUpdateClubFormStore from '@stores/club/useUpdateClubFormStore';
 import useCommunityStore from '@stores/communication/useCommunityStore';
 import UpdateClubDrawer from '@components/club/UpdateClubDrawer';
+import useClubStore from '@stores/club/useClubStore';
+import PropTypes from 'prop-types';
 
-const GetClubTop = () => {
+const GetClubTop = ({ prevPath }) => {
   const { clubNo } = useParams();
 
-  const {
-    setField,
-    prevChatRoomEntryNo,
-    prevChatType,
-    prevChatRoomLeader,
-    prevPath,
-  } = useCommunityStore();
+  // const { setField, prevChatRoomEntryNo, prevChatType, prevChatRoomLeader } =
+  //   useCommunityStore();
+
+  const { setField: setClubField } = useClubStore();
 
   const { reset } = useUpdateClubFormStore();
 
@@ -67,17 +66,27 @@ const GetClubTop = () => {
   }, [reset]);
 
   const onClickPrev = useCallback(() => {
-    setField('chatRoomEntryNo', prevChatRoomEntryNo);
-    setField('chatType', prevChatType);
-    setField('chatRoomLeader', prevChatRoomLeader);
+    const isPrevPathArray = Array.isArray(prevPath);
+    // setField('chatRoomEntryNo', prevChatRoomEntryNo);
+    // setField('chatType', prevChatType);
+    // setField('chatRoomLeader', prevChatRoomLeader);
+    const tempPrev = isPrevPathArray ? prevPath[prevPath.length - 1] : prevPath;
+    console.log('GetClubTopPrevPath', prevPath);
 
-    navigate(prevPath || -1);
+    if (isPrevPathArray) {
+      setClubField('prevClubPath', prevPath.pop());
+    }
+    console.log('pop()GetClubTopPrevPath', prevPath);
+
+    console.log('GetClubTopTempPrev', tempPrev);
+    navigate(tempPrev || -1);
   }, [
     prevPath,
-    prevChatRoomEntryNo,
-    prevChatType,
-    prevChatRoomLeader,
-    setField,
+    setClubField,
+    // prevChatRoomEntryNo,
+    // prevChatType,
+    // prevChatRoomLeader,
+    // setField,
     navigate,
   ]);
 
@@ -88,18 +97,14 @@ const GetClubTop = () => {
   return (
     <>
       <AppBar
-        position='fixed'
-        color='secondary'
+        position="fixed"
+        color="secondary"
         elevation={0}
         sx={{ height: '50px' }}
       >
-        <Container maxWidth='xl'>
+        <Container maxWidth="xl">
           <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
-            <IconButton
-              onClick={() => {
-                navigate(-1);
-              }}
-            >
+            <IconButton onClick={onClickPrev}>
               <ArrowBackIosNewIcon />
             </IconButton>
 
@@ -111,7 +116,7 @@ const GetClubTop = () => {
       </AppBar>
 
       <SwipeableDrawer
-        anchor='bottom'
+        anchor="bottom"
         open={leaderMenuOpen}
         onClose={toggleLeaderMenuOpen(false)}
         onOpen={toggleLeaderMenuOpen(true)}
@@ -145,5 +150,8 @@ const GetClubTop = () => {
       />
     </>
   );
+};
+GetClubTop.propTypes = {
+  prevPath: PropTypes.array,
 };
 export default GetClubTop;

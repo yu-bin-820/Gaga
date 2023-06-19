@@ -112,6 +112,7 @@ export default function ListChatRoom() {
           ? [...prevGetGroupChatPath, location.pathname]
           : [location.pathname]
       );
+
       console.log(prevChatRoomEntryNo, prevChatRoomLeader, prevChatType);
       console.log('----------------------------------------------------');
       console.log('isArray', isArray);
@@ -119,6 +120,7 @@ export default function ListChatRoom() {
       console.log('prevChatRoomEntryNo', prevChatRoomEntryNo);
       console.log('prevChatType', prevChatType);
       console.log('prevChatRoomLeader', prevChatRoomLeader);
+
       navigate(`/chat/group/message/list`);
     },
     [
