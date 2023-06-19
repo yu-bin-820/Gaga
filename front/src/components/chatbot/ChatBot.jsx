@@ -52,8 +52,7 @@ function Chatbot() {
        
   useEffect(() => {
     if (myData) {
-      const { userNo, role } = myData;
-      console.log(userNo, role, '유저넘버랑 권한');    
+      const { userNo, role } = myData;  
     }
   }, [myData]);
 
@@ -76,7 +75,7 @@ function Chatbot() {
               'Content-Type': 'application/json;UTF-8',
             },
           });
-       
+          
           const jsonData = JSON.stringify(response);
       
           const jsonObject = JSON.parse(jsonData);
@@ -101,7 +100,6 @@ function Chatbot() {
                 row.forEach((item) => {
                     const title = item.data.title; // 링크의 설명
                     let url = (item.data.data.action.data.url); // 링크의 URL
-                    console.log(url);
                   
                     buttons.push({ title, url });
         });
@@ -125,7 +123,6 @@ function Chatbot() {
   
 //HELP버튼 >> 추후 모달창으로 수정? 
   const handleHelpClick = () => {
-    console.log("메시지 출발합니다"); 
     setHelpModalOpen(true);
 };
 
@@ -196,7 +193,6 @@ const handleToggleGpt = () => {
         setMessages([...messages, gptStatusMessage]);
       } else {
         setIsGptMode(true);
-        console.log("gpt모드입니다 과금주의");
         chatContainer.classList.add('gpt-theme');
 
         toggleChatBotBtn.style.backgroundColor = '#000005';
@@ -209,7 +205,6 @@ const handleToggleGpt = () => {
   
         // GPT 모드가 활성화된 경우에만 handleSendMessage 호출
         if (isGptMode) {
-            console.log("gpt모드데스");
           handleSendMessage(inputText);
         }
       }
@@ -239,8 +234,6 @@ const handleSendMessage = async (text) => {
 
       // 변환된 JSON의 'text' 필드가 응답 메시지가 될 것이다.
       const botMessage = response.data;
-      console.log("유원? u Do", botMessage)
-      
       return botMessage;
     } else {
     //const apiUrl = 'http://192.168.0.37:8080/rest/chatbot';
@@ -263,7 +256,7 @@ const handleSendMessage = async (text) => {
       };    
 
     const requestBodyString = JSON.stringify(requestBody);
-
+    
     return axios
       .post(apiUrl, requestBodyString, {
         headers: {
@@ -429,9 +422,9 @@ const handleSendMessage = async (text) => {
                           <IconButton
                               className="submit"
                               type="submit"
-                              onClick={handleHelpClick}
+                              onClick={handleSendMessage}
                           >
-                              <SendRoundedIcon onClick={handleHelpClick} />
+                              <SendRoundedIcon onClick={handleSendMessage} />
                           </IconButton>
                       </Button>
                   </form>
