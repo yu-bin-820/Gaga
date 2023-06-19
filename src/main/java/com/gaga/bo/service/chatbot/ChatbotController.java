@@ -234,63 +234,7 @@ public class ChatbotController {
         return responseObject;
     }
     
-    @RequestMapping(method=RequestMethod.POST)
-    public ResponseEntity<String> handleOpenEvent() {
-    	System.out.println("저 도착했어요 선생님");
-        String apiUrl = "http://192.168.0.37:8080/rest/chatbot";
 
-
-        JSONObject requestBodyWelcome = new JSONObject();
-        requestBodyWelcome.put("version", "v2");
-        requestBodyWelcome.put("userId", "nuWelcomeUserUserSuperUser");
-        requestBodyWelcome.put("timestamp", System.currentTimeMillis());
-        requestBodyWelcome.put("bubbles", new JSONArray());
-        requestBodyWelcome.put("event", "open");
-
-        String requestBodyStringWelcome = requestBodyWelcome.toJSONString();
-
-        // 이 부분에서는 적절한 시그니처 생성 로직이 필요합니다.
-        String signature = signatureGenerator.generateSignature(requestBodyStringWelcome, secretKey);
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("hmac", signature);
-        headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
-
-        HttpEntity<String> requestEntity = new HttpEntity<>(requestBodyStringWelcome, headers);
-
-        try {
-            ResponseEntity<String> responseEntity = restTemplate.exchange(apiUrl, HttpMethod.POST, requestEntity, String.class);
-
-            if (responseEntity.getStatusCode() == HttpStatus.OK) {
-                String responseBody = responseEntity.getBody();
-                JSONObject jsonObject = (JSONObject) new JSONParser().parse(responseBody);
-
-                if (jsonObject.containsKey("error")) {
-                    System.out.println("네이버 챗봇 서버 에러: " + jsonObject.get("error"));
-                    return null;
-                }
-
-                String botMessage = ((JSONObject) jsonObject.get("bubbles")).get("description").toString();
-                
-                return ResponseEntity.ok(botMessage);
-                // 이하 코드는 기존 리액트 코드의 로직을 참조하여 작성해야 합니다.
-
-            } else {
-                System.out.println("네이버 챗봇 응답 에러 :" + responseEntity.getStatusCode());
-            }
-        } catch (Exception e) {
-            System.out.println("handleOpenEvent 오류: " + e.getMessage());
-        }
-
-        return null;
-    }
-    
-//    @PostMapping("/gpt")
-//    public Mono<String> generateResponse(@RequestBody PromptRequest promptRequest) {
-//        if (promptRequest.getIsGptMode()) {
-//            return gptService.generateResponse(promptRequest.getPrompt());
-//        } 
-//    }
     
     
 }
