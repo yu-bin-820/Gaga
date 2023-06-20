@@ -106,6 +106,7 @@ const UpdateMeetingReviewDrawer = ({settingsUpdateReviewOpen, setSettingsUpdateR
             </IconButton>
           </Stack>
           <Divider />
+          <Box sx={{ margin: '10px' }}>
             <Stack direction={'row'} spacing={3} sx={{ marginBottom: '30px' }}>
           <Button
             variant="outlined"
@@ -205,6 +206,7 @@ const UpdateMeetingReviewDrawer = ({settingsUpdateReviewOpen, setSettingsUpdateR
             수정하기
           </Button>
         </Stack>
+        </Box>
         </Drawer>
     );
 };

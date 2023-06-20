@@ -74,7 +74,7 @@ const UpdateMeetingDrawer = ({settingsUpdateMeetingOpen, setSettingsUpdateMeetin
       case 3:
         return <UpdateMeetingFilter />;
       case 4:
-        return <UpdateMeetingMaxMember />;
+        return <UpdateMeetingMaxMember meetingno={meetingno}/>;
       case 5:
         return <UpdateMeetingState 
         setSettingsUpdateMeetingOpen={setSettingsUpdateMeetingOpen}/>;
