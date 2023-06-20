@@ -31,7 +31,7 @@ const GetGroupChat = () => {
   );
 
   const isMeeting = chatType === 2;
-  const [socket, disconnect] = useSocket(isMeeting ? 'meeting' : 'club');
+  const [socket] = useSocket(isMeeting ? 'meeting' : 'club');
 
   const getKey = (index, prevPageData) => {
     if (prevPageData && !prevPageData.length) {
@@ -59,15 +59,8 @@ const GetGroupChat = () => {
   //   }
   // }, [boxRef]);
 
-  useEffect(() => {
-    return () => {
-      if (socket) {
-        disconnect();
-      }
-    };
-  }, [disconnect, socket]);
-
   const onMessage = useCallback(() => {
+    console.log('onMessage');
     mutateGroupMessages();
     // scrollToBottom();
   }, [mutateGroupMessages]);
