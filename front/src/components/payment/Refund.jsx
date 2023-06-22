@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react';
 import axios from 'axios';
 import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
-import { Navigate } from 'react-router';
 import { Box } from '@mui/system';
 import { Button, Grid, Modal, Typography } from '@mui/material';
 
