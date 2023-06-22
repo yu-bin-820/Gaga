@@ -22,9 +22,11 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
     fetcher
   );
 
-  const {mutate : mutateMyMeetingList } = useSWR(
-      `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${myData?.userNo}`,
-      fetcher
+  const { mutate: mutateMyMeetingList } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${
+      myData?.userNo
+    }`,
+    fetcher
   );
 
   const [openModal, setOpenModal] = useState(false);
@@ -92,7 +94,6 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
             `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/member`,
             { data: data } // userData를 delete 요청에 사용
           );
-          mutateMyMeetingList();
         } else {
           alert('환불 요청이 실패하였습니다.');
         }
@@ -156,6 +157,7 @@ const DeleteMemberDialog = ({ open, setOpen, meeting }) => {
               <Button
                 onClick={() => {
                   closeModal();
+                  mutateMyMeetingList();
                 }}
                 style={{ alignSelf: 'flex-end', marginTop: 16 }}
                 variant='contained'
