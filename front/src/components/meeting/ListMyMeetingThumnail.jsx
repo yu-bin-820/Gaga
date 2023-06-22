@@ -52,8 +52,6 @@ const ListMyMeetingThumnail = ({ meeting }) => {
   const onClickMeetingSuccess = useCallback(async () => {
     if (isEntryFee) {
       navigate(`/meeting/updatemeetingsuccess/meetingno/${meeting.meetingNo}`);
-      mutateMeeting();
-      mutateMeetingLsit();
     } else {
       const data = {
         meetingNo: meeting.meetingNo,
@@ -63,12 +61,14 @@ const ListMyMeetingThumnail = ({ meeting }) => {
         const response = await axios.patch(
           `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/meetingsuccess`,
           data
-        );
+        )
+        .then(() => {
+          mutateMeetingLsit();
+        });
 
         if (response.status === 200) {
           setOpenModal(true);
           mutateMeeting();
-          mutateMeetingLsit();
         }
       } catch (error) {
         console.error('Error updating meeting:', error);
@@ -143,12 +143,9 @@ const ListMyMeetingThumnail = ({ meeting }) => {
             borderRadius: 2,
             mx: 'auto',
             my: '20%',
-            width: '50%',
+            width: '66%',
           }}
         >
-          <Typography id="modal-title" variant="h6" component="h2">
-            알림
-          </Typography>
           <Typography id="modal-description" sx={{ mt: 2 }}>
             모임이 성사되었습니다.
           </Typography>

@@ -20,10 +20,10 @@ const SearchMeeting = () => {
   const onKeydownChat = useCallback(
     (e) => {
       if (e.key === 'Enter') {
-         if (!e.shiftKey) {
-        e.preventDefault();
-        onClickSearch(e);
-         }
+        if (!e.shiftKey) {
+          e.preventDefault();
+          onClickSearch(e);
+        }
       }
     },
     [onClickSearch]
@@ -31,7 +31,7 @@ const SearchMeeting = () => {
 
   return (
     <div>
-      <CommonTop />
+      <CommonTop prevPath="/" />
       <Box sx={{ marginTop: '64px' }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item></Grid>

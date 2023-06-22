@@ -18,7 +18,7 @@ const SearchClub = () => {
     console.log(searchKeyword);
     setField('currentPage', 1);
     setClubField('prevClubPath', location.pathname);
-  }, [navigate, searchKeyword]);
+  }, [navigate, setClubField, setField, searchKeyword]);
 
   const onKeydownChat = useCallback(
     (e) => {
@@ -34,28 +34,28 @@ const SearchClub = () => {
 
   return (
     <div>
-      <CommonTop />
+      <CommonTop prevPath="/" />
       <Box sx={{ marginTop: '64px' }}>
-        <Grid container spacing={2} alignItems='center'>
+        <Grid container spacing={2} alignItems="center">
           <Grid item></Grid>
           <Grid item xs>
             <TextField
               fullWidth
-              placeholder='지역 및 키워드로 클럽을 검색해주세요'
+              placeholder="지역 및 키워드로 클럽을 검색해주세요"
               InputProps={{
                 disableUnderline: true,
                 sx: { fontSize: 'default' },
               }}
-              variant='standard'
+              variant="standard"
               value={searchKeyword}
               onChange={(e) => setField('searchKeyword', e.target.value)}
               onKeyDown={onKeydownChat}
             />
           </Grid>
           <Grid item>
-            <Tooltip title='Reload'>
+            <Tooltip title="Reload">
               <IconButton onClick={onClickSearch}>
-                <SearchIcon color='inherit' sx={{ display: 'block' }} />
+                <SearchIcon color="inherit" sx={{ display: 'block' }} />
               </IconButton>
             </Tooltip>
           </Grid>

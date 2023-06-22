@@ -64,7 +64,7 @@ const ListSearchClub = () => {
         overflow: 'scroll',
       }}
     >
-      <CommonTop />
+      <CommonTop prevPath="/club/searchclub" />
       <Box></Box>
       <Box sx={{ bgcolor: '#ededed' }}>
         <Box

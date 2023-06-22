@@ -103,6 +103,10 @@ function ListBlackList() {
     };
 
     const handleSearch = async () => {
+        if (!searchKeyword || searchKeyword.trim() === '') {
+            alert('검색어를 입력해주세요.');
+            return;
+          }
       if (searchKeyword.length > 0) {
         try {
           const response = await axios.get(`${import.meta.env.VITE_SPRING_HOST}/rest/admin/searchBlackList`, {

@@ -26,6 +26,7 @@ const UpdateClubState = ({ setSettingsUpdateClubOpen }) => {
     filterMaxAge,
     clubMaxMemberNo,
     clubState,
+    clubImg,
     file,
     setField,
   } = useUpdateClubFormStore();
@@ -47,8 +48,11 @@ const UpdateClubState = ({ setSettingsUpdateClubOpen }) => {
 
       try {
         const formData = new FormData();
-
-        formData.append('file', file);
+        if (file) {
+          formData.append('file', file);
+        } else {
+          formData.append('clubImg', clubImg);
+        }
         formData.append('clubName', clubName);
         formData.append('clubIntro', clubIntro);
         formData.append('filterGender', filterGender);
@@ -71,7 +75,7 @@ const UpdateClubState = ({ setSettingsUpdateClubOpen }) => {
     },
     [
       clubNo,
-      navigate,
+      clubImg,
       file,
       filterGender,
       filterMaxAge,
@@ -94,36 +98,36 @@ const UpdateClubState = ({ setSettingsUpdateClubOpen }) => {
         </h5>
       </Box>
       <Stack
-        direction='row'
-        alignItems='center'
+        direction="row"
+        alignItems="center"
         spacing={12}
-        justifyContent='center'
+        justifyContent="center"
         margin={2}
       >
         <StyledToggleButtonGroup
-          size='large'
+          size="large"
           value={alignment}
           exclusive
           onChange={handleAlignment}
-          aria-label='text alignment'
+          aria-label="text alignment"
         >
-          <ToggleButton value='2' onClick={() => onClickClubState(2)}>
+          <ToggleButton value="2" onClick={() => onClickClubState(2)}>
             모집완료
           </ToggleButton>
-          <ToggleButton value='1' onClick={() => onClickClubState(1)}>
+          <ToggleButton value="1" onClick={() => onClickClubState(1)}>
             모집중
           </ToggleButton>
         </StyledToggleButtonGroup>
       </Stack>
       <Stack
         spacing={0}
-        direction='row'
-        justifyContent='center'
-        alignItems='center'
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
         sx={{ position: 'fixed', bottom: 5, left: 0, right: 0 }}
       >
         <Button
-          variant='contained'
+          variant="contained"
           sx={{ width: '85vw', borderRadius: '50px' }}
           onClick={handleSubmit}
         >

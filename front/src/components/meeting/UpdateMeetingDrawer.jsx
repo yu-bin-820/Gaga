@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Button, Divider, Drawer, IconButton, MobileStepper } from '@mui/material';
+import {
+  Button,
+  Divider,
+  Drawer,
+  IconButton,
+  MobileStepper,
+} from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
@@ -15,15 +21,13 @@ import { useTheme } from '@emotion/react';
 import useUpdateMeetingFormStore from '@stores/meeting/useUpdateMeetingFormStore';
 import dayjs from 'dayjs';
 
-
-
-const UpdateMeetingDrawer = ({settingsUpdateMeetingOpen, setSettingsUpdateMeetingOpen, toggleSettingsUpdateMeeting, meetingno}) => {
-
-  const {
-    meetingImg,
-    setField,
-  } =useUpdateMeetingFormStore();
-
+const UpdateMeetingDrawer = ({
+  settingsUpdateMeetingOpen,
+  setSettingsUpdateMeetingOpen,
+  toggleSettingsUpdateMeeting,
+  meetingno,
+}) => {
+  const { meetingImg, setField } = useUpdateMeetingFormStore();
 
   useEffect(() => {
     axios
@@ -34,18 +38,29 @@ const UpdateMeetingDrawer = ({settingsUpdateMeetingOpen, setSettingsUpdateMeetin
         setField('meetingIntro', response.data.meetingIntro);
         setField('meetingImg', response.data.meetingImg);
         setField('meetingDate', dayjs(response.data.meetingDate));
-        setField('meetingStartTime', dayjs(response.data.meetingDate+'T'+response.data.meetingStartTime));
-        setField('meetingEndTime', dayjs(response.data.meetingDate+'T'+response.data.meetingEndTime));
+        setField(
+          'meetingStartTime',
+          dayjs(
+            response.data.meetingDate + 'T' + response.data.meetingStartTime
+          )
+        );
+        setField(
+          'meetingEndTime',
+          dayjs(response.data.meetingDate + 'T' + response.data.meetingEndTime)
+        );
         setField('filterGender', response.data.filterGender);
         setField('filterMinAge', response.data.filterMinAge);
         setField('filterMaxAge', response.data.filterMaxAge);
         setField('meetingMaxMemberNo', response.data.meetingMaxMemberNo);
         setField('meetingState', response.data.meetingState);
-        setField('image', response.data?.meetingImg
-        ? `${import.meta.env.VITE_CDN_HOST}/upload_images/meeting/${
-          meetingImg
-        }?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`
-      : null)
+        setField(
+          'image',
+          response.data?.meetingImg
+            ? `${
+                import.meta.env.VITE_CDN_HOST
+              }/upload_images/meeting/${meetingImg}?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`
+            : null
+        );
       })
       .catch((error) => {
         console.log(error);
@@ -74,84 +89,89 @@ const UpdateMeetingDrawer = ({settingsUpdateMeetingOpen, setSettingsUpdateMeetin
       case 3:
         return <UpdateMeetingFilter />;
       case 4:
-        return <UpdateMeetingMaxMember />;
+        return <UpdateMeetingMaxMember meetingno={meetingno}/>;
       case 5:
-        return <UpdateMeetingState 
-        setSettingsUpdateMeetingOpen={setSettingsUpdateMeetingOpen}/>;
+        return (
+          <UpdateMeetingState
+            setSettingsUpdateMeetingOpen={setSettingsUpdateMeetingOpen}
+          />
+        );
       default:
         throw new Error('Unknown step');
     }
   }
 
-    return (
-        <Drawer
-            anchor="right"
-            open={settingsUpdateMeetingOpen}
-            onClose={toggleSettingsUpdateMeeting(false)}
-            onOpen={toggleSettingsUpdateMeeting(true)}
-          >
-            <Stack
-            direction={'row'}
-            alignItems={'center'}
-            sx={{ height: '55px', minWidth: '100vw' }}
-          >
-            <IconButton
-            onClick={() => {
-              setSettingsUpdateMeetingOpen(false);}}>
-              <ArrowBackIosNewIcon />
-            </IconButton>
-          </Stack>
-          <Divider />
-          <Box>
-          <MobileStepper
-            variant="progress"
-            steps={6}
-            position="static"
-            activeStep={activeStep}
-            sx={{ maxWidth: 500, flexGrow: 1 }}
-            nextButton={
-              <Button
-                size="small"
-                onClick={handleNext}
-                disabled={activeStep === 5}
-              >
-                Next
-                {theme.direction === 'rtl' ? (
-                  <KeyboardArrowLeft />
-                ) : (
-                  <KeyboardArrowRight />
-                )}
-              </Button>
-            }
-            backButton={
-              <Button
-                size="small"
-                onClick={handleBack}
-                disabled={activeStep === 0}
-              >
-                {theme.direction === 'rtl' ? (
-                  <KeyboardArrowRight />
-                ) : (
-                  <KeyboardArrowLeft />
-                )}
-                Back
-              </Button>
-            }
-          />
-          <React.Fragment>
-            {getStepContent(activeStep)}
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}></Box>
-          </React.Fragment>
-        </Box>
-        </Drawer>
-    );
+  return (
+    <Drawer
+      anchor="right"
+      open={settingsUpdateMeetingOpen}
+      onClose={toggleSettingsUpdateMeeting(false)}
+      onOpen={toggleSettingsUpdateMeeting(true)}
+    >
+      <Stack
+        direction={'row'}
+        alignItems={'center'}
+        sx={{ height: '55px', minWidth: '100vw' }}
+      >
+        <IconButton
+          onClick={() => {
+            setSettingsUpdateMeetingOpen(false);
+          }}
+        >
+          <ArrowBackIosNewIcon />
+        </IconButton>
+      </Stack>
+      <Divider />
+      <Box>
+        <MobileStepper
+          variant="progress"
+          steps={6}
+          position="static"
+          activeStep={activeStep}
+          sx={{ maxWidth: 500, flexGrow: 1 }}
+          nextButton={
+            <Button
+              size="small"
+              onClick={handleNext}
+              disabled={activeStep === 5}
+            >
+              Next
+              {theme.direction === 'rtl' ? (
+                <KeyboardArrowLeft />
+              ) : (
+                <KeyboardArrowRight />
+              )}
+            </Button>
+          }
+          backButton={
+            <Button
+              size="small"
+              onClick={handleBack}
+              disabled={activeStep === 0}
+            >
+              {theme.direction === 'rtl' ? (
+                <KeyboardArrowRight />
+              ) : (
+                <KeyboardArrowLeft />
+              )}
+              Back
+            </Button>
+          }
+        />
+        <React.Fragment>
+          {getStepContent(activeStep)}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}></Box>
+        </React.Fragment>
+      </Box>
+    </Drawer>
+  );
 };
 
 UpdateMeetingDrawer.propTypes = {
-    settingsUpdateMeetingOpen: PropTypes.bool,
-    setSettingsUpdateMeetingOpen: PropTypes.func,
-    toggleSettingsUpdateMeeting: PropTypes.func,
-    meetingno: PropTypes.object,
-    };
+  settingsUpdateMeetingOpen: PropTypes.bool,
+  setSettingsUpdateMeetingOpen: PropTypes.func,
+  toggleSettingsUpdateMeeting: PropTypes.func,
+  meetingno: PropTypes.object,
+};
 
 export default UpdateMeetingDrawer;

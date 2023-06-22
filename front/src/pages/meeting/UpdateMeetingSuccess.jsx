@@ -17,15 +17,20 @@ const UpdateMeetingSuccess = () => {
     bankName: '',
   });
 
-  const { data: myData, mutate: mutateMe } = useSWR(
+  const { data: myData} = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
 
-  const { data: meetingData, mutate: mutateMeeting } = useSWR(
+  const {mutate: mutateMeeting } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${meetingno}`,
     fetcher
   );
+
+  const { mutate: mutateMeetingLsit } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${myData?.userNo}`,
+    fetcher
+);
 
   const [bankName, setBankName] = useState(myData ? myData.bankName : '');
   const [accountNo, setAccountNo] = useState(myData ? myData.accountNo : '');
@@ -58,7 +63,11 @@ const UpdateMeetingSuccess = () => {
       const response = await axios.patch(
         `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/meetingsuccess`,
         data
-      );
+      )
+      .then(() => {
+        mutateMeetingLsit();
+        mutateMeeting();
+      });
 
       setOpenModal(true);
 
@@ -66,7 +75,7 @@ const UpdateMeetingSuccess = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [accountNo, bankName, meetingno]);
+  }, [accountNo, bankName, meetingno, mutateMeeting, mutateMeetingLsit]);
 
   return (
     <>

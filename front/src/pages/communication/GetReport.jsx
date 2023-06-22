@@ -77,7 +77,7 @@ const GetReport = () => {
 
   return (
     <>
-      <CommonTop prevPath={prevPath} />
+      <CommonTop pageName="신고 상세 조회" prevPath={prevPath} />
       <Box sx={{ marginTop: '73px', marginLeft: '15px', marginRight: '15px' }}>
         <Stack spacing={2.5}>
           <Stack spacing={1}>

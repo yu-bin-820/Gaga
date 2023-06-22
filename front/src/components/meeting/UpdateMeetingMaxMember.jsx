@@ -3,21 +3,29 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import React from 'react';
 import { Paper, Typography } from '@mui/material';
+import useSWR from 'swr';
+import PropTypes from 'prop-types';
 import useUpdateMeetingFormStore from '@stores/meeting/useUpdateMeetingFormStore';
+import fetcher from '@utils/fetcher';
 
-const UpdateMeetingMaxMember = () => {
+const UpdateMeetingMaxMember = ({meetingno}) => {
+
+  const { data: meeting } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${meetingno}`,
+    fetcher
+  );
 
     const {
       meetingMaxMemberNo,
       setField,
     } =useUpdateMeetingFormStore();
 
-    const isDecreaseDisabled = meetingMaxMemberNo === 3;
+    const isDecreaseDisabled = meetingMaxMemberNo === meeting.count;
     const isIncreaseDisabled = meetingMaxMemberNo === 99;
 
 
       const handleDecrease = () => {
-        if (meetingMaxMemberNo > 3) {
+        if (meetingMaxMemberNo > meeting.count) {
             setField('meetingMaxMemberNo', meetingMaxMemberNo - 1);
         }
       };
@@ -63,5 +71,9 @@ const UpdateMeetingMaxMember = () => {
   </Box>
     );
 };
+
+UpdateMeetingMaxMember.propTypes = {
+  meetingno: PropTypes.int,
+  };
 
 export default UpdateMeetingMaxMember;

@@ -57,6 +57,11 @@ const ListReport = () => {
     );
   
     const handleSearch = async () => {
+        if (!searchKeyword || searchKeyword.trim() === '') {
+            alert('검색어를 입력해주세요.');
+            return;
+          }
+          
       if (searchKeyword && searchKeyword.length > 0) {
         try {
           const response = await axios.get(
