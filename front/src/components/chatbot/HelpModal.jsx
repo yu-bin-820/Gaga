@@ -93,7 +93,7 @@ const style = {
                     <p> 📣 GAGA가 무슨 뜻이야?</p>
                     <p> ❔   클럽이랑 모임의 차이점이 뭐야?</p>
                     <p>🔍 내가 원하는 모임은 어떻게 찾을 수 있지?</p>
-                    <p>🤷🏻‍♂️ 클럽이랑 모임의 차이점이 뭐야?</p>
+                    <p>🤷🏻‍♂️ 나쁜 유저 신고는 어떻게 해?</p>
                 <Button onClick={(event) => handleClose(event)}>닫기</Button>
                 <ChildModal /> {/* ChildModal 추가 */}
             </Box>
