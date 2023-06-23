@@ -134,7 +134,7 @@ const AddMeetingDate = ({setNextButtonDisable}) => {
 };
 
 AddMeetingDate.propTypes = {
-  setNextButtonDisable: PropTypes.bool,
+  setNextButtonDisable: PropTypes.func,
   };
 
 export default AddMeetingDate;

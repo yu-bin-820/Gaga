@@ -1,4 +1,12 @@
-import { Avatar, Button, Divider, Drawer, IconButton, Rating, TextField } from '@mui/material';
+import {
+  Avatar,
+  Button,
+  Divider,
+  Drawer,
+  IconButton,
+  Rating,
+  TextField,
+} from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -10,103 +18,120 @@ import useSWR from 'swr';
 import PropTypes from 'prop-types';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
+const UpdateMeetingReviewDrawer = ({
+  settingsUpdateReviewOpen,
+  setSettingsUpdateReviewOpen,
+  toggleSettingsUpdateReview,
+  reviewno,
+}) => {
+  const [meetingReview, onChangeMeetingReview, setMeetingReview] = useInput({
+    meetingScore: '',
+    meetingReviewImg: '',
+    meetingReviewContent: '',
+    meetingNo: '',
+  });
 
-const UpdateMeetingReviewDrawer = ({settingsUpdateReviewOpen, setSettingsUpdateReviewOpen, toggleSettingsUpdateReview, reviewno}) => {
-    const [meetingReview, onChangeMeetingReview, setMeetingReview] = useInput({
-      meetingScore: '',
-      meetingReviewImg: '',
-      meetingReviewContent: '',
-      meetingNo: '',
-    });
-  
-    const {mutate: mutateMeetingReviewList } = useSWR(
-      `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/${meetingReview?.meetingNo}`,
-      fetcher
+  const { mutate: mutateMeetingReviewList } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/${
+      meetingReview?.meetingNo
+    }`,
+    fetcher
   );
-  
-    const [selectedImage, setSelectedImage] = useState(    );
-    const [selectedFile, setSelectedFile] = useState(null);
-  
-    const onChangeImg = (event) => {
-      const file = event.target.files[0];
-      setSelectedFile(file);
-      setSelectedImage(URL.createObjectURL(file));
-    };
-  
-    useEffect(() => {
-      axios
-        .get(
-          `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/no/${reviewno}`
-        )
-        .then((response) => {
-          console.log(response.data);
-          setMeetingReview(response.data);
-          setSelectedImage(
-            response.data?.meetingReviewImg
-              ? `${import.meta.env.VITE_CDN_HOST}/upload_images/meeting/${
-                  response.data?.meetingReviewImg
-                }?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`
-              : null
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }, [reviewno, setMeetingReview]);
-    
-    const handleSubmit = useCallback((event) => {
+
+  const [selectedImage, setSelectedImage] = useState();
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const onChangeImg = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    setSelectedImage(URL.createObjectURL(file));
+  };
+
+  useEffect(() => {
+    axios
+      .get(
+        `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review/no/${reviewno}`
+      )
+      .then((response) => {
+        console.log(response.data);
+        setMeetingReview(response.data);
+        setSelectedImage(
+          response.data?.meetingReviewImg
+            ? `${import.meta.env.VITE_CDN_HOST}/upload_images/meeting/${
+                response.data?.meetingReviewImg
+              }?type=f_sh&w=100&h=100&faceopt=true&sharp_amt=1.0`
+            : null
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [reviewno, setMeetingReview]);
+
+  const handleSubmit = useCallback(
+    (event) => {
       event.preventDefault();
-  
+
       try {
         const formData = new FormData();
-  
         formData.append('file', selectedFile);
+        formData.append('meetingReviewImg', meetingReview.meetingReviewImg);
         formData.append('meetingScore', meetingReview.meetingScore);
         formData.append(
           'meetingReviewContent',
           meetingReview.meetingReviewContent
         );
         formData.append('meetingReviewNo', reviewno);
-  
-        console.log(formData);
-        const response = 
-        axios
-        .patch(
-          `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`,
-          formData )
-          .then(()=>{
-            mutateMeetingReviewList()
-          });
-  
-          setSettingsUpdateReviewOpen(false);
 
-  
+        console.log(formData);
+        const response = axios
+          .patch(
+            `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/review`,
+            formData
+          )
+          .then(() => {
+            mutateMeetingReviewList();
+          });
+
+        setSettingsUpdateReviewOpen(false);
+
         console.log(response.data);
       } catch (error) {
         console.error(error);
       }
-    }, [meetingReview, selectedFile, mutateMeetingReviewList, reviewno, setSettingsUpdateReviewOpen]);
+    },
+    [
+      meetingReview,
+      selectedFile,
+      mutateMeetingReviewList,
+      reviewno,
+      setSettingsUpdateReviewOpen,
+    ]
+  );
 
-    return (
-        <Drawer
-            anchor="right"
-            open={settingsUpdateReviewOpen}
-            onClose={toggleSettingsUpdateReview(false)}
-            onOpen={toggleSettingsUpdateReview(true)}
+  return (
+    <Drawer
+      anchor="right"
+      open={settingsUpdateReviewOpen}
+      onClose={toggleSettingsUpdateReview(false)}
+      onOpen={toggleSettingsUpdateReview(true)}
+    >
+      <Stack
+        direction={'row'}
+        alignItems={'center'}
+        sx={{ height: '55px', minWidth: '100vw' }}
+      >
+        <IconButton
+          onClick={() => {
+            setSettingsUpdateReviewOpen(false);
+          }}
         >
-          <Stack
-            direction={'row'}
-            alignItems={'center'}
-            sx={{ height: '55px', minWidth: '100vw' }}
-          >
-            <IconButton
-            onClick={() => {
-              setSettingsUpdateReviewOpen(false);}}>
-              <ArrowBackIosNewIcon />
-            </IconButton>
-          </Stack>
-          <Divider />
-            <Stack direction={'row'} spacing={3} sx={{ marginBottom: '30px' }}>
+          <ArrowBackIosNewIcon />
+        </IconButton>
+      </Stack>
+      <Divider />
+      <Box sx={{ margin: '10px' }}>
+        <Stack direction={'row'} spacing={3} sx={{ marginBottom: '30px' }}>
           <Button
             variant="outlined"
             startIcon={
@@ -205,15 +230,16 @@ const UpdateMeetingReviewDrawer = ({settingsUpdateReviewOpen, setSettingsUpdateR
             수정하기
           </Button>
         </Stack>
-        </Drawer>
-    );
+      </Box>
+    </Drawer>
+  );
 };
 
 UpdateMeetingReviewDrawer.propTypes = {
-    settingsUpdateReviewOpen: PropTypes.bool.isRequired,
-    setSettingsUpdateReviewOpen: PropTypes.func.isRequired,
-    toggleSettingsUpdateReview: PropTypes.func.isRequired,
-    reviewno: PropTypes.object.isRequired,
-    };
+  settingsUpdateReviewOpen: PropTypes.bool.isRequired,
+  setSettingsUpdateReviewOpen: PropTypes.func.isRequired,
+  toggleSettingsUpdateReview: PropTypes.func.isRequired,
+  reviewno: PropTypes.object.isRequired,
+};
 
 export default UpdateMeetingReviewDrawer;

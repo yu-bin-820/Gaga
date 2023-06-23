@@ -16,7 +16,7 @@ const GetDirectChat = () => {
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
   );
-  const [socket, discconect] = useSocket('direct');
+  const [socket] = useSocket('direct');
 
   const getKey = (index, prevPageData) => {
     if (prevPageData && !prevPageData.length) {
@@ -39,13 +39,8 @@ const GetDirectChat = () => {
   //   }/receiverno/${chatRoomEntryNo}`
   // );
 
-  useEffect(() => {
-    return () => {
-      discconect();
-    };
-  }, [discconect]);
-
   const onMessage = useCallback(() => {
+    console.log('onMessage');
     mutateDirectMessages();
   }, [mutateDirectMessages]);
 
