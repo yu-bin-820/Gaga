@@ -15,12 +15,12 @@ const ListMeetingMember = () => {
   const { data: myData } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/user/login`,
     fetcher
-    );
+  );
 
-  const {data : meeting , mutate : mutateMeeting } = useSWR(
+  const { data: meeting, mutate: mutateMeeting } = useSWR(
     `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/no/${meetingno}`,
     fetcher
-);
+  );
 
   const { data: pendingMemberList, mutate: mutatePendingMemberList } = useSWR(
     `${
@@ -36,9 +36,11 @@ const ListMeetingMember = () => {
       fetcher
     );
 
-    const {mutate : mutateMyMeetingList } = useSWR(
-      `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${myData?.userNo}`,
-      fetcher
+  const { mutate: mutateMyMeetingList } = useSWR(
+    `${import.meta.env.VITE_SPRING_HOST}/rest/meeting/list/mymeeting/${
+      myData?.userNo
+    }`,
+    fetcher
   );
 
   const onClickUpdateMember = useCallback(
@@ -70,7 +72,13 @@ const ListMeetingMember = () => {
         console.error(error);
       }
     },
-    [meetingno, mutateConfirmedMemberList, mutatePendingMemberList, mutateMeeting, mutateMyMeetingList]
+    [
+      meetingno,
+      mutateConfirmedMemberList,
+      mutatePendingMemberList,
+      mutateMeeting,
+      mutateMyMeetingList,
+    ]
   );
 
   const onClickDeleteMember = useCallback(
@@ -122,21 +130,20 @@ const ListMeetingMember = () => {
       >
         <h5>신청 멤버</h5>
         {pendingMemberList?.length === 0 && (
-                <NoMeeting
-                ment={'신청 멤버가 없습니다'}/>
-            )}
+          <NoMeeting ment={'신청 멤버가 없습니다'} />
+        )}
         {pendingMemberList?.map((pendingMember, i) => (
           <Box key={i} sx={{ marginBottom: '10px' }}>
             <MeetingMember member={pendingMember} />
             <Stack
-              direction='row'
-              justifyContent='center'
-              alignItems='center'
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
               spacing={3}
               sx={{ marginBottom: '3px' }}
             >
               <Button
-                variant='contained'
+                variant="contained"
                 id={pendingMember.userNo}
                 onClick={onClickDeleteMember}
                 sx={{ height: '33px', width: '100px' }}
@@ -144,7 +151,7 @@ const ListMeetingMember = () => {
                 거절
               </Button>
               <Button
-                variant='contained'
+                variant="contained"
                 id={pendingMember.userNo}
                 onClick={onClickUpdateMember}
                 sx={{ height: '33px', width: '100px' }}
@@ -159,18 +166,17 @@ const ListMeetingMember = () => {
       <Box sx={{ paddingLeft: '10px', paddingRight: '10px', bgcolor: 'white' }}>
         <h5>확정 멤버</h5>
         {confirmedMemberList?.length === 0 && (
-                <NoMeeting
-                ment={'확정 멤버가 없습니다'}/>
-            )}
+          <NoMeeting ment={'확정 멤버가 없습니다'} />
+        )}
         {confirmedMemberList?.map((confirmedMember, i) => (
           <Box key={i}>
             <Stack direction={'row'} alignItems={'center'}>
               <MeetingMember key={i} member={confirmedMember} />
               <Button
-                variant='contained'
+                variant="contained"
                 id={confirmedMember.userNo}
                 onClick={onClickDeleteMember}
-                sx={{ height: '33px', width: '100px' }}
+                sx={{ minWidth: '100px', height: '33px', width: '100px' }}
               >
                 내보내기
               </Button>
