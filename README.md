@@ -24,8 +24,7 @@
 * 프로젝트 시연 영상  
 [![Video Thumbnail](http://img.youtube.com/vi/Z6uKVdweKa0/0.jpg)](https://youtu.be/Z6uKVdweKa0)
      
-* 프로젝트 기술서
-  - [링크](https://drive.google.com/file/d/12P-sJh_LBGfpdKDXpJZ0g6W9TEA003dw/view?usp=drive_link)   
+
 * 프로젝트 보고서(현업 요구사항 정의서, Use Case 정의서 등을 포함한 분석/설계 도큐먼트)
   - [링크](https://acrobat.adobe.com/link/review?uri=urn%3Aaaid%3Ascds%3AUS%3Ad361e49b-10db-41c1-a09c-3329c2863099)  
 * 아키텍쳐
