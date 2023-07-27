@@ -1,0 +1,17 @@
+# 환경 설정 파일
+node_modules
+node_modules/
+
+# 의존성 패키지
+/node_modules
+/uploads
+# 로그 파일
+/logs
+
+# 임시 파일
+/.cache
+/.tmp
+
+# IDE 및 편집기 설정 파일
+/.idea
+/.vscode

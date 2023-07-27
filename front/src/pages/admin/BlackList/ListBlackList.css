@@ -1,0 +1,25 @@
+.blacklist-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .blacklist-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 92%;
+    max-width: 280px; /* 원하는 너비로 설정하세요 */
+    margin: 0 auto;
+  }
+  
+  .blacklist-item {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .divider {
+    border: none;
+    border-top: 1px solid #000;
+    width: 100%;
+  }
