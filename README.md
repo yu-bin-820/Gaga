@@ -32,4 +32,4 @@
 * 발표 프레젠테이션
   - [링크](https://prezi.com/view/O7N8NhsymLFHb2P95y07/)
 * yubin's portfolio
-  - [링크]([https://prezi.com/view/O7N8NhsymLFHb2P95y07/](https://drive.google.com/file/d/1-sZ8lJ2R46ENyBFPE-exGLEn0-q2h2Ay/view?usp=drive_link)https://drive.google.com/file/d/1-sZ8lJ2R46ENyBFPE-exGLEn0-q2h2Ay/view?usp=drive_link)
+  - [링크](https://drive.google.com/file/d/1-sZ8lJ2R46ENyBFPE-exGLEn0-q2h2Ay/view?usp=drive_link)
